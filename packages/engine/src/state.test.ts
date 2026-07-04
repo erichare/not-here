@@ -18,7 +18,7 @@ describe('initialState', () => {
       chord: 0,
       staticMeter: 10,
       facts: [],
-      knownBy: { dora: [], elias: [], ivy: [], sam: [], maud: [], tam: [] },
+      knownBy: { dianne: [], wade: [], priya: [], sam: [], barb: [], tam: [] },
       flags: {},
       rngState: 42,
       choiceLog: [],

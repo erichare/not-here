@@ -18,22 +18,22 @@ describe('makeResolvers', () => {
   it('resolves axis values from the crafted state', () => {
     const resolvers = makeResolvers();
     const state = makeState([
-      { tag: 'kindness', knownBy: ['dora'] },
-      { tag: 'lie-caught', knownBy: ['ivy'] },
+      { tag: 'kindness', knownBy: ['dianne'] },
+      { tag: 'lie-caught', knownBy: ['priya'] },
     ]);
-    expect(resolvers['warmth:dora']?.(state)).toBe(AXIS_BASELINE + 1);
-    expect(resolvers['trust:ivy']?.(state)).toBe(AXIS_BASELINE - 3);
+    expect(resolvers['warmth:dianne']?.(state)).toBe(AXIS_BASELINE + 1);
+    expect(resolvers['trust:priya']?.(state)).toBe(AXIS_BASELINE - 3);
     expect(resolvers['fear:sam']?.(state)).toBe(AXIS_BASELINE);
   });
 
   it('plugs into the engine condition language via derived.gte', () => {
     const resolvers = makeResolvers();
-    const state = makeState([{ tag: 'kindness', knownBy: ['maud'] }]);
+    const state = makeState([{ tag: 'kindness', knownBy: ['barb'] }]);
     expect(
-      evaluate({ op: 'derived.gte', key: 'warmth:maud', value: 6 }, state, resolvers),
+      evaluate({ op: 'derived.gte', key: 'warmth:barb', value: 6 }, state, resolvers),
     ).toBe(true);
     expect(
-      evaluate({ op: 'derived.gte', key: 'warmth:elias', value: 6 }, state, resolvers),
+      evaluate({ op: 'derived.gte', key: 'warmth:wade', value: 6 }, state, resolvers),
     ).toBe(false);
   });
 

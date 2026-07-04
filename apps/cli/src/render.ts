@@ -1,7 +1,7 @@
 /**
- * ANSI rendering helpers for the terminal front-end. Aesthetic: Maud's
- * ledger by lamplight — warm, spare, no ornament, no emoji. Pure string
- * builders; main.ts owns the actual writes.
+ * ANSI rendering helpers for the terminal front-end. Aesthetic: Barb's
+ * tab book under the counter light — warm, spare, no ornament, no emoji.
+ * Pure string builders; main.ts owns the actual writes.
  */
 
 export const WRAP_WIDTH = 72;
@@ -20,7 +20,7 @@ export const italic = style('3;38;5;250');
 export const faint = style('2;38;5;244');
 /** Warm lamplight accents — brass, lamp oil. */
 export const warm = style('38;5;180');
-/** Brown ink, Maud's hand. */
+/** Brown ink, Barb's hand. */
 export const ink = style('38;5;137');
 
 const emphasis = style('1;38;5;180');

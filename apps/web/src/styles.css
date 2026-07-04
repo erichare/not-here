@@ -1,5 +1,5 @@
 /*
- * NOT HERE — entries in Maud's ledger.
+ * NOT HERE — entries in Barb's book.
  * CRT phosphor: warm amber on near-black, monospace, 68ch column.
  * The fog is the page's negative space: wide margins + vignette.
  * All animation is disabled under prefers-reduced-motion.
@@ -298,6 +298,45 @@ button.new-game-link:focus-visible {
 
   .choices {
     opacity: 1;
+  }
+}
+
+/* ---- margin sketches: ink portraits in the book's margin ---- */
+
+.margin-sketch {
+  position: fixed;
+  top: 50%;
+  right: 2.4rem;
+  transform: translateY(-50%);
+  width: clamp(120px, 12vw, 180px);
+  z-index: 20; /* under the vignette (30): the fog holds it too */
+  pointer-events: none;
+  opacity: 0;
+  animation: sketch-settle 4s ease-out 0.9s forwards;
+}
+
+.margin-sketch svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 0 6px rgba(232, 180, 90, 0.18));
+}
+
+@keyframes sketch-settle {
+  to {
+    opacity: 0.5;
+  }
+}
+
+@media (max-width: 1100px) {
+  .margin-sketch {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .margin-sketch {
+    display: none;
   }
 }
 

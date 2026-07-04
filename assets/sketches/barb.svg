@@ -1,0 +1,58 @@
+<svg viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Barb Kettle — ink sketch" fill="none" stroke="#e8b45a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- hand-ruled margin frame, gap on the left edge -->
+  <g stroke-width="1.1" opacity="0.5">
+    <path d="M18 15 C 82 16.4, 156 14.8, 222 15.8"/>
+    <path d="M222 15.8 C 223 96, 221.6 200, 222.6 286"/>
+    <path d="M222.6 286 C 154 285, 86 286.8, 18.6 285.6"/>
+    <path d="M18.6 285.6 C 17.8 246, 19.2 214, 18.4 186"/>
+    <path d="M18.8 150 C 17.6 106, 19 58, 18 15"/>
+  </g>
+  <!-- profile, ~65, sturdy -->
+  <path d="M112 62 C 101 68, 95 78, 96 88 C 96.5 95, 91 99, 89.5 105 C 88.6 108.6, 93 110, 94.5 113 C 93.5 116.5, 96 119.5, 95 122.5 C 97 129, 104 132, 112 133"/>
+  <path d="M113.6 63.6 C 103 69.4, 97.4 78.8, 98 88.2 C 98.4 94.8, 93.4 99.2, 91.8 104.6" stroke-width="1.5" opacity="0.35"/>
+  <path d="M112 133 C 122 142, 136 147, 150 145"/>
+  <path d="M113 135.5 C 123 143.8, 136.6 148.8, 149 147.2" stroke-width="1.4" opacity="0.3"/>
+  <path d="M112 62 C 142 50, 168 66, 170 96 C 171 116, 164 130, 154 140"/>
+  <path d="M114 60 C 143.6 48.4, 170 64.6, 172 95" stroke-width="1.5" opacity="0.35"/>
+  <!-- short practical hair: curl arcs along the crown -->
+  <path d="M118 54 C 112 58, 108 64, 108 70" stroke-width="1.5" opacity="0.6"/>
+  <path d="M132 50 C 126 54, 123 60, 124 66" stroke-width="1.5" opacity="0.6"/>
+  <path d="M148 52 C 143 57, 141 63, 143 69" stroke-width="1.5" opacity="0.6"/>
+  <path d="M162 62 C 158 66, 156 72, 158 78" stroke-width="1.5" opacity="0.6"/>
+  <path d="M168 74 C 164 78, 163 84, 165 90" stroke-width="1.5" opacity="0.55"/>
+  <path d="M126 56 C 122 60, 120 65, 121 70" stroke-width="1.3" opacity="0.4"/>
+  <path d="M140 52 C 136 56, 134 62, 135 68" stroke-width="1.3" opacity="0.4"/>
+  <path d="M155 58 C 151 63, 150 69, 152 75" stroke-width="1.3" opacity="0.4"/>
+  <!-- brow, eye, creases, chin fold -->
+  <path d="M102 80 C 107 78, 112 78.5, 116 80.5" stroke-width="2.4"/>
+  <path d="M101 90 C 105 89, 109 89.2, 112 90.5" stroke-width="1.8"/>
+  <path d="M103 96 C 106 95.4, 109 95.6, 111 96.5" stroke-width="1.3" opacity="0.55"/>
+  <path d="M100 116 C 98 121, 98 126, 100 130" stroke-width="1.4" opacity="0.6"/>
+  <path d="M112 138 C 116 141, 121 142, 126 141" stroke-width="1.4" opacity="0.55"/>
+  <!-- ear -->
+  <path d="M146 104 C 154 100, 156.5 111, 149 118 C 145 120.5, 142.5 114.5, 145.5 110.5" stroke-width="1.9"/>
+  <!-- sturdy neck, broad shoulders, at-counter posture -->
+  <path d="M110 136 C 108 148, 105 156, 98 163"/>
+  <path d="M150 142 C 152 152, 156 160, 163 166"/>
+  <path d="M46 196 C 82 174, 122 170, 158 176 C 180 179, 196 186, 208 196"/>
+  <path d="M48 199 C 84 177.6, 122 173.6, 157 179.4" stroke-width="1.5" opacity="0.3"/>
+  <!-- apron: strap over the shoulder, bib edge -->
+  <path d="M96 168 C 104 176, 116 181, 130 182" stroke-width="1.7"/>
+  <path d="M94 173 C 103 181, 116 186, 130 187" stroke-width="1.4" opacity="0.6"/>
+  <path d="M130 182 C 146 181, 160 184, 172 190" stroke-width="1.7"/>
+  <!-- the counter, ruled by hand -->
+  <path d="M26 232 C 80 229.5, 160 230.5, 214 229" stroke-width="1.5" opacity="0.65"/>
+  <path d="M26 237 C 90 235, 150 236, 214 234" stroke-width="1.2" opacity="0.45"/>
+  <!-- prop: the register, open, one line double-inked -->
+  <g stroke-width="1.6">
+    <path d="M150 231 C 160 225, 172 223, 182 224.5"/>
+    <path d="M182 224.5 C 194 222.5, 206 224.5, 214 229.5"/>
+    <path d="M152 252 C 162 247, 172 245.5, 182 247"/>
+    <path d="M182 247 C 193 245, 204 246.5, 212 250.5"/>
+    <path d="M150 231 L 152 252 M214 229.5 L 212 250.5 M182 224.5 L 182 247"/>
+    <path d="M156 233 C 164 229.5, 172 228.5, 179 229.5 M156 239.5 C 164 236, 172 235, 179 236 M156 246 C 164 242.6, 172 241.6, 179 242.6" stroke-width="1" opacity="0.5"/>
+    <path d="M186 231 C 194 229, 202 230, 208 233" stroke-width="2.6"/>
+    <path d="M186 233.6 C 194 231.6, 202 232.6, 208 235.4" stroke-width="2.4"/>
+    <ellipse cx="206.5" cy="234" rx="3.2" ry="1.8" fill="#e8b45a" fill-opacity="0.15" stroke="none"/>
+  </g>
+</svg>

@@ -11,9 +11,9 @@ const withFacts = (state: WorldState): WorldState => ({
   ...state,
   facts: [
     { id: 0, day: 1, slot: 'night', tag: 'saw-fog' },
-    { id: 1, day: 1, slot: 'night', tag: 'heard-song', about: 'dora' },
+    { id: 1, day: 1, slot: 'night', tag: 'heard-song', about: 'dianne' },
   ],
-  knownBy: { ...state.knownBy, dora: [0], elias: [1] },
+  knownBy: { ...state.knownBy, dianne: [0], wade: [1] },
 });
 
 const check = (cond: Cond, state: WorldState = base, derived: DerivedResolvers = NO_DERIVED) =>
@@ -86,14 +86,14 @@ describe('evaluate — facts', () => {
   });
 
   it('fact.knownBy requires the character to know a fact with that tag', () => {
-    expect(check({ op: 'fact.knownBy', who: 'dora', tag: 'saw-fog' }, state)).toBe(true);
-    expect(check({ op: 'fact.knownBy', who: 'elias', tag: 'heard-song' }, state)).toBe(true);
+    expect(check({ op: 'fact.knownBy', who: 'dianne', tag: 'saw-fog' }, state)).toBe(true);
+    expect(check({ op: 'fact.knownBy', who: 'wade', tag: 'heard-song' }, state)).toBe(true);
     // Fact exists but this character never witnessed it.
-    expect(check({ op: 'fact.knownBy', who: 'elias', tag: 'saw-fog' }, state)).toBe(false);
+    expect(check({ op: 'fact.knownBy', who: 'wade', tag: 'saw-fog' }, state)).toBe(false);
     // Character knows some fact, but not one with this tag.
-    expect(check({ op: 'fact.knownBy', who: 'dora', tag: 'heard-song' }, state)).toBe(false);
+    expect(check({ op: 'fact.knownBy', who: 'dianne', tag: 'heard-song' }, state)).toBe(false);
     // Nobody knows anything about a tag with no facts.
-    expect(check({ op: 'fact.knownBy', who: 'ivy', tag: 'nothing' }, state)).toBe(false);
+    expect(check({ op: 'fact.knownBy', who: 'priya', tag: 'nothing' }, state)).toBe(false);
   });
 });
 

@@ -4,18 +4,18 @@
  *
  *   title       — the full title arrangement (three verses, building)
  *   shingle     — arrival: sea, drone, bar 3 alone and very slow. Desolate.
- *   pub-warm    — the Kettle & Anchor: Maud's chords and the counter-line
- *                 only. The melody is withheld — Maud never presumed to know
+ *   pub-warm    — the Kettle: Barb's chords and the counter-line
+ *                 only. The melody is withheld — Barb never presumed to know
  *                 the tune. Warmth without the song.
- *   dora-theme  — bars 1–2 as the music-box lullaby over harmonium.
+ *   dianne-theme  — bars 1–2 as the music-box lullaby over harmonium.
  *   foghorn-312 — the nightly call: the horn plays bar 3, then holds.
  */
 
 import type { Instrument, NoteEvent, Song } from '../src/types.ts';
 import {
-  CHORDS_MAUD,
-  FRAGMENT_DORA,
-  FRAGMENT_ELIAS,
+  CHORDS_BARB,
+  FRAGMENT_DIANNE,
+  FRAGMENT_WADE,
 } from './foghorn-song.ts';
 
 const shift = (notes: readonly NoteEvent[], beats: number, vel = 1): NoteEvent[] =>
@@ -86,8 +86,8 @@ export const cueShingle: Song = {
       id: 'bar3-slow',
       instrument: musicBox,
       notes: [
-        ...shift(stretch(shift(FRAGMENT_ELIAS, -12), 2), 6),
-        ...shift(stretch(shift(FRAGMENT_ELIAS, -12), 2), 30, 0.6),
+        ...shift(stretch(shift(FRAGMENT_WADE, -12), 2), 6),
+        ...shift(stretch(shift(FRAGMENT_WADE, -12), 2), 30, 0.6),
       ],
       gain: 0.55,
       pan: 0.15,
@@ -96,7 +96,7 @@ export const cueShingle: Song = {
   ],
 };
 
-/** The Kettle & Anchor. Chords and counter-line; the tune withheld. */
+/** The Kettle. Chords and counter-line; the tune withheld. */
 export const cuePubWarm: Song = {
   id: 'pub-warm',
   bpm: 138,
@@ -106,7 +106,7 @@ export const cuePubWarm: Song = {
     {
       id: 'chords',
       instrument: harmonium,
-      notes: [...shift(CHORDS_MAUD, 0), ...shift(CHORDS_MAUD, 36, 0.9)],
+      notes: [...shift(CHORDS_BARB, 0), ...shift(CHORDS_BARB, 36, 0.9)],
       gain: 0.2,
     },
     {
@@ -139,9 +139,9 @@ export const cuePubWarm: Song = {
   ],
 };
 
-/** Dora: bars 1–2, the lullaby, twice — the second time barely there. */
-export const cueDoraTheme: Song = {
-  id: 'dora-theme',
+/** Dianne: bars 1–2, the lullaby, twice — the second time barely there. */
+export const cueDianneTheme: Song = {
+  id: 'dianne-theme',
   bpm: 126,
   lengthBeats: 42,
   echo: { beats: 3, feedback: 0.3 },
@@ -149,7 +149,7 @@ export const cueDoraTheme: Song = {
     {
       id: 'lullaby',
       instrument: musicBox,
-      notes: [...shift(FRAGMENT_DORA, 3), ...shift(FRAGMENT_DORA, 24, 0.45)],
+      notes: [...shift(FRAGMENT_DIANNE, 3), ...shift(FRAGMENT_DIANNE, 24, 0.45)],
       gain: 0.75,
       pan: -0.1,
       echo: 0.35,
@@ -177,7 +177,7 @@ export const cueFoghorn312: Song = {
     {
       id: 'horn',
       instrument: foghorn,
-      notes: transpose(shift(FRAGMENT_ELIAS, -12 + 2), -24).map((n) => ({
+      notes: transpose(shift(FRAGMENT_WADE, -12 + 2), -24).map((n) => ({
         ...n,
         dur: n.dur * 2.5,
       })),

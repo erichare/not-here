@@ -1,0 +1,46 @@
+<svg viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Wade Pike — ink sketch" fill="none" stroke="#e8b45a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- hand-ruled margin frame, gap on the bottom edge -->
+  <g stroke-width="1.1" opacity="0.5">
+    <path d="M18 15.6 C 84 14.4, 154 16, 222 14.8"/>
+    <path d="M222 14.8 C 223.2 100, 221.4 198, 222.6 285.4"/>
+    <path d="M222.6 285.4 C 196 286.4, 172 285.6, 150 286.2"/>
+    <path d="M112 286.6 C 80 285.6, 48 286.8, 18.2 285.8"/>
+    <path d="M18.2 285.8 C 17.2 200, 19 96, 18 15.6"/>
+  </g>
+  <!-- the hood, outer shell -->
+  <path d="M78 96 C 74 62, 104 40, 136 42 C 168 44, 188 68, 184 102 C 182 126, 172 146, 160 160 C 172 166, 182 174, 188 182"/>
+  <path d="M80.4 93 C 77 61, 106 42.4, 136.6 44.4 C 166 46.4, 185 69, 181.6 101" stroke-width="1.5" opacity="0.35"/>
+  <path d="M78 96 C 76 122, 82 146, 96 162 C 88 170, 78 180, 72 190"/>
+  <path d="M76 99 C 74.4 123, 80 146.4, 93.4 161.4" stroke-width="1.4" opacity="0.3"/>
+  <!-- hood inner edge, framing the face -->
+  <path d="M96 66 C 90 84, 88 104, 94 122 C 98 134, 106 144, 118 150" stroke-width="1.9"/>
+  <path d="M96 66 C 108 52, 128 48, 144 54" stroke-width="1.9"/>
+  <!-- weather-cut face: profile edge, heavy brow, grim mouth -->
+  <path d="M110 78 C 104 84, 101 90, 102 96 C 102.4 101, 98 105, 96.5 109.5 C 95.8 112.4, 99.4 113.6, 100.6 116 C 99.8 119, 101.8 121.4, 101 123.8 C 102.6 128.8, 107 131.6, 112 132.4"/>
+  <path d="M111.6 79.6 C 106 84.8, 103 90.4, 103.8 95.6" stroke-width="1.5" opacity="0.35"/>
+  <path d="M104 88 C 110 85.5, 116 86, 120 88.5" stroke-width="2.6"/>
+  <path d="M106 95 L 115 96" stroke-width="1.8"/>
+  <path d="M105 115 C 103.5 120, 103.5 125, 105 129" stroke-width="1.5" opacity="0.65"/>
+  <path d="M104 125 L 116 126" stroke-width="2"/>
+  <path d="M106 132 C 112 140, 122 146, 133 147"/>
+  <path d="M107.6 134.4 C 113.6 141.8, 123 147.4, 132 148.6" stroke-width="1.4" opacity="0.3"/>
+  <!-- stubble along the jaw -->
+  <g stroke-width="1.3" opacity="0.6">
+    <path d="M110 136 L 112 139 M116 140 L 118 143 M123 143 L 125 146 M130 145 L 132 148 M104 129 L 106 132 M137 146 L 139 148.5"/>
+  </g>
+  <!-- bulky jacket shoulders, zip seam -->
+  <path d="M50 200 C 84 178, 124 172, 158 178 C 180 182, 196 190, 206 200"/>
+  <path d="M52 202.6 C 86 181, 124 175.4, 157 181" stroke-width="1.5" opacity="0.3"/>
+  <path d="M126 176 C 128 184, 128 192, 127 200" stroke-width="1.5" opacity="0.6"/>
+  <path d="M92 182 C 96 190, 97 196, 96 202" stroke-width="1.4" opacity="0.5"/>
+  <!-- prop: the horn's brass valve — handwheel, stem, flange -->
+  <g stroke-width="1.8">
+    <path d="M184 217 C 196 218, 205 227, 204.6 238.6 C 204.2 250, 195 258.6, 183.6 258.8 C 172 259, 163.4 250, 163.6 238.4 C 163.8 227, 172.6 217, 184 217 Z"/>
+    <path d="M186 219.6 C 197 221.2, 204.6 229.6, 203.6 240.4" stroke-width="1.3" opacity="0.45"/>
+    <circle cx="184" cy="238" r="6.5"/>
+    <circle cx="184" cy="238" r="5" fill="#e8b45a" fill-opacity="0.15" stroke="none"/>
+    <path d="M184 231.5 L 184 219 M184 244.5 L 184 257 M177.5 238 L 165.5 238.2 M190.5 238 L 202.6 238.4" stroke-width="1.6"/>
+    <path d="M184 258.8 C 183 265, 184 270.5, 186 275.5" stroke-width="2"/>
+    <path d="M176 276.5 L 196 275.5" stroke-width="2"/>
+  </g>
+</svg>

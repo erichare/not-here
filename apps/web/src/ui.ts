@@ -5,6 +5,8 @@
  * as dash-prefixed ledger lines. Locked choices dim behind a '·'.
  */
 
+import { renderMarginSketch } from './sketches.ts';
+
 const WORD_INTERVAL_MS = 26;
 const CAPTION_LIFETIME_MS = 4000;
 
@@ -15,6 +17,7 @@ export interface ChoiceModel {
 }
 
 export interface SceneModel {
+  readonly sceneId?: string;
   readonly header: string;
   readonly paragraphs: readonly string[];
   readonly choices: readonly ChoiceModel[];
@@ -201,6 +204,8 @@ export const createUi = (root: HTMLElement, callbacks: UiCallbacks): Ui => {
       }
       const choices = buildChoices(model);
       page.replaceChildren(header, entry, choices);
+      const sketch = renderMarginSketch(model.sceneId);
+      if (sketch !== null) page.append(sketch);
       window.scrollTo({ top: 0 });
       startReveal(allWords, choices);
     },

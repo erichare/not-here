@@ -75,17 +75,17 @@ const viewOf = (run: Playthrough, sceneId: SceneId): SceneView => {
   return view;
 };
 
-const DORA_PATH = [
+const DIANNE_PATH = [
   'open-eyes', 'walk-to-town', 'go-in', 'sit', 'eat-all', 'say-his-name',
-  'q1-window', 'q2-however', 'q3-supper-owed', 'q4-light', 'q5-said-it-to-the-door',
-  'sleep', 'listen', 'go-down', 'go-to-dora', 'step-in', 'stay-till-done',
+  'q1-window', 'q2-however', 'q3-on-the-tab', 'q4-light', 'q5-said-it-to-the-door',
+  'sleep', 'listen', 'go-down', 'go-to-dianne', 'step-in', 'stay-till-done',
   'go-up', 'let-it-come',
 ] as const;
 
-const MAUD_PATH = [
+const BARB_PATH = [
   'open-eyes', 'look-at-water', 'go-in', 'sit', 'refuse', 'let-him-be',
-  'q1-fire', 'q2-none', 'q3-whats-true', 'q4-dont-sleep', 'q5-never-do',
-  'window-first', 'hand-to-wall', 'go-down', 'stay-for-cellar', 'take-the-cloth',
+  'q1-booth', 'q2-none', 'q3-whats-true', 'q4-dont-sleep', 'q5-never-do',
+  'window-first', 'hand-to-wall', 'go-down', 'stay-for-delivery', 'take-the-cloth',
   'to-evening', 'go-up', 'let-it-come',
 ] as const;
 
@@ -99,7 +99,7 @@ describe('content build', () => {
   });
 
   it('only references the five slice music cues', () => {
-    const allowed = new Set(['title', 'shingle', 'pub-warm', 'dora-theme', 'foghorn-312']);
+    const allowed = new Set(['title', 'shingle', 'pub-warm', 'dianne-theme', 'foghorn-312']);
     for (const scene of ALL_SCENES) {
       if (scene.cue !== undefined) expect(allowed.has(scene.cue)).toBe(true);
     }
@@ -140,8 +140,8 @@ describe('graph closure', () => {
   });
 });
 
-describe('walkthrough: the Dora branch', () => {
-  const run = play(DORA_PATH);
+describe('walkthrough: the Dianne branch', () => {
+  const run = play(DIANNE_PATH);
 
   it('reaches slice-end', () => {
     expect(run.state.sceneId).toBe('slice-end');
@@ -150,55 +150,55 @@ describe('walkthrough: the Dora branch', () => {
   });
 
   it('sets the interview truth flags and slice flags', () => {
-    expect(run.state.flags['truth:misses-the-sea']).toBe(true);
+    expect(run.state.flags['truth:misses-the-lake']).toBe(true);
     expect(run.state.flags['truth:eats-what-is-given']).toBe(true);
     expect(run.state.flags['truth:keeps-promises']).toBe(true);
     expect(run.state.flags['truth:afraid-of-quiet']).toBe(true);
     expect(run.state.flags['heard-horn-312']).toBe(true);
-    expect(run.state.flags['seen-ferry-date']).toBe(true);
+    expect(run.state.flags['seen-bus-date']).toBe(true);
   });
 
-  it('greets you as someone who went to Dora, and retells the cellar warmly', () => {
+  it('greets you as someone who went to Dianne, and retells the delivery warmly', () => {
     const evening = viewOf(run, 'd2-evening').paragraphs.join('\n');
-    expect(evening).toContain('How’s Dora keeping?');
-    expect(evening).toContain('You missed the drama');
-    expect(evening).not.toContain('spring sailings');
+    expect(evening).toContain('How’s Dianne keeping?');
+    expect(evening).toContain('You missed the show');
+    expect(evening).not.toContain('the winter runs');
   });
 
   it('emits the cue trail and a final autosave', () => {
     const cues = run.events.flatMap((e) => (e.kind === 'music.cue' ? [e.cue] : []));
     expect(cues).toEqual([
-      'title', 'shingle', 'pub-warm', 'foghorn-312', 'dora-theme', 'pub-warm',
+      'title', 'shingle', 'pub-warm', 'foghorn-312', 'dianne-theme', 'pub-warm',
       'foghorn-312', 'title',
     ]);
     expect(run.events.some((e) => e.kind === 'save.autosave')).toBe(true);
   });
 });
 
-describe('walkthrough: the Maud branch', () => {
-  const run = play(MAUD_PATH);
+describe('walkthrough: the Barb branch', () => {
+  const run = play(BARB_PATH);
 
   it('reaches slice-end', () => {
     expect(run.state.sceneId).toBe('slice-end');
   });
 
-  it('records helped-maud as a fact Maud witnessed', () => {
-    const fact = run.state.facts.find((f) => f.tag === 'helped-maud');
+  it('records helped-barb as a fact Barb witnessed', () => {
+    const fact = run.state.facts.find((f) => f.tag === 'helped-barb');
     expect(fact).toBeDefined();
-    expect(fact && run.state.knownBy.maud.includes(fact.id)).toBe(true);
+    expect(fact && run.state.knownBy.barb.includes(fact.id)).toBe(true);
   });
 
-  it('selects the helped-maud greeting over the refused-meal one', () => {
+  it('selects the helped-barb greeting over the refused-meal one', () => {
     const evening = viewOf(run, 'd2-evening').paragraphs.join('\n');
     expect(evening).toContain('Anyone who dries a pot');
     expect(evening).not.toContain('Eating tonight?');
   });
 
-  it('retells Dora’s morning without you — the ferry date arrives secondhand', () => {
+  it('retells Dianne’s morning without you — the bus date arrives secondhand', () => {
     const evening = viewOf(run, 'd2-evening').paragraphs.join('\n');
-    expect(evening).toContain('spring sailings');
+    expect(evening).toContain('the winter runs');
     expect(evening).toContain('She was singing when I left');
-    expect(evening).not.toContain('You missed the drama');
+    expect(evening).not.toContain('You missed the show');
   });
 });
 
@@ -213,12 +213,12 @@ describe('dialogue rules', () => {
     }
   });
 
-  it('falls back to the plain greeting when Maud knows nothing', () => {
+  it('falls back to the plain greeting when Barb knows nothing', () => {
     const fresh = initialState(7, 'd2-evening');
     const scene = content.scenes.get('d2-evening');
     if (!scene) throw new Error('missing d2-evening');
     const prose = content.realizeProse(scene, fresh).join('\n');
-    expect(prose).toContain('Fire’s good. Sit where you like.');
+    expect(prose).toContain('Heat’s on. Sit where you like.');
   });
 });
 
@@ -227,27 +227,29 @@ describe('prose invariants', () => {
 
   it('no character ever initiates touch with the player', () => {
     const touch =
-      /\b(she|he|they|dora|maud|tam|elias|ivy|sam|cobble)\s+(takes|touches|hugs|grabs|holds|pats|strokes|embraces|catches|clasps|pulls|reaches\s+for)\s+(you|your)\b/i;
+      /\b(she|he|they|dianne|barb|tam|wade|priya|sam|moose)\s+(takes|touches|hugs|grabs|holds|pats|strokes|embraces|catches|clasps|pulls|reaches\s+for)\s+(you|your)\b/i;
     for (const { source, text } of texts) {
       expect(touch.test(text), `NPC-initiated touch in ${source}: ${text}`).toBe(false);
     }
   });
 
-  it('the name Wren appears nowhere in the slice — Dora least of all', () => {
+  it('the name Wren appears nowhere in the slice — Dianne least of all', () => {
     for (const { source, text } of texts) {
       expect(/\bWren\b/.test(text), `'Wren' spoken in ${source}`).toBe(false);
     }
   });
 
-  it('the arrival text has dry salt in your seams, and no cold in you', () => {
-    const shingle = ALL_SCENES.find((s) => s.id === 'n1-shingle');
-    if (!shingle || shingle.prose.kind !== 'inline') throw new Error('missing shingle scene');
-    const arrival = shingle.prose.paragraphs.map((p) => p.text).join('\n');
-    expect(arrival).toContain('salt crusted in your seams is dry');
+  it('the arrival text carries no lake on you, and no cold in you', () => {
+    const beach = ALL_SCENES.find((s) => s.id === 'n1-beach');
+    if (!beach || beach.prose.kind !== 'inline') throw new Error('missing beach scene');
+    const arrival = beach.prose.paragraphs.map((p) => p.text).join('\n');
+    expect(arrival).toContain('no lake smell');
+    expect(arrival).toContain('no milfoil in your cuffs');
+    expect(arrival).toContain('dry at the roots');
     expect(arrival).toContain('no cold in you');
   });
 
-  it('Cobble never growls', () => {
+  it('Moose never growls', () => {
     for (const { source, text } of texts) {
       expect(/growl/i.test(text), `growl in ${source}`).toBe(false);
     }

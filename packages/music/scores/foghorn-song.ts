@@ -5,11 +5,11 @@
  * Bar 6 is a rest. The whole score of the game derives from bars 1–5.
  *
  * Fragment ownership (see design/game-bible.md):
- *   bars 1–2  Dora   — music-box lullaby
- *   bar  3    Elias  — the horn's falling minor third, A → F
- *   bar  4    Ivy    — the turn figure (she remembers it INVERTED)
+ *   bars 1–2  Dianne   — music-box lullaby
+ *   bar  3    Wade  — the horn's falling minor third, A → F
+ *   bar  4    Priya    — the turn figure (she remembers it INVERTED)
  *   bar  5    Sam    — the quick rising run, sped up the way a child whistles
- *   chords    Maud   — accompaniment only; she never presumed to know the tune
+ *   chords    Barb   — accompaniment only; she never presumed to know the tune
  *   (rhythm   Tam    — pitchless ostinato; not present in the title arrangement)
  *
  * The melody ends bar 5 hanging on E — the 2nd degree — over the rest where
@@ -65,19 +65,19 @@ const shift = (notes: readonly NoteEvent[], beats: number): NoteEvent[] =>
 // ---------------------------------------------------------------------------
 // THE MELODY — bars 1–5, then the rest.
 
-/** Dora, bars 1–2: the lullaby. A gentle arch, then a fall to warmth. */
-export const FRAGMENT_DORA: readonly NoteEvent[] = [
+/** Dianne, bars 1–2: the lullaby. A gentle arch, then a fall to warmth. */
+export const FRAGMENT_DIANNE: readonly NoteEvent[] = [
   n(0, 2, D5), n(2, 1, E5), n(3, 2, F5), n(5, 1, E5),
   n(6, 2, D5), n(8, 1, C5), n(9, 3, A4),
 ];
 
-/** Elias, bar 3: the horn. A falling minor third, held. */
-export const FRAGMENT_ELIAS: readonly NoteEvent[] = [
+/** Wade, bar 3: the horn. A falling minor third, held. */
+export const FRAGMENT_WADE: readonly NoteEvent[] = [
   n(12, 3, A4), n(15, 3, F4),
 ];
 
-/** Ivy, bar 4: the turn — the dorian B natural, questioning. */
-export const FRAGMENT_IVY: readonly NoteEvent[] = [
+/** Priya, bar 4: the turn — the dorian B natural, questioning. */
+export const FRAGMENT_PRIYA: readonly NoteEvent[] = [
   n(18, 1, B4), n(19, 1, C5), n(20, 1, D5), n(21, 1, C5), n(22, 1, B4), n(23, 1, G4),
 ];
 
@@ -89,17 +89,17 @@ export const FRAGMENT_SAM: readonly NoteEvent[] = [
 
 /** Bars 1–5 assembled. Bar 6 (beats 30–35) is a rest — always. */
 export const MELODY: readonly NoteEvent[] = [
-  ...FRAGMENT_DORA,
-  ...FRAGMENT_ELIAS,
-  ...FRAGMENT_IVY,
+  ...FRAGMENT_DIANNE,
+  ...FRAGMENT_WADE,
+  ...FRAGMENT_PRIYA,
   ...FRAGMENT_SAM,
 ];
 
-/** Maud, chords: Dm | C | F | G | F→Am | (rest). Voiced low-mid, close. */
+/** Barb, chords: Dm | C | F | G | F→Am | (rest). Voiced low-mid, close. */
 const chord = (t: number, dur: number, pitches: readonly number[], vel = 1): NoteEvent[] =>
   pitches.map((p) => n(t, dur, p, vel));
 
-export const CHORDS_MAUD: readonly NoteEvent[] = [
+export const CHORDS_BARB: readonly NoteEvent[] = [
   ...chord(0, 6, [D3, A3, F4], 0.9),
   ...chord(6, 6, [C3, G3, E4], 0.85),
   ...chord(12, 6, [F3, A3, C4], 0.85),
@@ -147,7 +147,7 @@ const foghorn: Instrument = {
   vibrato: { depthCents: 4, rateHz: 0.4, delay: 1 },
 };
 
-const fiddle: Instrument = {
+const guitar: Instrument = {
   kind: 'pulse',
   duty: 0.25,
   env: { attack: 0.06, decay: 0.25, sustain: 0.6, release: 0.35 },
@@ -170,8 +170,8 @@ const sea: Instrument = {
 // Arrangement — title-screen audition build.
 //   intro (2 bars): sea, one distant horn call
 //   verse A: music box alone
-//   verse B: + harmonium (Maud), + foghorn drone
-//   verse C: + fiddle unison, + counter-line — the fullest the theme ever gets
+//   verse B: + harmonium (Barb), + foghorn drone
+//   verse C: + guitar unison, + counter-line — the fullest the theme ever gets
 //   outro (3 bars): bar-six silence, the horn calling A→F into the fog
 const INTRO = 2 * BAR;
 const VERSE_A = INTRO;
@@ -244,18 +244,18 @@ export const foghornSong: Song = {
       pan: 0.18,
       echo: 0.35,
     },
-    // Maud's chords — verses B and C.
+    // Barb's chords — verses B and C.
     {
       id: 'chords-harmonium',
       instrument: harmonium,
-      notes: [...shift(CHORDS_MAUD, VERSE_B), ...shift(CHORDS_MAUD, VERSE_C)],
+      notes: [...shift(CHORDS_BARB, VERSE_B), ...shift(CHORDS_BARB, VERSE_C)],
       gain: 0.16,
       pan: 0.1,
     },
-    // Verse C: the fiddle joins the tune, the counter-line walks below.
+    // Verse C: the guitar joins the tune, the counter-line walks below.
     {
-      id: 'fiddle-unison',
-      instrument: fiddle,
+      id: 'guitar-unison',
+      instrument: guitar,
       notes: shift(MELODY, VERSE_C).map((note) => ({
         ...note,
         vel: (note.vel ?? 1) * 0.5,

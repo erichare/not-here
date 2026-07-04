@@ -47,7 +47,7 @@ describe('saveGame / loadSave', () => {
   });
 });
 
-describe('maud-ledger.txt', () => {
+describe('barb-ledger.txt', () => {
   it('formats the diegetic line', () => {
     expect(formatLedgerLine({ day: 2, slot: 'morning', label: 'Go down.' })).toBe(
       'Day 2, morning — Go down.',
@@ -55,7 +55,7 @@ describe('maud-ledger.txt', () => {
   });
 
   it('appends one line per choice', () => {
-    const path = join(dir, '.saves', 'maud-ledger.txt');
+    const path = join(dir, '.saves', 'barb-ledger.txt');
     appendLedgerLine({ day: 1, slot: 'night', label: 'Eat. All of it.' }, path);
     appendLedgerLine({ day: 2, slot: 'morning', label: 'Go down.' }, path);
     expect(readFileSync(path, 'utf8')).toBe(

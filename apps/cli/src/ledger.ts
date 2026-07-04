@@ -1,5 +1,5 @@
 /**
- * 'Consult the ledger' — Maud's handwritten observations of the guest.
+ * 'Consult the ledger' — Barb's handwritten observations of the guest.
  * Diegetic stat readout: three tiers per stat, one line for STATIC,
  * never a number in sight.
  */
@@ -17,7 +17,7 @@ const OBSERVATIONS: Readonly<Record<StatId, Tiers>> = {
   flesh: {
     low: 'the chair does not creak under her. it should.',
     mid: 'casts a shadow now, when the lamp is on her side.',
-    high: 'solid enough to carry a coffin handle, lately.',
+    high: 'solid enough to shoulder a casket, lately.',
   },
   name: {
     low: 'the ink dries pale on her page.',
@@ -30,7 +30,7 @@ const OBSERVATIONS: Readonly<Record<StatId, Tiers>> = {
     high: 'remembers more than she was told.',
   },
   undertow: {
-    low: 'keeps her feet dry and her back to the harbour.',
+    low: 'keeps her feet dry and her back to the lake.',
     mid: 'stands at windows longer than windows deserve.',
     high: 'looks at the water the way the water looks at everyone.',
   },
@@ -39,7 +39,7 @@ const OBSERVATIONS: Readonly<Record<StatId, Tiers>> = {
 const tierFor = (value: number): keyof Tiers =>
   value >= 5 ? 'high' : value >= 3 ? 'mid' : 'low';
 
-/** The observation Maud would write for one stat at its current value. */
+/** The observation Barb would write for one stat at its current value. */
 export const observationFor = (stat: StatId, value: number): string =>
   OBSERVATIONS[stat][tierFor(value)];
 
@@ -64,8 +64,8 @@ export const renderLedger = (state: WorldState): string => {
   const entries = STATS.map((stat) => observationFor(stat, state.stats[stat]));
   const blocks = [...entries, staticLine(state.staticMeter)].map(entryBlock);
   return [
-    warm("MAUD'S LEDGER"),
-    dim('brown ink, a steady hand, the guest’s page'),
+    warm("BARB'S BOOK"),
+    dim('double-inked, a steady hand, the guest’s page'),
     '',
     blocks.join('\n\n'),
   ].join('\n');

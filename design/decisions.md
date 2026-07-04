@@ -27,7 +27,20 @@ without asking.
   scene ornaments; ASCII notation marginalia for motifs; in the web build, small
   ink-line SVG vignettes at act boundaries and for keepsake objects (the fiddle,
   the circled timetable, the folded coat).
-- **Setting:** 1970s British coast as pitched.
+- **Setting:** 1970s British coast as pitched. *(Superseded 2026-07-04 — see
+  Setting pivot below. Kept for history.)*
+- **Setting pivot (2026-07-04):** after playing the vertical slice, the creator
+  moved the world: modern day, Okanagan Valley, BC — invented community of
+  **Lorn Bay** on Okanagan Lake. Modern names (Wren Cole, Dianne, Barb, Wade,
+  Priya, Sam, Tam; the dog is Moose), female protagonist explicit, the horn at
+  the old ferry wharf, the memorial potluck (was the Wake), the Friday EBUS
+  Nov 28 (was the spring ferry), and a first-class **digital-absence doctrine**
+  (no phone for you; photos disagree; your voice doesn't record). Music, mood,
+  twist logic, stats, endings, and structure unchanged; ending 4 retitled
+  "The Stranger on the Gravel" (leaves on Tam's 4:10 AM run). Prose register:
+  spare and modern, no antique cadence. Locked spec and single source of truth:
+  `retheme-lorn-bay.md` — it wins every conflict with older docs. Game bible and
+  twist table rewritten to match on the same date.
 - **Length:** 3–5 hours per playthrough.
 
 ## Structure

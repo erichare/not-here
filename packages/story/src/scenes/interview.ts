@@ -1,14 +1,14 @@
 /**
- * THE PUB INTERVIEW — Night 1, the Kettle & Anchor.
+ * THE COUNTER INTERVIEW — Night 1, the Kettle.
  *
- * Character creation as five strange questions over tea. Each answer weights
- * stats (Effect stat.add) and sets one self-truth flag (see ../truths.ts).
- * Maud asks everyone who stops here these questions; nobody, least of all
- * Maud, treats them as strange. This is the multiple-choice fallback build
- * of LLM touchpoint 1 — the canonical no-key path.
+ * Character creation as five strange questions over decaf. Each answer
+ * weights stats (Effect stat.add) and sets one self-truth flag (see
+ * ../truths.ts). Barb asks everyone who stops here these questions; nobody,
+ * least of all Barb, treats them as anything. This is the multiple-choice
+ * fallback build of LLM touchpoint 1 — the canonical no-key path.
  *
  * Post-reveal note (clue #11): these answers are woven, inverted, into the
- * main theme from the title screen. What you tell Maud tonight, the fog
+ * main theme from the title screen. What you tell Barb tonight, the fog
  * already used.
  */
 
@@ -22,32 +22,32 @@ const q1 = defineScene({
     kind: 'inline',
     paragraphs: [
       {
-        text: '"Cobble." The dog comes off the floor all at once, up and turned, staring past your shoulder at the room in general. His tail gives one uncertain beat. Then whatever it was is over for him; he circles twice, lies back down with his spine to you, and is asleep before you have finished being sorry.',
-        when: { op: 'flag', key: 'n1:spoke-to-cobble' },
+        text: '"Moose." The dog comes off the floor all at once, up and turned, staring past your shoulder at the room in general. His tail gives one uncertain beat. Then whatever it was is over for him; he circles twice, lies back down with his spine to you, and is asleep before you have finished being sorry.',
+        when: { op: 'flag', key: 'n1:spoke-to-moose' },
       },
       {
         text: 'You put your hand down where his nose could find it. He does not lift his head. His breathing does not change. After a while you take the hand back.',
-        when: { op: 'flag', key: 'n1:reached-for-cobble' },
+        when: { op: 'flag', key: 'n1:reached-for-moose' },
       },
       {
-        text: 'Maud comes back with a pot of tea and two cups, pours both, pushes one across the bar. She does not sit. Landladies don’t.',
+        text: 'Barb comes back with the decaf pot and two mugs, pours both, pushes one across the counter. She does not sit. Owners don’t.',
       },
       {
         text: '"Now," she says. "Few things I ask anybody who stops here. No harm in any of them."',
       },
       {
-        text: '"Where’ll you want to sit, mornings? Window looks at the sea. Settle’s by the fire and looks at nothing."',
+        text: '"Where’ll you want to sit, mornings? Window looks at the lake. Booth’s by the kitchen and looks at nothing."',
       },
     ],
   },
   choices: [
     {
-      id: 'q1-fire',
-      label: '"The fire."',
+      id: 'q1-booth',
+      label: '"The booth."',
       effects: [
         { op: 'stat.add', stat: 'flesh', value: 1 },
         { op: 'stat.add', stat: 'undertow', value: 1 },
-        { op: 'flag.set', key: truthFlag('hates-the-sea'), value: true },
+        { op: 'flag.set', key: truthFlag('hates-the-lake'), value: true },
       ],
       goto: 'n1-interview-2',
     },
@@ -56,7 +56,7 @@ const q1 = defineScene({
       label: '"The window."',
       effects: [
         { op: 'stat.add', stat: 'echo', value: 2 },
-        { op: 'flag.set', key: truthFlag('misses-the-sea'), value: true },
+        { op: 'flag.set', key: truthFlag('misses-the-lake'), value: true },
       ],
       goto: 'n1-interview-2',
     },
@@ -79,7 +79,7 @@ const q2 = defineScene({
     kind: 'inline',
     paragraphs: [
       {
-        text: 'She nods as if you have confirmed something she had money on. The lid comes off a sugar bowl old enough to have opinions.',
+        text: 'She nods as if you have confirmed something she had money on. The lid comes off a sugar jar old enough to have opinions.',
       },
       { text: '"Sugar?"' },
     ],
@@ -122,7 +122,7 @@ const q3 = defineScene({
     kind: 'inline',
     paragraphs: [
       {
-        text: 'She brings a ledger up from under the bar. It opens flat at a working page: columns, dates, small marginal weather. She uncaps a pen.',
+        text: 'She brings the tab book up from under the counter. It opens flat at a working page: columns, dates, small marginal weather. She uncaps a pen.',
       },
       {
         text: '"I keep the book," she says. "Everyone that stops. What am I writing?"',
@@ -151,8 +151,8 @@ const q3 = defineScene({
       goto: 'n1-interview-4',
     },
     {
-      id: 'q3-supper-owed',
-      label: '"Put the supper down as owed."',
+      id: 'q3-on-the-tab',
+      label: '"Put dinner down as owed."',
       effects: [
         { op: 'stat.add', stat: 'name', value: 2 },
         { op: 'flag.set', key: truthFlag('keeps-promises'), value: true },
@@ -172,7 +172,7 @@ const q4 = defineScene({
         text: 'Whatever she writes, she writes it small and does not show you. The pen stays out.',
       },
       {
-        text: '"Sleep light or heavy? Horn goes at night, up the point. Some can’t keep from listening for it."',
+        text: '"Sleep light or heavy? Horn goes at night, out on the wharf. Some can’t keep from listening for it."',
       },
     ],
   },
@@ -214,7 +214,7 @@ const q5 = defineScene({
     kind: 'inline',
     paragraphs: [
       {
-        text: 'The last one she asks into the ledger, writing something else while she does, as if the question were nothing and the marginal weather were the point.',
+        text: 'The last one she asks into the book, writing something else while she does, as if the question were nothing and the marginal weather were the point.',
       },
       {
         text: '"The place you came from. Did you say goodbye to it?"',

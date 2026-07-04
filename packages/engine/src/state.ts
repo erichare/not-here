@@ -56,7 +56,7 @@ export const initialState = (seed: number, openingScene: SceneId): WorldState =>
   chord: 0,
   staticMeter: 10,
   facts: [],
-  knownBy: { dora: [], elias: [], ivy: [], sam: [], maud: [], tam: [] },
+  knownBy: { dianne: [], wade: [], priya: [], sam: [], barb: [], tam: [] },
   flags: {},
   rngState: seed >>> 0,
   choiceLog: [],

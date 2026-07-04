@@ -1,6 +1,6 @@
 /**
  * Derived resolvers — the door through which the memory package's axes reach
- * the engine's condition language ({ op: 'derived.gte', key: 'trust:ivy' }).
+ * the engine's condition language ({ op: 'derived.gte', key: 'trust:priya' }).
  *
  * Keys: '<axis>:<character>' for every axis × every cast member.
  */
@@ -15,7 +15,7 @@ import type {
 import { AXES, axisValue, DEFAULT_AXIS_WEIGHTS } from './axes.ts';
 import type { AxisId, AxisWeightRule } from './axes.ts';
 
-/** Canonical resolver key for an axis on a character, e.g. 'warmth:dora'. */
+/** Canonical resolver key for an axis on a character, e.g. 'warmth:dianne'. */
 export const derivedKey = (axis: AxisId, who: CharacterId): string => `${axis}:${who}`;
 
 /**

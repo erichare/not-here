@@ -3,9 +3,9 @@
 > Seven years after you drowned, you walk back into the town that never stopped
 > grieving you.
 
-A branching narrative mystery set in Port Lorn — a fog-locked ferry town on a
-tidal causeway, British coast, spring 1971. Playable in the browser and in the
-terminal from one shared engine. The score is one broken six-bar song, and the
+A branching narrative mystery set in Lorn Bay — a fog-locked lake town in the
+Okanagan Valley, British Columbia, present day, early November. Playable in the
+browser and in the terminal from one shared engine. The score is one broken six-bar song, and the
 game is, musically, the act of reassembling it.
 
 **Content note:** grief, memory loss, death of a sibling, ambiguous

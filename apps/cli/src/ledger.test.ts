@@ -28,7 +28,7 @@ describe('observationFor', () => {
   });
 
   it('writes the specified signature lines', () => {
-    expect(observationFor('flesh', 5)).toContain('coffin handle');
+    expect(observationFor('flesh', 5)).toContain('shoulder a casket');
     expect(observationFor('echo', 5)).toContain('remembers more than she was told');
     expect(observationFor('name', 0)).toContain('ink dries pale');
   });

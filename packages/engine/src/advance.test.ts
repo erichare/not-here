@@ -21,7 +21,7 @@ const scenes: readonly Scene[] = [
         label: 'Walk to the shrine',
         effects: [
           { op: 'stat.add', stat: 'flesh', value: 2 },
-          { op: 'fact.add', tag: 'left-dock', witnessedBy: ['dora'] },
+          { op: 'fact.add', tag: 'left-dock', witnessedBy: ['dianne'] },
         ],
         goto: 'shrine',
       },
@@ -168,7 +168,7 @@ describe('advance — choose', () => {
     expect(state.sceneId).toBe('shrine');
     expect(state.stats.flesh).toBe(5);
     expect(state.facts).toEqual([{ id: 0, day: 1, slot: 'night', tag: 'left-dock' }]);
-    expect(state.knownBy.dora).toEqual([0]);
+    expect(state.knownBy.dianne).toEqual([0]);
     expect(view.sceneId).toBe('shrine');
     // Choice events come before entry events (shrine has no cue/onEnter).
     expect(events).toEqual([{ kind: 'stat.changed', stat: 'flesh', delta: 2 }]);

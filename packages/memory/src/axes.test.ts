@@ -18,7 +18,7 @@ describe('tagMatches', () => {
 
   it('matches prefix patterns ending in *', () => {
     expect(tagMatches('helped-*', 'helped-sam')).toBe(true);
-    expect(tagMatches('helped-*', 'helped-dora')).toBe(true);
+    expect(tagMatches('helped-*', 'helped-dianne')).toBe(true);
     expect(tagMatches('helped-*', 'harmed-sam')).toBe(false);
   });
 });
@@ -34,47 +34,47 @@ describe('axisValue', () => {
   });
 
   it('only counts facts the character actually knows', () => {
-    const state = makeState([{ tag: 'kindness', knownBy: ['dora'] }]);
-    expect(axisValue(state, 'dora', 'warmth')).toBe(AXIS_BASELINE + 1);
-    expect(axisValue(state, 'elias', 'warmth')).toBe(AXIS_BASELINE);
+    const state = makeState([{ tag: 'kindness', knownBy: ['dianne'] }]);
+    expect(axisValue(state, 'dianne', 'warmth')).toBe(AXIS_BASELINE + 1);
+    expect(axisValue(state, 'wade', 'warmth')).toBe(AXIS_BASELINE);
   });
 
   it('adds warmth for helped-* wildcard facts', () => {
     const state = makeState([
-      { tag: 'helped-sam', knownBy: ['ivy'] },
-      { tag: 'helped-maud', knownBy: ['ivy'] },
+      { tag: 'helped-sam', knownBy: ['priya'] },
+      { tag: 'helped-barb', knownBy: ['priya'] },
     ]);
-    expect(axisValue(state, 'ivy', 'warmth')).toBe(AXIS_BASELINE + 2);
+    expect(axisValue(state, 'priya', 'warmth')).toBe(AXIS_BASELINE + 2);
   });
 
   it('subtracts trust heavily for lie-caught and contradiction', () => {
     const state = makeState([
-      { tag: 'lie-caught', knownBy: ['ivy'] },
-      { tag: 'contradiction', knownBy: ['ivy'] },
+      { tag: 'lie-caught', knownBy: ['priya'] },
+      { tag: 'contradiction', knownBy: ['priya'] },
     ]);
-    expect(axisValue(state, 'ivy', 'trust')).toBe(0); // 5 - 3 - 3, clamped
-    expect(axisValue(state, 'ivy', 'fear')).toBe(AXIS_BASELINE + 1);
+    expect(axisValue(state, 'priya', 'trust')).toBe(0); // 5 - 3 - 3, clamped
+    expect(axisValue(state, 'priya', 'fear')).toBe(AXIS_BASELINE + 1);
   });
 
   it('adds trust for defended-sam only for tam and sam', () => {
     const state = makeState([
-      { tag: 'defended-sam', knownBy: ['tam', 'sam', 'dora'] },
+      { tag: 'defended-sam', knownBy: ['tam', 'sam', 'dianne'] },
     ]);
     expect(axisValue(state, 'tam', 'trust')).toBe(AXIS_BASELINE + 2);
     expect(axisValue(state, 'sam', 'trust')).toBe(AXIS_BASELINE + 2);
-    expect(axisValue(state, 'dora', 'trust')).toBe(AXIS_BASELINE);
+    expect(axisValue(state, 'dianne', 'trust')).toBe(AXIS_BASELINE);
   });
 
   it('applies the ECHO paradox: memory-taken cools warmth, raises trust and fear — for the character it is about', () => {
     const state = makeState([
-      { tag: 'memory-taken', about: 'maud', knownBy: ['maud', 'ivy'] },
+      { tag: 'memory-taken', about: 'barb', knownBy: ['barb', 'priya'] },
     ]);
-    expect(axisValue(state, 'maud', 'warmth')).toBe(AXIS_BASELINE - 2);
-    expect(axisValue(state, 'maud', 'trust')).toBe(AXIS_BASELINE + 1);
-    expect(axisValue(state, 'maud', 'fear')).toBe(AXIS_BASELINE + 1);
-    // Ivy knows the fact but it is not about her — aboutKnowerOnly rules skip.
-    expect(axisValue(state, 'ivy', 'warmth')).toBe(AXIS_BASELINE);
-    expect(axisValue(state, 'ivy', 'trust')).toBe(AXIS_BASELINE);
+    expect(axisValue(state, 'barb', 'warmth')).toBe(AXIS_BASELINE - 2);
+    expect(axisValue(state, 'barb', 'trust')).toBe(AXIS_BASELINE + 1);
+    expect(axisValue(state, 'barb', 'fear')).toBe(AXIS_BASELINE + 1);
+    // Priya knows the fact but it is not about her — aboutKnowerOnly rules skip.
+    expect(axisValue(state, 'priya', 'warmth')).toBe(AXIS_BASELINE);
+    expect(axisValue(state, 'priya', 'trust')).toBe(AXIS_BASELINE);
   });
 
   it('clamps to the 0..10 range', () => {
@@ -95,15 +95,15 @@ describe('axisValue', () => {
       ...DEFAULT_AXIS_WEIGHTS,
       { tag: 'shared-tea', axis: 'warmth', delta: 3 },
     ];
-    const state = makeState([{ tag: 'shared-tea', knownBy: ['dora'] }]);
-    expect(axisValue(state, 'dora', 'warmth', extended)).toBe(AXIS_BASELINE + 3);
-    expect(axisValue(state, 'dora', 'warmth')).toBe(AXIS_BASELINE);
+    const state = makeState([{ tag: 'shared-tea', knownBy: ['dianne'] }]);
+    expect(axisValue(state, 'dianne', 'warmth', extended)).toBe(AXIS_BASELINE + 3);
+    expect(axisValue(state, 'dianne', 'warmth')).toBe(AXIS_BASELINE);
   });
 
   it('never mutates the input state', () => {
-    const state = makeState([{ tag: 'kindness', knownBy: ['dora'] }]);
+    const state = makeState([{ tag: 'kindness', knownBy: ['dianne'] }]);
     const snapshot = JSON.stringify(state);
-    axisValue(state, 'dora', 'warmth');
+    axisValue(state, 'dianne', 'warmth');
     expect(JSON.stringify(state)).toBe(snapshot);
   });
 });

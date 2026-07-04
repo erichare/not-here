@@ -1,0 +1,57 @@
+<svg viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dr. Priya Anand — ink sketch" fill="none" stroke="#e8b45a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- hand-ruled margin frame, gap on the top edge -->
+  <g stroke-width="1.1" opacity="0.5">
+    <path d="M18 16.2 C 44 15, 70 16.4, 96 15.4"/>
+    <path d="M132 15 C 162 16.2, 192 14.8, 222 15.8"/>
+    <path d="M222 15.8 C 223 98, 221.6 198, 222.4 285.8"/>
+    <path d="M222.4 285.8 C 154 284.8, 88 286.6, 18.4 285.6"/>
+    <path d="M18.4 285.6 C 17.6 198, 19 102, 18 16.2"/>
+  </g>
+  <!-- profile, ~35, clean line -->
+  <path d="M114 60 C 103 66, 97 76, 98 86 C 98.5 93, 93 97.5, 91.5 103 C 90.6 106.6, 95 108, 96.5 111 C 95.5 114.5, 98 117.5, 97 120.5 C 99 127, 105 130.5, 112 131"/>
+  <path d="M115.6 61.6 C 105 67.4, 99.4 76.8, 100 86.2" stroke-width="1.5" opacity="0.35"/>
+  <path d="M112 131 C 120 139, 131 143, 142 141.5"/>
+  <!-- hair pulled tight to the skull, back to a bun -->
+  <path d="M114 60 C 142 50, 164 64, 167 92 C 168.5 108, 163 121, 154 131"/>
+  <path d="M116 58 C 143.6 48.4, 166 62.6, 169 91" stroke-width="1.5" opacity="0.35"/>
+  <path d="M118 56 C 138 49, 156 58, 162 74" stroke-width="1.4" opacity="0.55"/>
+  <path d="M112 64 C 134 57, 152 65, 158 80" stroke-width="1.2" opacity="0.4"/>
+  <path d="M150 70 C 158 80, 163 94, 164 108" stroke-width="1.3" opacity="0.5"/>
+  <path d="M142 62 C 152 72, 159 88, 161 104" stroke-width="1.1" opacity="0.35"/>
+  <path d="M132 58 C 144 66, 153 82, 156 100" stroke-width="1" opacity="0.25"/>
+  <!-- the bun and its tie -->
+  <path d="M164 110 C 174 106, 181 114, 176 123 C 172 130, 162 127, 162 119 C 162 114, 166 111, 170 111" stroke-width="1.9"/>
+  <path d="M158 108 L 163 112 M158 122 L 163 119" stroke-width="1.4" opacity="0.6"/>
+  <!-- ear, and the pen behind it -->
+  <path d="M144 102 C 151 98, 154 108, 147 115 C 143 117.5, 141 112, 143.5 108" stroke-width="1.9"/>
+  <g stroke-width="1.6">
+    <path d="M136 97 C 143 94.6, 150 92.2, 156 90"/>
+    <path d="M137 100 C 144 97.4, 151 95, 157 93"/>
+    <path d="M156 90 L 160.5 91 L 157 93"/>
+    <path d="M146 94.5 L 151 92.8" stroke-width="1.2" opacity="0.6"/>
+  </g>
+  <!-- brow, eye, mouth -->
+  <path d="M103 80 C 108 78, 113 78.4, 117 80" stroke-width="2.4"/>
+  <path d="M102 89 C 106 88, 110 88.2, 113 89.4" stroke-width="1.8"/>
+  <path d="M113.5 89 L 116 88" stroke-width="1.4" opacity="0.7"/>
+  <path d="M111 121 C 115 122.5, 120 122.5, 124 121.5" stroke-width="1.9"/>
+  <!-- neck, collar, shoulders -->
+  <path d="M110 134 C 108 146, 104 155, 96 162"/>
+  <path d="M138 134 C 141 147, 146 156, 154 162"/>
+  <path d="M96 170 C 108 178, 124 180, 138 176" stroke-width="1.6" opacity="0.65"/>
+  <path d="M60 198 C 90 179, 122 175, 152 180 C 172 183, 188 190, 199 199"/>
+  <path d="M62 200.6 C 92 182, 122.6 178.4, 151 183" stroke-width="1.5" opacity="0.3"/>
+  <!-- prop: the notebook, open, pen across the page -->
+  <g stroke-width="1.6">
+    <path d="M154 226 C 164 220.5, 175 218.5, 185 220"/>
+    <path d="M185 220 C 196 218, 206 220, 213 224.5"/>
+    <path d="M156 254 C 166 249, 176 247, 185 248.5"/>
+    <path d="M185 248.5 C 195 246.5, 205 248, 211 252"/>
+    <path d="M154 226 L 156 254 M213 224.5 L 211 252 M185 220 L 185 248.5"/>
+    <path d="M160 229 C 168 225.6, 176 224.6, 182 225.6 M160 236 C 168 232.6, 176 231.6, 182 232.6 M160 243 C 168 239.6, 176 238.6, 182 239.6" stroke-width="1" opacity="0.5"/>
+    <path d="M190 227 C 197 226, 203 226.6, 208 228.4" stroke-width="1" opacity="0.5"/>
+    <path d="M195 259 C 201 251, 207 243, 213 235.5"/>
+    <path d="M197 260.5 C 203 252.6, 209 244.6, 215 237" stroke-width="1.2" opacity="0.55"/>
+    <path d="M195 259 L 191.5 263.5 L 197 260.5" stroke-width="1.4"/>
+  </g>
+</svg>

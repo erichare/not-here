@@ -5,20 +5,20 @@ import { makeState } from './testing/fixtures.ts';
 
 describe('propagateGossip', () => {
   it('spreads known facts along an edge with certainty when chance is omitted', () => {
-    const state = makeState([{ tag: 'lie-caught', knownBy: ['ivy'] }]);
-    const next = propagateGossip(state, [{ from: 'ivy', to: 'maud' }]);
-    expect(next.knownBy.maud).toContain(0);
-    expect(next.knownBy.ivy).toEqual([0]);
+    const state = makeState([{ tag: 'lie-caught', knownBy: ['priya'] }]);
+    const next = propagateGossip(state, [{ from: 'priya', to: 'barb' }]);
+    expect(next.knownBy.barb).toContain(0);
+    expect(next.knownBy.priya).toEqual([0]);
   });
 
   it('never propagates facts with the private: tag prefix', () => {
     const state = makeState([
-      { tag: 'private:shard-dora', knownBy: ['dora'] },
-      { tag: 'kindness', knownBy: ['dora'] },
+      { tag: 'private:shard-dianne', knownBy: ['dianne'] },
+      { tag: 'kindness', knownBy: ['dianne'] },
     ]);
-    const next = propagateGossip(state, [{ from: 'dora', to: 'elias', chance: 1 }]);
-    expect(next.knownBy.elias).toContain(1);
-    expect(next.knownBy.elias).not.toContain(0);
+    const next = propagateGossip(state, [{ from: 'dianne', to: 'wade', chance: 1 }]);
+    expect(next.knownBy.wade).toContain(1);
+    expect(next.knownBy.wade).not.toContain(0);
   });
 
   it('respects the edge tag filter', () => {
@@ -36,13 +36,13 @@ describe('propagateGossip', () => {
     const state = makeState(
       Array.from({ length: 5 }, (_, i) => ({
         tag: `rumor-${i}`,
-        knownBy: ['maud'] as const,
+        knownBy: ['barb'] as const,
       })),
       1234,
     );
     const edges: readonly GossipEdge[] = [
-      { from: 'maud', to: 'dora', chance: 0.5 },
-      { from: 'maud', to: 'tam', chance: 0.5 },
+      { from: 'barb', to: 'dianne', chance: 0.5 },
+      { from: 'barb', to: 'tam', chance: 0.5 },
     ];
     const a = propagateGossip(state, edges);
     const b = propagateGossip(state, edges);
@@ -50,49 +50,49 @@ describe('propagateGossip', () => {
   });
 
   it('advances rngState when probabilistic edges roll', () => {
-    const state = makeState([{ tag: 'rumor', knownBy: ['elias'] }]);
-    const next = propagateGossip(state, [{ from: 'elias', to: 'ivy', chance: 0.5 }]);
+    const state = makeState([{ tag: 'rumor', knownBy: ['wade'] }]);
+    const next = propagateGossip(state, [{ from: 'wade', to: 'priya', chance: 0.5 }]);
     expect(next.rngState).not.toBe(state.rngState);
   });
 
   it('chance 0 spreads nothing but still advances the rng deterministically', () => {
-    const state = makeState([{ tag: 'rumor', knownBy: ['elias'] }]);
-    const next = propagateGossip(state, [{ from: 'elias', to: 'ivy', chance: 0 }]);
-    expect(next.knownBy.ivy).toEqual([]);
+    const state = makeState([{ tag: 'rumor', knownBy: ['wade'] }]);
+    const next = propagateGossip(state, [{ from: 'wade', to: 'priya', chance: 0 }]);
+    expect(next.knownBy.priya).toEqual([]);
     expect(next.rngState).not.toBe(state.rngState);
   });
 
   it('is one hop per pass: chained edges do not relay in a single pass', () => {
-    const state = makeState([{ tag: 'rumor', knownBy: ['dora'] }]);
+    const state = makeState([{ tag: 'rumor', knownBy: ['dianne'] }]);
     const next = propagateGossip(state, [
-      { from: 'dora', to: 'maud' },
-      { from: 'maud', to: 'tam' },
+      { from: 'dianne', to: 'barb' },
+      { from: 'barb', to: 'tam' },
     ]);
-    expect(next.knownBy.maud).toContain(0);
+    expect(next.knownBy.barb).toContain(0);
     expect(next.knownBy.tam).not.toContain(0);
     // A second pass carries it the next hop.
-    const later = propagateGossip(next, [{ from: 'maud', to: 'tam' }]);
+    const later = propagateGossip(next, [{ from: 'barb', to: 'tam' }]);
     expect(later.knownBy.tam).toContain(0);
   });
 
   it('does not duplicate facts the target already knows', () => {
-    const state = makeState([{ tag: 'kindness', knownBy: ['ivy', 'maud'] }]);
-    const next = propagateGossip(state, [{ from: 'ivy', to: 'maud' }]);
-    expect(next.knownBy.maud).toEqual([0]);
+    const state = makeState([{ tag: 'kindness', knownBy: ['priya', 'barb'] }]);
+    const next = propagateGossip(state, [{ from: 'priya', to: 'barb' }]);
+    expect(next.knownBy.barb).toEqual([0]);
   });
 
   it('returns the same reference when nothing changes', () => {
-    const state = makeState([{ tag: 'private:secret', knownBy: ['maud'] }]);
-    const next = propagateGossip(state, [{ from: 'maud', to: 'sam' }]);
+    const state = makeState([{ tag: 'private:secret', knownBy: ['barb'] }]);
+    const next = propagateGossip(state, [{ from: 'barb', to: 'sam' }]);
     expect(next).toBe(state);
   });
 
   it('never mutates the input state', () => {
-    const state = makeState([{ tag: 'rumor', knownBy: ['dora'] }]);
+    const state = makeState([{ tag: 'rumor', knownBy: ['dianne'] }]);
     const snapshot = JSON.stringify(state);
     propagateGossip(state, [
-      { from: 'dora', to: 'maud' },
-      { from: 'dora', to: 'sam', chance: 0.5 },
+      { from: 'dianne', to: 'barb' },
+      { from: 'dianne', to: 'sam', chance: 0.5 },
     ]);
     expect(JSON.stringify(state)).toBe(snapshot);
   });

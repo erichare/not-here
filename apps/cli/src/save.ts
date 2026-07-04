@@ -1,7 +1,7 @@
 /**
  * Persistence. WorldState JSON at .saves/slot1.json — schema-version
  * checked; corrupt, missing, or skewed saves mean a fresh start. Plus the
- * append-only plain-text .saves/maud-ledger.txt: one line per choice made,
+ * append-only plain-text .saves/barb-ledger.txt: one line per choice made,
  * the diegetic cross-run artifact (NG+ reads it later).
  */
 
@@ -50,7 +50,7 @@ export interface LedgerEntry {
   readonly label: string;
 }
 
-/** One line in Maud's book. */
+/** One line in Barb's book. */
 export const formatLedgerLine = (entry: LedgerEntry): string =>
   `Day ${entry.day}, ${entry.slot} — ${entry.label}`;
 

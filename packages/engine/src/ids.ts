@@ -8,14 +8,14 @@ export type ChoiceId = string & { readonly __brand?: 'ChoiceId' };
 export type CueId = string & { readonly __brand?: 'CueId' };
 export type FactTag = string & { readonly __brand?: 'FactTag' };
 
-export type CharacterId = 'dora' | 'elias' | 'ivy' | 'sam' | 'maud' | 'tam';
+export type CharacterId = 'dianne' | 'wade' | 'priya' | 'sam' | 'barb' | 'tam';
 
 export type StatId = 'flesh' | 'name' | 'echo' | 'undertow';
 
 export type SlotId = 'morning' | 'afternoon' | 'evening' | 'night';
 
 export const CHARACTERS: readonly CharacterId[] = [
-  'dora', 'elias', 'ivy', 'sam', 'maud', 'tam',
+  'dianne', 'wade', 'priya', 'sam', 'barb', 'tam',
 ];
 
 export const STATS: readonly StatId[] = ['flesh', 'name', 'echo', 'undertow'];

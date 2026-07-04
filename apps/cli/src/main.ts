@@ -36,7 +36,7 @@ import { appendLedgerLine, loadSave, saveGame } from './save.ts';
 const HERE = dirname(fileURLToPath(import.meta.url));
 const AUDITIONS_DIR = join(HERE, '..', '..', '..', 'auditions');
 const SAVE_PATH = join(cwd(), '.saves', 'slot1.json');
-const LEDGER_PATH = join(cwd(), '.saves', 'maud-ledger.txt');
+const LEDGER_PATH = join(cwd(), '.saves', 'barb-ledger.txt');
 const DEFAULT_SEED = 1971;
 
 const write = (text: string): void => {

@@ -86,7 +86,7 @@ describe('applyEffect — fact.add', () => {
     const { state } = applyEffect(base, {
       op: 'fact.add',
       tag: 'confided',
-      about: 'dora',
+      about: 'dianne',
       data: 'the moth thing',
     });
     expect(state.facts[0]).toEqual({
@@ -94,7 +94,7 @@ describe('applyEffect — fact.add', () => {
       day: 1,
       slot: 'night',
       tag: 'confided',
-      about: 'dora',
+      about: 'dianne',
       data: 'the moth thing',
     });
 
@@ -107,14 +107,14 @@ describe('applyEffect — fact.add', () => {
     const { state } = applyEffect(base, {
       op: 'fact.add',
       tag: 'saw-fog',
-      witnessedBy: ['dora', 'sam'],
+      witnessedBy: ['dianne', 'sam'],
     });
     expect(state.knownBy).toEqual({
-      dora: [0],
-      elias: [],
-      ivy: [],
+      dianne: [0],
+      wade: [],
+      priya: [],
       sam: [0],
-      maud: [],
+      barb: [],
       tam: [],
     });
   });
@@ -129,27 +129,27 @@ describe('applyEffect — fact.learn', () => {
   const withFact = applyEffect(base, {
     op: 'fact.add',
     tag: 'saw-fog',
-    witnessedBy: ['dora'],
+    witnessedBy: ['dianne'],
   }).state;
 
   it('adds the fact id to the learner', () => {
     const { state, events } = applyEffect(withFact, {
       op: 'fact.learn',
-      who: 'elias',
+      who: 'wade',
       tag: 'saw-fog',
     });
-    expect(state.knownBy.elias).toEqual([0]);
-    expect(state.knownBy.dora).toEqual([0]);
+    expect(state.knownBy.wade).toEqual([0]);
+    expect(state.knownBy.dianne).toEqual([0]);
     expect(events).toEqual([]);
   });
 
   it('is idempotent: learning an already-known fact returns the state unchanged', () => {
-    const { state } = applyEffect(withFact, { op: 'fact.learn', who: 'dora', tag: 'saw-fog' });
+    const { state } = applyEffect(withFact, { op: 'fact.learn', who: 'dianne', tag: 'saw-fog' });
     expect(state).toBe(withFact);
   });
 
   it('is a no-op when no fact with the tag exists', () => {
-    const { state } = applyEffect(withFact, { op: 'fact.learn', who: 'ivy', tag: 'nothing' });
+    const { state } = applyEffect(withFact, { op: 'fact.learn', who: 'priya', tag: 'nothing' });
     expect(state).toBe(withFact);
   });
 });

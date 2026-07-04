@@ -55,6 +55,7 @@ const run = (root: HTMLElement): void => {
     state = result.state;
     for (const event of result.events) handleEvent(event, result.state);
     const model: SceneModel = {
+      sceneId: result.state.sceneId,
       header: headerFor(result.state),
       paragraphs: result.view.paragraphs,
       choices: result.view.choices,
@@ -94,7 +95,9 @@ const run = (root: HTMLElement): void => {
       return;
     }
     const saved = loadSave(storage);
-    if (saved !== null) state = saved;
+    // A save referencing a scene this content no longer has (content patch)
+    // starts fresh rather than crashing the enter step.
+    if (saved !== null && content.scenes.has(saved.sceneId)) state = saved;
     enter();
   });
 };

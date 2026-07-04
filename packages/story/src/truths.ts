@@ -1,5 +1,5 @@
 /**
- * Self-truth tags — the working taxonomy seeded by the Pub Interview.
+ * Self-truth tags — the working taxonomy seeded by the Counter Interview.
  *
  * Flag keys take the form `truth:<tag>` with value `true`. The full game
  * uses a fixed 24-tag taxonomy (see design/game-bible.md, LLM touchpoint 1);
@@ -11,8 +11,8 @@
  */
 
 export const TRUTH_TAGS = [
-  'hates-the-sea',
-  'misses-the-sea',
+  'hates-the-lake',
+  'misses-the-lake',
   'eats-what-is-given',
   'travels-light',
   'keeps-promises',
