@@ -1,0 +1,314 @@
+/*
+ * NOT HERE — entries in Maud's ledger.
+ * CRT phosphor: warm amber on near-black, monospace, 68ch column.
+ * The fog is the page's negative space: wide margins + vignette.
+ * All animation is disabled under prefers-reduced-motion.
+ */
+
+:root {
+  --ink: #0a0908;
+  --phosphor: #e8b45a;
+  --phosphor-bright: #ffd98f;
+  --phosphor-dim: #7f6335;
+  --bloom: 0 0 6px rgba(232, 180, 90, 0.3);
+  --bloom-strong: 0 0 10px rgba(255, 217, 143, 0.45);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--ink);
+}
+
+body {
+  min-height: 100vh;
+  background: var(--ink);
+  color: var(--phosphor);
+  font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas,
+    'Liberation Mono', monospace;
+  font-size: 1rem;
+  line-height: 1.85;
+  text-shadow: var(--bloom);
+  overflow-x: hidden;
+}
+
+/* Scanlines — the tube between you and the ledger. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.22) 0px,
+    rgba(0, 0, 0, 0.22) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  animation: crt-drift 7s linear infinite;
+}
+
+/* Vignette — the fog holds the edges of the page. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 90% 75% at 50% 42%,
+    transparent 35%,
+    rgba(4, 3, 2, 0.55) 78%,
+    rgba(4, 3, 2, 0.9) 100%
+  );
+}
+
+@keyframes crt-drift {
+  0% { opacity: 0.9; }
+  50% { opacity: 1; }
+  92% { opacity: 0.95; }
+  96% { opacity: 0.8; }
+  100% { opacity: 0.9; }
+}
+
+.page {
+  max-width: 68ch;
+  margin: 0 auto;
+  padding: 5rem 2rem 8rem;
+}
+
+/* ---- ledger header ---- */
+
+.slot-header {
+  font-size: 0.72rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--phosphor-dim);
+  text-shadow: none;
+  border-bottom: 1px solid rgba(232, 180, 90, 0.18);
+  padding-bottom: 0.6rem;
+  margin-bottom: 2.6rem;
+}
+
+/* ---- prose ---- */
+
+.entry .prose {
+  margin-bottom: 1.5rem;
+}
+
+.w {
+  opacity: 0;
+  transition: opacity 0.12s ease-out;
+}
+
+.w.on {
+  opacity: 1;
+}
+
+/* ---- choices: ledger lines ---- */
+
+.choices {
+  list-style: none;
+  margin-top: 3rem;
+  opacity: 0;
+  transition: opacity 0.5s ease-in;
+}
+
+.choices.shown {
+  opacity: 1;
+}
+
+.choice-line {
+  margin: 0.4rem 0;
+}
+
+button.choice {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  font: inherit;
+  line-height: inherit;
+  color: var(--phosphor);
+  text-shadow: var(--bloom);
+  cursor: pointer;
+  padding: 0.25rem 0.5rem 0.25rem 0;
+}
+
+button.choice:hover,
+button.choice:focus-visible {
+  color: var(--phosphor-bright);
+  text-shadow: var(--bloom-strong);
+  outline: none;
+}
+
+button.choice:focus-visible {
+  outline: 1px dashed rgba(232, 180, 90, 0.4);
+  outline-offset: 4px;
+}
+
+.choice.locked {
+  display: block;
+  padding: 0.25rem 0.5rem 0.25rem 0;
+  color: var(--phosphor-dim);
+  opacity: 0.55;
+  text-shadow: none;
+  cursor: default;
+}
+
+.ending-mark {
+  margin: 2rem 0 1rem;
+  color: var(--phosphor-dim);
+  letter-spacing: 0.2em;
+  text-shadow: none;
+}
+
+/* ---- captions (audio fallbacks, visual tells) ---- */
+
+.captions {
+  position: fixed;
+  right: 1.2rem;
+  bottom: 1rem;
+  z-index: 50;
+  text-align: right;
+  pointer-events: none;
+}
+
+.caption {
+  font-size: 0.78rem;
+  color: var(--phosphor-dim);
+  text-shadow: none;
+  opacity: 0;
+  animation: caption-breathe 4s ease-in-out forwards;
+}
+
+@keyframes caption-breathe {
+  0% { opacity: 0; }
+  15% { opacity: 0.85; }
+  75% { opacity: 0.85; }
+  100% { opacity: 0; }
+}
+
+/* ---- title screen: a single lit window in the fog ---- */
+
+.title-screen {
+  min-height: 82vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.4rem;
+  text-align: center;
+}
+
+.title-name {
+  font-size: 1rem;
+  font-weight: normal;
+  letter-spacing: 0.9em;
+  padding-left: 0.9em; /* recenters the tracked-out text */
+  color: var(--phosphor-dim);
+  text-shadow: none;
+}
+
+button.lit-window {
+  width: 74px;
+  height: 100px;
+  border: 1px solid rgba(232, 180, 90, 0.6);
+  border-radius: 2px;
+  background: radial-gradient(
+    ellipse at 50% 55%,
+    #ffdf9c 0%,
+    #eab659 55%,
+    #b57f2e 100%
+  );
+  box-shadow:
+    0 0 22px rgba(232, 180, 90, 0.55),
+    0 0 70px rgba(232, 180, 90, 0.28),
+    0 0 140px rgba(232, 180, 90, 0.14);
+  cursor: pointer;
+  position: relative;
+  animation: lamp-breathe 5s ease-in-out infinite;
+}
+
+button.lit-window:hover,
+button.lit-window:focus-visible {
+  box-shadow:
+    0 0 28px rgba(255, 217, 143, 0.7),
+    0 0 90px rgba(232, 180, 90, 0.38),
+    0 0 170px rgba(232, 180, 90, 0.18);
+  outline: none;
+}
+
+/* Window panes: one vertical + one horizontal muntin. */
+button.lit-window .panes {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to right, transparent calc(50% - 1px), rgba(10, 9, 8, 0.85) calc(50% - 1px), rgba(10, 9, 8, 0.85) calc(50% + 1px), transparent calc(50% + 1px)),
+    linear-gradient(to bottom, transparent calc(38% - 1px), rgba(10, 9, 8, 0.85) calc(38% - 1px), rgba(10, 9, 8, 0.85) calc(38% + 1px), transparent calc(38% + 1px));
+}
+
+@keyframes lamp-breathe {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.12); }
+}
+
+.title-hint {
+  font-size: 0.8rem;
+  color: var(--phosphor-dim);
+  text-shadow: none;
+}
+
+button.new-game-link {
+  background: none;
+  border: none;
+  font: inherit;
+  font-size: 0.78rem;
+  color: var(--phosphor-dim);
+  text-decoration: underline dotted;
+  text-underline-offset: 4px;
+  cursor: pointer;
+  text-shadow: none;
+}
+
+button.new-game-link:hover,
+button.new-game-link:focus-visible {
+  color: var(--phosphor);
+}
+
+/* ---- accessibility: stillness on request ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .caption {
+    opacity: 0.85;
+  }
+
+  .choices {
+    opacity: 1;
+  }
+}
+
+/* Document artifacts — letters, timetables, ledger pages. Verbatim, no wrap. */
+.doc {
+  font-family: inherit;
+  color: color-mix(in srgb, var(--phosphor, #e8b45a) 78%, transparent);
+  margin: 1.4rem auto;
+  width: fit-content;
+  line-height: 1.25;
+  text-shadow: 0 0 6px color-mix(in srgb, var(--phosphor, #e8b45a) 25%, transparent);
+  overflow-x: auto;
+  max-width: 100%;
+}

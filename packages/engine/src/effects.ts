@@ -4,7 +4,7 @@
  * fx). Stat changes clamp; fact additions auto-witness.
  */
 
-import type { CharacterId, FactTag, SceneId, StatId } from './ids.ts';
+import type { CharacterId, FactTag, SceneId, SlotId, StatId } from './ids.ts';
 import { clampMeter, clampStat, type Fact, type WorldState } from './state.ts';
 import type { EngineEvent } from './events.ts';
 
@@ -22,6 +22,7 @@ export type Effect =
       readonly witnessedBy?: readonly CharacterId[];
     }
   | { readonly op: 'fact.learn'; readonly who: CharacterId; readonly tag: FactTag }
+  | { readonly op: 'time.set'; readonly day?: number; readonly slot?: SlotId }
   | { readonly op: 'goto'; readonly scene: SceneId };
 
 export interface EffectResult {
@@ -89,6 +90,15 @@ export const applyEffect = (state: WorldState, effect: Effect): EffectResult => 
       return { state: addFact(state, effect), events: [] };
     case 'fact.learn':
       return { state: learnFact(state, effect.who, effect.tag), events: [] };
+    case 'time.set':
+      return {
+        state: {
+          ...state,
+          ...(effect.day !== undefined ? { day: effect.day } : {}),
+          ...(effect.slot !== undefined ? { slot: effect.slot } : {}),
+        },
+        events: [],
+      };
     case 'goto':
       return { state, events: [], goto: effect.scene };
   }
