@@ -4,7 +4,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "typecheck": "echo 'Phase 1'",
-    "test": "echo 'Phase 1'"
+    "typecheck": "tsc --noEmit",
+    "test": "echo 'Phase 1'",
+    "start": "node src/main.ts"
+  },
+  "dependencies": {
+    "@not-here/engine": "workspace:*",
+    "@not-here/memory": "workspace:*",
+    "@not-here/story": "workspace:*",
+    "@not-here/music": "workspace:*"
   }
 }

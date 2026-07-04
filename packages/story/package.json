@@ -8,5 +8,9 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@not-here/engine": "workspace:*",
+    "@not-here/memory": "workspace:*"
   }
 }
