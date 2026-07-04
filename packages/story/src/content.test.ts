@@ -98,6 +98,87 @@ const BARB_PATH = [
   'to-evening', 'go-up', 'let-it-come',
 ] as const;
 
+// ——— Full Act 1 routes (Night 1 → act1-end), one per Foghorn branch. ———
+
+const HORN_ON_PATH = [
+  ...DIANNE_PATH,
+  // Day 3: the shed; trap held. Room + clinic resolve without you.
+  'to-shed', 'say-nothing', 'back-up-the-road', 'go-up', 'let-tomorrow',
+  // Day 4: the wharf; the first audible lie; the two phones.
+  'to-wharf', 'ask-direct', 'leave-him', 'look-longest', 'let-go',
+  // Day 5: the 07:40; the marked lie about the 28th.
+  'take-the-0740', 'hold-his-eyes', 'say-staying', 'go-in', 'turn-in',
+  'let-morning-come',
+  // Day 6: the hall (late intake); the recording; the honest answer.
+  'go-to-the-hall', 'answer-plainly', 'back-up-the-hill', 'cross-the-lot',
+  'say-i-dont-know', 'go-in-eventually',
+  // Day 7: the branch — "Keep playing."
+  'stay-the-morning', 'cross-the-lot', 'go-in', 'keep-playing', 'lie-down',
+] as const;
+
+const HORN_STOPPED_PATH = [
+  ...BARB_PATH,
+  // Day 3: the room; the quilt left hers. Shed + clinic resolve without you.
+  'to-room', 'let-it-stay', 'close-wardrobe', 'go-up', 'let-tomorrow',
+  // Day 4: the walk-in with Barb; Moose beat #2.
+  'to-errand', 'finish-out', 'look-longest', 'let-go',
+  // Day 5: the hall; the flyer goes up; the lid stays down.
+  'help-at-the-hall', 'do-the-flyers', 'let-the-lid-stay', 'walk-back-down',
+  'turn-in', 'let-morning-come',
+  // Day 6: the loaf to Wade; the recording; the said nothing.
+  'walk-the-loaf-down', 'warm-your-hands', 'walk-back-up', 'cross-the-lot',
+  'say-nothing', 'go-in-eventually',
+  // Day 7: the branch — "Stop."
+  'shore-road', 'cross-the-lot', 'go-in', 'stop', 'walk-back', 'lie-down',
+] as const;
+
+/** One recorded step of a traced run: what rendered, on what day, with what state. */
+interface TraceStep {
+  readonly sceneId: SceneId;
+  readonly day: number;
+  readonly state: WorldState;
+}
+
+interface TracedRun extends Playthrough {
+  readonly trace: readonly TraceStep[];
+}
+
+/** play(), but keeping per-step (sceneId, day, state) for boundary assertions. */
+const playTraced = (choiceIds: readonly string[], seed = 42): TracedRun => {
+  let step = advance(content, initialState(seed, OPENING_SCENE), { kind: 'enter' });
+  const views: SceneView[] = [step.view];
+  const events: EngineEvent[] = [...step.events];
+  const trace: TraceStep[] = [
+    { sceneId: step.view.sceneId, day: step.state.day, state: step.state },
+  ];
+  for (const choiceId of choiceIds) {
+    step = advance(content, step.state, { kind: 'choose', choiceId });
+    views.push(step.view);
+    events.push(...step.events);
+    trace.push({ sceneId: step.view.sceneId, day: step.state.day, state: step.state });
+  }
+  return { state: step.state, views, events, trace };
+};
+
+const stepAt = (run: TracedRun, sceneId: SceneId): TraceStep => {
+  const found = run.trace.find((t) => t.sceneId === sceneId);
+  if (!found) throw new Error(`Traced run never rendered ${sceneId}`);
+  return found;
+};
+
+const knowsTag = (state: WorldState, who: keyof WorldState['knownBy'], tag: string): boolean => {
+  const fact = state.facts.find((f) => f.tag === tag);
+  return fact !== undefined && state.knownBy[who].includes(fact.id);
+};
+
+/** Accessibility invariant, at run level: no detune without its visual twin next. */
+const expectPairedDetunes = (events: readonly EngineEvent[]): void => {
+  events.forEach((event, i) => {
+    if (event.kind !== 'music.detune') return;
+    expect(events[i + 1]?.kind, `unpaired music.detune at event ${i}`).toBe('tell.visual');
+  });
+};
+
 describe('content build', () => {
   it('builds, and the opening scene exists', () => {
     expect(content.scenes.has(OPENING_SCENE)).toBe(true);
@@ -180,10 +261,13 @@ describe('walkthrough: the Dianne branch', () => {
 
   it('emits the cue trail and a final autosave', () => {
     const cues = run.events.flatMap((e) => (e.kind === 'music.cue' ? [e.cue] : []));
-    expect(cues).toEqual([
+    // Night 1 + Day 2 open the trail; the Day 3–7 fleet appends its own cues.
+    expect(cues.slice(0, 7)).toEqual([
       'title', 'shingle', 'pub-warm', 'foghorn-312', 'dianne-theme', 'pub-warm',
       'foghorn-312',
     ]);
+    // The act closes on the ACT TWO title card (day7.ts, 'act1-end').
+    expect(cues[cues.length - 1]).toBe('title');
     expect(run.events.some((e) => e.kind === 'save.autosave')).toBe(true);
   });
 });
@@ -274,5 +358,121 @@ describe('prose invariants', () => {
         false,
       );
     }
+  });
+});
+
+describe('full Act 1 walkthrough — horn-on route', () => {
+  const run = playTraced(HORN_ON_PATH);
+
+  it('reaches act1-end on Day 8 with the ending marker', () => {
+    expect(run.state.sceneId).toBe('act1-end');
+    expect(run.views[run.views.length - 1]?.ending).toBe('act1-end');
+    expect(run.state.day).toBe(8);
+  });
+
+  it('the day counter reads 1..8, monotonic, each hub on its own day', () => {
+    const days = run.trace.map((t) => t.day);
+    days.forEach((day, i) => {
+      if (i > 0) expect(day, `day went backwards at step ${i}`).toBeGreaterThanOrEqual(days[i - 1] ?? 0);
+    });
+    expect([...new Set(days)]).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
+    expect(stepAt(run, 'd2-wake').day).toBe(2);
+    expect(stepAt(run, 'd3-morning').day).toBe(3);
+    expect(stepAt(run, 'd4-morning').day).toBe(4);
+    expect(stepAt(run, 'd5-morning').day).toBe(5);
+    expect(stepAt(run, 'd6-morning').day).toBe(6);
+    expect(stepAt(run, 'd7-morning').day).toBe(7);
+    expect(stepAt(run, 'act1-end').day).toBe(8);
+  });
+
+  it('gossip postDay ran: the Day-5 lie crosses tam→barb at the 5→6 boundary', () => {
+    // Only Tam witnessed 'told-tam-staying'; Barb still ignorant at Night 5 …
+    expect(knowsTag(stepAt(run, 'd5-night').state, 'barb', 'told-tam-staying')).toBe(false);
+    // … and knows it when Day 6 opens: learned via the edge, not the room.
+    expect(knowsTag(stepAt(run, 'd6-morning').state, 'barb', 'told-tam-staying')).toBe(true);
+  });
+
+  it('the gossip is visible in dialogue: Tam credits Barb on Day 5, Barb credits Tam on Day 6', () => {
+    const d5 = viewOf(run, 'd5-evening').paragraphs.join('\n');
+    expect(d5).toContain('Barb keeps me current');
+    const d6 = viewOf(run, 'd6-evening').paragraphs.join('\n');
+    expect(d6).toContain('Tam tells me');
+  });
+
+  it('sets the horn-on flags; Wade alone holds the fact; nothing starts counting', () => {
+    expect(run.state.flags['horn-on']).toBe(true);
+    expect(run.state.flags['wade-confession-seed']).toBe(true);
+    expect(run.state.flags['horn-stopped']).toBeUndefined();
+    expect(knowsTag(run.state, 'wade', 'let-wade-play')).toBe(true);
+    expect(knowsTag(run.state, 'barb', 'let-wade-play')).toBe(false);
+    expect(
+      run.events.some((e) => e.kind === 'tell.visual' && e.text === '(Something has started counting.)'),
+    ).toBe(false);
+  });
+
+  it('carries the marked-lie STATIC cost and pairs every detune with a visual twin', () => {
+    expect(run.state.staticMeter).toBe(12); // 10 baseline + say-staying
+    expectPairedDetunes(run.events);
+    expect(run.events.some((e) => e.kind === 'music.detune' && e.pattern === 'wade')).toBe(true);
+  });
+});
+
+describe('full Act 1 walkthrough — horn-stopped route', () => {
+  const run = playTraced(HORN_STOPPED_PATH);
+
+  it('reaches act1-end on Day 8 with the ending marker', () => {
+    expect(run.state.sceneId).toBe('act1-end');
+    expect(run.views[run.views.length - 1]?.ending).toBe('act1-end');
+    expect(run.state.day).toBe(8);
+  });
+
+  it('the day counter reads 1..8 across every boundary', () => {
+    const days = run.trace.map((t) => t.day);
+    days.forEach((day, i) => {
+      if (i > 0) expect(day, `day went backwards at step ${i}`).toBeGreaterThanOrEqual(days[i - 1] ?? 0);
+    });
+    expect([...new Set(days)]).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
+  });
+
+  it('gossip postDay ran: helped-barb crosses barb→tam at the 2→3 boundary', () => {
+    expect(knowsTag(stepAt(run, 'd2-night').state, 'tam', 'helped-barb')).toBe(false);
+    expect(knowsTag(stepAt(run, 'd3-morning').state, 'tam', 'helped-barb')).toBe(true);
+    // Still known (facts only accumulate) when Day 6 opens — the check the
+    // beat sheet asks for: a fact learned via edges exists by Day 6.
+    expect(knowsTag(stepAt(run, 'd6-morning').state, 'tam', 'helped-barb')).toBe(true);
+  });
+
+  it('Tam voices the gossiped fact on Day 5, crediting his source', () => {
+    const d5 = viewOf(run, 'd5-evening').paragraphs.join('\n');
+    expect(d5).toContain('Barb tells me you dry a pot properly');
+  });
+
+  it('the window-first habit pays off: the figure at the horn-room rail, Night 3', () => {
+    expect(viewOf(run, 'd3-night').paragraphs.join('\n')).toContain('a figure at the horn-room rail');
+    expect(run.state.flags['d3:saw-figure']).toBe(true);
+  });
+
+  it('sets horn-stopped; Wade alone holds the fact; the count begins', () => {
+    expect(run.state.flags['horn-stopped']).toBe(true);
+    expect(run.state.flags['horn-on']).toBeUndefined();
+    expect(knowsTag(run.state, 'wade', 'stopped-the-horn')).toBe(true);
+    expect(knowsTag(run.state, 'barb', 'stopped-the-horn')).toBe(false);
+    expect(
+      run.events.some((e) => e.kind === 'tell.visual' && e.text === '(Something has started counting.)'),
+    ).toBe(true);
+  });
+
+  it('closing the valve is the honest act: STATIC ends below baseline', () => {
+    expect(run.state.staticMeter).toBe(5); // 10 baseline − 5 at the valve
+    expectPairedDetunes(run.events);
+  });
+
+  it('the silent scene stays silent: no cue between pub-warm and the act card', () => {
+    const cues = run.events.flatMap((e) => (e.kind === 'music.cue' ? [e.cue] : []));
+    const lastPubWarm = cues.lastIndexOf('pub-warm'); // d7-evening
+    // After the Day-7 evening: the walk (foghorn-312), the horn room
+    // (horn-close), then nothing — d6-recording earlier and d7-silence/after
+    // carry no cue — until the ACT TWO card's title.
+    expect(cues.slice(lastPubWarm + 1)).toEqual(['foghorn-312', 'horn-close', 'title']);
   });
 });

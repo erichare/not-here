@@ -29,7 +29,7 @@ three over coffee, no menu UI):
   notebook fact-thread opens. If skipped, the note-under-the-door retelling
   fires that night (spike-fomo canon, retranslated).
 
-Evening: two without-you retellings (Maud→Barb telling B; C arrives as the
+Evening: two without-you retellings (Barb quoting Tam for B; C arrives as the
 note). Night 3: horn; if 'window-first' habit, you see a figure on the wharf.
 
 ## Day 4 — Wade, and the first audible lie
@@ -102,7 +102,7 @@ prep, both "of you." He says nothing. Whoever looks, looks away first.
     (lockedLabel always shown; gate: impossible in Act 1 — the ache.)
 - Act ends on the walk back up: one line either way about the quality of
   the silence / the sound behind you. `time.set day 8`, ACT 2 title card,
-  slice-end-act1 ending marker (replaces slice-end).
+  'act1-end' ending marker (replaces slice-end).
 
 ## Mechanics introduced this act
 - Three-way morning hubs with authored retellings for BOTH missed slots

@@ -63,9 +63,14 @@ export const DEFAULT_AXIS_WEIGHTS: readonly AxisWeightRule[] = [
 
   // The ECHO paradox: taking someone's memory of Wren cools their warmth for
   // you while raising their trust — they love the passing, fear the seam.
+  // Harvest facts ship 'private:'-prefixed (they must never gossip), so both
+  // spellings carry the same weights.
   { tag: 'memory-taken', axis: 'warmth', delta: -2, aboutKnowerOnly: true },
   { tag: 'memory-taken', axis: 'trust', delta: 1, aboutKnowerOnly: true },
   { tag: 'memory-taken', axis: 'fear', delta: 1, aboutKnowerOnly: true },
+  { tag: 'private:memory-taken', axis: 'warmth', delta: -2, aboutKnowerOnly: true },
+  { tag: 'private:memory-taken', axis: 'trust', delta: 1, aboutKnowerOnly: true },
+  { tag: 'private:memory-taken', axis: 'fear', delta: 1, aboutKnowerOnly: true },
 
   // The fog frightens everyone who sees it work.
   { tag: 'fog-*', axis: 'fear', delta: 2 },

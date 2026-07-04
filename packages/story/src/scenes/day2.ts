@@ -142,7 +142,7 @@ const dianne2 = defineScene({
         when: { op: 'fact.knownBy', who: 'dianne', tag: 'held-back-from-dianne' },
       },
       {
-        text: 'She sits you on the stool by the heater and finds tea from somewhere, the way she always could. "Drink that, love," she says. "Don’t talk yet."',
+        text: 'She waves you onto the stool by the heater and finds tea from somewhere, the way she always could. "Drink that, love," she says. "Don’t talk yet."',
       },
       {
         text: 'While she sorts the tubs you read the corkboard, because it is there. A quagga-mussel boat-wash notice. A snow-tire clinic in Penticton. The potluck flyer for the community hall — seven years, it says, and nothing else about it. And the bus schedule card, new this fall:',

@@ -36,15 +36,17 @@ const SKETCHES: Readonly<Record<SketchCharacter, string>> = {
 /**
  * Scene id → who the player meets there for the first time.
  * Ids are the post-retheme ids (design/retheme-lorn-bay.md name map).
- * Sam and Priya have no first-meeting scene in the slice yet — their
- * entries land with the Act 1 expansion.
+ * Branch-dependent intros (Dianne, Sam, Priya) sit on their intro scenes;
+ * a run that skips the scene simply never gets that margin card.
  */
 const FIRST_MEETING: Readonly<Record<string, SketchCharacter>> = {
   'n1-diner': 'barb', // the Kettle's counter, Night 1
   'n1-312': 'wade', // the horn at 3:12 — Wade's hand on the valve
   'd2-dianne': 'dianne', // Lorn Bay General, Day 2 morning
   'd2-evening': 'tam', // Tam comes in on the back of the cold
-  'slice-end': 'wren', // the empty frame, where the slice closes
+  'd3-shed': 'sam', // the boat shed, caulk gun going, Day 3
+  'd3-clinic': 'priya', // clinic hours in the old manse, Day 3
+  'act1-end': 'wren', // the empty frame, where the act closes
 };
 
 /** The inline SVG for a scene's first meeting, or null if there is none. */
