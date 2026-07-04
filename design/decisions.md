@@ -15,6 +15,18 @@ without asking.
   every scene must advance, rehearse, or pay off the mystery (the recontext table
   is the spine, not a garnish). When in doubt between a safe beat and a devastating
   one, write the devastating one and let the warmth around it do the carrying.
+- **Prose economy (creator directive, 2026-07-04):** enough to paint pictures,
+  never novel-wordy. Budget: 1–3 short paragraphs per beat, ~30–90 words between
+  choice points; longer only for set pieces (the Wake, the reveal, endings).
+  Cut adjectives before nouns; one concrete image per paragraph beats three.
+  The content lint warns on beats > 120 words.
+- **Image flourishes (creator directive, 2026-07-04):** favor small visual
+  artifacts over prose description wherever possible — letters, notes, tickets,
+  the tide table, ledger pages rendered AS documents (bordered/indented text
+  objects, same in both builds); ledger ruling-lines and tide-mark dividers as
+  scene ornaments; ASCII notation marginalia for motifs; in the web build, small
+  ink-line SVG vignettes at act boundaries and for keepsake objects (the fiddle,
+  the circled timetable, the folded coat).
 - **Setting:** 1970s British coast as pitched.
 - **Length:** 3–5 hours per playthrough.
 
