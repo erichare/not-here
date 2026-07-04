@@ -10,6 +10,11 @@ without asking.
   scarcity, plain-text cross-run ledger, both-doors acknowledgment, prose-grammar
   clue discipline, one-warning rule, verbatim player-words echo.
 - **Tone:** let it get truly dark (quiet-horror endings at full strength).
+  Reaffirmed 2026-07-04 in the creator's words: dark, shocking, emotional content
+  is "okay and encouraged" — do not soften on instinct. **The mystery is central:**
+  every scene must advance, rehearse, or pay off the mystery (the recontext table
+  is the spine, not a garnish). When in doubt between a safe beat and a devastating
+  one, write the devastating one and let the warmth around it do the carrying.
 - **Setting:** 1970s British coast as pitched.
 - **Length:** 3–5 hours per playthrough.
 
