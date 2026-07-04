@@ -9,12 +9,15 @@ import { fileURLToPath } from 'node:url';
 import { renderSong } from '../src/render.ts';
 import { encodeWav } from '../src/wav.ts';
 import { foghornSong } from '../scores/foghorn-song.ts';
+import { cueDoraTheme, cueFoghorn312, cuePubWarm, cueShingle } from '../scores/cues.ts';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const outDir = join(repoRoot, 'auditions');
 mkdirSync(outDir, { recursive: true });
 
-for (const song of [foghornSong]) {
+const title = { ...foghornSong, id: 'title' };
+
+for (const song of [foghornSong, title, cueShingle, cuePubWarm, cueDoraTheme, cueFoghorn312]) {
   const buffer = renderSong(song);
   const wav = encodeWav(buffer);
   const outPath = join(outDir, `${song.id}.wav`);
