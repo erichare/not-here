@@ -1,0 +1,1 @@
+{"name":"spike-terminal-audio","private":true,"type":"module","dependencies":{"node-web-audio-api":"^2.0.0"}}

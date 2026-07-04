@@ -1,0 +1,140 @@
+[
+ {
+  "scores": [
+   {
+    "pitchTitle": "Pitch 1: NOT HERE \u2014 Last Stop on the Owl Line",
+    "emotional": 9,
+    "twistQuality": 7,
+    "titleFit": 9,
+    "distinctiveness": 6,
+    "replayability": 8,
+    "total": 39,
+    "notes": "The single most quotable emotional beat of the four ('The luggage allowance is one heart. What will you carry?'), a flawless withheld-tonic music architecture, and the save-name-spoken-once device is a genuine sob trigger. But the twist lives in a crowded family \u2014 dying-rememberer/purgatory-town (To The Moon, Spiritfarer, KRZ-flavored elegy) \u2014 and many players will call 'the fog is you forgetting' by night three. Gorgeously clued, less surprising than it thinks. Cast is warm but archetypal (mother-innkeeper, dead-sister-DJ). Exceptional craft, familiar shape."
+   },
+   {
+    "pitchTitle": "Pitch 2: NOT HERE \u2014 Port Lorn",
+    "emotional": 9,
+    "twistQuality": 9,
+    "titleFit": 8,
+    "distinctiveness": 7,
+    "replayability": 8,
+    "total": 41,
+    "notes": "The one that would actually make me cry AND feel complicit. 'Nobody touches you first' is emotional design at the physical-grammar level \u2014 the Two Wrens hand-take 20 hours in is the kind of moment people describe with their voice breaking. The ECHO economy (take Dora's lullaby and she can never hum it again) turns the player's warmest instinct into theft, which is the cruelest and truest mechanic here. Triple twist (town lied, you're the fog's rehearsal-Wren, the real one is on the circled ferry that's been pinned on screen since Day 1) is airtight fair-play and lands in the stomach, not the head. Sam and Maud are instantly lovable; Ivy being right about everything is great antagonist craft. Docked on fit only because the terminal build's 'thinner and lonelier' justification is thematic rather than diegetic."
+   },
+   {
+    "pitchTitle": "Pitch 3: Not Here \u2014 The Foghorn / Lightship",
+    "emotional": 7,
+    "twistQuality": 8,
+    "titleFit": 8,
+    "distinctiveness": 9,
+    "replayability": 8,
+    "total": 40,
+    "notes": "Most distinctive by a mile \u2014 a grounded, adult recording-studio grief procedural with zero supernatural crutch, and the title-screen-contains-your-motif-inverted trick is the best single fair-play clue in the whole competition. 'She didn't write that part. Did she.' is a real scene. But the gut-punch depends on an asserted backstory (you mailed one demo at 17) the player never lived, so the reveal risks landing as clever rather than devastating \u2014 admiration, not tears. The grief on the island belongs to the band, not to you. Head over heart; brilliant head, though."
+   },
+   {
+    "pitchTitle": "Pitch 4: NOT HERE \u2014 Foley / The Sonic Census",
+    "emotional": 8,
+    "twistQuality": 7,
+    "titleFit": 9,
+    "distinctiveness": 7,
+    "replayability": 8,
+    "total": 39,
+    "notes": "The Last Roll Call and Mercy hanging up after seventy years ('It was good to hear your voice, caller') are money scenes, and 'grief experienced as gratitude' is the freshest emotional thesis here. Best dual-platform justification of all four \u2014 browser as the town's dream, terminal as the wire \u2014 and Mercy is the tenderest player-aware entity since OneShot without stealing from it. But 'the recordings ran so long they became people' is a familiar archive/simulation move, the lake-in-the-sky telegraphs the flood early, and the you-poured-into-a-Wren-shaped-hole twist is structurally the same as Pitch 2's with a colder, more conceptual cast. Big-ensemble town love versus Pitch 2's family-table intimacy \u2014 the latter cuts deeper."
+   }
+  ],
+  "winner": "Pitch 2: NOT HERE \u2014 Port Lorn",
+  "grafts": "From Pitch 3 (most important graft): the title-screen-contains-the-answer device \u2014 hide material derived from the player's pub-interview answers (or their humming of the sixth bar candidates) inverted inside the main theme from minute one, so returning to the title screen post-reveal is a chills moment. Also graft Pitch 3's lie-detune mechanic: give a high-EAR/attunement-style perception check where a character's leitmotif stem detunes a quarter-tone when they lie \u2014 the score as lie detector fits Port Lorn's fragment-reassembly soundtrack perfectly and gives Ivy's and Dora's concealments an audible tell. Also steal its scarcity economy: Pitch 2 should make explicit that you cannot pursue all six confession paths in 23 days, the way Pitch 3's eight-songs-time-for-four forces incompleteness. From Pitch 4: the Track 00 [UNRECORDED] plain-sight device \u2014 put a pub jukebox or parish hymn-board listing everyone's tune with Wren's slot as five bars and a rest, on screen from hour one; and adopt Pitch 4's diegetic terminal framing ('heard down the wire') plus the human-readable EXCHANGE_LOG.txt idea for Maud's ledger \u2014 make the ledger an actual plain-text file beside the saves that players can open, and have Maud react if it's been touched. Also graft Mercy's cross-platform acknowledgment line ('You found both doors') for players who run the same save in browser and terminal. From Pitch 1: the LLM memory-token verbatim-return device \u2014 extract two or three concrete nouns from the pub interview and have them waiting, verbatim, in a late authored scene (e.g., inside Wren's room); and the audacity of an ending that touches the save file itself \u2014 Pitch 1's file-rename ending suggests a version where the Ash or Wren-Again ending quietly renames the player's save to 'Wren Halloway,' the forgery completed at the filesystem level. Finally, consider Pitch 1's per-relationship music economy (Wren's radio gains an instrument every night you sing with her, loses one when you don't) as the visible feedback loop for Pitch 2's stem-graph score."
+ },
+ {
+  "scores": [
+   {
+    "pitchTitle": "NOT HERE: Last Stop on the Owl Line",
+    "emotional": 9,
+    "twistQuality": 6,
+    "titleFit": 9,
+    "distinctiveness": 6,
+    "replayability": 8,
+    "total": 38,
+    "notes": "Gorgeous execution of the single most worn twist family in the medium: the dying-dream/purgatory town. The subtitle literally winks at 'An Occurrence at Owl Creek Bridge,' the ur-text of the trope, and a genre-literate player will call 'everyone is a memory, you are the dying rememberer' by night two \u2014 the frozen calendars, psychopomp conductor, and fog-as-forgetting are loud signals, not buried clues. The clue craft itself is superb (songs cutting off at the bar you stopped knowing them is genuinely great; the pencil door, the unspoken save-name), and the Dora mid-game truth-fork shows real understanding that a mystery must survive being known. But fairness without surprise is only half the job: the reveal will land as confirmation for most players, not recontextualization. Emotional machinery and music architecture are the best-in-class here; the mystery is the weakest of the four. Also note it shares a suspicious amount of DNA with Pitches 2 and 4 (fog, Wren, 11:47, memory-town) \u2014 in a lineup it reads least distinct."
+   },
+   {
+    "pitchTitle": "NOT HERE (Port Lorn)",
+    "emotional": 9,
+    "twistQuality": 9,
+    "titleFit": 8,
+    "distinctiveness": 7,
+    "replayability": 9,
+    "total": 42,
+    "notes": "The finest fair-play construction in the set. The clues are physical, provable, and hidden in grammar rather than exposition: 'no one touches you first' is planted in sentence structure for twenty hours and detonates on a single reached hand; Dora's zero name-uses is searchably verifiable; the circled ferry date sits on screen the entire game like the Knives Out house. The twist is two-staged so that solving stage one (you are not Wren) still leaves stage two (the real Wren is coming, and you are the rehearsal) to invert the town's motives \u2014 the 'protecting you from / protecting something FROM you' pivot is genuine recontextualization, not information delivery. Crucially, the mystery gets BETTER on replay: the ECHO economy means every warm first-run scene is retroactively an act of theft, which is dramatic irony with teeth \u2014 the informed run is a different moral game, and Two Wrens being gated on understanding rather than flags is exactly right. Docked on distinctiveness for sitting in the same coastal-ghost-folk memory-construct space as two rivals, and the construct-of-grief twist family isn't virgin ground \u2014 but the second layer and the extraction economy earn the surprise honestly."
+   },
+   {
+    "pitchTitle": "Not Here (The Foghorn / Finisher)",
+    "emotional": 8,
+    "twistQuality": 8,
+    "titleFit": 8,
+    "distinctiveness": 9,
+    "replayability": 8,
+    "total": 41,
+    "notes": "The only grounded mystery of the four, and the most structurally audacious clue: the answer is in the title-screen music from minute one, with the ferry-timetable impossibility sitting in plain text from Act I. The two-wave reveal (the band left her first; the estate is Wren and she stole from YOU) is fair, human, and needs no supernatural machinery \u2014 as pure whodunit craft this is the cleanest. Reservations: the load-bearing musical clue (your motif inverted in the theme) is imperceptible to most players, so the reveal risks landing as told-not-solved for non-musicians, and 'you were connected to the victim all along' is a known noir move even if the theft-of-authorship spin is fresh. The blank music credit on the liner is the best single planted document in any pitch. Survives replay well (Undertow as a deliberate uncomfortable project; watching the band grieve while knowing Wren reads your logs nightly is strong irony), and it is far and away the most distinctive \u2014 no drowned town, no fog-construct, no purgatory. Emotional register is cooler and more procedural than the others; the 3 a.m. scene is excellent but the pitch trusts craft-warmth over gut-punch."
+   },
+   {
+    "pitchTitle": "NOT HERE (Foley / Sonic Census)",
+    "emotional": 9,
+    "twistQuality": 7,
+    "titleFit": 9,
+    "distinctiveness": 6,
+    "replayability": 8,
+    "total": 39,
+    "notes": "The Last Roll Call may be the single most powerful scene described in any pitch, and the dual-platform integration (browser as the town's dream, terminal as the wire) is the best answer to the brief's hardest requirement. But judged as mystery: stage one of the twist (you are not Wren, you were poured into a hole in an archive) is so heavily telegraphed \u2014 Track 00 [UNRECORDED], no first-meeting stories, the lake overhead \u2014 that it functions as premise, not reveal; the real surprise is Wren's signature on the Disconnection Order, and that hinge has a logic wobble the pitch papers over (it is called 'your' signature because you've been poured into Wren, but the player has never signed anything as Wren \u2014 the recognition beat is asserted, not earned). The aware-operator meta-layer, however tenderly reframed, will draw OneShot/DDLC comparisons the pitch is visibly braced for, and the archive-simulation twist family is adjacent to the most familiar territory in indie games. Also shares the 11:47, the frozen June calendar, and a Wren with two rivals \u2014 the least separable pitch in the lineup despite its best-in-class scene craft."
+   }
+  ],
+  "winner": "NOT HERE (Port Lorn)",
+  "grafts": "From Pitch 1 (Owl Line): (a) the concrete audio-engine spec \u2014 one tracker/MIDI note-data score with two instrument banks, where the terminal chip-synth rendition is canon ('heard through a thinner wall' needs Pitch 1's engineering rigor); (b) the tempo-as-dread trick (a fixed bpm the ear learns to associate with time running out, deployed at the dock regardless of ending); (c) the deterministic player-words echo pattern from the map epitaphs \u2014 player free text stored and replayed verbatim at the finale with zero LLM dependency; (d) the 'Empty Seat'-style cross-run seeding where a previous run's save-name surfaces diegetically (a prior caller's name faded in Maud's ledger). From Pitch 3 (Foghorn): (a) hide a player-derived musical fingerprint in the underscore from the title screen so the reveal is audible in retrospect \u2014 apply it to the player's pub-interview answers shaping how the fog 'built' you; (b) the lie-detune mechanic (a character's stem detunes a quarter-tone when they lie) as a learnable listening skill \u2014 perfect for a game whose score is one broken song; (c) the scarcity economy (eight songs, time for four) mapped onto Port Lorn's day budget so structural incompleteness is felt as triage, not content-gating; (d) NG+ shelving your previous run's actual final composition as a playable artifact. From Pitch 4 (Foley): (a) the human-readable cross-run file (EXCHANGE_LOG.txt) players can open in any editor \u2014 Maud's ledger should literally exist on disk as plain text; (b) the single cross-platform save code printed as a paper ticket, making the browser/terminal second playthrough diegetic; (c) the Track 00 [UNRECORDED] device translated as a songbook page pinned in the Kettle & Anchor with the sixth bar blank from Day 1 \u2014 a publicly listed hole in the record; (d) the Steadying verb \u2014 offering a memory of someone that the engine fact-checks, with the score (a dissonant sting) rather than UI telling you that you got them wrong \u2014 which slots perfectly into Port Lorn's memory-extraction economy as its ethical counter-verb: giving memories back.\"}"
+ },
+ {
+  "scores": [
+   {
+    "pitchTitle": "NOT HERE (Last Stop on the Owl Line)",
+    "emotional": 9,
+    "twistQuality": 6,
+    "titleFit": 8,
+    "distinctiveness": 6,
+    "replayability": 8,
+    "total": 37,
+    "notes": "Highest emotional ceiling in the field: the six-note motif whose tonic resolves exactly once is the single best musical idea across all four pitches, and 'the luggage allowance is one heart' is a genuine forever-scene. Mechanics are well-wired (Static detunes the score in real time, Weight buys access at the cost of action economy, the save-name as a gun fired once). But as systems design the stats are mostly content gates rather than economies \u2014 nothing you spend hurts anyone, so choices lack the friction the other pitches achieve. The twist is the weak joint: 'the town is a dying person's memory' is the most guessable reveal category here (To The Moon / purgatory-town lineage), and a savvy player calls it by night 2 (frozen calendars + no one says your name + fog-as-forgetting telegraph hard). Distinctiveness suffers doubly: it is the most Kentucky Route Zero-flavored, and inside this competition it collides head-on with Pitch 4 (same 11:47 train, same frozen-June ghost town, same 'nobody remembers meeting you')."
+   },
+   {
+    "pitchTitle": "NOT HERE (Port Lorn / the fog-construct)",
+    "emotional": 9,
+    "twistQuality": 8,
+    "titleFit": 8,
+    "distinctiveness": 7,
+    "replayability": 8,
+    "total": 40,
+    "notes": "The best stat design in the field: every stat is an answer to 'in what way are you here,' and ECHO is a genuinely cruel economy \u2014 the warmest-feeling play pattern (remembering together) is extraction, and the giver verifiably loses the lullaby. That is Undertale's pacifist/genocide inversion done at the level of epistemics, not violence, and it makes the stats inseparable from the theme. Clue discipline is exceptional \u2014 'no one touches you first' is a clue planted in prose grammar, provable on re-read, detonated once. The second-wave twist (the real Wren is arriving; your presence overwrites the true memory of her) gives the construct trope real stakes. Docked on fit because the dual-platform story is the weakest of the four \u2014 'the terminal is thinner and lonelier, which is a theme' is a rationalization where Pitches 3 and 4 have an in-fiction machine. CHORD-as-tracklist is good but the music is reactive telemetry more than playable system until Act 3. Distinctiveness dinged for sitting in the same fog-coast ghost-folk register as half this field, and for being the third pitch starring someone named Wren."
+   },
+   {
+    "pitchTitle": "Not Here (The Foghorn / the Finisher)",
+    "emotional": 7,
+    "twistQuality": 9,
+    "titleFit": 9,
+    "distinctiveness": 9,
+    "replayability": 8,
+    "total": 42,
+    "notes": "The systems designer's pitch. Music is not accompaniment or even telemetry \u2014 it is plot, evidence, and mechanic simultaneously: the twist is hidden in the title-screen score from minute one, leitmotif detune is a learnable lie-detector keyed to the Ear stat, and the endgame decision is literally about authorship of a melody. Character creation IS the twist's delivery vehicle \u2014 the LLM touchpoint plants the loaded gun \u2014 which is the tightest integration of the required LLM moment in the field. The song economy (eight songs, time for four, each bound to one character's confession path) makes time, stats, and NPC memory one system, and it's the cleanest structural replay engine here. The terminal build is the canon machine in the fiction. Hidden Undertow surfaced only as 'the band gets happier' is elegant, quiet horror. Distinct from Undertale/OMORI/DDLC and from its three rivals: no ghosts, no dead town \u2014 a grounded studio procedural. Weaknesses: the emotional ceiling is a notch cooler than 1 and 2 (relief and recognition rather than devastation), the motif-recognition payoff depends on players actually hearing their motif (mitigated by twelve authored motifs, but still an execution risk), and the ferry-timetable clue borders on too loud."
+   },
+   {
+    "pitchTitle": "NOT HERE (Foley / the Sonic Census)",
+    "emotional": 8,
+    "twistQuality": 7,
+    "titleFit": 8,
+    "distinctiveness": 6,
+    "replayability": 7,
+    "total": 36,
+    "notes": "The best dual-platform concept of the four \u2014 browser as the town's dream of itself, terminal as the wire, one save ticket working in both, each platform corroborating the other \u2014 that alone should be stolen regardless of who wins. Attunement literally widening the adaptive mix (hearing someone thin days early) and Steadying (humming a motif back) make listening a real verb, and Mercy-as-save-system is the tenderest meta device in the field. But the twist is assembled from familiar parts (drowned reservoir town, archive-people, 'you were poured into a missing person's hole'), and within this competition it is Pitch 1's frozen ghost town plus Pitch 2's vacancy-wearing-a-name \u2014 third to the same well. The player-aware operator, however gently handled, still walks the OneShot/DDLC ridgeline the brief warns about. Static rising on save-reload punishes normal play behavior in a way that needs care. Strong Branch B world-state math, but replay is archetype-flavored rather than structurally rationed like Pitch 3's song economy."
+   }
+  ],
+  "winner": "Not Here (The Foghorn / the Finisher)",
+  "grafts": "From Pitch 4 (Foley): (1) The dual-platform doctrine \u2014 make the browser build 'standing in the studio' and the terminal build explicitly 'the SoundLedger wire,' with a printable paper save ticket valid in both builds and small corroborating details (raw timestamps, log headers) visible only over the wire; (2) ASCII marginal notation as the no-audio terminal fallback so leitmotif clues \u2014 including the lie-detune tell \u2014 remain legible even in silence; (3) a human-readable cross-run log file beside the saves (Foghorn session archive) that Moira audibly reads from on NG+; (4) Attunement-style mix-widening: let high Ear physically widen the stem mix so trained players hear a band member's confession readiness (or lie) before dialogue admits it. From Pitch 2 (Port Lorn): (1) the prose-grammar clue discipline \u2014 plant one physical rule ('no one in the band ever asks about YOUR music') enforced silently for the whole game and broken exactly once at the reveal; (2) give Undertow the ECHO cost-structure: each time you accept being poured into Wren's shape, a named band member visibly loses a piece of the real her (a story they can no longer finish, a photo they misremember), so the hidden stat leaves a trail of damage the player can audit post-reveal; (3) the 'one person warns you exactly once' rule (Maud) \u2014 Moira should get a single, missable warning line about finishers who stayed too long. From Pitch 1 (Owl Line): (1) memory-token slot-insertion \u2014 the intake's extracted player phrases shouldn't just be quoted back in dialogue; have one wait physically in the world (written on the tape box of the seventeen-year-old demo) for the reveal; (2) the 74bpm trick \u2014 pin Dom's ahead-of-the-beat deadline ostinato to one fixed tempo the player's ear learns to dread, and score the November 1st scenes at that tempo in every ending; (3) cross-run diegetic haunting texture \u2014 prior-run lyric lines from the 'Two Lines' touchpoint resurfacing as scratch vocals on a shelf reel in the next run."
+ }
+]

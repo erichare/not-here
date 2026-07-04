@@ -1,0 +1,13 @@
+{
+  "name": "@not-here/music",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "render": "node scripts/render-audition.ts"
+  }
+}

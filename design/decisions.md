@@ -1,0 +1,81 @@
+# Decision Log
+
+All decisions below were made by the creator (Eric) on 2026-07-04 via 24 scoping
+questions, after reviewing 4 judged pitches and 6 research tracks. Do not relitigate
+without asking.
+
+## Story
+- **Concept:** Port Lorn (fog-construct premise), winner of 2/3 judge panels.
+  Grafts adopted from other pitches: title-screen fingerprint, lie-detune, hard
+  scarcity, plain-text cross-run ledger, both-doors acknowledgment, prose-grammar
+  clue discipline, one-warning rule, verbatim player-words echo.
+- **Tone:** let it get truly dark (quiet-horror endings at full strength).
+- **Setting:** 1970s British coast as pitched.
+- **Length:** 3–5 hours per playthrough.
+
+## Structure
+- **Endings:** all 7 as pitched (Sixth Bar, Wren Again, Two Wrens, Stranger,
+  Long Winter, Unwitnessed, Ash).
+- **Fail states:** fading is real — presence collapse mid-game is a genuine ending;
+  generous autosave (reload lands 1–2 nights back).
+- **Scarcity:** hard — ~4 of 6 confession paths per run; without-you retellings.
+- **NG+:** full diegetic (plain-text ledger file on disk, prior-run surfacing,
+  sixth-bar folklore, cross-platform acknowledgment).
+
+## Mechanics
+- **Stats:** all five as pitched — FLESH / NAME / ECHO / UNDERTOW + CHORD meter
+  (and STATIC).
+- **Time:** day/night scene slots (Presence Economy); nights are fixed beats.
+- **Stat display:** diegetic ledger view only; no bare numbers.
+- **Music mechanics:** full listening gameplay (lie-detune, buried layers,
+  missed-scene motifs, sixth-bar composition finale) — with full visual parity.
+
+## Music
+- **Tech:** score-as-data engine. JSON note data; one TS synth (pulse ×2, triangle,
+  noise, 2-op FM + envelopes/vibrato/echo — spec frozen) rendering via browser
+  AudioContext and node-web-audio-api in terminal.
+- **Palette:** chiptune-folk hybrid.
+- **Terminal audio:** full ladder — real-time synth → offline WAV via afplay/ffplay
+  → silence + notation. Week-1 spike decides primary tier.
+- **Composition:** Claude composes, creator auditions; creator is final taste
+  authority; nothing ships unheard. Main theme approved by ear before any other
+  music is written.
+
+## LLM
+- **Touchpoints:** all four (Pub Interview, Sixth Bar judging, Ivy's Interrogation,
+  Last Letter epilogue).
+- **Access:** proxy (creator-funded, spend-capped) + BYOK + offline. LLM outputs
+  cached in saves, never regenerated. No-key game must be complete and good.
+
+## Tech
+- **Stack:** pnpm monorepo, TS throughout; custom scene-graph engine owns
+  graph/state/saves/music; **inkjs embedded for prose realization** in prose-heavy
+  scenes (creator's explicit choice over pure-DSL).
+- **Browser look:** CRT ledger aesthetic + minimal ink-sketch vignettes at act
+  boundaries.
+
+## Delivery
+- **First milestone:** vertical slice of Night 1 in BOTH builds with real music.
+- **Distribution:** static web + `npx not-here`. (itch.io/Steam deferred.)
+- **Accessibility:** full visual parity; all endings reachable silent;
+  reduced-flicker mode.
+- **Content:** all endings as pitched; content note on landing page (grief, memory
+  loss, sibling death, ambiguous self-dissolution). No gore, nothing gratuitous.
+
+## Spike outcomes (fill in as they land)
+- **Spike A (terminal audio tier): PASSED 2026-07-04.** node-web-audio-api works on
+  macOS arm64 / Node 26: offline render correct, realtime AudioContext runs
+  (48kHz). **Primary terminal tier = real-time playback via node-web-audio-api.**
+  Architecture: the pure TS renderer (packages/music/src/render.ts) is canonical —
+  patterns render to sample buffers, played as AudioBufferSourceNodes with
+  per-pattern GainNodes for live vertical layering (identical code paths in
+  browser AudioContext and node-web-audio-api). Lie-detune tell = pre-rendered
+  detuned stem variant crossfaded in (deterministic; avoids playbackRate tempo
+  drift). Fallback tier 2 = offline WAV + afplay/ffplay (already proven by the
+  audition pipeline); tier 3 = silence + "♪" notation.
+- Spike B (main theme approval): iteration 1 rendered and sent to creator
+  2026-07-04 (auditions/foghorn-song-title.wav) — awaiting ears.
+- **Spike C (FOMO calibration): PASSED 2026-07-04.** See `spike-fomo.md` — two
+  without-you retellings written in full (Day 3: Sam's boathouse via Maud, Ivy's
+  surgery via the note under the door); both produce content attendance wouldn't.
+  Six calibration rules extracted; the Day-3 retellings are canon and ship.

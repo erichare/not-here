@@ -1,0 +1,21 @@
+{
+  "name": "not-here",
+  "version": "0.0.1",
+  "private": true,
+  "description": "NOT HERE — a branching narrative mystery. Port Lorn, spring 1971.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9"
+  }
+}

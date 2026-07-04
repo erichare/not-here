@@ -1,0 +1,10 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.DS_Store
+# rendered audition audio (regenerated from score data)
+auditions/*.wav
+# local saves during dev playtesting
+.saves/
+.env
+.env.local
