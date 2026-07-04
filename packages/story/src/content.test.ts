@@ -1,6 +1,6 @@
 /**
  * Night-1 slice content tests: the content builds, the graph closes, the
- * scripted walkthroughs reach 'slice-end', and the prose invariants hold
+ * scripted walkthroughs reach 'act1-end', and the prose invariants hold
  * (design/game-bible.md §Prose grammar; design/twist-recontext-table.md).
  */
 
@@ -66,6 +66,15 @@ const play = (choiceIds: readonly string[], seed = 42): Playthrough => {
     views.push(step.view);
     events.push(...step.events);
   }
+  // Walk any remaining (stub) scenes by first open choice until an ending.
+  // The Act 1 fleet replaces stubs with real scenes and extends the scripts.
+  for (let i = 0; i < 60 && step.view.ending === undefined; i++) {
+    const first = step.view.choices.find((c) => !c.locked);
+    if (!first) break;
+    step = advance(content, step.state, { kind: 'choose', choiceId: first.id });
+    views.push(step.view);
+    events.push(...step.events);
+  }
   return { state: step.state, views, events };
 };
 
@@ -98,8 +107,12 @@ describe('content build', () => {
     expect(new Set(ALL_SCENES.map((s) => s.id)).size).toBe(ALL_SCENES.length);
   });
 
-  it('only references the five slice music cues', () => {
-    const allowed = new Set(['title', 'shingle', 'pub-warm', 'dianne-theme', 'foghorn-312']);
+  it('only references shipped music cues', () => {
+    const allowed = new Set([
+      'title', 'shingle', 'pub-warm', 'dianne-theme', 'foghorn-312',
+      'wrens-room', 'wade-theme', 'priya-theme', 'sam-theme', 'tam-theme',
+      'hall-upright', 'horn-close',
+    ]);
     for (const scene of ALL_SCENES) {
       if (scene.cue !== undefined) expect(allowed.has(scene.cue)).toBe(true);
     }
@@ -133,20 +146,20 @@ describe('graph closure', () => {
     }
   });
 
-  it('exactly one ending scene, and it is slice-end', () => {
+  it('exactly one ending scene, and it is act1-end', () => {
     const endings = ALL_SCENES.filter((s) => s.ending !== undefined);
-    expect(endings.map((s) => s.id)).toEqual(['slice-end']);
-    expect(endings[0]?.ending).toBe('slice-end');
+    expect(endings.map((s) => s.id)).toEqual(['act1-end']);
+    expect(endings[0]?.ending).toBe('act1-end');
   });
 });
 
 describe('walkthrough: the Dianne branch', () => {
   const run = play(DIANNE_PATH);
 
-  it('reaches slice-end', () => {
-    expect(run.state.sceneId).toBe('slice-end');
+  it('reaches act1-end', () => {
+    expect(run.state.sceneId).toBe('act1-end');
     const last = run.views[run.views.length - 1];
-    expect(last?.ending).toBe('slice-end');
+    expect(last?.ending).toBe('act1-end');
   });
 
   it('sets the interview truth flags and slice flags', () => {
@@ -169,7 +182,7 @@ describe('walkthrough: the Dianne branch', () => {
     const cues = run.events.flatMap((e) => (e.kind === 'music.cue' ? [e.cue] : []));
     expect(cues).toEqual([
       'title', 'shingle', 'pub-warm', 'foghorn-312', 'dianne-theme', 'pub-warm',
-      'foghorn-312', 'title',
+      'foghorn-312',
     ]);
     expect(run.events.some((e) => e.kind === 'save.autosave')).toBe(true);
   });
@@ -178,8 +191,8 @@ describe('walkthrough: the Dianne branch', () => {
 describe('walkthrough: the Barb branch', () => {
   const run = play(BARB_PATH);
 
-  it('reaches slice-end', () => {
-    expect(run.state.sceneId).toBe('slice-end');
+  it('reaches act1-end', () => {
+    expect(run.state.sceneId).toBe('act1-end');
   });
 
   it('records helped-barb as a fact Barb witnessed', () => {

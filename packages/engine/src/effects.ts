@@ -7,6 +7,7 @@
 import type { CharacterId, FactTag, SceneId, SlotId, StatId } from './ids.ts';
 import { clampMeter, clampStat, type Fact, type WorldState } from './state.ts';
 import type { EngineEvent } from './events.ts';
+import { evaluate, type Cond, type DerivedResolvers } from './conditions.ts';
 
 export type Effect =
   | { readonly op: 'stat.add'; readonly stat: StatId; readonly value: number }
@@ -23,6 +24,15 @@ export type Effect =
     }
   | { readonly op: 'fact.learn'; readonly who: CharacterId; readonly tag: FactTag }
   | { readonly op: 'time.set'; readonly day?: number; readonly slot?: SlotId }
+  /** Conditional effects — presence decay, gated stingers, branch-on-state. */
+  | {
+      readonly op: 'when';
+      readonly cond: Cond;
+      readonly then: readonly Effect[];
+      readonly else?: readonly Effect[];
+    }
+  /** Content-raised events: lie-detune, visual twins, layer changes. */
+  | { readonly op: 'emit'; readonly event: EngineEvent }
   | { readonly op: 'goto'; readonly scene: SceneId };
 
 export interface EffectResult {
@@ -58,7 +68,13 @@ const learnFact = (state: WorldState, who: CharacterId, tag: FactTag): WorldStat
   };
 };
 
-export const applyEffect = (state: WorldState, effect: Effect): EffectResult => {
+const NO_DERIVED: DerivedResolvers = {};
+
+export const applyEffect = (
+  state: WorldState,
+  effect: Effect,
+  derived: DerivedResolvers = NO_DERIVED,
+): EffectResult => {
   switch (effect.op) {
     case 'stat.add': {
       const next = {
@@ -99,6 +115,14 @@ export const applyEffect = (state: WorldState, effect: Effect): EffectResult => 
         },
         events: [],
       };
+    case 'when': {
+      const branch = evaluate(effect.cond, state, derived)
+        ? effect.then
+        : (effect.else ?? []);
+      return applyEffects(state, branch, derived);
+    }
+    case 'emit':
+      return { state, events: [effect.event] };
     case 'goto':
       return { state, events: [], goto: effect.scene };
   }
@@ -107,10 +131,11 @@ export const applyEffect = (state: WorldState, effect: Effect): EffectResult => 
 export const applyEffects = (
   state: WorldState,
   effects: readonly Effect[],
+  derived: DerivedResolvers = NO_DERIVED,
 ): EffectResult =>
   effects.reduce<EffectResult>(
     (acc, effect) => {
-      const result = applyEffect(acc.state, effect);
+      const result = applyEffect(acc.state, effect, derived);
       return {
         state: result.state,
         events: [...acc.events, ...result.events],

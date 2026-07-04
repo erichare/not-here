@@ -3,7 +3,7 @@
  * the old wharf (clue #1), the walk into town, the Kettle (first meal,
  * Moose — clue #4), the Counter Interview (see ./interview.ts), the room,
  * and the first 3:12 AM horn. Terminates (after Day 2, see ./day2.ts) at
- * 'slice-end'.
+ * 'act1-end' (day7.ts).
  *
  * Prose invariants in force (design/game-bible.md §Prose grammar):
  * nobody touches you first; the "soaked" clothes carry no lake on them;
@@ -289,26 +289,6 @@ const horn = defineScene({
   cue: 'foghorn-312',
 });
 
-const sliceEnd = defineScene({
-  id: 'slice-end',
-  prose: {
-    kind: 'inline',
-    paragraphs: [
-      { text: 'Here the fog closes over Lorn Bay, for now.' },
-      {
-        text: 'Two nights in. Twenty-one to go — the schedule card on the corkboard says so, ringed twice, pressed through to the cork.',
-      },
-      {
-        text: 'The horn will play again tomorrow at 3:12. Five bars, then the stop. Somebody, somewhere, knows the sixth.',
-      },
-      { text: 'TO BE CONTINUED.' },
-    ],
-  },
-  choices: [],
-  cue: 'title',
-  ending: 'slice-end',
-});
-
 export const NIGHT1_SCENES: readonly Scene[] = [
   title,
   beach,
@@ -319,5 +299,4 @@ export const NIGHT1_SCENES: readonly Scene[] = [
   ...INTERVIEW_SCENES,
   room,
   horn,
-  sliceEnd,
 ];

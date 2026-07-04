@@ -17,6 +17,12 @@ export interface StoryContent {
   readonly derived: DerivedResolvers;
   /** Realize prose for a scene given state (ink or inline). */
   readonly realizeProse: (scene: Scene, state: WorldState) => readonly string[];
+  /**
+   * Pure, deterministic day-boundary hook — runs once whenever a step ends on
+   * a later day than it began (gossip propagation lives here). Must not
+   * change day/slot/sceneId.
+   */
+  readonly postDay?: (state: WorldState) => WorldState;
 }
 
 export type EngineInput =
@@ -63,7 +69,7 @@ const enterScene = (
   const scene = sceneOrThrow(content, sceneId);
   const entered: WorldState = { ...state, sceneId: scene.id };
   const result = scene.onEnter
-    ? applyEffects(entered, scene.onEnter)
+    ? applyEffects(entered, scene.onEnter, content.derived)
     : { state: entered, events: [] as readonly EngineEvent[] };
   const events: EngineEvent[] = [...result.events];
   if (scene.cue) events.unshift({ kind: 'music.cue', cue: scene.cue });
@@ -96,12 +102,14 @@ export const advance = (
     ],
   };
   const applied = choice.effects
-    ? applyEffects(logged, choice.effects)
+    ? applyEffects(logged, choice.effects, content.derived)
     : { state: logged, events: [] as readonly EngineEvent[] };
   const target = applied.goto ?? choice.goto;
   const entered = enterScene(content, applied.state, target);
+  const dayCrossed = entered.state.day > state.day && content.postDay;
+  const finalState = dayCrossed ? content.postDay!(entered.state) : entered.state;
   return {
-    state: entered.state,
+    state: finalState,
     view: entered.view,
     events: [...applied.events, ...entered.events],
   };

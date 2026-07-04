@@ -321,7 +321,7 @@ const night = defineScene({
       },
     ],
   },
-  choices: [{ id: 'let-it-come', label: 'Let the next thing come.', goto: 'slice-end' }],
+  choices: [{ id: 'let-it-come', label: 'Let the next thing come.', goto: 'd3-morning' }],
   cue: 'foghorn-312',
 });
 
