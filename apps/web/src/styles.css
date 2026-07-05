@@ -394,6 +394,12 @@ button.book-consult.pulse {
   inset: 0;
   z-index: 35;
   display: flex;
+}
+
+/* The hidden attribute must always win over the flex display above —
+   otherwise the closed backdrop blankets the page and eats every click. */
+.book-overlay[hidden] {
+  display: none;
   align-items: center;
   justify-content: center;
   padding: 2rem 1.4rem;
