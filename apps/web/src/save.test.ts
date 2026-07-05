@@ -1,11 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { initialState } from '@not-here/engine';
+import { advance, initialState } from '@not-here/engine';
+import { buildContent, OPENING_SCENE } from '@not-here/story';
 import {
   clearSave,
   hasSave,
   loadSave,
   persistSave,
+  resumableSave,
   SAVE_KEY,
+  type ResumableScene,
   type SaveStorage,
 } from './save.ts';
 
@@ -82,5 +85,62 @@ describe('save slot', () => {
     expect(persistSave(storage, initialState(7, 'n1-title'))).toBe(false);
     expect(loadSave(storage)).toBeNull();
     expect(() => clearSave(storage)).not.toThrow();
+  });
+
+  it('persists every step of a real walk — generous autosave', () => {
+    const content = buildContent();
+    const storage = memoryStorage();
+    let step = advance(content, initialState(1971, OPENING_SCENE), {
+      kind: 'enter',
+    });
+    persistSave(storage, step.state);
+    expect(loadSave(storage)).toEqual(step.state);
+    for (let moves = 0; moves < 4; moves += 1) {
+      const open = step.view.choices.find((choice) => !choice.locked);
+      if (open === undefined) break;
+      step = advance(content, step.state, { kind: 'choose', choiceId: open.id });
+      // The applyStep contract: every advance lands in storage immediately.
+      persistSave(storage, step.state);
+      expect(loadSave(storage)).toEqual(step.state);
+    }
+  });
+});
+
+describe('resumableSave', () => {
+  const scenes: ReadonlyMap<string, ResumableScene> = new Map([
+    ['n1-room', {}],
+    ['act1-end', { ending: 'act1-end' }],
+  ]);
+
+  it('returns a mid-run save', () => {
+    const storage = memoryStorage();
+    const midRun = initialState(3, 'n1-room');
+    persistSave(storage, midRun);
+    expect(resumableSave(storage, scenes)).toEqual(midRun);
+  });
+
+  it('treats a save parked on an ending as a finished run', () => {
+    const storage = memoryStorage();
+    persistSave(storage, initialState(3, 'act1-end'));
+    expect(resumableSave(storage, scenes)).toBeNull();
+  });
+
+  it('starts fresh when the saved scene no longer exists', () => {
+    const storage = memoryStorage();
+    persistSave(storage, initialState(3, 'gone-in-a-patch'));
+    expect(resumableSave(storage, scenes)).toBeNull();
+  });
+
+  it('is null with no save at all', () => {
+    expect(resumableSave(memoryStorage(), scenes)).toBeNull();
+  });
+
+  it('accepts the real content map and a real ending scene', () => {
+    const content = buildContent();
+    const storage = memoryStorage();
+    persistSave(storage, initialState(9, 'act1-end'));
+    expect(resumableSave(storage, content.scenes)).toBeNull();
+    persistSave(storage, initialState(9, OPENING_SCENE));
+    expect(resumableSave(storage, content.scenes)).not.toBeNull();
   });
 });

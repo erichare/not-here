@@ -12,10 +12,18 @@
  *  c. Title discipline — the exact phrase 'not here' appears exactly ONCE
  *     outside @doc blocks (Dianne's Day-2 phone call) and exactly ONCE
  *     inside them (the chord sheet). Counts are pinned.
- *  d. Detune pairing — every music.detune emit is immediately followed by a
- *     tell.visual emit in the same effects array (accessibility invariant).
+ *  d. Detune twinning — every music.detune emit has a visual twin: either
+ *     an immediately-following tell.visual emit, or (the canonical form
+ *     after playtest fix-03) a prose paragraph in the SAME scene carrying
+ *     the twin — pinned per scene in PROSE_TWINS (accessibility invariant).
  *  e. Prose economy — warn on paragraphs over 120 words; fail over 150
  *     (decisions.md budget: 30–90 words per beat, lint warns at 120).
+ *  f. Locked-option surface (playtest fix-11) — the renderer owns the '·'
+ *     glyph, so no authored lockedLabel starts with it; and a lockedLabel
+ *     must ache, not parrot — it never equals its open label.
+ *  g. The bus date (prose grammar #3, playtest fix-08) — the EBUS schedule
+ *     card is on screen on EVERY route: once on Dianne's corkboard (Day 2),
+ *     once in the FIXED Day-3 evening for any route that missed it.
  *
  * Plus one integration-seam guard: the day counter's time.set ladder covers
  * days 2..8 exactly once each, on the scenes that own the boundaries.
@@ -159,17 +167,56 @@ const sceneEffectArrays = (scene: Scene): readonly (readonly Effect[])[] => [
   ...scene.choices.flatMap((c) => effectArrays(c.effects ?? [])),
 ];
 
-describe('d. detune pairing — every lie has its visual twin, adjacent', () => {
-  it('each music.detune emit is immediately followed by a tell.visual emit', () => {
+/**
+ * fix-03: prose is the canonical visual twin. Every scene that emits a
+ * detune WITHOUT an adjacent tell.visual must appear here, with the twin
+ * substrings its prose is required to carry.
+ */
+const PROSE_TWINS: Readonly<Record<string, readonly string[]>> = {
+  'd3-evening': ['a quarter-tone flat', 'a shade flat'],
+  'd3-night': ['one layer short'],
+  'd4-wharf-2': ['a quarter-turn flat'],
+  'd4-evening': ['a shade flat'],
+  'd5-evening': ['a shade flat', 'idle, road, idle'],
+  'd6-ticket-2': ['a quarter-turn flat'],
+};
+
+const sceneProse = (scene: Scene): string =>
+  scene.prose.kind === 'inline' ? scene.prose.paragraphs.map((p) => p.text).join('\n') : '';
+
+describe('d. detune twinning — every lie has its visual twin', () => {
+  it('each music.detune emit is twinned: adjacent tell.visual, or pinned prose', () => {
     for (const scene of ALL_SCENES) {
       for (const effects of sceneEffectArrays(scene)) {
         effects.forEach((effect, i) => {
           if (effect.op !== 'emit' || effect.event.kind !== 'music.detune') return;
           const next = effects[i + 1];
-          const paired = next?.op === 'emit' && next.event.kind === 'tell.visual';
-          expect(paired, `unpaired music.detune in ${scene.id} (index ${i})`).toBe(true);
+          const adjacent = next?.op === 'emit' && next.event.kind === 'tell.visual';
+          if (adjacent) return;
+          const twins = PROSE_TWINS[scene.id];
+          expect(
+            twins,
+            `music.detune in ${scene.id} (index ${i}) has no adjacent tell.visual and no PROSE_TWINS entry`,
+          ).toBeDefined();
+          for (const twin of twins ?? []) {
+            expect(
+              sceneProse(scene).includes(twin),
+              `${scene.id}: prose twin "${twin}" missing`,
+            ).toBe(true);
+          }
         });
       }
+    }
+  });
+
+  it('no scene carries a redundant toast twin — the prose owns it (fix-03)', () => {
+    // Scenes in PROSE_TWINS must NOT also emit tell.visual duplicates.
+    for (const scene of ALL_SCENES) {
+      if (PROSE_TWINS[scene.id] === undefined) continue;
+      const tells = sceneEffectArrays(scene)
+        .flat()
+        .filter((e) => e.op === 'emit' && e.event.kind === 'tell.visual');
+      expect(tells, `${scene.id} re-emits its prose twin as a toast`).toEqual([]);
     }
   });
 
@@ -208,6 +255,64 @@ describe('e. prose economy — 30–90 word beats; warn >120, fail >150', () => 
       );
     }
     expect(over120.length).toBeGreaterThanOrEqual(0); // reporting only
+  });
+});
+
+// ——— f. Locked-option surface (fix-11) ———
+
+describe('f. locked labels — one glyph (the renderer’s), real ache', () => {
+  const lockedLabels = ALL_SCENES.flatMap((scene) =>
+    scene.choices.flatMap((c) =>
+      c.lockedLabel !== undefined
+        ? [{ source: `${scene.id}#${c.id}`, label: c.label, lockedLabel: c.lockedLabel }]
+        : [],
+    ),
+  );
+
+  it('no lockedLabel starts with the renderer’s glyph', () => {
+    for (const { source, lockedLabel } of lockedLabels) {
+      expect(lockedLabel.startsWith('·'), `double glyph in ${source}: ${lockedLabel}`).toBe(false);
+    }
+  });
+
+  it('no lockedLabel parrots its open label verbatim', () => {
+    for (const { source, label, lockedLabel } of lockedLabels) {
+      expect(lockedLabel === label, `no ache in ${source}: ${lockedLabel}`).toBe(false);
+    }
+  });
+});
+
+// ——— g. The bus date is on screen on every route (fix-08) ———
+
+describe('g. the EBUS card — the twist’s clock survives every route', () => {
+  const cardParagraphs = ALL_SCENES.flatMap((scene) => {
+    if (scene.prose.kind !== 'inline') return [];
+    return scene.prose.paragraphs.flatMap((p) =>
+      p.text.includes('EBUS — WINTER SCHEDULE') ? [{ source: scene.id, block: p }] : [],
+    );
+  });
+
+  it('appears exactly twice: Dianne’s corkboard, and the fixed Day-3 evening', () => {
+    expect(cardParagraphs.map((c) => c.source).sort()).toEqual(['d2-dianne-2', 'd3-evening']);
+  });
+
+  it('both copies circle the 28th twice', () => {
+    for (const { source, block } of cardParagraphs) {
+      expect(block.text.includes('(( Fri 28 Nov'), `no ring on the card in ${source}`).toBe(true);
+    }
+  });
+
+  it('the Day-3 copy is the catch-all: gated, so it fires only when unseen', () => {
+    const d3 = cardParagraphs.find((c) => c.source === 'd3-evening');
+    expect(d3?.block.when).toBeDefined();
+  });
+
+  it('no other schedule in Act 1 shares the EBUS departure time (fix-08 retime)', () => {
+    // Tam's regional run is 07:10; only the EBUS card may say 07:40.
+    for (const { source, text } of ALL_TEXTS) {
+      if (text.includes('EBUS — WINTER SCHEDULE')) continue;
+      expect(text.includes('07:40'), `EBUS time outside the card in ${source}`).toBe(false);
+    }
   });
 });
 

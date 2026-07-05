@@ -61,6 +61,18 @@ export const RULES: readonly DialogueRule[] = [
     requires: ['went-to-dianne'],
     text: '"Heard you gave Dianne your first morning here," Tam says, to his coffee, not to you. "Barb keeps me current whether I ask or not." A while later, unattached to anything: "That store runs on string and her nerve. It was good you went."',
   },
+  // The Refuser's route reaches the gossip mechanic too (playtest fix-15):
+  // Barb witnessed the refused plate on Night 1; the barb→tam edge carried
+  // it. Salience matches tam-e5-helped-barb — warmth wins that tie by id,
+  // but a pure Refuser has no warmth in the table, and hears this.
+  {
+    id: 'tam-e5-refused-plate',
+    speaker: 'tam',
+    slot: 'evening-d5',
+    requires: ['refused-first-meal'],
+    salience: 1,
+    text: '“Barb says you sat a full plate out, first night,” Tam offers, to the counter, not to you. “She’s told it three times now. It gets colder every telling.”',
+  },
   {
     id: 'tam-e5-fallback',
     speaker: 'tam',

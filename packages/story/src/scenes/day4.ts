@@ -10,16 +10,31 @@
  *
  * Evening is fixed regardless of the morning: Sam lays two phones side by
  * side on the counter — clue #6 planted in public, and nobody comments.
- * Night 4: the horn, brief. Prose invariants per design/game-bible.md.
+ * The evening also carries without-you retellings for the missed wharf and
+ * the missed General (playtest fix-14 — the hole has a sound on Day 4 too),
+ * each with its motif detune whose visual twin lives in the prose (fix-03);
+ * and, if the quilt memory was taken and Dianne went unvisited, the cost
+ * arrives anyway, secondhand, through Barb (fix-01 — the act's warning shot
+ * fires on every route). Night 4: the horn, brief, with the phones carried
+ * up the stairs. Prose invariants per design/game-bible.md.
  */
 
-import { defineScene, type Cond, type Scene } from '@not-here/engine';
+import { defineScene, type Cond, type Effect, type Scene } from '@not-here/engine';
 
 const tookQuilt: Cond = { op: 'fact.exists', tag: 'private:memory-taken' };
 const leftQuilt: Cond = {
   op: 'all',
   of: [{ op: 'flag', key: 'd3:slot', value: 'room' }, { op: 'not', of: tookQuilt }],
 };
+const missedWharf: Cond = { op: 'not', of: { op: 'flag', key: 'd4:slot', value: 'wharf' } };
+const missedDianne: Cond = { op: 'not', of: { op: 'flag', key: 'd4:slot', value: 'dianne' } };
+const trapSprung: Cond = { op: 'fact.exists', tag: 'fog-sam-trap-sprung' };
+
+/** Missed-scene motif detune; the visual twin is a prose paragraph here. */
+const detune = (pattern: string): Effect => ({
+  op: 'emit',
+  event: { kind: 'music.detune', pattern, cents: -50 },
+});
 
 const morning = defineScene({
   id: 'd4-morning',
@@ -110,11 +125,9 @@ const wharf2 = defineScene({
   onEnter: [
     { op: 'fact.add', tag: 'asked-wade-knew-her', about: 'wade', witnessedBy: ['wade'] },
     { op: 'flag.set', key: 'heard-first-lie-detune', value: true },
-    { op: 'emit', event: { kind: 'music.detune', pattern: 'wade', cents: -50 } },
-    {
-      op: 'emit',
-      event: { kind: 'tell.visual', text: '— something in the room goes a quarter-turn flat.' },
-    },
+    // fix-03: the twin is the 'quarter-turn flat' paragraph below — after
+    // the lie, where it belongs — not a duplicate line above the prose.
+    detune('wade'),
   ],
   prose: {
     kind: 'inline',
@@ -226,6 +239,8 @@ const evening = defineScene({
   onEnter: [
     { op: 'time.set', slot: 'evening' },
     { op: 'fact.add', tag: 'two-phones-laid-out', about: 'sam', witnessedBy: ['sam', 'barb', 'tam'] },
+    { op: 'when', cond: missedWharf, then: [detune('wade')] },
+    { op: 'when', cond: missedDianne, then: [detune('dianne')] },
   ],
   prose: {
     kind: 'inline',
@@ -234,14 +249,34 @@ const evening = defineScene({
         text: 'The Kettle at supper: the crib board, the orchard men, gravy weather. Tam is on his stool with his gloves drying on the rail.',
       },
       { text: '@line:barb:greeting' },
+      // ——— fix-01: the quilt's cost reaches every route, gossip-sourced.
+      {
+        text: '“Dianne rang about the potluck,” Barb says, at some point, not to anyone. “Asked me — me — who pieced that quilt of her mother’s. I thought she was joking.” She squares the sugar jar on its shelf. “She wasn’t joking.”',
+        when: { op: 'all', of: [tookQuilt, missedDianne] },
+      },
+      // ——— Without-you: the wharf (fix-14). The motif twin closes it.
+      {
+        text: '“Wade had the shed doors open all morning,” Barb says, to the middle distance. “First time in a season. Nobody went down.” Under the furnace note, faint, four held notes with fog on them — a shade flat, once through, gone.',
+        when: missedWharf,
+      },
+      // ——— Without-you: the General (fix-14). The shelf gap, in passing.
+      {
+        text: '“Tam ran Dianne’s boxes up to the house for her,” Barb says, with the pot. “Albums, by the shape of them. That long shelf behind her till is bare wood now.” Under the crib pegs, briefly, a music-box phrase, a shade flat, twice through and gone.',
+        when: missedDianne,
+      },
       {
         text: 'Sam comes in with the cold on him and doesn’t take his coat off. He sets two phones on the counter, side by side, screens up — his and one he’s borrowed — and turns them with one finger until they face the room.',
       },
       {
-        text: 'The same minute, twice: the hall steps, two days back, tables going in for the potluck. You remember passing. You are at the edge of both frames, half-turned. Two phones, one minute, one you in each. The screens sit there being level with everybody.',
+        text: 'The same minute, twice: the Kettle door at closing, two nights back, coats going out in ones. You remember passing through it. You are at the edge of both frames, half-turned. Two phones, one minute, one you in each. The screens sit there being level with everybody.',
       },
       {
         text: 'He says nothing. Nobody says anything. Tam finds the bottom of his coffee. Barb discovers the far end of the counter. Whoever looks, looks away first, and everybody looks. The screens go dark on their own schedule, and Sam pockets both phones and orders nothing.',
+      },
+      // ——— fix-02: the shed is not over for him. It never got to be.
+      {
+        text: 'He doesn’t look at you while the screens burn. He hasn’t, since the boat shed. Nobody told you that, he said, and nobody has told him anything since — the phones sit there saying it again in different words.',
+        when: trapSprung,
       },
     ],
   },
@@ -280,6 +315,15 @@ const night = defineScene({
   prose: {
     kind: 'inline',
     paragraphs: [
+      // ——— fix-14: what you did with the phones follows you up.
+      {
+        text: 'You carried the minute up the stairs with you — not the phones, the thing they held. In his, you are half-turned toward the door. In the other, away. The same second. Both true. Nobody at the counter said so, and neither did you.',
+        when: { op: 'fact.exists', tag: 'studied-the-photos' },
+      },
+      {
+        text: 'You gave the plate your whole attention, and the plate is long finished, and the attention has nowhere to be. The not-looking climbed the stairs with you and sits at the foot of the bed.',
+        when: { op: 'fact.exists', tag: 'looked-away-from-photos' },
+      },
       {
         text: '3:12 finds you the way it has taken to finding you: already listening. Five bars through the wall, patient as weather, and the stop.',
       },

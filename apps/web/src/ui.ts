@@ -5,6 +5,9 @@
  * as dash-prefixed ledger lines. Locked choices dim behind a '·'.
  */
 
+import type { WorldState } from '@not-here/engine';
+import { createBookLayer } from './book.ts';
+import { loadSave } from './save.ts';
 import { renderMarginSketch } from './sketches.ts';
 
 const WORD_INTERVAL_MS = 26;
@@ -22,6 +25,8 @@ export interface SceneModel {
   readonly paragraphs: readonly string[];
   readonly choices: readonly ChoiceModel[];
   readonly ending?: string;
+  /** Current world — Barb's book reads it; absent means no book this frame. */
+  readonly world?: WorldState;
 }
 
 export interface UiCallbacks {
@@ -114,6 +119,19 @@ export const createUi = (root: HTMLElement, callbacks: UiCallbacks): Ui => {
   captions.setAttribute('aria-live', 'polite');
   root.append(page, captions);
 
+  const addCaption = (text: string): void => {
+    const note = el('p', 'caption', text);
+    captions.append(note);
+    window.setTimeout(() => {
+      note.remove();
+    }, CAPTION_LIFETIME_MS);
+  };
+
+  // Barb's book lives beside the page, never inside it: opening or closing
+  // the overlay must not rebuild the scene, restart the typewriter, or
+  // re-emit tells.
+  const book = createBookLayer(root, { onExitBeat: addCaption });
+
   let cancelReveal: (() => void) | null = null;
 
   const finishReveal = (words: readonly HTMLSpanElement[], after: HTMLElement): void => {
@@ -185,6 +203,7 @@ export const createUi = (root: HTMLElement, callbacks: UiCallbacks): Ui => {
   return {
     showTitle: (canResume, onBegin) => {
       cancelReveal?.();
+      book.retire();
       page.replaceChildren(buildTitleScreen(canResume, onBegin));
     },
 
@@ -207,15 +226,13 @@ export const createUi = (root: HTMLElement, callbacks: UiCallbacks): Ui => {
       const sketch = renderMarginSketch(model.sceneId);
       if (sketch !== null) page.append(sketch);
       window.scrollTo({ top: 0 });
+      // The book reads the world the model carries; failing that, the save
+      // slot — main.ts persists every step before rendering, so it is
+      // current by the time a scene draws.
+      book.update(model.world ?? loadSave(window.localStorage));
       startReveal(allWords, choices);
     },
 
-    addCaption: (text) => {
-      const note = el('p', 'caption', text);
-      captions.append(note);
-      window.setTimeout(() => {
-        note.remove();
-      }, CAPTION_LIFETIME_MS);
-    },
+    addCaption,
   };
 };

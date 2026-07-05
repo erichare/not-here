@@ -37,6 +37,19 @@ export const RULES: readonly DialogueRule[] = [
     requires: ['went-to-shed-d3'],
     text: '“The hammering let up a while, down the shed,” Barb says. “That’ll have been you. Sit. You’ve earned the chair by the heater.”',
   },
+  // The trap sprang (playtest fix-02): she saw Sam come up the hill wrong,
+  // and the chair-by-the-heater warmth would ring false. Neutral instead.
+  {
+    id: 'barb-greeting-d3-shed-sprung',
+    speaker: 'barb',
+    slot: 'greeting',
+    when: {
+      op: 'all',
+      of: [onDay(3), { op: 'fact.exists', tag: 'fog-sam-trap-sprung' }],
+    },
+    requires: ['went-to-shed-d3'],
+    text: '“Sam came up the hill before noon,” Barb says, and that is all she says about the morning. She pours, and watches the coffee instead of you, and lets the plate do the talking.',
+  },
   {
     id: 'barb-greeting-d3-clinic',
     speaker: 'barb',

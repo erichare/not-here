@@ -1,6 +1,7 @@
 import { initialState, STATS, type WorldState } from '@not-here/engine';
+import { observationFor, staticLineFor } from '@not-here/story';
 import { describe, expect, it } from 'vitest';
-import { observationFor, renderLedger, staticLine } from './ledger.ts';
+import { renderLedger } from './ledger.ts';
 import { stripAnsi } from './render.ts';
 
 const withStats = (
@@ -11,49 +12,42 @@ const withStats = (
   return { ...base, stats: { ...base.stats, ...stats }, staticMeter };
 };
 
-describe('observationFor', () => {
-  it('has three distinct tiers for every stat', () => {
-    for (const stat of STATS) {
-      const low = observationFor(stat, 0);
-      const mid = observationFor(stat, 3);
-      const high = observationFor(stat, 5);
-      expect(new Set([low, mid, high]).size).toBe(3);
-    }
-  });
-
-  it('tier boundaries sit at 3 and 5', () => {
-    expect(observationFor('flesh', 2)).toBe(observationFor('flesh', 0));
-    expect(observationFor('flesh', 4)).toBe(observationFor('flesh', 3));
-    expect(observationFor('flesh', 10)).toBe(observationFor('flesh', 5));
-  });
-
-  it('writes the specified signature lines', () => {
-    expect(observationFor('flesh', 5)).toContain('shoulder a casket');
-    expect(observationFor('echo', 5)).toContain('remembers more than she was told');
-    expect(observationFor('name', 0)).toContain('ink dries pale');
-  });
-});
-
-describe('staticLine', () => {
-  it('rises with the fog', () => {
-    const calm = staticLine(0);
-    const mid = staticLine(30);
-    const loud = staticLine(60);
-    expect(new Set([calm, mid, loud]).size).toBe(3);
-  });
-});
-
 describe('renderLedger', () => {
-  it('shows no numbers anywhere (diegetic invariant)', () => {
+  it('shows no numbers outside the handwritten register line', () => {
     const out = stripAnsi(renderLedger(withStats({ flesh: 7, echo: 5 }, 45)));
-    expect(out).not.toMatch(/\d/);
+    const outsideRegister = out
+      .split('\n')
+      .filter((line) => !line.includes('supper, tab'))
+      .join('\n');
+    expect(outsideRegister).not.toMatch(/\d/);
   });
 
-  it('includes one entry per stat plus the static line', () => {
-    const out = stripAnsi(renderLedger(withStats({})));
+  it('includes one entry per stat plus the static line (shared source)', () => {
+    const state = withStats({});
+    const out = stripAnsi(renderLedger(state));
     for (const stat of STATS) {
-      expect(out).toContain(observationFor(stat, withStats({}).stats[stat]));
+      expect(out).toContain(observationFor(stat, state.stats[stat]));
     }
-    expect(out).toContain(staticLine(10));
+    expect(out).toContain(staticLineFor(state.staticMeter));
+  });
+
+  it('quotes a night-one answer verbatim once it is on the log', () => {
+    const base = withStats({});
+    const state: WorldState = {
+      ...base,
+      choiceLog: [
+        { scene: 'n1-interview-2', choice: 'q2-two-heaped', day: 1, slot: 'night' },
+      ],
+    };
+    const out = stripAnsi(renderLedger(state));
+    expect(out).toContain('what you told her, night one');
+    expect(out).toContain('Two. Heaped.');
+    expect(out).not.toContain('q2-two-heaped');
+  });
+
+  it('keeps the margins section silent until Barb knows something', () => {
+    expect(stripAnsi(renderLedger(withStats({})))).not.toContain(
+      'margins, other hands',
+    );
   });
 });

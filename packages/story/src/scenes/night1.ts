@@ -11,7 +11,7 @@
  */
 
 import { defineScene, type Scene } from '@not-here/engine';
-import { INTERVIEW_SCENES } from './interview.ts';
+import { echoSeed, INTERVIEW_SCENES } from './interview.ts';
 
 const title = defineScene({
   id: 'n1-title',
@@ -198,7 +198,7 @@ const moose = defineScene({
       label: 'Say his name.',
       effects: [
         { op: 'flag.set', key: 'n1:spoke-to-moose', value: true },
-        { op: 'stat.add', stat: 'echo', value: 1 },
+        echoSeed,
       ],
       goto: 'n1-interview-1',
     },
@@ -215,6 +215,9 @@ const moose = defineScene({
 const room = defineScene({
   id: 'n1-room',
   slot: 'night',
+  // The book is teachable from here on (playtest fix-04): frontends key the
+  // one-time ledger hint / the web book button on this flag.
+  onEnter: [{ op: 'flag.set', key: 'barbs-book:unlocked', value: true }],
   prose: {
     kind: 'inline',
     paragraphs: [
@@ -222,7 +225,7 @@ const room = defineScene({
         text: 'Barb writes you into the book herself: the date, the unit, the supper. The NAME column she leaves blank — leaves it the way you’d leave a chair, for someone.',
       },
       {
-        text: 'She blots the line and closes the book on it. "That’ll do," she says. "Unit one. It’s made up. Door sticks — lift it."',
+        text: 'She blots the line and closes the book on it. "That’ll do," she says. Then, with one finger flat on the cover, the only lesson she will ever give it: "Ask, if you ever want to know what I’ve written." The book goes back under the counter. "Unit one. It’s made up. Door sticks — lift it."',
       },
       {
         text: 'The units are out back, six doors under one long gutter. Unit one is small and clean: bed, chair, a baseboard heater ticking up to temperature, a window with the lake in it. Through the thinning fog you can make out the breakwater, the black water it keeps, and the light going round and round at the end of the old wharf.',
@@ -282,7 +285,7 @@ const horn = defineScene({
     {
       id: 'hand-to-wall',
       label: 'Press your palm flat to the wall.',
-      effects: [{ op: 'stat.add', stat: 'echo', value: 1 }],
+      effects: [echoSeed],
       goto: 'd2-wake',
     },
   ],

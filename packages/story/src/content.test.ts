@@ -171,14 +171,6 @@ const knowsTag = (state: WorldState, who: keyof WorldState['knownBy'], tag: stri
   return fact !== undefined && state.knownBy[who].includes(fact.id);
 };
 
-/** Accessibility invariant, at run level: no detune without its visual twin next. */
-const expectPairedDetunes = (events: readonly EngineEvent[]): void => {
-  events.forEach((event, i) => {
-    if (event.kind !== 'music.detune') return;
-    expect(events[i + 1]?.kind, `unpaired music.detune at event ${i}`).toBe('tell.visual');
-  });
-};
-
 describe('content build', () => {
   it('builds, and the opening scene exists', () => {
     expect(content.scenes.has(OPENING_SCENE)).toBe(true);
@@ -299,6 +291,42 @@ describe('walkthrough: the Barb branch', () => {
   });
 });
 
+describe('Night-1 ECHO seeding is capped (fix-10)', () => {
+  it('the cap holds at dawn: an all-attunement Night 1 still enters Day 2 at ECHO 4', () => {
+    let step = advance(content, initialState(9, OPENING_SCENE), { kind: 'enter' });
+    for (const id of [
+      'open-eyes', 'walk-to-town', 'go-in', 'sit', 'eat-some', 'say-his-name',
+      'q1-window', 'q2-two-heaped', 'q3-what-they-call-me', 'q4-light',
+      'q5-dont-remember', 'window-first', 'hand-to-wall',
+    ]) {
+      step = advance(content, step.state, { kind: 'choose', choiceId: id });
+    }
+    expect(step.state.sceneId).toBe('d2-wake');
+    expect(step.state.stats.echo).toBe(4); // 2 baseline + 2 seeded, capped
+  });
+});
+
+describe('Barb teaches the book, exactly once (fix-04)', () => {
+  it('the authored line closes the Counter Interview, in n1-room', () => {
+    const room = ALL_SCENES.find((s) => s.id === 'n1-room');
+    if (!room || room.prose.kind !== 'inline') throw new Error('missing n1-room');
+    const text = room.prose.paragraphs.map((p) => p.text).join('\n');
+    expect(text).toContain('Ask, if you ever want to know what I’ve written.');
+  });
+
+  it('unlocks the book for the frontends on entering n1-room', () => {
+    const run = play(DIANNE_PATH.slice(0, 11));
+    expect(run.state.flags['barbs-book:unlocked']).toBe(true);
+  });
+
+  it('is taught nowhere else — one lesson, one cadence', () => {
+    const hits = allTexts().filter(({ text }) =>
+      text.includes('Ask, if you ever want to know'),
+    );
+    expect(hits.map((h) => h.source)).toEqual(['n1-room']);
+  });
+});
+
 describe('dialogue rules', () => {
   it('every (speaker, slot) pair has a zero-condition fallback', () => {
     const pairs = new Set(DIALOGUE_RULES.map((r) => `${r.speaker}:${r.slot}`));
@@ -410,9 +438,10 @@ describe('full Act 1 walkthrough — horn-on route', () => {
     ).toBe(false);
   });
 
-  it('carries the marked-lie STATIC cost and pairs every detune with a visual twin', () => {
+  it('carries the marked-lie STATIC cost and detunes Wade’s stem', () => {
     expect(run.state.staticMeter).toBe(12); // 10 baseline + say-staying
-    expectPairedDetunes(run.events);
+    // fix-03: the visual twins ride the prose of the emitting scenes —
+    // pinned scene by scene in act1-lint's PROSE_TWINS.
     expect(run.events.some((e) => e.kind === 'music.detune' && e.pattern === 'wade')).toBe(true);
   });
 });
@@ -464,7 +493,6 @@ describe('full Act 1 walkthrough — horn-stopped route', () => {
 
   it('closing the valve is the honest act: STATIC ends below baseline', () => {
     expect(run.state.staticMeter).toBe(5); // 10 baseline − 5 at the valve
-    expectPairedDetunes(run.events);
   });
 
   it('the silent scene stays silent: no cue between pub-warm and the act card', () => {

@@ -24,6 +24,7 @@ import { createAudioSink, type AudioSink } from './audio.ts';
 import { renderLedger } from './ledger.ts';
 import {
   clearScreen,
+  degradeMargin,
   dim,
   renderChoices,
   renderEnding,
@@ -103,15 +104,28 @@ const drawScene = (
   eventLines: readonly string[],
 ): void => {
   stdout.write(clearScreen());
-  write(renderHeader(step.state.day, slotOf(content, step.state)));
-  write('');
-  for (const line of eventLines) write(line);
-  if (eventLines.length > 0) write('');
+  // Ending scenes carry no DAY header — the act is over, not a ninth day.
+  if (step.view.ending === undefined) {
+    write(renderHeader(step.state.day, slotOf(content, step.state)));
+    write('');
+  }
   write(renderParagraphs(step.view.paragraphs));
   write('');
+  // Margin notes (captions, tells) sit under the prose they follow from —
+  // and at high STATIC the fog gets into the margin ink, never the prose.
+  for (const [index, line] of eventLines.entries()) {
+    write(`  ${degradeMargin(line, step.state.staticMeter, step.state.rngState + index)}`);
+  }
+  if (eventLines.length > 0) write('');
 };
 
 const HINT = dim('a number chooses · l consults the ledger · q quits');
+
+/** Barb's one lesson made visible: printed once, under the room's choices. */
+const LEDGER_HINT = dim('l consults the ledger');
+
+/** The scene the Counter Interview lands on — where the hint belongs. */
+const LEDGER_HINT_SCENE = 'n1-room';
 
 /** Read input until it yields the next step, or undefined to stop. */
 const promptLoop = async (
@@ -170,6 +184,9 @@ const startingState = (content: StoryContent): WorldState => {
 const runGame = async (input: LineSource, audio: AudioSink): Promise<void> => {
   const content = buildContent();
   let step = advance(content, startingState(content), { kind: 'enter' });
+  // App-side flag (not engine state): the ledger hint prints exactly once,
+  // under the first choice list after the Counter Interview (fix-04).
+  let ledgerHintShown = false;
 
   for (;;) {
     const eventLines = audio.handle(step.events);
@@ -185,12 +202,17 @@ const runGame = async (input: LineSource, audio: AudioSink): Promise<void> => {
     }
 
     const rendered = renderChoices(step.view.choices);
+    const showLedgerHint =
+      !ledgerHintShown && step.state.sceneId === LEDGER_HINT_SCENE;
+    if (showLedgerHint) ledgerHintShown = true;
     const redraw = (): void => {
-      drawScene(content, step, eventLines);
+      // The ledger redraw must not re-emit scene tell lines (fix-03).
+      drawScene(content, step, []);
       write(rendered.text);
       write('');
     };
     write(rendered.text);
+    if (showLedgerHint) write(`  ${LEDGER_HINT}`);
     write('');
 
     if (rendered.openIds.length === 0) {
@@ -207,7 +229,7 @@ const runGame = async (input: LineSource, audio: AudioSink): Promise<void> => {
 
 const main = async (): Promise<void> => {
   const rl = createInterface({ input: stdin, output: stdout });
-  const audio = createAudioSink(AUDITIONS_DIR, write, {
+  const audio = createAudioSink(AUDITIONS_DIR, {
     silent: env['NH_SILENT'] === '1',
   });
   try {

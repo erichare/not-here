@@ -135,11 +135,26 @@ describe('the horn room — the Foghorn Choice', () => {
       locked: false,
     });
     expect(atHorn.view.choices[1]).toEqual({ id: 'stop', label: '"Stop."', locked: false });
+    // fix-11: the renderer owns the glyph; the label reads as designed
+    // impossibility, not a missed unlock.
     expect(atHorn.view.choices[2]).toEqual({
       id: 'ask-sixth-bar',
-      label: '· Ask him what the sixth bar is.',
+      label: 'Ask him what the sixth bar is. (There are no words for it yet. Anywhere.)',
       locked: true,
     });
+  });
+
+  it('a stranger is named a stranger (fix-09), and a met Wade is not', () => {
+    // This route never met Wade: no Day-4 wharf, no Day-6 loaf.
+    expect(atHorn.view.paragraphs.join('\n')).toContain('You have never spoken to this man');
+    const scene = DAY7_SCENES.find((s) => s.id === 'd7-hornroom');
+    if (!scene) throw new Error('missing d7-hornroom');
+    const met = applyEffects(initialState(7, 'd7-hornroom'), [
+      { op: 'fact.add', tag: 'met-wade', witnessedBy: ['wade'] },
+    ]).state;
+    expect(content.realizeProse(scene, met).join('\n')).not.toContain(
+      'You have never spoken to this man',
+    );
   });
 
   it('keeps the sixth-bar question impossible all act (gate: chord.gte 6)', () => {
@@ -170,8 +185,10 @@ describe('branch: "Keep playing."', () => {
     expect(fact && after.state.knownBy.barb.includes(fact.id)).toBe(false);
   });
 
-  it('does not start the count, and the song follows you home', () => {
+  it('does not start the count — not even on the lie-down — and the song follows you home', () => {
     expect(after.events.some((e) => e.kind === 'tell.visual')).toBe(false);
+    const end = choose(after, 'lie-down');
+    expect(end.events.some((e) => e.kind === 'tell.visual')).toBe(false);
     const prose = after.view.paragraphs.join('\n');
     expect(prose).toContain('with the song at your back');
     expect(prose).not.toContain('nothing underneath it');
@@ -201,14 +218,20 @@ describe('branch: "Stop."', () => {
     expect(fact && silence.state.knownBy.wade.includes(fact.id)).toBe(true);
   });
 
-  it('announces the decay on entering d7-after — something has started counting', () => {
-    expect(after.events).toContainEqual({
-      kind: 'tell.visual',
-      text: '(Something has started counting.)',
-    });
+  it('announces the decay on the lie-down — the last thing Act 1 says (fix-03)', () => {
+    // Not on entering d7-after: the walk home is prose, uninterrupted …
+    expect(after.events.some((e) => e.kind === 'tell.visual')).toBe(false);
     const prose = after.view.paragraphs.join('\n');
     expect(prose).toContain('nothing underneath it');
     expect(prose).not.toContain('with the song at your back');
+    // … and the count starts exactly once, as the act closes.
+    const end = choose(after, 'lie-down');
+    expect(
+      end.events.filter(
+        (e) => e.kind === 'tell.visual' && e.text === '(Something has started counting.)',
+      ),
+    ).toHaveLength(1);
+    expect(end.view.ending).toBe('act1-end');
   });
 });
 
@@ -252,12 +275,19 @@ describe('barb’s goodnight (dialogue-day7)', () => {
     expect(prose).toContain('It is not clear she believes you will.');
   });
 
-  it('warms the goodnight when trust:barb reaches 6 — pie for the morning', () => {
+  it('warms the goodnight when you kept her company (fix-15: reachable in play)', () => {
     const trusted = applyEffects(initialState(3, 'd7-evening'), [
-      { op: 'fact.add', tag: 'truth-told', witnessedBy: ['barb'] },
+      { op: 'fact.add', tag: 'kept-barb-company', witnessedBy: ['barb'] },
     ]).state;
     const prose = content.realizeProse(evening, trusted).join('\n');
     expect(prose).toContain('Sleep well tonight');
+    expect(prose).toContain('There’s pie for the morning');
+  });
+
+  it('the warm goodnight is live on a real route: stay the morning, hear the pie', () => {
+    const step = choose(enterDay7(), 'stay-the-morning');
+    expect(step.view.sceneId).toBe('d7-evening');
+    const prose = step.view.paragraphs.join('\n');
     expect(prose).toContain('There’s pie for the morning');
   });
 });

@@ -12,8 +12,20 @@
  * already used.
  */
 
-import { defineScene, type Scene } from '@not-here/engine';
+import { defineScene, type Effect, type Scene } from '@not-here/engine';
 import { truthFlag } from '../truths.ts';
+
+/**
+ * Night-1 ECHO seeding, capped (playtest fix-10): every attunement pick in
+ * the interview and the Night-1 habit beats grants at most +1, and grants
+ * stop once ECHO reaches 4 (baseline 2 + 2 seeded). The d3-shed correction
+ * stays gated at ECHO≥3 — "barely reachable" exactly as the beat sheet asks.
+ */
+export const echoSeed: Effect = {
+  op: 'when',
+  cond: { op: 'stat.lte', stat: 'echo', value: 3 },
+  then: [{ op: 'stat.add', stat: 'echo', value: 1 }],
+};
 
 const q1 = defineScene({
   id: 'n1-interview-1',
@@ -55,7 +67,7 @@ const q1 = defineScene({
       id: 'q1-window',
       label: '"The window."',
       effects: [
-        { op: 'stat.add', stat: 'echo', value: 2 },
+        echoSeed,
         { op: 'flag.set', key: truthFlag('misses-the-lake'), value: true },
       ],
       goto: 'n1-interview-2',
@@ -98,7 +110,7 @@ const q2 = defineScene({
       id: 'q2-two-heaped',
       label: '"Two. Heaped."',
       effects: [
-        { op: 'stat.add', stat: 'echo', value: 2 },
+        echoSeed,
         { op: 'flag.set', key: truthFlag('wants-to-be-seen'), value: true },
       ],
       goto: 'n1-interview-3',
@@ -135,7 +147,7 @@ const q3 = defineScene({
       id: 'q3-what-they-call-me',
       label: '"Whatever the town’s calling me."',
       effects: [
-        { op: 'stat.add', stat: 'echo', value: 1 },
+        echoSeed,
         { op: 'stat.add', stat: 'name', value: 1 },
         { op: 'flag.set', key: truthFlag('lies-easily'), value: true },
       ],
@@ -181,7 +193,7 @@ const q4 = defineScene({
       id: 'q4-light',
       label: '"Light. I’ll listen."',
       effects: [
-        { op: 'stat.add', stat: 'echo', value: 2 },
+        echoSeed,
         { op: 'flag.set', key: truthFlag('afraid-of-quiet'), value: true },
       ],
       goto: 'n1-interview-5',
@@ -235,7 +247,7 @@ const q5 = defineScene({
       id: 'q5-dont-remember',
       label: '"I don’t remember leaving it."',
       effects: [
-        { op: 'stat.add', stat: 'echo', value: 2 },
+        echoSeed,
         { op: 'flag.set', key: truthFlag('doesnt-remember-leaving'), value: true },
       ],
       goto: 'n1-room',

@@ -10,9 +10,13 @@
  * Evening carries the without-you retellings for whichever slots were
  * missed (design/spike-fomo.md, retranslated to Lorn Bay); each retelling
  * ends with the missed character's motif faint and detuned — a music.detune
- * emit ALWAYS immediately paired with a tell.visual (accessibility
- * invariant). The missed clinic resolves as the note under the door, at
- * night. Prose invariants per design/game-bible.md §Prose grammar.
+ * emit whose visual twin lives IN THE PROSE of the same scene (playtest
+ * fix-03: prose is the canonical twin; no duplicate toast lines). The missed
+ * clinic resolves as the note under the door, at night. The evening also
+ * carries the diner's copy of the EBUS winter schedule for any route that
+ * hasn't seen Dianne's corkboard yet (playtest fix-08: the bus date is on
+ * screen on every route). Prose invariants per design/game-bible.md
+ * §Prose grammar.
  */
 
 import { defineScene, type Cond, type Effect, type Scene } from '@not-here/engine';
@@ -25,11 +29,14 @@ const missedShed: Cond = { op: 'not', of: wentShed };
 const missedClinic: Cond = { op: 'not', of: wentClinic };
 const tookQuilt: Cond = { op: 'fact.exists', tag: 'private:memory-taken' };
 
-/** A detune tell and its mandatory visual twin, emitted back to back. */
-const detunePair = (pattern: string, text: string): readonly Effect[] => [
-  { op: 'emit', event: { kind: 'music.detune', pattern, cents: -50 } },
-  { op: 'emit', event: { kind: 'tell.visual', text } },
-];
+/**
+ * A missed-scene motif detune. Its visual twin is a prose paragraph in the
+ * same scene (act1-lint pins the pairing) — never a duplicate event line.
+ */
+const detune = (pattern: string): Effect => ({
+  op: 'emit',
+  event: { kind: 'music.detune', pattern, cents: -50 },
+});
 
 const morning = defineScene({
   id: 'd3-morning',
@@ -197,7 +204,7 @@ const shed = defineScene({
       id: 'correct-him',
       label: '“The bailiff. Because it took things.”',
       when: { op: 'stat.gte', stat: 'echo', value: 3 },
-      lockedLabel: '· Correct him. The right word is almost there, at the edge of you.',
+      lockedLabel: 'Correct him. The right word is almost there, at the edge of you.',
       effects: [
         { op: 'flag.set', key: 'd3:trap', value: 'sprung' },
         { op: 'fact.add', tag: 'fog-sam-trap-sprung', about: 'sam', witnessedBy: ['sam'] },
@@ -341,21 +348,17 @@ const evening = defineScene({
   slot: 'evening',
   onEnter: [
     { op: 'time.set', slot: 'evening' },
+    { op: 'when', cond: missedShed, then: [detune('sam')] },
+    { op: 'when', cond: missedRoom, then: [detune('dianne')] },
+    // fix-08: the twist's clock must be on screen on every route. Any run
+    // that never read Dianne's corkboard gets the diner's copy tonight.
     {
       op: 'when',
-      cond: missedShed,
-      then: detunePair(
-        'sam',
-        'In the margin of the evening: someone was whistling, earlier — fast, a boy’s tempo, a shade flat.',
-      ),
-    },
-    {
-      op: 'when',
-      cond: missedRoom,
-      then: detunePair(
-        'dianne',
-        'In the margin of the evening: a music-box phrase, a shade flat, twice through and gone.',
-      ),
+      cond: { op: 'not', of: { op: 'flag', key: 'seen-bus-date' } },
+      then: [
+        { op: 'flag.set', key: 'd3:bus-card', value: true },
+        { op: 'flag.set', key: 'seen-bus-date', value: true },
+      ],
     },
   ],
   prose: {
@@ -395,6 +398,20 @@ const evening = defineScene({
         text: 'Under the crib pegs, faint, a few notes in a music-box register, a shade flat, once through and once again. Then just the furnace.',
         when: missedRoom,
       },
+      // ——— The diner's schedule card (fix-08), for routes that missed the
+      //     General's corkboard. Same card, different wall.
+      {
+        text: 'Taped by the till, where the specials would go, the winter schedule — Tam brings a stack down every fall and Barb keeps one for the drivers.',
+        when: { op: 'flag', key: 'd3:bus-card' },
+      },
+      {
+        text: '@doc:\n┌─────────────────────────────────┐\n│  EBUS — WINTER SCHEDULE         │\n│  VANCOUVER–PENTICTON–LORN BAY   │\n│                                 │\n│   Fri 14 Nov ......... 07:40    │\n│   Fri 21 Nov ......... 07:40    │\n│  (( Fri 28 Nov ....... 07:40 )) │\n│   Fri  5 Dec ......... 07:40    │\n│                                 │\n│  Flag stop. Exact fare. No pets.│\n└─────────────────────────────────┘',
+        when: { op: 'flag', key: 'd3:bus-card' },
+      },
+      {
+        text: 'The last Friday of the month is ringed twice round in blue pen, pressed hard enough to hold the paper still. It is not Barb’s pen.',
+        when: { op: 'flag', key: 'd3:bus-card' },
+      },
       // ——— Common close.
       {
         text: 'The crib game ends in the usual quiet triumph and the usual coats. Barb turns the chairs onto the tables around you, which is the town’s way of striking midnight.',
@@ -419,10 +436,7 @@ const night = defineScene({
       then: [
         { op: 'fact.add', tag: 'missed-clinic-noted', witnessedBy: ['priya'] },
         { op: 'flag.set', key: 'priya:notebook-open', value: true },
-        ...detunePair(
-          'priya',
-          'The room tone thins by one layer while you read, and does not come back until you put the page down.',
-        ),
+        detune('priya'),
       ],
     },
     {

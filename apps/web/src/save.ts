@@ -73,3 +73,25 @@ export const clearSave = (storage: SaveStorage): void => {
 };
 
 export const hasSave = (storage: SaveStorage): boolean => loadSave(storage) !== null;
+
+/** The slice of scene data resume needs: does the id exist, is it an end. */
+export interface ResumableScene {
+  readonly ending?: string;
+}
+
+/**
+ * The save worth resuming, or null. Mirrors the CLI: a save parked on an
+ * ending is a finished run (never trap resume on the act card), and a save
+ * referencing a scene this content no longer has (content patch) starts
+ * fresh rather than crashing the enter step.
+ */
+export const resumableSave = (
+  storage: SaveStorage,
+  scenes: ReadonlyMap<string, ResumableScene>,
+): WorldState | null => {
+  const saved = loadSave(storage);
+  if (saved === null) return null;
+  const scene = scenes.get(saved.sceneId);
+  if (scene === undefined || scene.ending !== undefined) return null;
+  return saved;
+};

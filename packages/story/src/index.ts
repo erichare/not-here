@@ -9,3 +9,11 @@ export { NIGHT1_SCENES } from './scenes/night1.ts';
 export { DAY2_SCENES } from './scenes/day2.ts';
 export { TRUTH_TAGS, truthFlag } from './truths.ts';
 export type { TruthTag } from './truths.ts';
+export {
+  buildBarbsBook,
+  isBookUnlocked,
+  observationFor,
+  staticLineFor,
+  staticTierFor,
+} from './barbs-book.ts';
+export type { BarbsBook, StaticTier } from './barbs-book.ts';

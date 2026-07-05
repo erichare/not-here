@@ -6,7 +6,8 @@
  * compressed and cooler) OR Wade's old ticket office (cue wade-theme; the
  * cot, the kettle; nobody half-lives at a wharf and gets asked about it —
  * except, if you choose, by you; Wade's answers detune, ECHO≥4-gated per the
- * Day-4 rule, every music.detune paired immediately with its tell.visual).
+ * Day-4 rule, each detune's visual twin carried in the prose of the same
+ * scene — playtest fix-03: prose is the canonical twin).
  *
  * NIGHT 6 (fixed, the act's dark beat): Sam in the lot at 2 AM with the
  * recording that has room tone where your voice was. He isn't threatening;
@@ -39,6 +40,7 @@ const clinicSkipped: Cond = {
 
 const wentToHall: Cond = { op: 'flag', key: 'd6:slot', value: 'hall' };
 const wentToWharf: Cond = { op: 'flag', key: 'd6:slot', value: 'wharf' };
+const trapSprung: Cond = { op: 'fact.exists', tag: 'fog-sam-trap-sprung' };
 
 const morning = defineScene({
   id: 'd6-morning',
@@ -166,6 +168,15 @@ const hall2 = defineScene({
 const ticketOffice = defineScene({
   id: 'd6-ticket-office',
   slot: 'morning',
+  // fix-09: this IS meeting Wade, for any route that skipped the Day-4
+  // wharf — d7-hornroom reads the fact. Guarded so the ledger stays clean.
+  onEnter: [
+    {
+      op: 'when',
+      cond: { op: 'not', of: { op: 'fact.exists', tag: 'met-wade' } },
+      then: [{ op: 'fact.add', tag: 'met-wade', witnessedBy: ['wade'] }],
+    },
+  ],
   prose: {
     kind: 'inline',
     paragraphs: [
@@ -205,8 +216,8 @@ const ticket2 = defineScene({
   slot: 'morning',
   onEnter: [
     // Lie-detunes gate on ECHO≥4 after Day 4's freebie (act1-beats §Day 4).
-    // Accessibility invariant: every music.detune immediately followed by its
-    // visual twin.
+    // Accessibility invariant: each detune's visual twin is the when-matched
+    // 'quarter-turn flat' paragraph below (fix-03: prose is the twin).
     {
       op: 'when',
       cond: {
@@ -216,13 +227,7 @@ const ticket2 = defineScene({
           { op: 'stat.gte', stat: 'echo', value: 4 },
         ],
       },
-      then: [
-        { op: 'emit', event: { kind: 'music.detune', pattern: 'wade', cents: -50 } },
-        {
-          op: 'emit',
-          event: { kind: 'tell.visual', text: '— something in the room goes a quarter-turn flat.' },
-        },
-      ],
+      then: [{ op: 'emit', event: { kind: 'music.detune', pattern: 'wade', cents: -50 } }],
     },
     {
       op: 'when',
@@ -233,16 +238,7 @@ const ticket2 = defineScene({
           { op: 'stat.gte', stat: 'echo', value: 4 },
         ],
       },
-      then: [
-        { op: 'emit', event: { kind: 'music.detune', pattern: 'wade', cents: -50 } },
-        {
-          op: 'emit',
-          event: {
-            kind: 'tell.visual',
-            text: '— something under the stove-tick goes a quarter-turn flat.',
-          },
-        },
-      ],
+      then: [{ op: 'emit', event: { kind: 'music.detune', pattern: 'wade', cents: -50 } }],
     },
   ],
   prose: {
@@ -253,8 +249,28 @@ const ticket2 = defineScene({
         when: { op: 'fact.exists', tag: 'asked-about-the-cot' },
       },
       {
+        text: 'Under the kettle’s note, something goes a quarter-turn flat. Felt, not heard, the way a shelf settles at night.',
+        when: {
+          op: 'all',
+          of: [
+            { op: 'fact.exists', tag: 'asked-about-the-cot' },
+            { op: 'stat.gte', stat: 'echo', value: 4 },
+          ],
+        },
+      },
+      {
         text: '"Compressor," Wade says. "For the light." The light on the breakwater runs off the pole line; you have seen the cable come down the hill. You let it stand. He turns the loaf-end in and cuts a third slice nobody asked for.',
         when: { op: 'fact.exists', tag: 'asked-about-horn-room' },
+      },
+      {
+        text: 'Under the stove-tick, something goes a quarter-turn flat. The compressor keeps its pulse; the flatness is not the compressor.',
+        when: {
+          op: 'all',
+          of: [
+            { op: 'fact.exists', tag: 'asked-about-horn-room' },
+            { op: 'stat.gte', stat: 'echo', value: 4 },
+          ],
+        },
       },
       {
         text: 'You put your hands out over the stove and he lets the quiet do the hosting. He pours the tea into the one mug and sets it at your side of the table, and keeps a jam jar for himself, and neither of you names the arrangement.',
@@ -284,6 +300,11 @@ const evening = defineScene({
         text: '"Sam spent his afternoon down the wharf with that phone out," Barb says, not looking up from the soup. "Wade sent him back up the hill — never went near him, just used the voice. The one off the ferry deck." She taps the ladle twice. "That boy is looking for something a screen can’t find." And that is as far as she goes with it.',
         when: wentToHall,
       },
+      // ——— fix-14: the loaf you didn't walk down is still on the counter.
+      {
+        text: 'The loaf sits where she stood it this morning, re-wrapped once, by the till. Nobody walked it down. Nobody says so either.',
+        when: wentToHall,
+      },
       // ——— Without-you retelling: the hall, via Dianne’s stop-in; Priya’s
       //     notebook advances without you, which is exactly Priya.
       {
@@ -301,15 +322,24 @@ const evening = defineScene({
 
 // NO cue, by design: the first scene in the game with no music. The mixer
 // holds nothing under this; the silence is the point (act1-beats §Day 6).
+// fix-05: the music.stop emit makes the silence real in both builds — the
+// last cue must not be left looping under the act's designed quiet.
 const recording = defineScene({
   id: 'd6-recording',
   slot: 'night',
-  onEnter: [{ op: 'time.set', slot: 'night' }],
+  onEnter: [
+    { op: 'time.set', slot: 'night' },
+    { op: 'emit', event: { kind: 'music.stop' } },
+  ],
   prose: {
     kind: 'inline',
     paragraphs: [
       {
         text: 'You don’t remember choosing the lot over the bed. It is two in the morning by the diner clock through the dark glass, and you are on the gravel between the units, and Sam is sitting on the tailgate of the dead pickup with his phone in both hands, coat over pyjama pants. He was waiting.',
+      },
+      // The silence's visual twin (fix-05): the beat exists for silent players.
+      {
+        text: 'Nothing is playing under this. You only notice because something always was.',
       },
       {
         text: '"Tuesday," he says. No hello. "The diner. You were at the counter, talking with Barb. I was in the corner booth. Twelve minutes of it." He turns the phone flat on his palm, like dealing a card face up, and presses play.',
@@ -320,12 +350,29 @@ const recording = defineScene({
       {
         text: 'Sam thumbs it off. His hands are steady; it’s his voice that isn’t. "Eleven files like that. I stopped making them." He looks at you — level, tired, seven years older than eighteen. "Who’d believe I didn’t fake it. So I’m not showing anyone. I’m asking you." The lot is very quiet. "I’m not asking where my sister is. I’m asking what you are."',
       },
+      // ——— fix-02: the shed came down the hill with him.
+      {
+        text: '"The bailiff," he says. "I keep coming back to that." Since the boat shed he hasn’t looked at you once, not straight on. He looks at you now.',
+        when: trapSprung,
+      },
     ],
   },
   choices: [
     {
       id: 'deny-the-file',
       label: '"The file’s doctored, Sam. It has to be."',
+      when: { op: 'not', of: trapSprung },
+      effects: [
+        { op: 'static.add', value: 2 },
+        { op: 'fact.add', tag: 'private:denied-sams-recording', witnessedBy: ['sam'] },
+      ],
+      goto: 'd6-recording-2',
+    },
+    {
+      // fix-02: after the shed, the same lie has to walk past the bailiff.
+      id: 'deny-the-file-sprung',
+      label: '"The file’s doctored." The word goes out knowing how he’ll weigh it.',
+      when: trapSprung,
       effects: [
         { op: 'static.add', value: 2 },
         { op: 'fact.add', tag: 'private:denied-sams-recording', witnessedBy: ['sam'] },
@@ -368,7 +415,24 @@ const recording2 = defineScene({
       },
       {
         text: 'It is out of you before you can weigh it, and it weighs nothing, and it is the heaviest true thing you own. Sam goes still. Then: "Okay," he says. He tries it again, softer, like a note he wasn’t sure the piano had: "You don’t know." One laugh, no sound in it. "That’s the first thing anybody in this town has said to me in seven years that wasn’t rehearsed." He slides off the tailgate. "I’m not going to tell them. Who’d believe that either."',
-        when: { op: 'fact.knownBy', who: 'sam', tag: 'told-sam-dont-know' },
+        when: {
+          op: 'all',
+          of: [
+            { op: 'fact.knownBy', who: 'sam', tag: 'told-sam-dont-know' },
+            { op: 'not', of: { op: 'flag', key: 'd3:trap', value: 'admitted' } },
+          ],
+        },
+      },
+      // ——— fix-02: he has heard you not-know before, at the shed, on purpose.
+      {
+        text: 'It is out of you before you can weigh it. Sam goes still, and then a sound that is nearly a laugh. "Twice now," he says. "You keep not knowing things at me. Nobody here does that once." He slides off the tailgate. "I’m not going to tell them. Who’d believe that either."',
+        when: {
+          op: 'all',
+          of: [
+            { op: 'fact.knownBy', who: 'sam', tag: 'told-sam-dont-know' },
+            { op: 'flag', key: 'd3:trap', value: 'admitted' },
+          ],
+        },
       },
       {
         text: 'At 3:12 the horn takes up over the water, five bars into the fog. Sam is gone by then; his window is dark by the second bar. You stand in the middle of the lot and listen the whole way through, and for the first time the stop at the end sounds less like something missing and more like something being left for you to say.',

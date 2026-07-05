@@ -1,7 +1,9 @@
 /**
  * DAY 5 — Tam's ride, or the hall (design/act1-beats.md §Day 5).
  *
- * Two-slot morning: the 07:40 Penticton run (cue tam-theme; the idling under
+ * Two-slot morning: the 07:10 Penticton run (cue tam-theme; retimed off the
+ * EBUS's Friday 07:40 per playtest fix-08 so the two cannot conflate; the
+ * idling under
  * everything — his rhythm-fragment, diegetic; his ONE question, "You planning
  * to stay past the 28th?", three answers incl. one marked lie → STATIC +2;
  * how he watches the mirror when Sam's name comes up) OR potluck prep at the
@@ -21,10 +23,17 @@
  * says only 'love' / 'hon' / 'my girl'.
  */
 
-import { defineScene, type Cond, type Scene } from '@not-here/engine';
+import { defineScene, type Cond, type Effect, type Scene } from '@not-here/engine';
 
 const rode: Cond = { op: 'flag', key: 'd5:slot', value: 'ride' };
 const wentToHall: Cond = { op: 'flag', key: 'd5:slot', value: 'hall' };
+const tookQuilt: Cond = { op: 'fact.exists', tag: 'private:memory-taken' };
+
+/** Missed-scene motif detune; the visual twin is a prose paragraph here. */
+const detune = (pattern: string): Effect => ({
+  op: 'emit',
+  event: { kind: 'music.detune', pattern, cents: -50 },
+});
 
 const morning = defineScene({
   id: 'd5-morning',
@@ -37,7 +46,7 @@ const morning = defineScene({
         text: 'The fifth morning is up before you are: the flat-top going, a truck compressing gravel somewhere, the crows already halfway through their argument. The snowline has come down another fence-rail in the night. It gets looked at, around the Bay, the way a clock gets looked at.',
       },
       {
-        text: '"Tam’s holding the 07:40 at the pull-in, if you want town," Barb says, pouring before you’ve sat. "His idea, not mine. Don’t expect talk — you’ll get the road there and the road back."',
+        text: '"Tam’s holding the 07:10 at the pull-in, if you want town," Barb says, pouring before you’ve sat. "His idea, not mine. Don’t expect talk — you’ll get the road there and the road back."',
       },
       {
         text: '"Or the hall’s open. Potluck prep — Dianne’s got the tables down and the doctor counting chairs. They could use hands." She sets the pot back on the ring. "One or the other. The morning won’t stretch."',
@@ -47,7 +56,7 @@ const morning = defineScene({
   choices: [
     {
       id: 'take-the-0740',
-      label: 'Take the 07:40.',
+      label: 'Take the 07:10.',
       effects: [
         { op: 'flag.set', key: 'd5:slot', value: 'ride' },
         { op: 'fact.add', tag: 'rode-with-tam', witnessedBy: ['tam'] },
@@ -179,14 +188,21 @@ const hall = defineScene({
       {
         text: 'That is the whole of it. Nobody has written what the seven years are of. Everyone the flyer is for already knows.',
       },
+      // ——— fix-01 echo: the quilt story losing its maker, in company.
+      {
+        text: 'While they work, Dianne is telling Priya about the quilt — the frozen winter, the dresses cut on the kitchen floor — and stops where the maker goes. “It’ll come to me,” she says, to the chairs, and counts them again.',
+        when: tookQuilt,
+      },
     ],
   },
   choices: [
     {
       id: 'carry-tables',
       label: 'Take one end of the tables.',
-      when: { op: 'stat.gte', stat: 'flesh', value: 3 },
-      lockedLabel: '· Take one end of the tables.',
+      // fix-15: the act's one body gate, raised so it can actually lock on
+      // a woman who refused every meal (FLESH starts at 3 and never drops).
+      when: { op: 'stat.gte', stat: 'flesh', value: 5 },
+      lockedLabel: 'Take one end of the tables. (Your hands know they would go through it.)',
       effects: [
         { op: 'stat.add', stat: 'flesh', value: 1 },
         { op: 'stat.add', stat: 'name', value: 1 },
@@ -313,7 +329,13 @@ const hall3 = defineScene({
 const evening = defineScene({
   id: 'd5-evening',
   slot: 'evening',
-  onEnter: [{ op: 'time.set', slot: 'evening' }],
+  onEnter: [
+    { op: 'time.set', slot: 'evening' },
+    // fix-14: the Day-3 grammar holds on Day 5 — the hole has a sound.
+    // Each motif's visual twin is the retelling paragraph below.
+    { op: 'when', cond: rode, then: [detune('priya')] },
+    { op: 'when', cond: wentToHall, then: [detune('tam')] },
+  ],
   prose: {
     kind: 'inline',
     paragraphs: [
@@ -332,7 +354,7 @@ const evening = defineScene({
       },
       // ——— Without-you retelling: the ride, via Barb, who watches the road.
       {
-        text: '"Tam held the 07:40 at the pull-in this morning," Barb says, with the pot in her hand. "Four minutes, engine running, watching the hill road. That man hasn’t run late in seven years — the schedule prints around him." She fills your cup. "Came back with Dianne’s mail tubs and a mood you could stand a spoon in."',
+        text: '"Tam held the 07:10 at the pull-in this morning," Barb says, with the pot in her hand. "Four minutes, engine running, watching the hill road. That man hasn’t run late in seven years — the schedule prints around him." She fills your cup. "Came back with Dianne’s mail tubs and a mood you could stand a spoon in."',
         when: wentToHall,
       },
       {

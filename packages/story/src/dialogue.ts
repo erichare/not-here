@@ -32,11 +32,15 @@ export const DIALOGUE_RULES: readonly DialogueRule[] = [
   },
 
   // You turned her supper down on Night 1 (fact 'refused-first-meal').
+  // Salience lifts it past the lexicographic tie with barb-greeting-dianne
+  // (playtest fix-15: the world must notice the Refuser); the helped-barb
+  // greeting still wins its tie by id, warmth outranking the edge.
   {
     id: 'barb-greeting-refused',
     speaker: 'barb',
     slot: 'greeting',
     requires: ['refused-first-meal'],
+    salience: 1,
     text: '"Eating tonight?" Barb asks. "Or shall I cook for the pleasure of it, like last night." There is no edge on it. There is a little edge on it.',
   },
 

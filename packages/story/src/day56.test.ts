@@ -176,7 +176,11 @@ describe('day 5 — the ride', () => {
 });
 
 describe('day 5 — the hall', () => {
-  const run = play('d5-morning', [...HALL_PATH]);
+  // carry-tables gates at FLESH≥5 now (fix-15): feed the body first.
+  const run = play('d5-morning', [...HALL_PATH], (s) => ({
+    ...s,
+    stats: { ...s.stats, flesh: 5 },
+  }));
 
   it('shows the flyer @doc and the inverted turn at the upright', () => {
     expect(rawText(sceneById('d5-hall'))).toContain('SEVEN YEARS');
@@ -185,18 +189,20 @@ describe('day 5 — the hall', () => {
   });
 
   it('carrying tables feeds FLESH and NAME, witnessed by Priya and Dianne', () => {
-    expect(run.state.stats.flesh).toBe(4);
+    expect(run.state.stats.flesh).toBe(6); // 5 seeded + 1
     expect(run.state.stats.name).toBe(3);
     const id = factIdOf(run.state, 'helped-hall');
     expect(run.state.knownBy.priya).toContain(id);
     expect(run.state.knownBy.dianne).toContain(id);
   });
 
-  it('the missed ride arrives as a retelling with the engine motif', () => {
+  it('the missed ride arrives as a retelling with the engine motif, detuned', () => {
     const evening = viewOf(run, 'd5-evening').paragraphs.join('\n');
-    expect(evening).toContain('held the 07:40');
+    expect(evening).toContain('held the 07:10'); // fix-08: never the EBUS 07:40
     expect(evening).toContain('idle, road, idle');
     expect(evening).not.toContain('Three notes and shut the lid');
+    // fix-14: the hole has the same sound on Day 5 as on Day 3.
+    expect(run.events.some((e) => e.kind === 'music.detune' && e.pattern === 'tam')).toBe(true);
   });
 
   it('helped-hall gossips dianne→barb; Barb credits Dianne on Day 6', () => {
@@ -206,15 +212,16 @@ describe('day 5 — the hall', () => {
     expect(prose).toContain('Dianne says you carried tables');
   });
 
-  it('the tables are FLESH-gated: locked label shows when the body is thin', () => {
-    const run2 = play('d5-morning', ['help-at-the-hall'], (s) => ({
-      ...s,
-      stats: { ...s.stats, flesh: 2 },
-    }));
+  it('the tables lock at starting FLESH (fix-15) and the locked label aches (fix-11)', () => {
+    // FLESH starts at 3 and never drops — the raised gate means the body
+    // must have been fed to carry. No glyph in the authored label.
+    const run2 = play('d5-morning', ['help-at-the-hall']);
     const view = viewOf(run2, 'd5-hall');
     const gate = view.choices.find((c) => c.id === 'carry-tables');
     expect(gate?.locked).toBe(true);
-    expect(gate?.label).toBe('· Take one end of the tables.');
+    expect(gate?.label).toBe(
+      'Take one end of the tables. (Your hands know they would go through it.)',
+    );
   });
 });
 
@@ -236,9 +243,25 @@ describe('first gossip visibility (day 5 evening)', () => {
   });
 
   it('with nothing gossiped, Tam falls back to two fingers off the mug', () => {
-    const run = play('d5-morning', [...HALL_PATH.slice(0, 4)]);
+    const run = play('d5-morning', [
+      'help-at-the-hall', 'do-the-flyers', 'hum-the-turn', 'walk-back-down',
+    ]);
     const evening = viewOf(run, 'd5-evening').paragraphs.join('\n');
     expect(evening).toContain('two fingers off the mug');
+  });
+
+  it('the Refuser’s plate travels the same edge (fix-15): Tam heard, and says so', () => {
+    const seed = (s: WorldState): WorldState =>
+      propagateGossip(
+        applyEffects(s, [
+          { op: 'fact.add', tag: 'refused-first-meal', witnessedBy: ['barb'] },
+        ]).state,
+        [{ from: 'barb', to: 'tam' }],
+      );
+    const run = play('d5-morning', ['take-the-0740', 'watch-the-lake', 'say-dont-know', 'go-in'], seed);
+    const evening = viewOf(run, 'd5-evening').paragraphs.join('\n');
+    expect(evening).toContain('sat a full plate out, first night');
+    expect(evening).toContain('It gets colder every telling');
   });
 });
 
@@ -275,15 +298,31 @@ describe('day 6 — the ticket office', () => {
     expect(text).toContain('kettle on the stove ring');
   });
 
-  it('detunes Wade at ECHO≥4, immediately paired with its visual twin', () => {
+  it('detunes Wade at ECHO≥4, twin carried in the prose (fix-03)', () => {
     const run = play('d6-morning', ['walk-the-loaf-down', 'ask-about-the-cot'], (s) => ({
       ...s,
       stats: { ...s.stats, echo: 5 },
     }));
-    const i = run.events.findIndex((e) => e.kind === 'music.detune');
-    expect(i).toBeGreaterThanOrEqual(0);
-    const next = run.events[i + 1];
-    expect(next?.kind).toBe('tell.visual');
+    expect(run.events.some((e) => e.kind === 'music.detune' && e.pattern === 'wade')).toBe(true);
+    const view = viewOf(run, 'd6-ticket-2').paragraphs.join('\n');
+    expect(view).toContain('a quarter-turn flat');
+    expect(run.events.some((e) => e.kind === 'tell.visual')).toBe(false);
+  });
+
+  it('below the gate, the twin paragraph stays out of the prose too', () => {
+    const run = play('d6-morning', ['walk-the-loaf-down', 'ask-about-the-cot']);
+    expect(viewOf(run, 'd6-ticket-2').paragraphs.join('\n')).not.toContain('a quarter-turn flat');
+  });
+
+  it('walking the loaf down counts as meeting Wade (fix-09)', () => {
+    const run = play('d6-morning', ['walk-the-loaf-down']);
+    const id = factIdOf(run.state, 'met-wade');
+    expect(run.state.knownBy.wade).toContain(id);
+    // Guarded: a Day-4 meeting is not double-entered in the ledger.
+    const met = play('d6-morning', ['walk-the-loaf-down'], (s) =>
+      applyEffects(s, [{ op: 'fact.add', tag: 'met-wade', witnessedBy: ['wade'] }]).state,
+    );
+    expect(met.state.facts.filter((f) => f.tag === 'met-wade')).toHaveLength(1);
   });
 
   it('stays undetuned below the ECHO gate', () => {
@@ -308,6 +347,14 @@ describe('day 6 — retellings for the missed slot', () => {
     const evening = viewOf(run, 'd6-evening').paragraphs.join('\n');
     expect(evening).toContain('asked where you’d got to');
   });
+
+  it('missing the wharf: the loaf you didn’t carry is still by the till (fix-14)', () => {
+    const run = play('d6-morning', ['go-to-the-hall', 'turn-the-question', 'back-up-the-hill']);
+    const evening = viewOf(run, 'd6-evening').paragraphs.join('\n');
+    expect(evening).toContain('Nobody walked it down.');
+    const other = play('d6-morning', ['walk-the-loaf-down', 'warm-your-hands', 'walk-back-up']);
+    expect(viewOf(other, 'd6-evening').paragraphs.join('\n')).not.toContain('Nobody walked it down.');
+  });
 });
 
 describe('night 6 — the recording', () => {
@@ -318,6 +365,41 @@ describe('night 6 — the recording', () => {
     const view = viewOf(run, 'd6-recording').paragraphs.join('\n');
     expect(view).toContain('room tone');
     expect(view).toContain('what you are');
+  });
+
+  it('the silence is actually silent (fix-05): music.stop, with its visual twin', () => {
+    const run = play('d6-morning', [...toLot]);
+    expect(run.events).toContainEqual({ kind: 'music.stop' });
+    const view = viewOf(run, 'd6-recording').paragraphs.join('\n');
+    expect(view).toContain('Nothing is playing under this.');
+  });
+
+  it('after the sprung shed, Sam names the bailiff and the deny label changes (fix-02)', () => {
+    const sprung = (s: WorldState): WorldState =>
+      applyEffects(s, [
+        { op: 'fact.add', tag: 'fog-sam-trap-sprung', about: 'sam', witnessedBy: ['sam'] },
+      ]).state;
+    const run = play('d6-morning', [...toLot], sprung);
+    const view = viewOf(run, 'd6-recording');
+    expect(view.paragraphs.join('\n')).toContain('I keep coming back to that');
+    const ids = view.choices.map((c) => c.id);
+    expect(ids).toContain('deny-the-file-sprung');
+    expect(ids).not.toContain('deny-the-file');
+    // Same lie, same cost, either label.
+    const denied = play('d6-morning', [...toLot, 'deny-the-file-sprung'], sprung);
+    expect(denied.state.staticMeter).toBe(12);
+  });
+
+  it('the honest admission is remembered (fix-02): "Twice now" after the shed truth', () => {
+    const admitted = (s: WorldState): WorldState => ({
+      ...s,
+      flags: { ...s.flags, 'd3:trap': 'admitted' },
+    });
+    const run = play('d6-morning', [...toLot, 'say-i-dont-know'], admitted);
+    const view = viewOf(run, 'd6-recording-2').paragraphs.join('\n');
+    expect(view).toContain('Twice now');
+    expect(view).toContain('Nobody here does that once.');
+    expect(view).not.toContain('wasn’t rehearsed');
   });
 
   it('deny is a marked lie: STATIC +2, and the fact stays private to Sam', () => {

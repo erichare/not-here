@@ -12,8 +12,9 @@
  *   'horn-stopped'         — the player closed the valve herself
  *   'wade-confession-seed' — Wade's confession path opens early (horn-on)
  * Facts: 'let-wade-play' / 'stopped-the-horn', witnessed by wade only.
- * The presence-decay mechanic itself is Act 2's; Act 1 only announces it
- * (the '(Something has started counting.)' visual tell in d7-after).
+ * The presence-decay mechanic itself is Act 2's; Act 1 only announces it —
+ * the '(Something has started counting.)' visual tell rides the lie-down
+ * choice out of d7-after (playtest fix-03: it is the LAST thing Act 1 says).
  *
  * Prose invariants in force (design/game-bible.md §Prose grammar): nobody
  * touches you first — in the Stop branch YOU reach past Wade and touch the
@@ -85,6 +86,15 @@ const evening = defineScene({
       {
         text: 'The fog comes in early and means it. By four the streetlights are on and might as well not be; by five the hills are gone and the town has pulled its shoulders in. The men look at the window, and settle up, and go while there’s still a road to go by.',
       },
+      // ——— fix-14: the morning you chose gets its one sentence back.
+      {
+        text: 'The shore road gave you back around noon, hands cold, nothing decided.',
+        when: { op: 'flag', key: 'd7:walked-shore' },
+      },
+      {
+        text: 'The morning went into the till roll and the pie, and Barb let you stay inside the work of it, and neither of you counted the hours.',
+        when: { op: 'fact.exists', tag: 'kept-barb-company' },
+      },
       {
         text: 'No crib game tonight. Moose takes his post at the door early, facing the lot, waiting on the last run the way he does. Barb turns the sign around at half past seven, and nobody is there to see it but you.',
       },
@@ -136,6 +146,17 @@ const hornroom = defineScene({
       {
         text: 'Five bars, complete, at full voice for the first time. The fifth leans forward the way it always leans, and the silence where a sixth should go is not silence in here. It is a held breath. The whole room makes it together — the man, the machine, and you.',
       },
+      // ——— fix-09: the widest route arrives a stranger, and the scene knows.
+      {
+        text: 'You have never spoken to this man. You know his name the way you know the song — from the wrong side of a wall.',
+        when: {
+          op: 'all',
+          of: [
+            { op: 'not', of: { op: 'fact.exists', tag: 'met-wade' } },
+            { op: 'not', of: { op: 'fact.exists', tag: 'helped-wade' } },
+          ],
+        },
+      },
       {
         text: 'He sees you. His eyes come to the door, find you, and go back to the valves. He doesn’t stop. He doesn’t miss a beat to the seeing. The song goes out again over the water, patient as weather, and his hands wait on the brass for whatever you have come down to say.',
       },
@@ -163,10 +184,12 @@ const hornroom = defineScene({
       goto: 'd7-silence',
     },
     {
-      // The ache: always visible, never openable in Act 1 (CHORD caps below 6).
+      // The ache: always visible, never openable in Act 1 (CHORD caps below
+      // 6). The locked text reads as designed impossibility, not a missed
+      // unlock (playtest fix-11).
       id: 'ask-sixth-bar',
       label: 'Ask him what the sixth bar is.',
-      lockedLabel: '· Ask him what the sixth bar is.',
+      lockedLabel: 'Ask him what the sixth bar is. (There are no words for it yet. Anywhere.)',
       when: { op: 'chord.gte', value: 6 },
       goto: 'd7-after',
     },
@@ -179,6 +202,9 @@ const hornroom = defineScene({
 const silence = defineScene({
   id: 'd7-silence',
   slot: 'night',
+  // fix-05: the valve closes and so does the mixer — nothing may loop under
+  // "there is no music of any kind."
+  onEnter: [{ op: 'emit', event: { kind: 'music.stop' } }],
   prose: {
     kind: 'inline',
     paragraphs: [
@@ -201,19 +227,6 @@ const silence = defineScene({
 const after = defineScene({
   id: 'd7-after',
   slot: 'night',
-  onEnter: [
-    // Decay seeding: Act 2 implements the nightly count; Act 1 announces it.
-    {
-      op: 'when',
-      cond: { op: 'flag', key: 'horn-stopped' },
-      then: [
-        {
-          op: 'emit',
-          event: { kind: 'tell.visual', text: '(Something has started counting.)' },
-        },
-      ],
-    },
-  ],
   prose: {
     kind: 'inline',
     paragraphs: [
@@ -227,7 +240,27 @@ const after = defineScene({
       },
     ],
   },
-  choices: [{ id: 'lie-down', label: 'Lie down.', goto: 'act1-end' }],
+  choices: [
+    {
+      id: 'lie-down',
+      label: 'Lie down.',
+      // Decay seeding: Act 2 implements the nightly count; Act 1 announces
+      // it once, on the lie-down — the last thing the act says (fix-03).
+      effects: [
+        {
+          op: 'when',
+          cond: hornStopped,
+          then: [
+            {
+              op: 'emit',
+              event: { kind: 'tell.visual', text: '(Something has started counting.)' },
+            },
+          ],
+        },
+      ],
+      goto: 'act1-end',
+    },
+  ],
 });
 
 // ——— ACT TWO title card — the current build terminates here ———

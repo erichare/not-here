@@ -66,15 +66,6 @@ const factKnownBy = (state: WorldState, who: CharacterId, tag: FactTag): boolean
 const detunesOf = (run: Run): readonly string[] =>
   run.events.flatMap((e) => (e.kind === 'music.detune' ? [e.pattern] : []));
 
-/** Every music.detune must be IMMEDIATELY followed by its visual twin. */
-const expectPairedDetunes = (events: readonly EngineEvent[]): void => {
-  events.forEach((event, i) => {
-    if (event.kind !== 'music.detune') return;
-    const next = events[i + 1];
-    expect(next?.kind, `unpaired music.detune at event ${i}`).toBe('tell.visual');
-  });
-};
-
 const sceneTexts = (scenes: readonly Scene[]): readonly string[] =>
   scenes.flatMap((scene) => {
     if (scene.prose.kind !== 'inline') return [];
@@ -154,10 +145,15 @@ describe('without-you retellings (Day 3 evening/night)', () => {
     expect(detunesOf(CLINIC_RUN)).toEqual(['sam', 'dianne']);
   });
 
-  it('every detune emit is immediately paired with a visual twin', () => {
+  it('the motif twins live in the prose, not in toast events (fix-03)', () => {
+    // No duplicate tell.visual lines ride these runs; act1-lint pins each
+    // detune to its prose twin in the same scene.
     for (const run of [ROOM_RUN, SHED_RUN, CLINIC_RUN, WHARF_RUN, QUILT_COST_RUN]) {
-      expectPairedDetunes(run.events);
+      expect(run.events.filter((e) => e.kind === 'tell.visual')).toEqual([]);
     }
+    expect(paragraphsOf(ROOM_RUN, 'd3-evening')).toContain('a quarter-tone flat');
+    expect(paragraphsOf(SHED_RUN, 'd3-evening')).toContain('a shade flat');
+    expect(paragraphsOf(ROOM_RUN, 'd3-night')).toContain('one layer short');
   });
 });
 
@@ -190,6 +186,87 @@ describe('the quilt harvest (first ECHO offer)', () => {
     const dianne = paragraphsOf(QUILT_LEFT_RUN, 'd4-dianne');
     expect(dianne).toContain('My mother pieced that');
     expect(dianne).not.toContain('It’ll come to me, hon');
+  });
+
+  it('the cost fires on every route (fix-01): skip Dianne and Barb relays it', () => {
+    const skipDianne = playFrom('d3-morning', [
+      'to-room', 'remember-with-her', 'close-wardrobe', 'go-up', 'let-tomorrow',
+      'to-errand', 'finish-out',
+    ]);
+    const evening = paragraphsOf(skipDianne, 'd4-evening');
+    expect(evening).toContain('who pieced that quilt of her mother’s');
+    // The fuller beat stays the reward for revisiting: no relay when you went.
+    expect(paragraphsOf(QUILT_COST_RUN, 'd4-dianne')).toContain('It’ll come to me, hon');
+  });
+
+  it('no quilt taken, no cost relayed (fix-01 stays honest)', () => {
+    const run = playFrom('d3-morning', [
+      'to-room', 'let-it-stay', 'close-wardrobe', 'go-up', 'let-tomorrow',
+      'to-errand', 'finish-out',
+    ]);
+    expect(paragraphsOf(run, 'd4-evening')).not.toContain('who pieced that quilt');
+  });
+});
+
+describe('Day 4 evening — the hole has a sound here too (fix-14)', () => {
+  it('missing the wharf: the open shed doors arrive with a detuned motif', () => {
+    const run = playFrom('d3-morning', [
+      'to-clinic', 'honest-wrist', 'back-along-hall', 'go-up', 'let-tomorrow',
+      'to-dianne', 'go-easy',
+    ]);
+    const evening = paragraphsOf(run, 'd4-evening');
+    expect(evening).toContain('Wade had the shed doors open all morning');
+    expect(evening).toContain('a shade flat');
+    expect(detunesOf(run)).toContain('wade');
+  });
+
+  it('missing the General: the shelf gap arrives in passing, with the music-box', () => {
+    const evening = paragraphsOf(WHARF_RUN, 'd4-evening');
+    expect(evening).toContain('bare wood now');
+    expect(detunesOf(WHARF_RUN)).toContain('dianne');
+  });
+
+  it('the photographed minute is Day-2-plausible on every route', () => {
+    const evening = paragraphsOf(WHARF_RUN, 'd4-evening');
+    expect(evening).toContain('the Kettle door at closing, two nights back');
+    expect(evening).not.toContain('tables going in');
+  });
+
+  it('studying the photos follows you up to Night 4, with the flat disagreement', () => {
+    const night = paragraphsOf(WHARF_RUN, 'd4-night'); // WHARF_RUN looks longest
+    expect(night).toContain('In his, you are half-turned toward the door. In the other, away.');
+  });
+
+  it('looking away also makes a sound at Night 4', () => {
+    const run = playFrom('d4-morning', ['to-errand', 'finish-out', 'back-to-plate', 'let-go']);
+    expect(paragraphsOf(run, 'd4-night')).toContain('The not-looking climbed the stairs with you');
+    expect(paragraphsOf(run, 'd4-night')).not.toContain('In his, you are half-turned');
+  });
+});
+
+describe('Sam remembers the shed (fix-02)', () => {
+  const base = initialState(11, 'd3-morning');
+  const attuned: WorldState = { ...base, stats: { ...base.stats, echo: 3 } };
+  const SPRUNG_RUN = playFrom(
+    'd3-morning',
+    ['to-shed', 'correct-him', 'back-up-the-road', 'go-up', 'let-tomorrow', 'to-errand', 'finish-out'],
+    attuned,
+  );
+
+  it('Barb’s Day-3 greeting goes neutral — no chair by the heater tonight', () => {
+    const evening = paragraphsOf(SPRUNG_RUN, 'd3-evening');
+    expect(evening).toContain('Sam came up the hill before noon');
+    expect(evening).not.toContain('You’ve earned the chair by the heater');
+  });
+
+  it('the shed shadows the two-phones beat on Day 4', () => {
+    const evening = paragraphsOf(SPRUNG_RUN, 'd4-evening');
+    expect(evening).toContain('He hasn’t, since the boat shed');
+  });
+
+  it('held trap leaves Day 4 unshadowed', () => {
+    const evening = paragraphsOf(WHARF_RUN, 'd4-evening');
+    expect(evening).not.toContain('since the boat shed');
   });
 });
 
@@ -235,19 +312,16 @@ describe('Priya’s clinic', () => {
 });
 
 describe('Day 4: Wade and the first audible lie', () => {
-  it('“Not well.” detunes his stem a quarter-tone, unGated, with the exact visual twin', () => {
-    const i = WHARF_RUN.events.findIndex(
+  it('“Not well.” detunes his stem a quarter-tone, unGated, twin carried in prose', () => {
+    const detune = WHARF_RUN.events.find(
       (e) => e.kind === 'music.detune' && e.pattern === 'wade',
     );
-    expect(i).toBeGreaterThanOrEqual(0);
-    const detune = WHARF_RUN.events[i];
-    const twin = WHARF_RUN.events[i + 1];
     expect(detune?.kind === 'music.detune' && detune.cents).toBe(-50);
-    expect(twin?.kind).toBe('tell.visual');
-    expect(twin?.kind === 'tell.visual' && twin.text).toBe(
-      '— something in the room goes a quarter-turn flat.',
-    );
-    expect(paragraphsOf(WHARF_RUN, 'd4-wharf-2')).toContain('“Not well.”');
+    const prose = paragraphsOf(WHARF_RUN, 'd4-wharf-2');
+    expect(prose).toContain('“Not well.”');
+    // fix-03: the twin FOLLOWS the lie, inside the prose — no toast above it.
+    expect(prose).toContain('a quarter-turn flat');
+    expect(WHARF_RUN.events.some((e) => e.kind === 'tell.visual')).toBe(false);
   });
 
   it('the horn room stays shut', () => {

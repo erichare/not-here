@@ -18,6 +18,12 @@ export type EngineEvent =
   | { readonly kind: 'music.static'; readonly amount: number }
   /** A musical stinger on a beat-quantized boundary. */
   | { readonly kind: 'music.stinger'; readonly cue: CueId }
+  /**
+   * Silence as a beat: fade or kill the current cue and play nothing until
+   * the next `music.cue`. Frontends print no note line for this — the
+   * silence is the score (Day 6, Day 7).
+   */
+  | { readonly kind: 'music.stop' }
   /** Visual twin for any audio tell — accessibility invariant. */
   | { readonly kind: 'tell.visual'; readonly text: string }
   | { readonly kind: 'stat.changed'; readonly stat: StatId; readonly delta: number }
