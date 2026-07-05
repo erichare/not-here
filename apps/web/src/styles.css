@@ -141,6 +141,16 @@ button.choice {
   padding: 0.25rem 0.5rem 0.25rem 0;
 }
 
+button.choice.major,
+.choice.major.locked {
+  border-left: 1px solid rgba(255, 217, 143, 0.55);
+  margin: 0.75rem 0;
+  padding: 0.45rem 0.75rem;
+  color: var(--phosphor-bright);
+  background: linear-gradient(90deg, rgba(232, 180, 90, 0.1), transparent 72%);
+  text-shadow: var(--bloom-strong);
+}
+
 button.choice:hover,
 button.choice:focus-visible {
   color: var(--phosphor-bright);
@@ -160,6 +170,11 @@ button.choice:focus-visible {
   opacity: 0.55;
   text-shadow: none;
   cursor: default;
+}
+
+.choice.major.locked {
+  color: var(--phosphor-dim);
+  background: linear-gradient(90deg, rgba(232, 180, 90, 0.05), transparent 72%);
 }
 
 .ending-mark {

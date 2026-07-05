@@ -18,7 +18,7 @@ export const RULES: readonly DialogueRule[] = [
     speaker: 'barb',
     slot: 'goodnight',
     requires: ['kept-barb-company'],
-    text: '"Sleep well tonight," Barb says. She stops wiping when she says it, and looks at you the way she looked at you the first night — for exactly as long as it takes to look at someone. "There’s pie for the morning. I’ll want help with it."',
+    text: '"Warm’s not free," Barb says, one hand on the register. "Somebody feeds the stove." Then, gentler: "Sleep well tonight." She looks at you the way she looked at you the first night — for exactly as long as it takes to look at someone. "There’s pie for the morning. I’ll want help with it."',
   },
 
   // Guaranteed fallback — no conditions, chosen last.
@@ -26,6 +26,6 @@ export const RULES: readonly DialogueRule[] = [
     id: 'barb-goodnight-fallback',
     speaker: 'barb',
     slot: 'goodnight',
-    text: '"Sleep well tonight," Barb says, to the room, the way she’d call closing. The chairs are up already, all of them. The lock goes over behind you before you’re three steps into the fog, and you cannot remember it ever going over before.',
+    text: '"Warm’s not free," Barb says, one hand on the register. "Somebody feeds the stove." Then, to the room, the way she’d call closing: "Sleep well tonight." The chairs are up already, all of them. The lock goes over behind you before you’re three steps into the fog, and you cannot remember it ever going over before.',
   },
 ];

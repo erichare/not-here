@@ -284,6 +284,7 @@ const evening = defineScene({
     {
       id: 'look-longest',
       label: 'Look until the screens sleep.',
+      stakes: 'major',
       effects: [
         { op: 'stat.add', stat: 'undertow', value: 1 },
         { op: 'fact.add', tag: 'studied-the-photos', witnessedBy: ['sam'] },
@@ -293,6 +294,7 @@ const evening = defineScene({
     {
       id: 'back-to-plate',
       label: 'Give your plate your whole attention.',
+      stakes: 'major',
       effects: [
         { op: 'static.add', value: 2 },
         { op: 'fact.add', tag: 'looked-away-from-photos', witnessedBy: ['sam'] },

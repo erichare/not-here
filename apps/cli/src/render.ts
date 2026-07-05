@@ -87,6 +87,7 @@ export interface ChoiceLine {
   readonly id: string;
   readonly label: string;
   readonly locked: boolean;
+  readonly stakes?: 'major';
 }
 
 export interface RenderedChoices {
@@ -106,8 +107,8 @@ export const renderChoices = (choices: readonly ChoiceLine[]): RenderedChoices =
   const open = choices.filter((choice) => !choice.locked);
   const lines = choices.map((choice) =>
     choice.locked
-      ? dim(`     · ${stripLockedGlyph(choice.label)}`)
-      : `  ${warm(`${open.indexOf(choice) + 1}.`)} ${choice.label}`,
+      ? dim(`${choice.stakes === 'major' ? '  !' : '  '}  · ${stripLockedGlyph(choice.label)}`)
+      : `${choice.stakes === 'major' ? warm('! ') : '  '}${warm(`${open.indexOf(choice) + 1}.`)} ${choice.label}`,
   );
   return { text: lines.join('\n'), openIds: open.map((choice) => choice.id) };
 };

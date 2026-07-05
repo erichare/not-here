@@ -41,6 +41,7 @@ const scenes: readonly Scene[] = [
       {
         id: 'vanish',
         label: 'Step off the edge',
+        stakes: 'major',
         effects: [{ op: 'goto', scene: 'gone' }],
         goto: 'shrine',
       },
@@ -120,7 +121,7 @@ describe('advance — choice gating in the view', () => {
       { id: 'walk', label: 'Walk to the shrine', locked: false },
       { id: 'sing', label: 'Your throat holds no song yet', locked: true },
       // 'whisper' has a failing gate and no lockedLabel → hidden entirely.
-      { id: 'vanish', label: 'Step off the edge', locked: false },
+      { id: 'vanish', label: 'Step off the edge', locked: false, stakes: 'major' },
     ]);
   });
 
@@ -131,7 +132,7 @@ describe('advance — choice gating in the view', () => {
       { id: 'walk', label: 'Walk to the shrine', locked: false },
       { id: 'sing', label: 'Sing the old song', locked: false },
       { id: 'whisper', label: 'Whisper the secret', locked: false },
-      { id: 'vanish', label: 'Step off the edge', locked: false },
+      { id: 'vanish', label: 'Step off the edge', locked: false, stakes: 'major' },
     ]);
   });
 });

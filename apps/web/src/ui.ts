@@ -17,6 +17,7 @@ export interface ChoiceModel {
   readonly id: string;
   readonly label: string;
   readonly locked: boolean;
+  readonly stakes?: 'major';
 }
 
 export interface SceneModel {
@@ -173,10 +174,11 @@ export const createUi = (root: HTMLElement, callbacks: UiCallbacks): Ui => {
     const list = el('ul', 'choices');
     for (const choice of model.choices) {
       const item = el('li', 'choice-line');
+      const className = choice.stakes === 'major' ? 'choice major' : 'choice';
       if (choice.locked) {
-        item.append(el('span', 'choice locked', `· ${choice.label}`));
+        item.append(el('span', `${className} locked`, `· ${choice.label}`));
       } else {
-        const button = el('button', 'choice', `— ${choice.label}`);
+        const button = el('button', className, `— ${choice.label}`);
         button.type = 'button';
         button.addEventListener('click', (event) => {
           event.stopPropagation();

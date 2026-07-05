@@ -4,7 +4,7 @@
  * Covers: the single quiet morning slot (Day 7 by design owes no without-you
  * retellings — there is nothing simultaneous to miss), the register clue
  * plant (@doc, NAME column still blank), the railroaded walk (< 120 words,
- * continue-only), the Foghorn Choice (three options, third always visible
+ * posture-only), the Foghorn Choice (three options, third always visible
  * and locked all act), both branch outcomes with correctly witnessed facts,
  * the decay-seeding announcement, and the ACT TWO card at 'act1-end'.
  */
@@ -74,7 +74,10 @@ describe('day 7 structure — the single quiet slot', () => {
   });
 
   it('walks the fixed spine morning → evening → walk → hornroom', () => {
-    const step = choose(choose(choose(enterDay7(), 'stay-the-morning'), 'cross-the-lot'), 'go-in');
+    const step = choose(
+      choose(choose(enterDay7(), 'stay-the-morning'), 'cross-the-lot'),
+      'for-sam',
+    );
     expect(step.state.sceneId).toBe('d7-hornroom');
     expect(step.state.slot).toBe('night');
   });
@@ -99,10 +102,14 @@ describe('the register clue (thread beat 2)', () => {
 });
 
 describe('the walk — the act’s one railroad', () => {
-  it('offers exactly one choice, a continue', () => {
+  it('offers posture choices only; every one enters the horn room', () => {
     const walk = DAY7_SCENES.find((s) => s.id === 'd7-walk');
-    expect(walk?.choices.length).toBe(1);
-    expect(walk?.choices[0]?.when).toBeUndefined();
+    expect(walk?.choices.map((c) => c.goto)).toEqual([
+      'd7-hornroom',
+      'd7-hornroom',
+      'd7-hornroom',
+    ]);
+    expect(walk?.choices.every((c) => c.when === undefined)).toBe(true);
   });
 
   it('is under 120 words and arrives at 3:12, the fog parting along the boards', () => {
@@ -117,7 +124,7 @@ describe('the walk — the act’s one railroad', () => {
 describe('the horn room — the Foghorn Choice', () => {
   const atHorn = choose(
     choose(choose(enterDay7(), 'shore-road'), 'cross-the-lot'),
-    'go-in',
+    'for-sam',
   );
 
   it('cues horn-close and plays the song complete, at full voice', () => {
@@ -133,15 +140,26 @@ describe('the horn room — the Foghorn Choice', () => {
       id: 'keep-playing',
       label: '"Keep playing."',
       locked: false,
+      stakes: 'major',
     });
-    expect(atHorn.view.choices[1]).toEqual({ id: 'stop', label: '"Stop."', locked: false });
+    expect(atHorn.view.choices[1]).toEqual({
+      id: 'stop',
+      label: '"Stop."',
+      locked: false,
+      stakes: 'major',
+    });
     // fix-11: the renderer owns the glyph; the label reads as designed
     // impossibility, not a missed unlock.
     expect(atHorn.view.choices[2]).toEqual({
       id: 'ask-sixth-bar',
       label: 'Ask him what the sixth bar is. (There are no words for it yet. Anywhere.)',
       locked: true,
+      stakes: 'major',
     });
+  });
+
+  it('carries the chosen posture and Sam answer into the horn room', () => {
+    expect(atHorn.view.paragraphs.join('\n')).toContain('Sam’s question has followed you');
   });
 
   it('a stranger is named a stranger (fix-09), and a met Wade is not', () => {
@@ -168,7 +186,7 @@ describe('the horn room — the Foghorn Choice', () => {
 describe('branch: "Keep playing."', () => {
   const atHorn = choose(
     choose(choose(enterDay7(), 'stay-the-morning'), 'cross-the-lot'),
-    'go-in',
+    'for-the-song',
   );
   const after = choose(atHorn, 'keep-playing');
 
@@ -198,7 +216,7 @@ describe('branch: "Keep playing."', () => {
 describe('branch: "Stop."', () => {
   const atHorn = choose(
     choose(choose(enterDay7(), 'stay-the-morning'), 'cross-the-lot'),
-    'go-in',
+    'for-the-town',
   );
   const silence = choose(atHorn, 'stop');
   const after = choose(silence, 'walk-back');
@@ -236,7 +254,7 @@ describe('branch: "Stop."', () => {
 });
 
 describe('act1-end — the ACT TWO card', () => {
-  const run = ['stay-the-morning', 'cross-the-lot', 'go-in', 'keep-playing', 'lie-down'].reduce(
+  const run = ['stay-the-morning', 'cross-the-lot', 'for-the-song', 'keep-playing', 'lie-down'].reduce(
     (step, id) => choose(step, id),
     enterDay7(),
   );

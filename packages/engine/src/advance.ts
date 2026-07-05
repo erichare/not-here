@@ -49,11 +49,12 @@ const buildView = (
   sceneId: scene.id,
   paragraphs: content.realizeProse(scene, state),
   choices: scene.choices.flatMap(
-    (choice): { id: string; label: string; locked: boolean }[] => {
+    (choice): { id: string; label: string; locked: boolean; stakes?: 'major' }[] => {
       const open = !choice.when || evaluate(choice.when, state, content.derived);
-      if (open) return [{ id: choice.id, label: choice.label, locked: false }];
+      const stakes = choice.stakes === undefined ? {} : { stakes: choice.stakes };
+      if (open) return [{ id: choice.id, label: choice.label, locked: false, ...stakes }];
       if (choice.lockedLabel) {
-        return [{ id: choice.id, label: choice.lockedLabel, locked: true }];
+        return [{ id: choice.id, label: choice.lockedLabel, locked: true, ...stakes }];
       }
       return [];
     },

@@ -25,6 +25,10 @@ import { defineScene, type Cond, type Scene } from '@not-here/engine';
 
 const hornOn: Cond = { op: 'flag', key: 'horn-on' };
 const hornStopped: Cond = { op: 'flag', key: 'horn-stopped' };
+const tookQuilt: Cond = { op: 'fact.exists', tag: 'private:memory-taken' };
+const deniedSam: Cond = { op: 'fact.exists', tag: 'private:denied-sams-recording' };
+const answeredSamHonestly: Cond = { op: 'fact.exists', tag: 'told-sam-dont-know' };
+const gaveSamSilence: Cond = { op: 'flag', key: 'd6:said-nothing' };
 
 // ——— Morning: the book briefly open (register thread, beat 2) ———
 
@@ -49,6 +53,10 @@ const morning = defineScene({
       },
       {
         text: 'One line for November. The date, the unit, the supper — the ink gone over more than once, some of it lately. And the NAME column still open, six days now, the way you’d leave a chair for someone.',
+      },
+      {
+        text: 'Tucked under the cover is a loose slip in Dianne’s hand: quilt maker? Barb has written one name beneath it, lightly, and not gone over the ink.',
+        when: tookQuilt,
       },
       {
         text: 'Barb squares the book shut on her way past — no hurry in it, a chapter finished rather than a page lost — and pours your coffee. "Quiet one today," she says, to the pot. It is.',
@@ -98,6 +106,9 @@ const evening = defineScene({
       {
         text: 'No crib game tonight. Moose takes his post at the door early, facing the lot, waiting on the last run the way he does. Barb turns the sign around at half past seven, and nobody is there to see it but you.',
       },
+      {
+        text: 'By the till, the EBUS schedule has curled under its tape. Friday the twenty-eighth is still ringed twice, blue on blue, hard as a bruise.',
+      },
       { text: '@line:barb:goodnight' },
       { text: 'It is not clear she believes you will.' },
     ],
@@ -128,7 +139,26 @@ const walk = defineScene({
       },
     ],
   },
-  choices: [{ id: 'go-in', label: 'Go in.', goto: 'd7-hornroom' }],
+  choices: [
+    {
+      id: 'for-the-song',
+      label: 'Go in because the song has been calling you all week.',
+      effects: [{ op: 'flag.set', key: 'd7:entered-for', value: 'song' }],
+      goto: 'd7-hornroom',
+    },
+    {
+      id: 'for-sam',
+      label: 'Go in because Sam asked what you are.',
+      effects: [{ op: 'flag.set', key: 'd7:entered-for', value: 'sam' }],
+      goto: 'd7-hornroom',
+    },
+    {
+      id: 'for-the-town',
+      label: 'Go in because someone has to stop pretending.',
+      effects: [{ op: 'flag.set', key: 'd7:entered-for', value: 'town' }],
+      goto: 'd7-hornroom',
+    },
+  ],
   cue: 'foghorn-312',
 });
 
@@ -145,6 +175,30 @@ const hornroom = defineScene({
       },
       {
         text: 'Five bars, complete, at full voice for the first time. The fifth leans forward the way it always leans, and the silence where a sixth should go is not silence in here. It is a held breath. The whole room makes it together — the man, the machine, and you.',
+      },
+      {
+        text: 'The song called you here, and the answer in your body is old enough to feel borrowed.',
+        when: { op: 'flag', key: 'd7:entered-for', value: 'song' },
+      },
+      {
+        text: 'Sam’s question has followed you down the boards. What are you? In this room it stops sounding like an accusation and starts sounding like a door.',
+        when: { op: 'flag', key: 'd7:entered-for', value: 'sam' },
+      },
+      {
+        text: 'The whole town has made a room around this sound and called the room weather. Standing inside it, you can feel how much work pretending is.',
+        when: { op: 'flag', key: 'd7:entered-for', value: 'town' },
+      },
+      {
+        text: 'The lie you gave Sam has followed too. It stands behind you in the doorway and has no room tone to hide in.',
+        when: deniedSam,
+      },
+      {
+        text: 'The true thing you gave Sam has followed too: I don’t know. Here, under the horn, it feels less like emptiness than a debt.',
+        when: answeredSamHonestly,
+      },
+      {
+        text: 'The nothing you gave Sam has followed too. It is not silence. You know that now.',
+        when: gaveSamSilence,
       },
       // ——— fix-09: the widest route arrives a stranger, and the scene knows.
       {
@@ -166,6 +220,7 @@ const hornroom = defineScene({
     {
       id: 'keep-playing',
       label: '"Keep playing."',
+      stakes: 'major',
       effects: [
         { op: 'flag.set', key: 'horn-on', value: true },
         { op: 'fact.add', tag: 'let-wade-play', witnessedBy: ['wade'] },
@@ -176,6 +231,7 @@ const hornroom = defineScene({
     {
       id: 'stop',
       label: '"Stop."',
+      stakes: 'major',
       effects: [
         { op: 'flag.set', key: 'horn-stopped', value: true },
         { op: 'fact.add', tag: 'stopped-the-horn', witnessedBy: ['wade'] },
@@ -189,6 +245,7 @@ const hornroom = defineScene({
       // unlock (playtest fix-11).
       id: 'ask-sixth-bar',
       label: 'Ask him what the sixth bar is.',
+      stakes: 'major',
       lockedLabel: 'Ask him what the sixth bar is. (There are no words for it yet. Anywhere.)',
       when: { op: 'chord.gte', value: 6 },
       goto: 'd7-after',
@@ -231,7 +288,7 @@ const after = defineScene({
     kind: 'inline',
     paragraphs: [
       {
-        text: 'You climb home with the song at your back, going out over the water like a lamp left burning in a room behind you. It is still playing when you reach the lot, still playing when you lie down — five bars, the stop, five bars — and something in you is fed by it, and lets itself be, and you don’t ask that something its name.',
+        text: 'You climb home with the song at your back, going out over the water like a lamp left burning in a room behind you. It is still playing when you reach the lot, still playing when you lie down — five bars, the stop, five bars — and something in you is fed by it, and lets itself be, and you don’t ask that something its name. Somewhere up the hill, or only in the song, a woman loses the next line of a thing she had been humming. The horn covers it kindly.',
         when: hornOn,
       },
       {

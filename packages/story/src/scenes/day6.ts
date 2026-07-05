@@ -361,6 +361,7 @@ const recording = defineScene({
     {
       id: 'deny-the-file',
       label: '"The file’s doctored, Sam. It has to be."',
+      stakes: 'major',
       when: { op: 'not', of: trapSprung },
       effects: [
         { op: 'static.add', value: 2 },
@@ -372,6 +373,7 @@ const recording = defineScene({
       // fix-02: after the shed, the same lie has to walk past the bailiff.
       id: 'deny-the-file-sprung',
       label: '"The file’s doctored." The word goes out knowing how he’ll weigh it.',
+      stakes: 'major',
       when: trapSprung,
       effects: [
         { op: 'static.add', value: 2 },
@@ -382,12 +384,14 @@ const recording = defineScene({
     {
       id: 'say-nothing',
       label: 'Say nothing.',
+      stakes: 'major',
       effects: [{ op: 'flag.set', key: 'd6:said-nothing', value: true }],
       goto: 'd6-recording-2',
     },
     {
       id: 'say-i-dont-know',
       label: '"I don’t know."',
+      stakes: 'major',
       effects: [
         { op: 'stat.add', stat: 'undertow', value: 2 },
         { op: 'fact.add', tag: 'told-sam-dont-know', witnessedBy: ['sam'] },

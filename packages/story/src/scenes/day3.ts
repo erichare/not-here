@@ -118,6 +118,7 @@ const room = defineScene({
     {
       id: 'remember-with-her',
       label: '“I remember.” Take the story in, corner to corner.',
+      stakes: 'major',
       effects: [
         { op: 'stat.add', stat: 'echo', value: 1 },
         {
@@ -132,6 +133,7 @@ const room = defineScene({
     {
       id: 'let-it-stay',
       label: 'Say nothing. Let the story stay hers.',
+      stakes: 'major',
       effects: [
         { op: 'stat.add', stat: 'undertow', value: 1 },
         { op: 'flag.set', key: 'd3:left-quilt', value: true },
@@ -203,6 +205,7 @@ const shed = defineScene({
     {
       id: 'correct-him',
       label: '“The bailiff. Because it took things.”',
+      stakes: 'major',
       when: { op: 'stat.gte', stat: 'echo', value: 3 },
       lockedLabel: 'Correct him. The right word is almost there, at the edge of you.',
       effects: [
@@ -214,6 +217,7 @@ const shed = defineScene({
     {
       id: 'say-nothing',
       label: 'Say nothing. Keep the canoe steady.',
+      stakes: 'major',
       effects: [
         { op: 'flag.set', key: 'd3:trap', value: 'held' },
         { op: 'fact.add', tag: 'sam-test-1-passed', about: 'sam', witnessedBy: ['sam'] },
@@ -223,6 +227,7 @@ const shed = defineScene({
     {
       id: 'admit-blank',
       label: '“I don’t remember it. Any of it. I’m sorry.”',
+      stakes: 'major',
       effects: [
         { op: 'stat.add', stat: 'undertow', value: 1 },
         { op: 'flag.set', key: 'd3:trap', value: 'admitted' },
@@ -294,6 +299,7 @@ const clinic = defineScene({
     {
       id: 'lie-ache',
       label: '“When the rain’s coming. You know how it is.”',
+      stakes: 'major',
       effects: [
         { op: 'static.add', value: 2 },
         { op: 'fact.add', tag: 'lied-at-intake', witnessedBy: ['priya'] },
@@ -303,6 +309,7 @@ const clinic = defineScene({
     {
       id: 'honest-wrist',
       label: 'Turn the wrist over in the light. “It doesn’t ache. Should it?”',
+      stakes: 'major',
       effects: [
         { op: 'stat.add', stat: 'undertow', value: 1 },
         { op: 'fact.add', tag: 'intake-honest-wrist', witnessedBy: ['priya'] },

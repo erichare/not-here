@@ -75,6 +75,16 @@ describe('renderChoices', () => {
     expect(plain).toContain('· Take one end of the tables.');
     expect(plain).not.toContain('· ·');
   });
+
+  it('marks major-stakes choices more prominently', () => {
+    const marked = [
+      { id: 'a', label: 'Keep playing.', locked: false, stakes: 'major' as const },
+      { id: 'b', label: 'Ask why.', locked: true, stakes: 'major' as const },
+    ];
+    const plain = stripAnsi(renderChoices(marked).text);
+    expect(plain).toContain('! 1. Keep playing.');
+    expect(plain).toContain('!  · Ask why.');
+  });
 });
 
 describe('renderEnding', () => {

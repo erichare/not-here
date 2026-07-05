@@ -122,6 +122,7 @@ const ride2 = defineScene({
     {
       id: 'say-staying',
       label: '"Yes. Past it. Why wouldn’t I?"',
+      stakes: 'major',
       effects: [
         { op: 'static.add', value: 2 },
         { op: 'fact.add', tag: 'told-tam-staying', witnessedBy: ['tam'] },
@@ -131,6 +132,7 @@ const ride2 = defineScene({
     {
       id: 'say-dont-know',
       label: '"I don’t know yet."',
+      stakes: 'major',
       effects: [
         { op: 'stat.add', stat: 'undertow', value: 1 },
         { op: 'fact.add', tag: 'told-tam-unsure', witnessedBy: ['tam'] },
@@ -140,6 +142,7 @@ const ride2 = defineScene({
     {
       id: 'let-the-road-answer',
       label: 'Let the road answer for you.',
+      stakes: 'major',
       effects: [{ op: 'fact.add', tag: 'gave-tam-silence', witnessedBy: ['tam'] }],
       goto: 'd5-ride-3',
     },

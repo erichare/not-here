@@ -21,6 +21,8 @@ export interface ProseBlock {
 export interface Choice {
   readonly id: string;
   readonly label: string;
+  /** Render with extra visual weight; reserved for narratively consequential choices. */
+  readonly stakes?: 'major';
   readonly when?: Cond;
   /** Shown but unselectable when gate fails — the ache of the locked option. */
   readonly lockedLabel?: string;
@@ -50,6 +52,11 @@ export const defineScene = (scene: Scene): Scene => scene;
 export interface SceneView {
   readonly sceneId: SceneId;
   readonly paragraphs: readonly string[];
-  readonly choices: readonly { id: string; label: string; locked: boolean }[];
+  readonly choices: readonly {
+    id: string;
+    label: string;
+    locked: boolean;
+    stakes?: 'major';
+  }[];
   readonly ending?: string;
 }

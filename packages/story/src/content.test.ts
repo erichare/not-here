@@ -113,7 +113,7 @@ const HORN_ON_PATH = [
   'go-to-the-hall', 'answer-plainly', 'back-up-the-hill', 'cross-the-lot',
   'say-i-dont-know', 'go-in-eventually',
   // Day 7: the branch — "Keep playing."
-  'stay-the-morning', 'cross-the-lot', 'go-in', 'keep-playing', 'lie-down',
+  'stay-the-morning', 'cross-the-lot', 'for-sam', 'keep-playing', 'lie-down',
 ] as const;
 
 const HORN_STOPPED_PATH = [
@@ -129,7 +129,7 @@ const HORN_STOPPED_PATH = [
   'walk-the-loaf-down', 'warm-your-hands', 'walk-back-up', 'cross-the-lot',
   'say-nothing', 'go-in-eventually',
   // Day 7: the branch — "Stop."
-  'shore-road', 'cross-the-lot', 'go-in', 'stop', 'walk-back', 'lie-down',
+  'shore-road', 'cross-the-lot', 'for-the-town', 'stop', 'walk-back', 'lie-down',
 ] as const;
 
 /** One recorded step of a traced run: what rendered, on what day, with what state. */
