@@ -28,6 +28,7 @@ const missedRoom: Cond = { op: 'not', of: wentRoom };
 const missedShed: Cond = { op: 'not', of: wentShed };
 const missedClinic: Cond = { op: 'not', of: wentClinic };
 const tookQuilt: Cond = { op: 'fact.exists', tag: 'private:memory-taken' };
+const promisedDianne: Cond = { op: 'fact.exists', tag: 'promised-dianne-return' };
 
 /**
  * A missed-scene motif detune. Its visual twin is a prose paragraph in the
@@ -104,6 +105,10 @@ const room = defineScene({
       },
       {
         text: 'The room at the top has been kept, not used. Bed, desk, a corkboard gone bare at the corners. The air in it is seven Novembers deep and going out the window a year at a time.',
+      },
+      {
+        text: '“You came,” Dianne says, and turns to the sheets before the relief in it can ask for anything else. Yesterday’s promise has lasted one night.',
+        when: promisedDianne,
       },
       {
         text: 'The quilt is off the bed and folded over the sill. Dianne puts a hand flat on it. “My mother pieced this. The winter the lake froze bank to bank — sixty-nine. Out of dance dresses, if you can credit it. There’s a blue in there she got married in. The second time. The good one.”',
@@ -288,7 +293,10 @@ const clinic = defineScene({
         text: 'Clinic hours happen in the front room of the old manse behind the hall: two chairs, a scale, a desk that was a sewing table once. Dr. Anand opens the door before you knock and stands aside exactly wide enough.',
       },
       {
-        text: '“Sit,” she says, and takes the far chair, and uncaps a pen. The questions are plain and she writes every answer in full sentences. Sleeping — some. Eating — when it is put in front of you. Headaches — no. She does not ask your name. She leaves a line for it.',
+        text: 'For one second her face does something the rest of her has not authorized. “You still—” she says. Then the door in it closes. “Sit.”',
+      },
+      {
+        text: 'She takes the far chair and uncaps a pen. The questions are plain and she writes every answer in full sentences. Sleeping — some. Eating — when it is put in front of you. Headaches — no. She does not ask your name. She leaves a line for it.',
       },
       {
         text: '“Left wrist,” she says, not looking up. “Still aches before weather?” The pen waits on the page like a level held to a wall.',
@@ -393,6 +401,10 @@ const evening = defineScene({
         when: missedShed,
       },
       // ——— Without-you: the room, told by Barb off the street's account.
+      {
+        text: '“Dianne kept the kettle on till noon,” Barb says. “Said you told her tomorrow. Tomorrow’s a wide word, I suppose.” She pours from her own pot and does not make you answer for either of them.',
+        when: { op: 'all', of: [missedRoom, promisedDianne] },
+      },
       {
         text: '“Dianne had the window up at the house today,” Barb says, with the coffee pot for punctuation. “Seven years that sash has been down. Sheets on the line in November, quilt over the sill, and half the street finding errands up that road all morning. Not one of them stopped, mind. You don’t stop a thing like that. You let it air.”',
         when: missedRoom,

@@ -4,14 +4,15 @@
  * written to the prose register: feel, not label. A raw cue id must never
  * reach a player; unknown cues fall back to a generic line, never the id.
  *
- * Loop policy lives here too: ambient cues loop under the scene, the horn
- * beats play once and leave the silence they made.
+ * Loop policy lives here too: ambient cues loop under the scene, the nightly
+ * horn beat plays once, and the Night-7 close call repeats until the player
+ * either closes the valve or leaves it playing.
  */
 
 export interface CueMeta {
   /** What the caption channel prints after the '♪'. Never the cue id. */
   readonly caption: string;
-  /** False for one-shot beats (the horn): play once, then nothing. */
+  /** False for one-shot beats: play once, then nothing. */
   readonly loop: boolean;
 }
 
@@ -43,8 +44,8 @@ export const CUE_META: Readonly<Record<string, CueMeta>> = {
     loop: true,
   },
   'horn-close': {
-    caption: 'the horn at arm’s length, all five bars',
-    loop: false,
+    caption: 'the horn at arm’s length, all five bars returning',
+    loop: true,
   },
 };
 

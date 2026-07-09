@@ -339,7 +339,7 @@ const recording = defineScene({
       },
       // The silence's visual twin (fix-05): the beat exists for silent players.
       {
-        text: 'Nothing is playing under this. You only notice because something always was.',
+        text: 'The night has no undertone. No held chord, no room-hum arranging itself into music — only gravel under your boots and the diner furnace through glass. You notice because until now something always answered.',
       },
       {
         text: '"Tuesday," he says. No hello. "The diner. You were at the counter, talking with Barb. I was in the corner booth. Twelve minutes of it." He turns the phone flat on his palm, like dealing a card face up, and presses play.',

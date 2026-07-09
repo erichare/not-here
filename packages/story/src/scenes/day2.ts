@@ -230,7 +230,7 @@ const delivery2 = defineScene({
         when: { op: 'fact.knownBy', who: 'barb', tag: 'helped-barb' },
       },
       {
-        text: 'At the end Barb looks at the rack as if counting. "Well," she says, which is a wage. Later, passing the till, you see her open the book, write one line, and then go over the line again, pressing — twice, so it takes.',
+        text: 'At the end Barb looks at the rack as if counting. "Well," she says, which is a wage. Later, passing the till, you see her open the book. Last night’s word supper has gone pale — not crossed out, simply thinned to the pressure of the pen. She writes it back over itself, then once again, pressing, so it takes.',
         when: { op: 'fact.knownBy', who: 'barb', tag: 'helped-barb' },
       },
       {
@@ -256,6 +256,9 @@ const evening = defineScene({
     paragraphs: [
       {
         text: 'By evening the diner has people in it: orchard men in off the pruning, a crib game, the heat up proper. Moose is at his post by the door, waiting for the last run that isn’t coming.',
+      },
+      {
+        text: 'One of the orchard men looks up from the crib board. “Welcome home, Wren,” he says. Not loudly. The name crosses the room and settles as fact before you can decide whether it belongs to you. Nobody checks whether you answer.',
       },
       { text: '@line:barb:greeting' },
       // ——— Without-you retelling: the delivery morning, told by Barb (you were at Dianne's).

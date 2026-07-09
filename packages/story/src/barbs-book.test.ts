@@ -156,8 +156,8 @@ describe('the discipline — what the page must never show', () => {
     expect(registerDoc).toContain('THE KETTLE — REGISTER');
     expect(registerDoc).toContain('supper,');
     // The kept chair: the entry row runs date → blank NAME → unit.
-    const entryRow = registerDoc.split('\n').find((l) => l.includes('nov fifth'));
-    expect(entryRow).toMatch(/nov fifth\s{10,}one/);
+    const entryRow = registerDoc.split('\n').find((l) => l.includes('nov sixth'));
+    expect(entryRow).toMatch(/nov sixth\s{10,}one/);
     // No numerals anywhere on the page (spec).
     expect(registerDoc).not.toMatch(/\d/);
   });

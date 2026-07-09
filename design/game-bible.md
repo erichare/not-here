@@ -16,7 +16,7 @@ Lorn Bay, BC: an invented community on the west side of Okanagan Lake, year-roun
 population ~300, forty minutes from Penticton ("town"). Summer place — paddleboards,
 tasting rooms, a packed beach in July. In November it is fog, frost fans, and eleven
 lit windows. The lake fog inversion sits on the water for weeks. **Now: early
-November, present day. Day 1 = Nov 5.**
+November, present day. Day 1 = Nov 6.**
 
 The lake ferry quit when the highway went through, but its compressed-air horn still
 stands at the end of the old wharf, and every night at 3:12 AM it plays five bars of
@@ -287,8 +287,8 @@ Dianne's **unburned letter** (Act 2, the till drawer).
    endings that break it deliberately (Two Wrens; variants at the bus stop).
 2. **Dianne never says the player-facing name** ("love," "hon," "my girl") until
    the lullaby-taken flag.
-3. **The bus date is on screen from Day 1** (the General's corkboard scene, both
-   builds).
+3. **The bus date is on screen from Day 1** (beneath the Kettle register on
+   Night 1, repeated on the General's corkboard; both builds).
 4. The Day 1 arrival text states the wrongness as fact: no lake smell, no milfoil
    in your cuffs, hair dry at the roots, **no cold in you** — on a November night
    that would kill a swimmer in forty minutes.

@@ -13,7 +13,7 @@
 year-round population ~300, forty minutes from Penticton ("town"). Summer place:
 paddleboards, tasting rooms, a packed beach in July. In November it is fog,
 frost fans, and eleven lit windows. The lake fog inversion sits on the water for
-weeks. **Now: early November, present day.** Day 1 = Nov 5. The circled date =
+weeks. **Now: early November, present day.** Day 1 = Nov 6. The circled date =
 **Friday, Nov 28** (Day 23).
 
 Texture nouns (use these, not marine-Britain ones): the bench, the orchard
@@ -91,7 +91,7 @@ Phones exist. They make it worse:
 | 4 | dog walks through your space | Moose, unchanged (never growls; fails to register) |
 | 5 | sixth bar is a rest | unchanged; three people say "you always hummed the end different" |
 | 6 | mismatched face in photos | **phone photos disagree** (doctrine #2); Dianne's physical albums are put away |
-| 7 | circled ferry date | **EBUS winter schedule card** on the General's corkboard, Friday Nov 28 circled twice, pen pressed through — Day 1, on screen all game |
+| 7 | circled ferry date | **EBUS winter schedule card** beneath the Kettle register on Night 1, then on the General's corkboard, Friday Nov 28 circled twice, pen pressed through — on screen from Day 1 |
 | 8 | drowning stories differ | which beach the canoe drifted to, what the weather was, who called it in — all slightly different per teller |
 | 9 | ledger fades overnight | Barb's register: unchanged (she double-inks) |
 | 10 | Elias keeps playing | Wade keeps the horn fed; knows what it called |

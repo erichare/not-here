@@ -159,6 +159,12 @@ describe('day 5 — the ride', () => {
     expect(run.state.knownBy.priya).not.toContain(id);
   });
 
+  it('ties the twenty-eighth back to the blue-ringed card and remembers his first look', () => {
+    const ride = viewOf(run, 'd5-ride-2').paragraphs.join('\n');
+    expect(ride).toContain('winter card back in blue');
+    expect(ride).toContain('meets your eyes in the mirror again');
+  });
+
   it('the missed hall arrives as a retelling — piano plant included', () => {
     const evening = viewOf(run, 'd5-evening').paragraphs.join('\n');
     expect(evening).toContain('Three notes and shut the lid');
@@ -188,6 +194,12 @@ describe('day 5 — the hall', () => {
     expect(rawText(sceneById('d5-hall-2'))).toContain('steps the wrong way');
   });
 
+  it('lets Priya’s composure bend when the player corrects her turn', () => {
+    expect(viewOf(run, 'd5-hall-3').paragraphs.join('\n')).toContain(
+      'clipboard hard enough to bow it',
+    );
+  });
+
   it('carrying tables feeds FLESH and NAME, witnessed by Priya and Dianne', () => {
     expect(run.state.stats.flesh).toBe(6); // 5 seeded + 1
     expect(run.state.stats.name).toBe(3);
@@ -201,6 +213,7 @@ describe('day 5 — the hall', () => {
     expect(evening).toContain('held the 07:10'); // fix-08: never the EBUS 07:40
     expect(evening).toContain('idle, road, idle');
     expect(evening).not.toContain('Three notes and shut the lid');
+    expect(evening).toContain('holding unit one past the twenty-eighth');
     // fix-14: the hole has the same sound on Day 5 as on Day 3.
     expect(run.events.some((e) => e.kind === 'music.detune' && e.pattern === 'tam')).toBe(true);
   });
@@ -371,7 +384,7 @@ describe('night 6 — the recording', () => {
     const run = play('d6-morning', [...toLot]);
     expect(run.events).toContainEqual({ kind: 'music.stop' });
     const view = viewOf(run, 'd6-recording').paragraphs.join('\n');
-    expect(view).toContain('Nothing is playing under this.');
+    expect(view).toContain('The night has no undertone.');
   });
 
   it('after the sprung shed, Sam names the bailiff and the deny label changes (fix-02)', () => {

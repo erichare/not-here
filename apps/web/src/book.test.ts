@@ -68,10 +68,10 @@ describe('the page', () => {
   it('keeps the register entry with the NAME column blank', () => {
     const page = buildBookPage(base());
     expect(page.registerDoc).toContain('THE KETTLE — REGISTER');
-    expect(page.registerDoc).toContain('nov fifth');
+    expect(page.registerDoc).toContain('nov sixth');
     expect(page.registerDoc).toContain('supper,');
     // Nothing but her columns' silence between the date and the party.
-    expect(page.registerDoc).toMatch(/nov fifth +one/);
+    expect(page.registerDoc).toMatch(/nov sixth +one/);
   });
 
   it('quotes the interview answers verbatim, in the player’s own words', () => {

@@ -4,8 +4,8 @@
  * Covers: the single quiet morning slot (Day 7 by design owes no without-you
  * retellings — there is nothing simultaneous to miss), the register clue
  * plant (@doc, NAME column still blank), the railroaded walk (< 120 words,
- * posture-only), the Foghorn Choice (three options, third always visible
- * and locked all act), both branch outcomes with correctly witnessed facts,
+ * posture-only), the Foghorn Choice (an open question that returns to the
+ * two final options), both branch outcomes with correctly witnessed facts,
  * the decay-seeding announcement, and the ACT TWO card at 'act1-end'.
  */
 
@@ -89,8 +89,9 @@ describe('the register clue (thread beat 2)', () => {
     expect(text).toContain('@doc:');
     expect(text).toContain('NAME');
     // The one November line carries date, unit, remarks — and no name.
-    expect(text).toMatch(/Nov 5\s+1\s+supper,/);
+    expect(text).toMatch(/Nov 6\s+1\s+supper,/);
     expect(text).toContain('still open, six days now');
+    expect(text).toContain('a first hand has faded to a pressure mark');
   });
 
   it('nobody comments — no question, no answer, in the morning prose', () => {
@@ -118,6 +119,7 @@ describe('the walk — the act’s one railroad', () => {
     expect(words.length).toBeLessThan(120);
     expect(text).toContain('3:12');
     expect(text).toContain('the fog parts along the boards');
+    expect(text).toContain('for the first time all week, the first note comes again');
   });
 });
 
@@ -127,14 +129,15 @@ describe('the horn room — the Foghorn Choice', () => {
     'for-sam',
   );
 
-  it('cues horn-close and plays the song complete, at full voice', () => {
+  it('cues horn-close and plays all five bars whole, at full voice', () => {
     expect(atHorn.events).toContainEqual({ kind: 'music.cue', cue: 'horn-close' });
     const text = sceneText('d7-hornroom');
-    expect(text).toContain('Five bars, complete, at full voice for the first time');
+    expect(text).toContain('Five bars whole, at full voice for the first time');
     expect(text).toContain('He doesn’t stop.');
+    expect(text).toContain('The horn is not only calling you; it is keeping you.');
   });
 
-  it('shows exactly three options; the third is visible and locked — the ache', () => {
+  it('shows exactly three open options, including the sixth-bar question', () => {
     expect(atHorn.view.choices).toHaveLength(3);
     expect(atHorn.view.choices[0]).toEqual({
       id: 'keep-playing',
@@ -148,18 +151,28 @@ describe('the horn room — the Foghorn Choice', () => {
       locked: false,
       stakes: 'major',
     });
-    // fix-11: the renderer owns the glyph; the label reads as designed
-    // impossibility, not a missed unlock.
     expect(atHorn.view.choices[2]).toEqual({
       id: 'ask-sixth-bar',
-      label: 'Ask him what the sixth bar is. (There are no words for it yet. Anywhere.)',
-      locked: true,
+      label: 'Ask him what the sixth bar is.',
+      locked: false,
       stakes: 'major',
     });
   });
 
   it('carries the chosen posture and Sam answer into the horn room', () => {
     expect(atHorn.view.paragraphs.join('\n')).toContain('Sam’s question has followed you');
+  });
+
+  it('echoes the player’s Night-1 goodbye answer and chord-sheet choice', () => {
+    const scene = DAY7_SCENES.find((s) => s.id === 'd7-hornroom');
+    if (!scene) throw new Error('missing d7-hornroom');
+    const state = {
+      ...initialState(7, 'd7-hornroom'),
+      flags: { 'n1:goodbye': 'forgot', 'd3:hummed-chart': true },
+    };
+    const prose = content.realizeProse(scene, state).join('\n');
+    expect(prose).toContain('You told Barb you don’t remember leaving');
+    expect(prose).toContain('You hummed the first line from the wardrobe once');
   });
 
   it('a stranger is named a stranger (fix-09), and a met Wade is not', () => {
@@ -175,11 +188,30 @@ describe('the horn room — the Foghorn Choice', () => {
     );
   });
 
-  it('keeps the sixth-bar question impossible all act (gate: chord.gte 6)', () => {
-    const scene = DAY7_SCENES.find((s) => s.id === 'd7-hornroom');
-    const locked = scene?.choices.find((c) => c.id === 'ask-sixth-bar');
-    expect(locked?.when).toEqual({ op: 'chord.gte', value: 6 });
-    expect(() => choose(atHorn, 'ask-sixth-bar')).toThrow(/locked/);
+  it('lets the player ask, gets Wade’s limited truth, then returns to Keep / Stop', () => {
+    const answer = choose(atHorn, 'ask-sixth-bar');
+    expect(answer.state.sceneId).toBe('d7-sixth-question');
+    expect(answer.events.some((event) => event.kind === 'music.stop')).toBe(false);
+    expect(answer.events.some((event) => event.kind === 'music.cue')).toBe(false);
+    expect(answer.view.paragraphs.join('\n')).toContain('“There wasn’t one,”');
+    expect(answer.view.paragraphs.join('\n')).toContain('“She never finished it.”');
+    expect(answer.view.choices).toEqual([
+      { id: 'keep-playing', label: '"Keep playing."', locked: false, stakes: 'major' },
+      { id: 'stop', label: '"Stop."', locked: false, stakes: 'major' },
+    ]);
+    const fact = answer.state.facts.find((candidate) => candidate.tag === 'asked-wade-sixth-bar');
+    expect(fact).toBeDefined();
+    expect(fact && answer.state.knownBy.wade.includes(fact.id)).toBe(true);
+  });
+
+  it('preserves both final branches after the question', () => {
+    const answer = choose(atHorn, 'ask-sixth-bar');
+    const keep = choose(answer, 'keep-playing');
+    expect(keep.state.flags['horn-on']).toBe(true);
+    expect(keep.events.some((event) => event.kind === 'music.stop')).toBe(false);
+    const stop = choose(answer, 'stop');
+    expect(stop.state.flags['horn-stopped']).toBe(true);
+    expect(stop.events).toContainEqual({ kind: 'music.stop' });
   });
 });
 
@@ -208,6 +240,7 @@ describe('branch: "Keep playing."', () => {
     const end = choose(after, 'lie-down');
     expect(end.events.some((e) => e.kind === 'tell.visual')).toBe(false);
     const prose = after.view.paragraphs.join('\n');
+    expect(prose).toContain('I wondered when you’d come down');
     expect(prose).toContain('with the song at your back');
     expect(prose).not.toContain('nothing underneath it');
   });

@@ -10,8 +10,9 @@
  *
  * Evening is fixed regardless of the morning: Sam lays two phones side by
  * side on the counter — clue #6 planted in public, and nobody comments.
- * The evening also carries without-you retellings for the missed wharf and
- * the missed General (playtest fix-14 — the hole has a sound on Day 4 too),
+ * The evening also carries without-you retellings for both missed slots:
+ * the wharf and General carry detuned motifs (playtest fix-14 — the hole has
+ * a sound on Day 4 too), while Barb's errand returns through Moose,
  * each with its motif detune whose visual twin lives in the prose (fix-03);
  * and, if the quilt memory was taken and Dianne went unvisited, the cost
  * arrives anyway, secondhand, through Barb (fix-01 — the act's warning shot
@@ -28,6 +29,7 @@ const leftQuilt: Cond = {
 };
 const missedWharf: Cond = { op: 'not', of: { op: 'flag', key: 'd4:slot', value: 'wharf' } };
 const missedDianne: Cond = { op: 'not', of: { op: 'flag', key: 'd4:slot', value: 'dianne' } };
+const missedErrand: Cond = { op: 'not', of: { op: 'flag', key: 'd4:slot', value: 'errand' } };
 const trapSprung: Cond = { op: 'fact.exists', tag: 'fog-sam-trap-sprung' };
 
 /** Missed-scene motif detune; the visual twin is a prose paragraph here. */
@@ -231,7 +233,7 @@ const dianne = defineScene({
   cue: 'dianne-theme',
 });
 
-// ——— Evening, fixed: two phones, side by side. Clue #6, in public.
+// ——— Evening, fixed: the drowning accounts disagree; then two phones do too.
 
 const evening = defineScene({
   id: 'd4-evening',
@@ -249,6 +251,10 @@ const evening = defineScene({
         text: 'The Kettle at supper: the crib board, the orchard men, gravy weather. Tam is on his stool with his gloves drying on the rail.',
       },
       { text: '@line:barb:greeting' },
+      // ——— Clue #8: the public story has never agreed with itself.
+      {
+        text: 'At the crib board, one of the orchard men gets to the canoe, the part of the seven-year story everybody knows. “Cedar Point,” he says. “Clear enough to see it from the road. Tam called it in.” Tam says, “Public launch. Fog all the way up to the road. Dianne made the call.” Barb says, to the till, “I made it.” The next peg moves. Nobody settles it.',
+      },
       // ——— fix-01: the quilt's cost reaches every route, gossip-sourced.
       {
         text: '“Dianne rang about the potluck,” Barb says, at some point, not to anyone. “Asked me — me — who pieced that quilt of her mother’s. I thought she was joking.” She squares the sugar jar on its shelf. “She wasn’t joking.”',
@@ -264,14 +270,19 @@ const evening = defineScene({
         text: '“Tam ran Dianne’s boxes up to the house for her,” Barb says, with the pot. “Albums, by the shape of them. That long shelf behind her till is bare wood now.” Under the crib pegs, briefly, a music-box phrase, a shade flat, twice through and gone.',
         when: missedDianne,
       },
+      // ——— Without-you: Barb's walk-in, and what Moose could not see.
       {
-        text: 'Sam comes in with the cold on him and doesn’t take his coat off. He sets two phones on the counter, side by side, screens up — his and one he’s borrowed — and turns them with one finger until they face the room.',
+        text: '“Moose was a trial in the walk-in doorway,” Barb says. “Stood there while I had it propped and wouldn’t come through till it swung shut. Eyes going, maybe.” At his post, Moose does not lift his head.',
+        when: missedErrand,
       },
       {
-        text: 'The same minute, twice: the Kettle door at closing, two nights back, coats going out in ones. You remember passing through it. You are at the edge of both frames, half-turned. Two phones, one minute, one you in each. The screens sit there being level with everybody.',
+        text: 'Sam comes in with the cold on him and doesn’t take his coat off. He sets two phones on the counter, side by side, screens up — his and one an orchard man at the crib board has handed over — and turns them with one finger until they face the room.',
       },
       {
-        text: 'He says nothing. Nobody says anything. Tam finds the bottom of his coffee. Barb discovers the far end of the counter. Whoever looks, looks away first, and everybody looks. The screens go dark on their own schedule, and Sam pockets both phones and orders nothing.',
+        text: 'The same second, twice: the Kettle door halfway shut, one coat sleeve blurred in the same place. You are at the edge of both frames, the same coat, the same hands, the same half-turn. In one, your face is longer through the jaw and older at the eyes. In the other it is rounder, the mouth set in an expression you did not make. Each is unmistakably yours until the phones sit together. They are not the same face.',
+      },
+      {
+        text: 'Sam looks once at his own screen and keeps watching the borrowed one, as if that is the one lying. The orchard man studies his own, then Sam’s, with the same certainty turned around. Neither man says anything. Nobody does. Tam finds the bottom of his coffee. Barb discovers the far end of the counter. Whoever looks, looks away first, and everybody looks. The screens go dark on their own schedule, and Sam pockets both phones and orders nothing.',
       },
       // ——— fix-02: the shed is not over for him. It never got to be.
       {
@@ -319,7 +330,7 @@ const night = defineScene({
     paragraphs: [
       // ——— fix-14: what you did with the phones follows you up.
       {
-        text: 'You carried the minute up the stairs with you — not the phones, the thing they held. In his, you are half-turned toward the door. In the other, away. The same second. Both true. Nobody at the counter said so, and neither did you.',
+        text: 'You carried the second up the stairs with you — not the phones, the two faces they held. One longer at the jaw, one rounder; the same coat and hands below both. The same second. Both you. Not the same face. Nobody at the counter said so, and neither did you.',
         when: { op: 'fact.exists', tag: 'studied-the-photos' },
       },
       {

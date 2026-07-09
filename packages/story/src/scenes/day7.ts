@@ -21,7 +21,7 @@
  * HORN, never him; nobody remarks that anything is strange.
  */
 
-import { defineScene, type Cond, type Scene } from '@not-here/engine';
+import { defineScene, type Choice, type Cond, type Scene } from '@not-here/engine';
 
 const hornOn: Cond = { op: 'flag', key: 'horn-on' };
 const hornStopped: Cond = { op: 'flag', key: 'horn-stopped' };
@@ -29,6 +29,10 @@ const tookQuilt: Cond = { op: 'fact.exists', tag: 'private:memory-taken' };
 const deniedSam: Cond = { op: 'fact.exists', tag: 'private:denied-sams-recording' };
 const answeredSamHonestly: Cond = { op: 'fact.exists', tag: 'told-sam-dont-know' };
 const gaveSamSilence: Cond = { op: 'flag', key: 'd6:said-nothing' };
+const neverSaysGoodbye: Cond = { op: 'flag', key: 'n1:goodbye', value: 'never' };
+const forgotLeaving: Cond = { op: 'flag', key: 'n1:goodbye', value: 'forgot' };
+const saidGoodbyeToDoor: Cond = { op: 'flag', key: 'n1:goodbye', value: 'door' };
+const hummedChart: Cond = { op: 'flag', key: 'd3:hummed-chart' };
 
 // ——— Morning: the book briefly open (register thread, beat 2) ———
 
@@ -49,10 +53,10 @@ const morning = defineScene({
         text: 'Inside it’s just Barb. The register lies open on the counter — she is going down the month with one finger, some arithmetic of her own — and she doesn’t close it when you come in. From your stool you can read the page. There is nothing on it that isn’t yours.',
       },
       {
-        text: '@doc:\n┌──────────────────────────────────────────────┐\n│  THE KETTLE — REGISTER                       │\n│                                              │\n│  DATE      NAME           UNIT   REMARKS     │\n│  Nov 5                    1      supper,     │\n│                                  tab         │\n└──────────────────────────────────────────────┘',
+        text: '@doc:\n┌──────────────────────────────────────────────┐\n│  THE KETTLE — REGISTER                       │\n│                                              │\n│  DATE      NAME           UNIT   REMARKS     │\n│  Nov 6                    1      supper,     │\n│                                  tab         │\n└──────────────────────────────────────────────┘',
       },
       {
-        text: 'One line for November. The date, the unit, the supper — the ink gone over more than once, some of it lately. And the NAME column still open, six days now, the way you’d leave a chair for someone.',
+        text: 'One line for November. The date, the unit, the supper — beneath each dark word, a first hand has faded to a pressure mark, the paper remembering what the ink would not. Some of it has been written back lately. And the NAME column is still open, six days now, the way you’d leave a chair for someone.',
       },
       {
         text: 'Tucked under the cover is a loose slip in Dianne’s hand: quilt maker? Barb has written one name beneath it, lightly, and not gone over the ink.',
@@ -129,13 +133,13 @@ const walk = defineScene({
     kind: 'inline',
     paragraphs: [
       {
-        text: 'You lie down in your clothes. The night passes over without stopping. At 3:12 you are awake, and dressed, and at the door with your hand on the cold of the latch, and none of these were decisions.',
+        text: 'You lie down in your clothes. Night passes without stopping. At 3:12 you are awake, dressed, at the door with your hand on the cold latch. None of these were decisions.',
       },
       {
         text: 'The horn is playing. You go down through the sleeping town toward it — past the General, past the hall — and where the road gives onto the old wharf the fog parts along the boards ahead of you, a corridor exactly your width. It closes again behind. You don’t look.',
       },
       {
-        text: 'Five bars, the stop. Five bars, nearer. The horn room door at the end stands open. The light inside is the color of a kept fire.',
+        text: 'Five bars, the stop. Then, for the first time all week, the first note comes again. Five bars, nearer. The horn room door at the end stands open. The light inside is the color of a kept fire.',
       },
     ],
   },
@@ -164,6 +168,30 @@ const walk = defineScene({
 
 // ——— THE HORN ROOM — the Foghorn Choice ———
 
+const keepPlayingChoice: Choice = {
+  id: 'keep-playing',
+  label: '"Keep playing."',
+  stakes: 'major',
+  effects: [
+    { op: 'flag.set', key: 'horn-on', value: true },
+    { op: 'fact.add', tag: 'let-wade-play', witnessedBy: ['wade'] },
+    { op: 'flag.set', key: 'wade-confession-seed', value: true },
+  ],
+  goto: 'd7-after',
+};
+
+const stopChoice: Choice = {
+  id: 'stop',
+  label: '"Stop."',
+  stakes: 'major',
+  effects: [
+    { op: 'flag.set', key: 'horn-stopped', value: true },
+    { op: 'fact.add', tag: 'stopped-the-horn', witnessedBy: ['wade'] },
+    { op: 'static.add', value: -5 },
+  ],
+  goto: 'd7-silence',
+};
+
 const hornroom = defineScene({
   id: 'd7-hornroom',
   slot: 'night',
@@ -174,7 +202,7 @@ const hornroom = defineScene({
         text: 'Wade at the valves. You have seen men stand that way at a wheelhouse: feet apart, hands light, the whole body listening. The compressor breathes behind him and the horn takes the breath and turns it into the tune you know — and here, not through a wall, not across water, it has a body. It stands in the room with you. It moves the air in your chest on its way out over the lake.',
       },
       {
-        text: 'Five bars, complete, at full voice for the first time. The fifth leans forward the way it always leans, and the silence where a sixth should go is not silence in here. It is a held breath. The whole room makes it together — the man, the machine, and you.',
+        text: 'Five bars whole, at full voice for the first time. The fifth leans forward the way it always leans, and the silence where a sixth should go is not silence in here. It is a held breath. The whole room makes it together — the man, the machine, and you.',
       },
       {
         text: 'The song called you here, and the answer in your body is old enough to feel borrowed.',
@@ -187,6 +215,22 @@ const hornroom = defineScene({
       {
         text: 'The whole town has made a room around this sound and called the room weather. Standing inside it, you can feel how much work pretending is.',
         when: { op: 'flag', key: 'd7:entered-for', value: 'town' },
+      },
+      {
+        text: 'You told Barb you never say goodbye. The horn has spent seven years making the same refusal.',
+        when: neverSaysGoodbye,
+      },
+      {
+        text: 'You told Barb you don’t remember leaving. Tonight the road from your bed to this room is another blank with your footprints through it.',
+        when: forgotLeaving,
+      },
+      {
+        text: 'You told Barb you said goodbye to the door. Tonight another door stood open, and you came through.',
+        when: saidGoodbyeToDoor,
+      },
+      {
+        text: 'You hummed the first line from the wardrobe once. In here the horn gives it back at a size that makes the paper version feel like a warning.',
+        when: hummedChart,
       },
       {
         text: 'The lie you gave Sam has followed too. It stands behind you in the doorway and has no room tone to hide in.',
@@ -214,44 +258,50 @@ const hornroom = defineScene({
       {
         text: 'He sees you. His eyes come to the door, find you, and go back to the valves. He doesn’t stop. He doesn’t miss a beat to the seeing. The song goes out again over the water, patient as weather, and his hands wait on the brass for whatever you have come down to say.',
       },
+      {
+        text: 'Between one phrase and the next, the floor finds more of your weight. Warmth gathers in your palms. The horn is not only calling you; it is keeping you. Wade watches the gauge instead of your face, and the lack of surprise is another answer.',
+      },
+      {
+        text: 'The feeling has the clean edges of the quilt story entering you: something becoming yours while its first owner goes thin around it. This time you recognize the bargain before you make it.',
+        when: tookQuilt,
+      },
     ],
   },
   choices: [
+    keepPlayingChoice,
+    stopChoice,
     {
-      id: 'keep-playing',
-      label: '"Keep playing."',
-      stakes: 'major',
-      effects: [
-        { op: 'flag.set', key: 'horn-on', value: true },
-        { op: 'fact.add', tag: 'let-wade-play', witnessedBy: ['wade'] },
-        { op: 'flag.set', key: 'wade-confession-seed', value: true },
-      ],
-      goto: 'd7-after',
-    },
-    {
-      id: 'stop',
-      label: '"Stop."',
-      stakes: 'major',
-      effects: [
-        { op: 'flag.set', key: 'horn-stopped', value: true },
-        { op: 'fact.add', tag: 'stopped-the-horn', witnessedBy: ['wade'] },
-        { op: 'static.add', value: -5 },
-      ],
-      goto: 'd7-silence',
-    },
-    {
-      // The ache: always visible, never openable in Act 1 (CHORD caps below
-      // 6). The locked text reads as designed impossibility, not a missed
-      // unlock (playtest fix-11).
       id: 'ask-sixth-bar',
       label: 'Ask him what the sixth bar is.',
       stakes: 'major',
-      lockedLabel: 'Ask him what the sixth bar is. (There are no words for it yet. Anywhere.)',
-      when: { op: 'chord.gte', value: 6 },
-      goto: 'd7-after',
+      effects: [{ op: 'fact.add', tag: 'asked-wade-sixth-bar', witnessedBy: ['wade'] }],
+      goto: 'd7-sixth-question',
     },
   ],
   cue: 'horn-close',
+});
+
+// ——— The question before the choice — Wade answers what he knows, truthfully. ———
+
+const sixthQuestion = defineScene({
+  id: 'd7-sixth-question',
+  slot: 'night',
+  prose: {
+    kind: 'inline',
+    paragraphs: [
+      { text: '“What’s the sixth bar?”' },
+      {
+        text: 'Wade’s hands stop without closing the valve. The horn spends the last of the fifth bar, and the room holds its breath.',
+      },
+      {
+        text: '“There wasn’t one,” he says. The machine keeps its pitch. “She never finished it.”',
+      },
+      {
+        text: 'The answer fits every memory in you and leaves the blank exactly where it was. Then his hand settles on the brass again, waiting on what you came to say.',
+      },
+    ],
+  },
+  choices: [keepPlayingChoice, stopChoice],
 });
 
 // ——— The valve closed: the loudest thing in the act ———
@@ -287,6 +337,14 @@ const after = defineScene({
   prose: {
     kind: 'inline',
     paragraphs: [
+      {
+        text: '“Keep playing.” Wade’s fingers settle on the brass, which is how you learn he was afraid. “I wondered when you’d come down,” he says. Not welcome. Confirmation. Then he gives the horn the next first note.',
+        when: hornOn,
+      },
+      {
+        text: 'The phrase returns before the room has given back the last one. Wade feeds it air. Each pass leaves you a little more weight for the boards to carry. He does not ask who pays the difference. Neither do you.',
+        when: hornOn,
+      },
       {
         text: 'You climb home with the song at your back, going out over the water like a lamp left burning in a room behind you. It is still playing when you reach the lot, still playing when you lie down — five bars, the stop, five bars — and something in you is fed by it, and lets itself be, and you don’t ask that something its name. Somewhere up the hill, or only in the song, a woman loses the next line of a thing she had been humming. The horn covers it kindly.',
         when: hornOn,
@@ -339,6 +397,7 @@ export const DAY7_SCENES: readonly Scene[] = [
   evening,
   walk,
   hornroom,
+  sixthQuestion,
   silence,
   after,
   actEnd,

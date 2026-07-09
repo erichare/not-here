@@ -240,6 +240,7 @@ const q5 = defineScene({
       effects: [
         { op: 'stat.add', stat: 'undertow', value: 2 },
         { op: 'flag.set', key: truthFlag('never-says-goodbye'), value: true },
+        { op: 'flag.set', key: 'n1:goodbye', value: 'never' },
       ],
       goto: 'n1-room',
     },
@@ -249,6 +250,7 @@ const q5 = defineScene({
       effects: [
         echoSeed,
         { op: 'flag.set', key: truthFlag('doesnt-remember-leaving'), value: true },
+        { op: 'flag.set', key: 'n1:goodbye', value: 'forgot' },
       ],
       goto: 'n1-room',
     },
@@ -259,6 +261,7 @@ const q5 = defineScene({
         { op: 'stat.add', stat: 'flesh', value: 1 },
         { op: 'stat.add', stat: 'name', value: 1 },
         { op: 'flag.set', key: truthFlag('keeps-promises'), value: true },
+        { op: 'flag.set', key: 'n1:goodbye', value: 'door' },
       ],
       goto: 'n1-room',
     },

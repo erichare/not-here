@@ -2,8 +2,8 @@
  * Cue playback for `music.cue` / `music.stop` engine events. Fetches
  * /auditions/<cue>.wav, decodes once (cached), and plays it through a
  * per-cue GainNode with a 1s crossfade between cues. Loop policy comes from
- * the shared cue map: ambient cues loop, one-shot beats (the horn) play once
- * and leave silence. stop() fades the current source out over ~1.5s and
+ * the shared cue map: ambient cues and the Night-7 close call loop; one-shot
+ * beats play once and leave silence. stop() fades the current source out over ~1.5s and
  * nothing plays again until the next cue — the silence is the score.
  * Missing or undecodable files degrade silently to the onFallback caption
  * (tier-3: the '♪ <caption>' ledger note).

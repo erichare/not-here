@@ -7,8 +7,9 @@
  *
  *  a. Touch — no NPC-initiated touch anywhere in Act 1 (allowlist: empty;
  *     the rule breaks once, in an ENDING, acts away from here).
- *  b. Naming — 'Wren' is never uttered in Act 1 content; a fortiori Dianne
- *     never addresses the player by it (bible: 'love' / 'hon' / 'my girl').
+ *  b. Naming — one fixed, non-Dianne resident says 'Wren' in Act 1 so her
+ *     identity is legible; Dianne never addresses the player by it (bible:
+ *     'love' / 'hon' / 'my girl').
  *  c. Title discipline — the exact phrase 'not here' appears exactly ONCE
  *     outside @doc blocks (Dianne's Day-2 phone call) and exactly ONCE
  *     inside them (the chord sheet). Counts are pinned.
@@ -22,8 +23,8 @@
  *     glyph, so no authored lockedLabel starts with it; and a lockedLabel
  *     must ache, not parrot — it never equals its open label.
  *  g. The bus date (prose grammar #3, playtest fix-08) — the EBUS schedule
- *     card is on screen on EVERY route: once on Dianne's corkboard (Day 2),
- *     once in the FIXED Day-3 evening for any route that missed it.
+ *     card is on screen on EVERY route from Night 1, then repeats either on
+ *     Dianne's corkboard (Day 2) or in the fixed Day-3 evening.
  *
  * Plus one integration-seam guard: the day counter's time.set ladder covers
  * days 2..8 exactly once each, on the scenes that own the boundaries.
@@ -114,11 +115,13 @@ describe('a. touch — nobody touches you first, no exceptions in Act 1', () => 
 
 // ——— b. Naming ———
 
-describe('b. naming — the name is never said', () => {
-  it("'Wren' appears in no Act 1 surface (so Dianne can never say it to you)", () => {
-    for (const { source, text } of ALL_TEXTS) {
-      expect(/\bWren\b/.test(text), `'Wren' uttered in ${source}: ${text}`).toBe(false);
-    }
+describe('b. naming — one public name, never from Dianne', () => {
+  it("'Wren' appears exactly once, spoken by an orchard man in the fixed Day-2 crowd", () => {
+    const hits = ALL_TEXTS.filter(({ text }) => /\bWren\b/.test(text));
+    expect(hits).toHaveLength(1);
+    expect(hits[0]?.source).toBe('d2-evening');
+    expect(hits[0]?.text).toContain('One of the orchard men');
+    expect(hits[0]?.text).toContain('“Welcome home, Wren,”');
   });
 });
 
@@ -292,14 +295,23 @@ describe('g. the EBUS card — the twist’s clock survives every route', () => 
     );
   });
 
-  it('appears exactly twice: Dianne’s corkboard, and the fixed Day-3 evening', () => {
-    expect(cardParagraphs.map((c) => c.source).sort()).toEqual(['d2-dianne-2', 'd3-evening']);
+  it('is planted on Night 1, with later copies at the General and the Kettle', () => {
+    expect(cardParagraphs.map((c) => c.source).sort()).toEqual([
+      'd2-dianne-2',
+      'd3-evening',
+      'n1-room',
+    ]);
   });
 
-  it('both copies circle the 28th twice', () => {
+  it('every copy circles the 28th twice', () => {
     for (const { source, block } of cardParagraphs) {
       expect(block.text.includes('(( Fri 28 Nov'), `no ring on the card in ${source}`).toBe(true);
     }
+  });
+
+  it('the Night-1 copy is fixed on every route', () => {
+    const night1 = cardParagraphs.find((c) => c.source === 'n1-room');
+    expect(night1?.block.when).toBeUndefined();
   });
 
   it('the Day-3 copy is the catch-all: gated, so it fires only when unseen', () => {

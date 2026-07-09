@@ -41,7 +41,7 @@ const SKETCHES: Readonly<Record<SketchCharacter, string>> = {
  */
 const FIRST_MEETING: Readonly<Record<string, SketchCharacter>> = {
   'n1-diner': 'barb', // the Kettle's counter, Night 1
-  'n1-312': 'wade', // the horn at 3:12 — Wade's hand on the valve
+  'd4-wharf': 'wade', // first actual meeting; Night 1 must not identify the player
   'd2-dianne': 'dianne', // Lorn Bay General, Day 2 morning
   'd2-evening': 'tam', // Tam comes in on the back of the cold
   'd3-shed': 'sam', // the boat shed, caulk gun going, Day 3

@@ -98,8 +98,10 @@ prep, both "of you." He says nothing. Whoever looks, looks away first.
     one presence stat −1 per night (rotating flesh→name→echo), offset only
     by being fed/named/remembered that day. Wade locks the horn room. The
     Stranger path opens.
-  - Locked third option, visible: *· Ask him what the sixth bar is.*
-    (lockedLabel always shown; gate: impossible in Act 1 — the ache.)
+  - **Ask him what the sixth bar is.** Wade answers truthfully from his
+    limited knowledge: *“There wasn’t one. She never finished it.”* The
+    player then returns to **Keep playing / Stop** with the blank clarified,
+    not solved.
 - Act ends on the walk back up: one line either way about the quality of
   the silence / the sound behind you. `time.set day 8`, ACT 2 title card,
   'act1-end' ending marker (replaces slice-end).

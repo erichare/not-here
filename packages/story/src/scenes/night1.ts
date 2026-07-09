@@ -225,7 +225,16 @@ const room = defineScene({
         text: 'Barb writes you into the book herself: the date, the unit, the supper. The NAME column she leaves blank — leaves it the way you’d leave a chair, for someone.',
       },
       {
-        text: 'She blots the line and closes the book on it. "That’ll do," she says. Then, with one finger flat on the cover, the only lesson she will ever give it: "Ask, if you ever want to know what I’ve written." The book goes back under the counter. "Unit one. It’s made up. Door sticks — lift it."',
+        text: 'She blots the line and closes the book on it. "That’ll do," she says. Then, with one finger flat on the cover, the only lesson she will ever give it: "Ask, if you ever want to know what I’ve written."',
+      },
+      {
+        text: 'A loose card slips from beneath the register before she puts it away. Barb catches it against the counter with one finger. Winter buses. One Friday has been ringed twice in blue, hard enough to score the paper:',
+      },
+      {
+        text: '@doc:\n┌─────────────────────────────────┐\n│  EBUS — WINTER SCHEDULE         │\n│  VANCOUVER–PENTICTON–LORN BAY   │\n│                                 │\n│   Fri 14 Nov ......... 07:40    │\n│   Fri 21 Nov ......... 07:40    │\n│  (( Fri 28 Nov ....... 07:40 )) │\n│   Fri  5 Dec ......... 07:40    │\n│                                 │\n│  Flag stop. Exact fare. No pets.│\n└─────────────────────────────────┘',
+      },
+      {
+        text: 'She tucks the card under the cover and the book under the counter without looking at the date. "Unit one. It’s made up. Door sticks — lift it."',
       },
       {
         text: 'The units are out back, six doors under one long gutter. Unit one is small and clean: bed, chair, a baseboard heater ticking up to temperature, a window with the lake in it. Through the thinning fog you can make out the breakwater, the black water it keeps, and the light going round and round at the end of the old wharf.',

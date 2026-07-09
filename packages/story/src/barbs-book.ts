@@ -113,7 +113,7 @@ const REGISTER_DOC = [
   docLine('  THE KETTLE — REGISTER'),
   docLine(''),
   docRow('DATE', 'NAME', 'UNIT', 'REMARKS'),
-  docRow('nov fifth', '', 'one', 'supper,'),
+  docRow('nov sixth', '', 'one', 'supper,'),
   docRow('', '', '', 'tab'),
   `└${'─'.repeat(DOC_INNER_WIDTH)}┘`,
 ].join('\n');

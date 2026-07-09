@@ -38,9 +38,9 @@ describe('cue captions', () => {
     expect(cueCaption('some-internal-slug')).not.toContain('slug');
   });
 
-  it('one-shot horn beats do not loop; ambient cues do', () => {
+  it('the nightly horn is one-shot; the close call and ambient cues loop', () => {
     expect(cueLoops('foghorn-312')).toBe(false);
-    expect(cueLoops('horn-close')).toBe(false);
+    expect(cueLoops('horn-close')).toBe(true);
     expect(cueLoops('pub-warm')).toBe(true);
     expect(cueLoops('wrens-room')).toBe(true);
     // Unknown cues default to ambient looping.

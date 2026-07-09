@@ -9,6 +9,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   advance,
+  applyEffects,
   initialState,
   type CharacterId,
   type EngineEvent,
@@ -155,6 +156,20 @@ describe('without-you retellings (Day 3 evening/night)', () => {
     expect(paragraphsOf(SHED_RUN, 'd3-evening')).toContain('a shade flat');
     expect(paragraphsOf(ROOM_RUN, 'd3-night')).toContain('one layer short');
   });
+
+  it('remembers a promise to Dianne whether it is kept or missed', () => {
+    const promised = applyEffects(initialState(11, 'd3-morning'), [
+      { op: 'fact.add', tag: 'promised-dianne-return', witnessedBy: ['dianne'] },
+    ]).state;
+    const kept = playFrom('d3-morning', ['to-room'], promised);
+    expect(paragraphsOf(kept, 'd3-room')).toContain('Yesterday’s promise has lasted one night');
+    const missed = playFrom(
+      'd3-morning',
+      ['to-shed', 'say-nothing', 'back-up-the-road'],
+      promised,
+    );
+    expect(paragraphsOf(missed, 'd3-evening')).toContain('kept the kettle on till noon');
+  });
 });
 
 describe('the quilt harvest (first ECHO offer)', () => {
@@ -226,15 +241,33 @@ describe('Day 4 evening — the hole has a sound here too (fix-14)', () => {
     expect(detunesOf(WHARF_RUN)).toContain('dianne');
   });
 
-  it('the photographed minute is Day-2-plausible on every route', () => {
+  it('the photographed second carries a facial disagreement no camera angle explains', () => {
     const evening = paragraphsOf(WHARF_RUN, 'd4-evening');
-    expect(evening).toContain('the Kettle door at closing, two nights back');
-    expect(evening).not.toContain('tables going in');
+    expect(evening).toContain('The same second, twice');
+    expect(evening).toContain('They are not the same face');
+    expect(evening).toContain('as if that is the one lying');
+    expect(evening).toContain('the same certainty turned around');
   });
 
-  it('studying the photos follows you up to Night 4, with the flat disagreement', () => {
+  it('studying the photos follows you up to Night 4, with both faces intact', () => {
     const night = paragraphsOf(WHARF_RUN, 'd4-night'); // WHARF_RUN looks longest
-    expect(night).toContain('In his, you are half-turned toward the door. In the other, away.');
+    expect(night).toContain('Both you. Not the same face.');
+  });
+
+  it('plants the mutually incompatible canoe accounts on the fixed evening spine', () => {
+    const evening = paragraphsOf(WHARF_RUN, 'd4-evening');
+    expect(evening).toContain('Cedar Point');
+    expect(evening).toContain('Public launch');
+    expect(evening).toContain('Fog all the way up to the road');
+    expect(evening).toContain('Tam called it in');
+    expect(evening).toContain('Dianne made the call');
+    expect(evening).toContain('“I made it.”');
+  });
+
+  it('retells the missed walk-in through what Moose would not cross', () => {
+    expect(paragraphsOf(WHARF_RUN, 'd4-evening')).toContain(
+      'wouldn’t come through till it swung shut',
+    );
   });
 
   it('looking away also makes a sound at Night 4', () => {
@@ -295,6 +328,10 @@ describe('Sam’s trap test #1', () => {
 });
 
 describe('Priya’s clinic', () => {
+  it('lets personal recognition break through before the intake mask closes', () => {
+    expect(paragraphsOf(CLINIC_RUN, 'd3-clinic')).toContain('“You still—”');
+  });
+
   it('intake completes and the notebook thread opens', () => {
     expect(factKnownBy(CLINIC_RUN.state, 'priya', 'priya-intake-done')).toBe(true);
     expect(CLINIC_RUN.state.flags['priya:notebook-open']).toBe(true);
@@ -331,7 +368,7 @@ describe('Day 4: Wade and the first audible lie', () => {
   it('the two phones land side by side in public — witnessed, uncommented', () => {
     const evening = paragraphsOf(WHARF_RUN, 'd4-evening');
     expect(evening).toContain('two phones on the counter, side by side');
-    expect(evening).toContain('He says nothing. Nobody says anything.');
+    expect(evening).toContain('Neither man says anything. Nobody does.');
     for (const who of ['sam', 'barb', 'tam'] as const) {
       expect(factKnownBy(WHARF_RUN.state, who, 'two-phones-laid-out')).toBe(true);
     }

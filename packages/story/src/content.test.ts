@@ -240,6 +240,7 @@ describe('walkthrough: the Dianne branch', () => {
     expect(run.state.flags['truth:eats-what-is-given']).toBe(true);
     expect(run.state.flags['truth:keeps-promises']).toBe(true);
     expect(run.state.flags['truth:afraid-of-quiet']).toBe(true);
+    expect(run.state.flags['n1:goodbye']).toBe('door');
     expect(run.state.flags['heard-horn-312']).toBe(true);
     expect(run.state.flags['seen-bus-date']).toBe(true);
   });
@@ -283,7 +284,7 @@ describe('walkthrough: the Barb branch', () => {
     expect(evening).not.toContain('Eating tonight?');
   });
 
-  it('retells Dianne’s morning without you — the bus date arrives secondhand', () => {
+  it('retells Dianne’s morning without you — the winter runs repeat as local concern', () => {
     const evening = viewOf(run, 'd2-evening').paragraphs.join('\n');
     expect(evening).toContain('the winter runs');
     expect(evening).toContain('She was singing when I left');
@@ -358,10 +359,11 @@ describe('prose invariants', () => {
     }
   });
 
-  it('the name Wren appears nowhere in the slice — Dianne least of all', () => {
-    for (const { source, text } of texts) {
-      expect(/\bWren\b/.test(text), `'Wren' spoken in ${source}`).toBe(false);
-    }
+  it('one orchard man names Wren in the fixed Day-2 crowd scene', () => {
+    const hits = texts.filter(({ text }) => /\bWren\b/.test(text));
+    expect(hits).toHaveLength(1);
+    expect(hits[0]?.source).toBe('d2-evening');
+    expect(hits[0]?.text).toContain('“Welcome home, Wren,”');
   });
 
   it('the arrival text carries no lake on you, and no cold in you', () => {

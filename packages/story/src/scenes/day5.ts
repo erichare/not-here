@@ -116,12 +116,20 @@ const ride2 = defineScene({
       {
         text: 'On the climb out of town he asks his one question of the drive. "You planning to stay past the 28th?" The engine idles high at the brow of the bench. He doesn’t fill the silence after it. The lake comes up grey through the windshield and he lets it do the asking with him, the whole way down the hill.',
       },
+      {
+        text: 'The number brings the winter card back in blue: the ring pressed through paper into cork. Tam meets your eyes in the mirror again and waits to see whether it did.',
+        when: { op: 'fact.exists', tag: 'met-tams-look' },
+      },
+      {
+        text: 'The number brings the winter card back in blue: the ring pressed through paper into cork. Tam watches the mirror long enough to see whether it did.',
+        when: { op: 'not', of: { op: 'fact.exists', tag: 'met-tams-look' } },
+      },
     ],
   },
   choices: [
     {
       id: 'say-staying',
-      label: '"Yes. Past it. Why wouldn’t I?"',
+      label: '"I remember why it matters. I’m staying."',
       stakes: 'major',
       effects: [
         { op: 'static.add', value: 2 },
@@ -299,7 +307,7 @@ const hall3 = defineScene({
     kind: 'inline',
     paragraphs: [
       {
-        text: 'You hum it, under the room noise, only as far as the turn — down where she went up. Priya doesn’t look at you. She looks at the piano, as if the piano had done it. Then she writes one line on the clipboard, unhurried, and goes to count something that is already counted.',
+        text: 'You hum it, under the room noise, only as far as the turn — down where she went up. Priya doesn’t look at you. Her hand closes around the clipboard hard enough to bow it; then she looks at the piano, as if the piano had done it. She writes one line, unhurried, and goes to count something that is already counted.',
         when: { op: 'fact.knownBy', who: 'priya', tag: 'hummed-bar-four' },
       },
       {
@@ -345,6 +353,9 @@ const evening = defineScene({
       {
         text: 'Evening fills the Kettle to its weeknight line: the crib game, two orchard crews, the windows going soft with steam. Moose keeps his post by the door.',
       },
+      {
+        text: 'The phones are gone from the counter. The two stools nearest yours stay empty until Tam comes in, and he takes the third.',
+      },
       { text: '@line:barb:greeting-d5' },
       // ——— Without-you retelling: the hall, via Dianne on the phone to Barb.
       {
@@ -357,7 +368,7 @@ const evening = defineScene({
       },
       // ——— Without-you retelling: the ride, via Barb, who watches the road.
       {
-        text: '"Tam held the 07:10 at the pull-in this morning," Barb says, with the pot in her hand. "Four minutes, engine running, watching the hill road. That man hasn’t run late in seven years — the schedule prints around him." She fills your cup. "Came back with Dianne’s mail tubs and a mood you could stand a spoon in."',
+        text: '"Tam held the 07:10 at the pull-in this morning," Barb says, with the pot in her hand. "Four minutes, engine running, watching the hill road. That man hasn’t run late in seven years — the schedule prints around him." She fills your cup. "Asked if I was holding unit one past the twenty-eighth, too. Came back with Dianne’s mail tubs and a mood you could stand a spoon in."',
         when: wentToHall,
       },
       {
