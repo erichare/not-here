@@ -11,7 +11,13 @@ import { loadSave } from './save.ts';
 import { renderMarginSketch } from './sketches.ts';
 
 const WORD_INTERVAL_MS = 26;
-const CAPTION_LIFETIME_MS = 4000;
+const ARTIFACT_PAUSE_MS = 180;
+const CAPTION_LIFETIME_MS = 6500;
+
+interface RevealItem {
+  readonly node: HTMLElement;
+  readonly delayMs: number;
+}
 
 export interface ChoiceModel {
   readonly id: string;
@@ -85,7 +91,13 @@ const buildTitleScreen = (
   const panes = el('span', 'panes');
   panes.setAttribute('aria-hidden', 'true');
   windowButton.append(panes);
-  const hint = el('p', 'title-hint', 'the lamp is lit — click the window');
+  const hint = el(
+    'p',
+    'title-hint',
+    canResume
+      ? 'the lamp is still lit — return to the ledger'
+      : 'the lamp is lit — click the window',
+  );
   screen.append(name, windowButton, hint);
   windowButton.addEventListener(
     'click',
@@ -118,6 +130,7 @@ export const createUi = (root: HTMLElement, callbacks: UiCallbacks): Ui => {
   const page = el('main', 'page');
   const captions = el('div', 'captions');
   captions.setAttribute('aria-live', 'polite');
+  captions.setAttribute('aria-relevant', 'additions');
   root.append(page, captions);
 
   const addCaption = (text: string): void => {
@@ -135,16 +148,18 @@ export const createUi = (root: HTMLElement, callbacks: UiCallbacks): Ui => {
 
   let cancelReveal: (() => void) | null = null;
 
-  const finishReveal = (words: readonly HTMLSpanElement[], after: HTMLElement): void => {
-    for (const w of words) w.classList.add('on');
+  const finishReveal = (items: readonly RevealItem[], after: HTMLElement): void => {
+    for (const item of items) item.node.classList.add('on');
+    after.inert = false;
+    after.setAttribute('aria-hidden', 'false');
     after.classList.add('shown');
     cancelReveal = null;
   };
 
-  const startReveal = (words: readonly HTMLSpanElement[], after: HTMLElement): void => {
+  const startReveal = (items: readonly RevealItem[], after: HTMLElement): void => {
     cancelReveal?.();
-    if (prefersReducedMotion() || words.length === 0) {
-      finishReveal(words, after);
+    if (prefersReducedMotion() || items.length === 0) {
+      finishReveal(items, after);
       return;
     }
     let index = 0;
@@ -153,17 +168,17 @@ export const createUi = (root: HTMLElement, callbacks: UiCallbacks): Ui => {
     const finishRevealAndCleanup = (): void => {
       window.clearTimeout(timer);
       page.removeEventListener('click', skip);
-      finishReveal(words, after);
+      finishReveal(items, after);
     };
     const tick = (): void => {
-      const word = words[index];
-      if (word === undefined) {
+      const item = items[index];
+      if (item === undefined) {
         finishRevealAndCleanup();
         return;
       }
-      word.classList.add('on');
+      item.node.classList.add('on');
       index += 1;
-      timer = window.setTimeout(tick, WORD_INTERVAL_MS);
+      timer = window.setTimeout(tick, item.delayMs);
     };
     page.addEventListener('click', skip);
     cancelReveal = finishRevealAndCleanup;
@@ -172,6 +187,8 @@ export const createUi = (root: HTMLElement, callbacks: UiCallbacks): Ui => {
 
   const buildChoices = (model: SceneModel): HTMLElement => {
     const list = el('ul', 'choices');
+    list.inert = true;
+    list.setAttribute('aria-hidden', 'true');
     for (const choice of model.choices) {
       const item = el('li', 'choice-line');
       const className = choice.stakes === 'major' ? 'choice major' : 'choice';
@@ -206,33 +223,48 @@ export const createUi = (root: HTMLElement, callbacks: UiCallbacks): Ui => {
     showTitle: (canResume, onBegin) => {
       cancelReveal?.();
       book.retire();
+      page.className = 'page title-page';
+      page.removeAttribute('data-scene');
       page.replaceChildren(buildTitleScreen(canResume, onBegin));
     },
 
     renderScene: (model) => {
       cancelReveal?.();
-      const header = el('header', 'slot-header', model.header);
+      page.className = model.ending === undefined ? 'page scene-page' : 'page ending-page';
+      if (model.sceneId === undefined) page.removeAttribute('data-scene');
+      else page.dataset.scene = model.sceneId;
+
+      const header = model.header.length > 0 ? el('header', 'slot-header', model.header) : null;
       const entry = el('section', 'entry');
-      const allWords: HTMLSpanElement[] = [];
+      const revealItems: RevealItem[] = [];
       for (const paragraph of model.paragraphs) {
         if (paragraph.startsWith(DOC_PREFIX)) {
-          entry.append(el('pre', 'doc', paragraph.slice(DOC_PREFIX.length)));
+          const document = el('pre', 'doc', paragraph.slice(DOC_PREFIX.length));
+          entry.append(document);
+          revealItems.push({ node: document, delayMs: ARTIFACT_PAUSE_MS });
           continue;
         }
         const { p, words } = buildParagraph(paragraph);
-        allWords.push(...words);
+        revealItems.push(...words.map((node) => ({ node, delayMs: WORD_INTERVAL_MS })));
         entry.append(p);
       }
       const choices = buildChoices(model);
-      page.replaceChildren(header, entry, choices);
       const sketch = renderMarginSketch(model.sceneId);
-      if (sketch !== null) page.append(sketch);
+      const children: HTMLElement[] = [];
+      if (header !== null) children.push(header);
+      children.push(entry);
+      if (sketch !== null) {
+        children.push(sketch);
+        revealItems.push({ node: sketch, delayMs: ARTIFACT_PAUSE_MS });
+      }
+      children.push(choices);
+      page.replaceChildren(...children);
       window.scrollTo({ top: 0 });
       // The book reads the world the model carries; failing that, the save
       // slot — main.ts persists every step before rendering, so it is
       // current by the time a scene draws.
       book.update(model.world ?? loadSave(window.localStorage));
-      startReveal(allWords, choices);
+      startReveal(revealItems, choices);
     },
 
     addCaption,
