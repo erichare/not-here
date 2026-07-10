@@ -1,13 +1,15 @@
 /**
- * Night-1 slice content tests: the content builds, the graph closes, the
- * scripted walkthroughs reach 'act1-end', and the prose invariants hold
- * (design/game-bible.md §Prose grammar; design/twist-recontext-table.md).
+ * Content tests: the content builds, the graph closes, the scripted Act 1
+ * walkthroughs reach the unsealed 'act1-end' boundary, and the prose
+ * invariants hold (design/game-bible.md §Prose grammar;
+ * design/twist-recontext-table.md).
  */
 
 import { describe, expect, it } from 'vitest';
 import {
   advance,
   initialState,
+  type Effect,
   type EngineEvent,
   type Scene,
   type SceneId,
@@ -20,13 +22,19 @@ import { DIALOGUE_RULES } from './dialogue.ts';
 
 const content = buildContent();
 
+/** Every effect, flattened through 'when' branches (goto overrides hide there). */
+const flattenEffects = (effects: readonly Effect[]): readonly Effect[] =>
+  effects.flatMap((e) =>
+    e.op === 'when' ? [e, ...flattenEffects(e.then), ...flattenEffects(e.else ?? [])] : [e],
+  );
+
 /** Every goto target a scene can reach (choices, choice effects, onEnter). */
 const gotoTargets = (scene: Scene): readonly SceneId[] => {
   const fromChoices = scene.choices.map((c) => c.goto);
   const fromChoiceEffects = scene.choices.flatMap((c) =>
-    (c.effects ?? []).flatMap((e) => (e.op === 'goto' ? [e.scene] : [])),
+    flattenEffects(c.effects ?? []).flatMap((e) => (e.op === 'goto' ? [e.scene] : [])),
   );
-  const fromOnEnter = (scene.onEnter ?? []).flatMap((e) =>
+  const fromOnEnter = flattenEffects(scene.onEnter ?? []).flatMap((e) =>
     e.op === 'goto' ? [e.scene] : [],
   );
   return [...fromChoices, ...fromChoiceEffects, ...fromOnEnter];
@@ -66,9 +74,13 @@ const play = (choiceIds: readonly string[], seed = 42): Playthrough => {
     views.push(step.view);
     events.push(...step.events);
   }
-  // Walk any remaining (stub) scenes by first open choice until an ending.
-  // The Act 1 fleet replaces stubs with real scenes and extends the scripts.
-  for (let i = 0; i < 60 && step.view.ending === undefined; i++) {
+  // Walk any remaining scenes by first open choice until the Act 1 boundary
+  // (the unsealed act card carries a choice into Act 2 now) or an ending.
+  for (
+    let i = 0;
+    i < 60 && step.view.ending === undefined && step.view.sceneId !== 'act1-end';
+    i++
+  ) {
     const first = step.view.choices.find((c) => !c.locked);
     if (!first) break;
     step = advance(content, step.state, { kind: 'choose', choiceId: first.id });
@@ -219,20 +231,34 @@ describe('graph closure', () => {
     }
   });
 
-  it('exactly one ending scene, and it is act1-end', () => {
+  it('exactly two ending scenes — the ACT THREE card and Ash', () => {
     const endings = ALL_SCENES.filter((s) => s.ending !== undefined);
-    expect(endings.map((s) => s.id)).toEqual(['act1-end']);
-    expect(endings[0]?.ending).toBe('act1-end');
+    expect(endings.map((s) => ({ id: s.id, ending: s.ending })).sort((a, b) =>
+      a.id.localeCompare(b.id),
+    )).toEqual([
+      { id: 'act2-ash-2', ending: 'ash' },
+      { id: 'act2-end', ending: 'act2-end' },
+    ]);
+  });
+
+  it('the act boundary is unsealed: act1-end has no ending and walks into Day 8', () => {
+    const boundary = ALL_SCENES.find((s) => s.id === 'act1-end');
+    expect(boundary).toBeDefined();
+    expect(boundary?.ending).toBeUndefined();
+    expect(boundary?.choices.map((c) => ({ id: c.id, goto: c.goto }))).toEqual([
+      { id: 'morning-comes-anyway', goto: 'd8-morning' },
+    ]);
   });
 });
 
 describe('walkthrough: the Dianne branch', () => {
   const run = play(DIANNE_PATH);
 
-  it('reaches act1-end', () => {
+  it('reaches the act1-end boundary card, mid-run', () => {
     expect(run.state.sceneId).toBe('act1-end');
     const last = run.views[run.views.length - 1];
-    expect(last?.ending).toBe('act1-end');
+    expect(last?.sceneId).toBe('act1-end');
+    expect(last?.ending).toBeUndefined();
   });
 
   it('sets the interview truth flags and slice flags', () => {
@@ -252,16 +278,15 @@ describe('walkthrough: the Dianne branch', () => {
     expect(evening).not.toContain('the winter runs');
   });
 
-  it('emits the cue trail and a final autosave', () => {
+  it('emits the cue trail into the act card', () => {
     const cues = run.events.flatMap((e) => (e.kind === 'music.cue' ? [e.cue] : []));
     // Night 1 + Day 2 open the trail; the Day 3–7 fleet appends its own cues.
     expect(cues.slice(0, 7)).toEqual([
       'title', 'shingle', 'pub-warm', 'foghorn-312', 'dianne-theme', 'pub-warm',
       'foghorn-312',
     ]);
-    // The act closes on the ACT TWO title card (day7.ts, 'act1-end').
+    // The act boundary is the ACT TWO title card (day7.ts, 'act1-end').
     expect(cues[cues.length - 1]).toBe('title');
-    expect(run.events.some((e) => e.kind === 'save.autosave')).toBe(true);
   });
 });
 
@@ -359,11 +384,15 @@ describe('prose invariants', () => {
     }
   });
 
-  it('one orchard man names Wren in the fixed Day-2 crowd scene', () => {
+  it('the name is spent only where the acts pin it (details in the act lints)', () => {
     const hits = texts.filter(({ text }) => /\bWren\b/.test(text));
-    expect(hits).toHaveLength(1);
-    expect(hits[0]?.source).toBe('d2-evening');
-    expect(hits[0]?.text).toContain('“Welcome home, Wren,”');
+    expect(hits.map((h) => h.source).sort()).toEqual([
+      'd13-verdict', // the orchard man answers Sam (defended verdict)
+      'd16-morning', // Dianne, gated on lullaby-taken
+      'd17-reveal-2', // @doc — the unsent reply draft's salutation
+      'd2-evening', // "Welcome home, Wren," — Act 1's one public use
+    ]);
+    expect(hits.find((h) => h.source === 'd2-evening')?.text).toContain('“Welcome home, Wren,”');
   });
 
   it('the arrival text carries no lake on you, and no cold in you', () => {
@@ -394,9 +423,10 @@ describe('prose invariants', () => {
 describe('full Act 1 walkthrough — horn-on route', () => {
   const run = playTraced(HORN_ON_PATH);
 
-  it('reaches act1-end on Day 8 with the ending marker', () => {
+  it('reaches the act1-end boundary on Day 8, mid-run', () => {
     expect(run.state.sceneId).toBe('act1-end');
-    expect(run.views[run.views.length - 1]?.ending).toBe('act1-end');
+    expect(run.views[run.views.length - 1]?.sceneId).toBe('act1-end');
+    expect(run.views[run.views.length - 1]?.ending).toBeUndefined();
     expect(run.state.day).toBe(8);
   });
 
@@ -451,9 +481,10 @@ describe('full Act 1 walkthrough — horn-on route', () => {
 describe('full Act 1 walkthrough — horn-stopped route', () => {
   const run = playTraced(HORN_STOPPED_PATH);
 
-  it('reaches act1-end on Day 8 with the ending marker', () => {
+  it('reaches the act1-end boundary on Day 8, mid-run', () => {
     expect(run.state.sceneId).toBe('act1-end');
-    expect(run.views[run.views.length - 1]?.ending).toBe('act1-end');
+    expect(run.views[run.views.length - 1]?.sceneId).toBe('act1-end');
+    expect(run.views[run.views.length - 1]?.ending).toBeUndefined();
     expect(run.state.day).toBe(8);
   });
 

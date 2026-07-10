@@ -1,4 +1,4 @@
-<svg viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tam Osei — ink sketch" fill="none" stroke="#e8b45a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+<svg viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tam Osei — ink sketch" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
   <!-- hand-ruled margin frame, gap on the right edge, high -->
   <g stroke-width="1.1" opacity="0.5">
     <path d="M18 15.4 C 80 16.6, 158 14.6, 222 15.8"/>
@@ -45,6 +45,6 @@
     <path d="M157 240 L 164 239.4 M172 238.6 L 181 238 M191 237.6 L 200 237.2" stroke-width="1.2" opacity="0.6"/>
     <path d="M157 254 L 163 253.5 M172 252.6 L 180 252.2" stroke-width="1.2" opacity="0.6"/>
     <path d="M191 251.8 L 199 251.5" stroke-width="2.4"/>
-    <ellipse cx="195" cy="251.6" rx="5.5" ry="2.2" fill="#e8b45a" fill-opacity="0.15" stroke="none"/>
+    <ellipse cx="195" cy="251.6" rx="5.5" ry="2.2" fill="currentColor" fill-opacity="0.15" stroke="none"/>
   </g>
 </svg>

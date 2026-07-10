@@ -282,7 +282,8 @@ describe('branch: "Stop."', () => {
         (e) => e.kind === 'tell.visual' && e.text === '(Something has started counting.)',
       ),
     ).toHaveLength(1);
-    expect(end.view.ending).toBe('act1-end');
+    expect(end.view.sceneId).toBe('act1-end');
+    expect(end.view.ending).toBeUndefined();
   });
 });
 
@@ -292,16 +293,23 @@ describe('act1-end — the ACT TWO card', () => {
     enterDay7(),
   );
 
-  it('sets day 8, carries the ending marker, and cues title', () => {
+  it('sets day 8, is no longer an ending, and cues title', () => {
     expect(run.state.day).toBe(8);
-    expect(run.view.ending).toBe('act1-end');
+    expect(run.view.ending).toBeUndefined();
     expect(run.events).toContainEqual({ kind: 'music.cue', cue: 'title' });
-    expect(run.events.some((e) => e.kind === 'save.autosave')).toBe(true);
   });
 
   it('renders ACT TWO inside a hard line of white space', () => {
     expect(run.view.paragraphs).toEqual(['', 'ACT TWO', '']);
-    expect(run.view.choices).toHaveLength(0);
+  });
+
+  it('carries one choice, and it walks into Day 8 (the unsealed boundary)', () => {
+    expect(run.view.choices).toEqual([
+      { id: 'morning-comes-anyway', label: 'Morning comes anyway.', locked: false },
+    ]);
+    const card = DAY7_SCENES.find((s) => s.id === 'act1-end');
+    expect(card?.ending).toBeUndefined();
+    expect(card?.choices.map((c) => c.goto)).toEqual(['d8-morning']);
   });
 });
 

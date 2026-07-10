@@ -4,8 +4,8 @@
  * Single quiet morning slot (the register briefly open — thread beat 2, no
  * comment from anyone), a short early-fog evening, and then the act's one
  * railroad: the walk to the wharf at 3:12 and THE FOGHORN CHOICE. The act
- * ends on the walk back up and the ACT TWO title card ('act1-end' ending
- * marker terminates the current build; Act 2 replaces it).
+ * ends on the walk back up and the ACT TWO title card ('act1-end', now the
+ * unsealed act boundary: one choice carries the player into d8-morning).
  *
  * Flags this file owns (Act 2 branches on them):
  *   'horn-on'              — the player told Wade to keep playing
@@ -378,7 +378,7 @@ const after = defineScene({
   ],
 });
 
-// ——— ACT TWO title card — the current build terminates here ———
+// ——— ACT TWO title card — the unsealed act boundary (Act 2 continues) ———
 
 const actEnd = defineScene({
   id: 'act1-end',
@@ -387,9 +387,10 @@ const actEnd = defineScene({
     kind: 'inline',
     paragraphs: [{ text: '' }, { text: 'ACT TWO' }, { text: '' }],
   },
-  choices: [],
+  choices: [
+    { id: 'morning-comes-anyway', label: 'Morning comes anyway.', goto: 'd8-morning' },
+  ],
   cue: 'title',
-  ending: 'act1-end',
 });
 
 export const DAY7_SCENES: readonly Scene[] = [

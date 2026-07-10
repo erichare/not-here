@@ -94,6 +94,12 @@ describe('renderEnding', () => {
     expect(plain).not.toContain('act1-end');
   });
 
+  it('maps act2-end to its diegetic card, no internal id', () => {
+    const plain = stripAnsi(renderEnding('act2-end'));
+    expect(plain).toContain('— end of the second act —');
+    expect(plain).not.toContain('act2-end');
+  });
+
   it('closes unknown ending ids generically, never echoing the id', () => {
     const plain = stripAnsi(renderEnding('slice-end'));
     expect(plain).toContain('— the ledger closes here —');

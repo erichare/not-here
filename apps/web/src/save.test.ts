@@ -109,7 +109,7 @@ describe('save slot', () => {
 describe('resumableSave', () => {
   const scenes: ReadonlyMap<string, ResumableScene> = new Map([
     ['n1-room', {}],
-    ['act1-end', { ending: 'act1-end' }],
+    ['act2-end', { ending: 'act2-end' }],
   ]);
 
   it('returns a mid-run save', () => {
@@ -121,7 +121,7 @@ describe('resumableSave', () => {
 
   it('treats a save parked on an ending as a finished run', () => {
     const storage = memoryStorage();
-    persistSave(storage, initialState(3, 'act1-end'));
+    persistSave(storage, initialState(3, 'act2-end'));
     expect(resumableSave(storage, scenes)).toBeNull();
   });
 
@@ -138,9 +138,16 @@ describe('resumableSave', () => {
   it('accepts the real content map and a real ending scene', () => {
     const content = buildContent();
     const storage = memoryStorage();
-    persistSave(storage, initialState(9, 'act1-end'));
+    persistSave(storage, initialState(9, 'act2-end'));
     expect(resumableSave(storage, content.scenes)).toBeNull();
     persistSave(storage, initialState(9, OPENING_SCENE));
+    expect(resumableSave(storage, content.scenes)).not.toBeNull();
+  });
+
+  it('the unsealed act1-end card is mid-run now — a save parked there resumes', () => {
+    const content = buildContent();
+    const storage = memoryStorage();
+    persistSave(storage, initialState(9, 'act1-end'));
     expect(resumableSave(storage, content.scenes)).not.toBeNull();
   });
 });

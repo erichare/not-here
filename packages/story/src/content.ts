@@ -20,19 +20,36 @@ import { DIALOGUE_RULES } from './dialogue.ts';
 import { RULES as RULES_D34 } from './dialogue-days34.ts';
 import { RULES as RULES_D56 } from './dialogue-days56.ts';
 import { RULES as RULES_D7 } from './dialogue-day7.ts';
+import { RULES as RULES_D89 } from './dialogue-days89.ts';
+import { RULES as RULES_D1011 } from './dialogue-days1011.ts';
+import { RULES as RULES_D1213 } from './dialogue-days1213.ts';
+import { RULES as RULES_D1416 } from './dialogue-days1416.ts';
+import { RULES as RULES_D1719 } from './dialogue-days1719.ts';
 import { DAY2_SCENES } from './scenes/day2.ts';
 import { DAY3_SCENES } from './scenes/day3.ts';
 import { DAY4_SCENES } from './scenes/day4.ts';
 import { DAY5_SCENES } from './scenes/day5.ts';
 import { DAY6_SCENES } from './scenes/day6.ts';
 import { DAY7_SCENES } from './scenes/day7.ts';
+import { DAY8_SCENES } from './scenes/day8.ts';
+import { DAY9_SCENES } from './scenes/day9.ts';
+import { DAY10_SCENES } from './scenes/day10.ts';
+import { DAY11_SCENES } from './scenes/day11.ts';
+import { DAY12_SCENES } from './scenes/day12.ts';
+import { DAY13_SCENES } from './scenes/day13.ts';
+import { DAY14_SCENES } from './scenes/day14.ts';
+import { DAY15_SCENES } from './scenes/day15.ts';
+import { DAY16_SCENES } from './scenes/day16.ts';
+import { DAY17_SCENES } from './scenes/day17.ts';
+import { DAY18_SCENES } from './scenes/day18.ts';
+import { DAY19_SCENES } from './scenes/day19.ts';
 import { NIGHT1_SCENES } from './scenes/night1.ts';
 
 /** Where a fresh run begins. */
 export const OPENING_SCENE: SceneId = 'n1-title';
 
-/** All authored scenes through Act 1. */
-export const ALL_SCENES: readonly Scene[] = [
+/** Act 1 scenes only (Night 1 → the unsealed act boundary in day7.ts). */
+export const ACT1_SCENES: readonly Scene[] = [
   ...NIGHT1_SCENES,
   ...DAY2_SCENES,
   ...DAY3_SCENES,
@@ -42,7 +59,34 @@ export const ALL_SCENES: readonly Scene[] = [
   ...DAY7_SCENES,
 ];
 
-const ALL_RULES = [...DIALOGUE_RULES, ...RULES_D34, ...RULES_D56, ...RULES_D7];
+/** All authored scenes through Act 2. */
+export const ALL_SCENES: readonly Scene[] = [
+  ...ACT1_SCENES,
+  ...DAY8_SCENES,
+  ...DAY9_SCENES,
+  ...DAY10_SCENES,
+  ...DAY11_SCENES,
+  ...DAY12_SCENES,
+  ...DAY13_SCENES,
+  ...DAY14_SCENES,
+  ...DAY15_SCENES,
+  ...DAY16_SCENES,
+  ...DAY17_SCENES,
+  ...DAY18_SCENES,
+  ...DAY19_SCENES,
+];
+
+const ALL_RULES = [
+  ...DIALOGUE_RULES,
+  ...RULES_D34,
+  ...RULES_D56,
+  ...RULES_D7,
+  ...RULES_D89,
+  ...RULES_D1011,
+  ...RULES_D1213,
+  ...RULES_D1416,
+  ...RULES_D1719,
+];
 
 /**
  * Who talks to whom in Lorn Bay when the player isn't in the room.
@@ -109,7 +153,10 @@ const realizeInline = (
 
 /** Assemble the playable Night-1 slice. */
 export const buildContent = (): StoryContent => {
-  const derived = makeResolvers();
+  const derived: DerivedResolvers = {
+    ...makeResolvers(),
+    witness: (state) => state.stats.flesh + state.stats.name,
+  };
   const scenes = buildSceneMap(ALL_SCENES);
   return {
     scenes,
