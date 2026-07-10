@@ -128,6 +128,8 @@ export const createBookLayer = (root: HTMLElement, hooks: BookLayerHooks): BookL
   let unlockSeen: boolean | null = null;
   let open = false;
   let restoreFocus: HTMLElement | null = null;
+  let currentPanel: HTMLElement | null = null;
+  let currentClose: HTMLButtonElement | null = null;
 
   const button = element('button', 'book-consult', 'consult Barb’s book');
   button.type = 'button';
@@ -142,6 +144,7 @@ export const createBookLayer = (root: HTMLElement, hooks: BookLayerHooks): BookL
   overlay.setAttribute('aria-label', 'Barb’s book');
 
   root.append(button, overlay);
+  const scenePage = root.querySelector<HTMLElement>('.page');
 
   const close = (withBeat: boolean): void => {
     if (!open) return;
@@ -149,23 +152,39 @@ export const createBookLayer = (root: HTMLElement, hooks: BookLayerHooks): BookL
     overlay.hidden = true;
     overlay.replaceChildren();
     button.setAttribute('aria-expanded', 'false');
+    scenePage?.removeAttribute('inert');
+    button.inert = false;
     if (withBeat) hooks.onExitBeat(EXIT_BEAT);
     // Give focus back to wherever the player left it — never the choices'
     // problem that the book was open.
     restoreFocus?.focus?.();
     restoreFocus = null;
+    currentPanel = null;
+    currentClose = null;
   };
 
   const openBook = (): void => {
     if (open || !unlocked || world === null) return;
     const page = buildBookPage(world);
     const panel = buildPageElement(page);
+    const closeButton = element('button', 'book-close', 'close the book');
+    closeButton.type = 'button';
+    closeButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      close(true);
+    });
+    panel.prepend(closeButton);
+
+    const active = document.activeElement;
+    restoreFocus = active instanceof HTMLElement ? active : null;
+    currentPanel = panel;
+    currentClose = closeButton;
     overlay.replaceChildren(panel);
     overlay.hidden = false;
     open = true;
     button.setAttribute('aria-expanded', 'true');
-    const active = document.activeElement;
-    restoreFocus = active instanceof HTMLElement ? active : null;
+    scenePage?.setAttribute('inert', '');
+    button.inert = true;
     panel.focus();
   };
 
@@ -184,6 +203,16 @@ export const createBookLayer = (root: HTMLElement, hooks: BookLayerHooks): BookL
 
   window.addEventListener('keydown', (event) => {
     if (event.metaKey || event.ctrlKey || event.altKey) return;
+    if (event.key === 'Tab' && open && currentPanel !== null && currentClose !== null) {
+      event.preventDefault();
+      const active = document.activeElement;
+      if (event.shiftKey) {
+        (active === currentPanel ? currentClose : currentPanel).focus();
+      } else {
+        (active === currentClose ? currentPanel : currentClose).focus();
+      }
+      return;
+    }
     if (event.key === 'Escape' && open) {
       event.preventDefault();
       close(true);
