@@ -202,12 +202,18 @@ describe('c. prose economy — 30–90 word beats; warn >120, fail >150', () => 
  * here with the twin substrings its prose must carry. Twins are per-branch
  * — only one renders per run — so the check reads raw scene text.
  * Pinned from the author manifests and verified against the files.
+ *
+ * pt2-fix-01: nights 8–11 each hear the flatness in their own words —
+ * night 8 keeps the establishing Act-1 descriptors; nights 9, 10, and 11
+ * pin fresh images plus the character-keyed fragment identities, so the
+ * twin still surfaces nightly without pinning exact-phrase sameness
+ * across the ritual's four evenings.
  */
 const PROSE_TWINS: Readonly<Record<string, readonly string[]>> = {
   'd8-evening': ['a shade flat', 'a quarter-turn flat', 'a quarter-tone flat'],
-  'd9-evening': ['a shade flat', 'idle, road, idle'],
-  'd10-evening': ['a shade flat', 'a quarter-tone flat'],
-  'd11-evening': ['a shade flat'],
+  'd9-evening': ['a hair under true', 'piano notes', 'idle, road, idle'],
+  'd10-evening': ['a breath flat', 'music-box register', 'upright-piano notes', 'the horn’s fifth bar'],
+  'd11-evening': ['a finger’s width flat', 'music-box phrase'],
   'd16-evening': ['a quarter-tone flat', 'a shade flat'],
   'd17-evening': ['a shade flat', 'a quarter-tone flat'],
 };
@@ -244,6 +250,33 @@ describe('d. detune twinning — every lie has its visual twin', () => {
         .flat()
         .filter((e) => e.op === 'emit' && e.event.kind === 'tell.visual');
       expect(tells, `${scene.id} re-emits its prose twin as a toast`).toEqual([]);
+    }
+  });
+
+  it('pt2-fix-01: the ritual nights never share a flatness image (8–11)', () => {
+    // Same fact, four ways of hearing it: each evening's descriptor for the
+    // detuned motif is its own, so the nightly ritual never reads verbatim.
+    const RITUAL_IMAGES: Readonly<Record<string, readonly string[]>> = {
+      'd8-evening': ['a shade flat', 'a quarter-turn flat', 'a quarter-tone flat'],
+      'd9-evening': ['a hair under true'],
+      'd10-evening': ['a breath flat'],
+      'd11-evening': ['a finger’s width flat'],
+    };
+    const nights = Object.keys(RITUAL_IMAGES);
+    for (const owner of nights) {
+      for (const phrase of RITUAL_IMAGES[owner] ?? []) {
+        expect(
+          sceneProse(sceneById(owner)).includes(phrase),
+          `${owner}: missing its own flatness image "${phrase}"`,
+        ).toBe(true);
+        for (const other of nights) {
+          if (other === owner) continue;
+          expect(
+            sceneProse(sceneById(other)).includes(phrase),
+            `${other} reuses ${owner}'s flatness image "${phrase}"`,
+          ).toBe(false);
+        }
+      }
     }
   });
 

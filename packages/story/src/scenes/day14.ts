@@ -24,6 +24,12 @@
  * the press that makes it 3 also sets 'dianne:locks-house'. The game never
  * remarks on the locking.
  *
+ * pt2-fix-02 (defended morning): the potluck's IOU pays a first sliver —
+ * one seam inside the warmth, the kindness arriving as inventory. No
+ * confrontation; the cost is in the grain of how it is given. pt2-fix-03
+ * (exiled evening): Sam's cost made first-hand from the wharf — the plate
+ * on the shed step, kindness with the knock taken out of it.
+ *
  * Night 14: NIGHT_DECAY (act2-shared, never re-authored); cue branches on
  * the track — foghorn-312 on horn-on, music.stop and no cue on horn-stopped;
  * one gated diegetic decay tell per stat, fresh tonight.
@@ -89,6 +95,11 @@ const morning = defineScene({
         when: exiledVerdict,
       },
       { text: '@line:barb:greeting-d14' },
+      // ——— pt2-fix-02: the seam in the warmth. Sealed, not welcomed.
+      {
+        text: 'Alma comes down after her buns, mid-morning, to see them eaten. She sets one down before you and steps back to watch it the way you watch a stove you have decided to trust, and the watching has no hunger in it, only inventory. The town is not feeding you up. It is feeding you in.',
+        when: defendedVerdict,
+      },
       {
         text: 'Food keeps arriving at your elbow in the small ways the Bay has: a plate, a top-up, the heel of something still proving its warmth through the paper.',
       },
@@ -377,6 +388,11 @@ const evening = defineScene({
       },
       {
         text: 'Late, boots on the boards: Wade, passing with the breakwater lantern, not stopping. By the door, where you find them after, a filled thermos and a dry pair of work gloves, and no word attached to either.',
+        when: exiledVerdict,
+      },
+      // ——— pt2-fix-03: the other lit window down here. His bill, visible.
+      {
+        text: 'Down the shore the boat shed keeps its own light, a launch length from yours. At dusk somebody comes down the hill with a wrapped plate, sets it on the shed step, and goes back up without knocking. Kindness with the knock taken out of it. They are feeding him the way they feed you.',
         when: exiledVerdict,
       },
       {

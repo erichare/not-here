@@ -183,6 +183,12 @@ describe('day 17 — the second harvest', () => {
 });
 
 describe('day 17 — the mail run', () => {
+  it('the morning pitches pull level: the mail run carries its own gravity (pt2-fix-02)', () => {
+    const morning = rawText(sceneById('d17-morning'));
+    expect(morning).toContain('She doesn’t ask things twice');
+    expect(morning).toContain('like it owes her something');
+  });
+
   it('finds the slip: found-mail-slip is set and the @doc names D. Cole', () => {
     const run = play('d17-morning', [...MAIL]);
     expect(run.state.flags['found-mail-slip']).toBe(true);
@@ -450,6 +456,44 @@ describe('day 18 — the lighter fog', () => {
       'take-the-day', 'up-to-the-house'], withFlags({ 'horn-on': true }));
     expect(house.state.flags['today:fed']).toBe(true);
   });
+
+  it('never-found only: one countdown pulse — the till drawer, the re-pressed tape (pt2-fix-03)', () => {
+    const neverFound = play('d17-morning', [...CLINIC_TAKE, 'turn-in', 'let-morning-come',
+      'take-the-day'], withFlags({ 'horn-on': true }));
+    const fog = viewOf(neverFound, 'd18-fog').paragraphs.join('\n');
+    expect(fog).toContain('hand flat on the till drawer');
+    expect(fog).toContain('pressed down again');
+    const burned = play('d17-morning', [...MAIL, 'turn-in', 'burn-unread', 'go-up',
+      'take-the-day'], withFlags({ 'horn-on': true }));
+    expect(viewOf(burned, 'd18-fog').paragraphs.join('\n')).not.toContain('till drawer');
+  });
+
+  it('the stove side of the day shows its minute and keeps its flags (pt2-fix-04)', () => {
+    const run = play('d17-morning', [...CLINIC_TAKE, 'turn-in', 'let-morning-come',
+      'take-the-day', 'keep-the-stove-side', 'let-the-evening-find-you'],
+      withFlags({ 'horn-on': true }));
+    const beat = viewOf(run, 'd18-stove').paragraphs.join('\n');
+    expect(beat).toContain('the stove side of the day');
+    expect(beat).toContain('goes over one line');
+    expect(run.state.flags['d18:kettle-day']).toBe(true); // Act 3 inheritance
+    expect(run.state.flags['today:fed']).toBe(true);
+    expect(run.state.sceneId).toBe('d18-evening');
+  });
+
+  it('the house meal grants a refusal its history (pt2-fix-05)', () => {
+    const toHouse = [...CLINIC_TAKE, 'turn-in', 'let-morning-come',
+      'take-the-day', 'up-to-the-house'] as const;
+    const plain = play('d17-morning', [...toHouse], withFlags({ 'horn-on': true }));
+    expect(viewOf(plain, 'd18-house').paragraphs.join('\n')).toContain('feeds you at the table');
+    const refused = play('d17-morning', [...toHouse], (s) =>
+      applyEffects(withFlags({ 'horn-on': true })(s), [
+        { op: 'fact.add', tag: 'refused-first-meal', witnessedBy: ['barb'] },
+      ]).state,
+    );
+    const view = viewOf(refused, 'd18-house').paragraphs.join('\n');
+    expect(view).toContain('heard about the first one');
+    expect(view).not.toContain('feeds you at the table');
+  });
 });
 
 describe('day 18 — evening at the store', () => {
@@ -463,7 +507,8 @@ describe('day 18 — evening at the store', () => {
 
   it('the burned route gets the same evening without the minute', () => {
     const burned = play('d17-morning', [...MAIL, 'turn-in', 'burn-unread', 'go-up',
-      'take-the-day', 'keep-the-stove-side'], withFlags({ 'horn-on': true }));
+      'take-the-day', 'keep-the-stove-side', 'let-the-evening-find-you'],
+      withFlags({ 'horn-on': true }));
     expect(viewOf(burned, 'd18-evening').paragraphs.join('\n')).not.toContain('one unbroken minute');
   });
 
@@ -551,17 +596,100 @@ describe('day 19 — the register read-back', () => {
     expect(view).toContain('Spoke for the boy');
   });
 
-  it('trust:barb ≥ 7 seeds the Long Winter, one sentence, never pushed', () => {
+  it('one witnessed kindness is not a pattern: trust 6 leaves the winter unseeded', () => {
+    // base() seeds exactly one barb-witnessed kindness (helped-barb), so
+    // trust:barb = baseline 5 + 1 = 6 — under the ≥ 7 gate by design
+    // (pt2-fix-01: the seed takes two or more acts, never one).
+    expect(content.derived['trust:barb']?.(run.state)).toBe(6);
     expect(readback).not.toContain('end on purpose');
     expect(run.state.flags['barb:counsel-seeded']).toBeUndefined();
-    const trusted = play('d19-morning', ['let-the-day-spend'], (s) =>
-      applyEffects(base(s), [
-        { op: 'fact.add', tag: 'truth-told', witnessedBy: ['barb'] },
-        { op: 'fact.add', tag: 'truth-told', witnessedBy: ['barb'] },
-      ]).state,
-    );
-    expect(viewOf(trusted, 'd19-evening').paragraphs.join('\n')).toContain('end on purpose');
-    expect(trusted.state.flags['barb:counsel-seeded']).toBe(true);
+  });
+
+  it('the morning fork leaves its trace in the evening opening (pt2-fix-06)', () => {
+    expect(readback).toContain('Let the day spend itself, did you');
+    expect(readback).not.toContain('You ate today, at least');
+    const fed = play('d19-morning', ['eat-whats-put-down'], base);
+    const view = viewOf(fed, 'd19-evening').paragraphs.join('\n');
+    expect(view).toContain('You ate today, at least');
+    expect(view).not.toContain('Let the day spend itself, did you');
+  });
+});
+
+describe('the Long Winter seed — reached through real play, never injected (pt2-fix-01)', () => {
+  // Both runs advance() from Day 7 to the Day-19 read-back through real
+  // scenes and choices — no synthetic facts, no stat staging. The horn is
+  // kept playing in both so presence decay stays off and the only variable
+  // is how the run treats Barb. trust:barb moves ONLY on the kindnesses
+  // she witnesses (axes.ts, knowers ['barb']); the warm route below plants
+  // exactly two — the minimum pattern — and the cold route plants none.
+  const ACT1_CLOSE = ['cross-the-lot', 'for-the-song', 'keep-playing', 'lie-down',
+    'morning-comes-anyway'] as const;
+  const D17_TO_READBACK = ['let-the-seventeenth-come', 'to-clinic', 'let-it-stay-hers',
+    'walk-the-long-way', 'turn-in', 'let-morning-come', 'take-the-day'] as const;
+
+  it('a warm-honest run — two witnessed kindnesses — arrives at trust 7 and the counsel', () => {
+    const run = play('d7-morning', [
+      // Day 7: the last ordinary morning, given to Barb (kept-barb-company).
+      'stay-the-morning', ...ACT1_CLOSE,
+      // Day 8: the stockroom, no pressing.
+      'to-stockroom', 'keep-lifting', 'take-the-afternoon', 'cross-the-lot', 'let-day-nine',
+      // Day 9: the walk-in with Barb (helped-walkin-d9) — rung two.
+      'to-walkin', 'finish-the-crates', 'cross-to-your-unit', 'let-day-ten',
+      // Days 10–12: present, fed, helping — none of it witnessed by Barb.
+      'go-to-the-hall', 'set-chairs', 'down-the-hill', 'let-her-ink', 'turn-in-late',
+      'let-morning-come',
+      'to-the-counter', 'slide-the-pad-to-dianne', 'down-to-the-kettle', 'eat-supper',
+      'say-nothing', 'cross-the-lot', 'let-the-morning-come',
+      'carry-tables', 'take-the-bowl', 'walk-down', 'cross-the-lot', 'sleep',
+      // Day 13: witness 12 ≥ 9 — the town defends; the player defends Sam.
+      'eat-then-iron', 'take-the-end-chair', 'defend-sam', 'find-your-coat', 'lie-down',
+      // Days 14–16.
+      'take-what-is-given', 'hold-the-record', 'to-the-store', 'keep-wrapping',
+      'down-the-hill', 'turn-in', 'let-the-fifteenth-come',
+      'let-evening-come', 'stay-the-evening', 'refuse-it', 'let-the-sixteenth-come',
+      'find-tam', 'sit-the-layover', 'eat-what-barbs-made',
+      // Days 17–19: clinic, refuse the harvest; the plain never-found close.
+      ...D17_TO_READBACK, 'up-to-the-house', 'walk-the-parcels-down', 'say-goodnight',
+      'let-morning-come', 'eat-whats-put-down',
+    ]);
+    expect(run.state.sceneId).toBe('d19-evening');
+    // The arithmetic, settled days before the gate: 5 + 1 (d7) + 1 (d9).
+    expect(content.derived['trust:barb']?.(run.state)).toBe(7);
+    expect(run.state.flags['barb:counsel-seeded']).toBe(true);
+    const view = viewOf(run, 'd19-evening').paragraphs.join('\n');
+    expect(view).toContain('Winters end, you know');
+    expect(view).toContain('end on purpose');
+  });
+
+  it('a cold run through the same days stays at trust 5, unseeded', () => {
+    const run = play('d7-morning', [
+      // Day 7: the shore road instead of her morning.
+      'shore-road', ...ACT1_CLOSE,
+      // Days 8–12: never once where Barb could ink a kindness.
+      'to-shed', 'say-nothing-wall', 'up-the-shore-road', 'cross-the-lot', 'let-day-nine',
+      'to-ride', 'give-the-mirror-nothing', 'walk-up-from-pullin', 'cross-to-your-unit',
+      'let-day-ten',
+      'go-to-the-shed', 'go-without-a-word', 'back-up-the-road', 'turn-in',
+      'let-morning-come',
+      'to-the-counter', 'slide-the-pad-to-dianne', 'down-to-the-kettle', 'leave-the-plate',
+      'say-nothing', 'cross-the-lot', 'let-the-morning-come',
+      'lay-cutlery', 'work-through', 'walk-down', 'cross-the-lot', 'sleep',
+      // Day 13: witness 6 < 9 — exiled; silence at the verdict.
+      'give-the-day-the-shore', 'take-the-end-chair', 'say-nothing', 'find-your-coat',
+      'let-d14-come',
+      // Days 14–16.
+      'leave-it', 'hold-the-record', 'let-the-day-go', 'turn-in', 'let-the-fifteenth-come',
+      'let-evening-come', 'stay-the-evening', 'refuse-it', 'let-the-sixteenth-come',
+      'find-sam', 'leave-him-to-it', 'go-down-early',
+      // Days 17–19 as above, on the stove side.
+      ...D17_TO_READBACK, 'keep-the-stove-side', 'let-the-evening-find-you', 'say-goodnight',
+      'let-morning-come', 'let-the-day-spend',
+    ]);
+    expect(run.state.sceneId).toBe('d19-evening');
+    // Pinned: no reachable fact moves trust:barb on this route.
+    expect(content.derived['trust:barb']?.(run.state)).toBe(5);
+    expect(run.state.flags['barb:counsel-seeded']).toBeUndefined();
+    expect(viewOf(run, 'd19-evening').paragraphs.join('\n')).not.toContain('end on purpose');
   });
 });
 

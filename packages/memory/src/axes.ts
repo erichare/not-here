@@ -58,6 +58,19 @@ export const DEFAULT_AXIS_WEIGHTS: readonly AxisWeightRule[] = [
   // Telling a costly truth slowly rebuilds trust.
   { tag: 'truth-told', axis: 'trust', delta: 1 },
 
+  // pt2-fix-01: Barb's trust is ledger-trust — moved only by kindnesses she
+  // witnessed and inked herself, one point per act. Without these rows no
+  // reachable fact ever moved trust:barb (every 'truth-told' is witnessed
+  // by priya or sam, and no gossip edge leads into barb), which re-opened
+  // the dead-axis trap Act 1's fix-15 closed once (see dialogue-day7.ts).
+  // Plant sites, all witnessedBy ['barb']: helped-barb (Day 2, the pots),
+  // helped-barb-walkin (Day 4), kept-barb-company (Day 7), helped-walkin-d9
+  // (Day 9). Knowers-restricted so a gossiped copy moves nobody else.
+  { tag: 'helped-barb', axis: 'trust', delta: 1, knowers: ['barb'] },
+  { tag: 'helped-barb-walkin', axis: 'trust', delta: 1, knowers: ['barb'] },
+  { tag: 'kept-barb-company', axis: 'trust', delta: 1, knowers: ['barb'] },
+  { tag: 'helped-walkin-d9', axis: 'trust', delta: 1, knowers: ['barb'] },
+
   // Standing up for Sam matters to Sam — and Tam is watching.
   { tag: 'defended-sam', axis: 'trust', delta: 2, knowers: ['tam', 'sam'] },
 

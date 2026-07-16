@@ -88,6 +88,11 @@ const morning = defineScene({
       {
         text: '“And that—” the outgoing mail in its elastic, squared on the counter’s end “—wants walking over to Dianne’s counter before the pickup at two. Morning won’t stretch over both. You know how they are.”',
       },
+      // pt2-fix-02: the mail run gets its own gravity — equal pull, no
+      // signpost. The clinic keeps "she doesn't ask things twice."
+      {
+        text: '“Dianne’s been stood at that counter all week like it owes her something,” she adds, to the flat-top. “Wouldn’t hurt her to have somebody in the store of a morning.”',
+      },
     ],
   },
   choices: [

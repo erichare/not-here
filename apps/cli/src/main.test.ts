@@ -1,17 +1,21 @@
 /**
  * End-to-end run of the terminal build with piped input (NH_SILENT). These
  * assert presentation invariants that only exist at the main-loop level:
- * the ledger hint prints exactly once (fix-04), and no internal identifier
- * ever reaches the screen (fix-07).
+ * the ledger hint prints exactly once (fix-04), no internal identifier
+ * ever reaches the screen (fix-07), act boundaries hold the save
+ * (pt2-fix-01), resume does not re-apply onEnter effects (pt2-fix-03),
+ * and re-prints keep their margin lines (pt2-fix-04).
  */
 
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { initialState, SAVE_SCHEMA_VERSION, type WorldState } from '@not-here/engine';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { stripAnsi } from './render.ts';
+import { loadSave } from './save.ts';
 
 const MAIN = fileURLToPath(new URL('./main.ts', import.meta.url));
 
@@ -64,5 +68,95 @@ describe('terminal build, Night 1 walk', () => {
     const captions = plain.split('♪ small waves working the gravel').length - 1;
     expect(captions).toBe(1);
     expect(plain).toContain("BARB'S BOOK");
+  });
+});
+
+const SAVE_FILE = (): string => join(cwd, '.saves', 'slot1.json');
+
+/** Park a hand-built save in the test cwd, as if a run had quit there. */
+const parkSave = (state: WorldState): void => {
+  mkdirSync(join(cwd, '.saves'), { recursive: true });
+  writeFileSync(SAVE_FILE(), `${JSON.stringify(state, null, 2)}\n`, 'utf8');
+};
+
+describe('act boundaries hold the save (pt2-fix-01)', () => {
+  const parked: WorldState = {
+    ...initialState(7, 'act2-end'),
+    day: 20,
+    slot: 'morning',
+    flags: { 'knows-truth': true, 'horn-on': true },
+  };
+
+  it('relaunching on the Act 2 boundary re-prints the card and exits', () => {
+    parkSave(parked);
+    const plain = play([]);
+    expect(plain).toContain('ACT THREE');
+    expect(plain).toContain('end of the second act');
+    expect(plain).toContain('Your November is kept. Act Three is not written yet.');
+    // No fresh Day 1, no prompt, no ninth-day header on the card.
+    expect(plain).not.toContain('DAY 1 —');
+    expect(plain).not.toContain('a number chooses');
+  });
+
+  it('never overwrites the parked save — Act 3 inherits its flags', () => {
+    parkSave(parked);
+    const before = readFileSync(SAVE_FILE(), 'utf8');
+    play([]);
+    play([]); // stable across as many launches as it takes
+    expect(readFileSync(SAVE_FILE(), 'utf8')).toBe(before);
+    expect(loadSave(SAVE_FILE())?.flags['knows-truth']).toBe(true);
+  });
+
+  it('a save parked on the Ash ending still means a fresh start', () => {
+    parkSave({ ...initialState(7, 'act2-ash-2'), day: 18, slot: 'morning' });
+    const plain = play(['q']);
+    expect(plain).toContain('DAY 1 —');
+    expect(loadSave(SAVE_FILE())?.sceneId).not.toBe('act2-ash-2');
+  });
+});
+
+describe('resume is a re-print, not a re-entry (pt2-fix-03, pt2-fix-04)', () => {
+  it('quitting and relaunching leaves the saved state untouched', () => {
+    // n1-beach's onEnter appends a fact — a re-enter on resume would
+    // append it again (and NIGHT_DECAY-style blocks would pay twice).
+    play(['1', 'q']);
+    const first = loadSave(SAVE_FILE());
+    expect(first?.sceneId).toBe('n1-beach');
+    expect(first?.facts).toHaveLength(1);
+    play(['q']);
+    expect(loadSave(SAVE_FILE())).toEqual(first);
+  });
+
+  it('the resumed screen re-prints the same margin lines as the first print', () => {
+    const firstRun = play(['1', 'q']);
+    expect(firstRun).toContain('♪ small waves working the gravel');
+    const resumed = play(['q']);
+    expect(resumed).toContain('♪ small waves working the gravel');
+  });
+
+  it('the act card keeps its counting line on re-print', () => {
+    // As the game leaves them: the save parked on the ACT TWO card, the
+    // margin sidecar carrying the tell the lie-down choice emitted.
+    parkSave({
+      ...initialState(7, 'act1-end'),
+      day: 8,
+      slot: 'morning',
+      flags: { 'horn-stopped': true },
+    });
+    writeFileSync(
+      join(cwd, '.saves', 'slot1.margin.json'),
+      JSON.stringify({
+        v: SAVE_SCHEMA_VERSION,
+        sceneId: 'act1-end',
+        events: [
+          { kind: 'tell.visual', text: '(Something has started counting.)' },
+          { kind: 'music.cue', cue: 'title' },
+        ],
+      }),
+      'utf8',
+    );
+    const plain = play(['q']);
+    expect(plain).toContain('ACT TWO');
+    expect(plain).toContain('(Something has started counting.)');
   });
 });

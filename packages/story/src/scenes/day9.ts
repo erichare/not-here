@@ -22,10 +22,13 @@
  *      extra answer opens if the player saw the wall on Day 8.
  *
  * Evening: without-you retellings for both missed slots (spike-fomo rules;
- * priya and tam motifs detune with prose twins — 'a shade flat' and
- * 'idle, road, idle'; Barb's own missed walk-in retells with NO detune,
- * per Act 1 precedent, day4). Night 9: decay/horn per track; NIGHT_DECAY
- * spread from act2-shared, fresh diegetic tells, goto d10-morning.
+ * priya and tam motifs detune with prose twins — 'a hair under true' is
+ * this night's hearing of the flatness, plus tam's 'idle, road, idle';
+ * Barb's own missed walk-in retells with NO detune, per Act 1 precedent,
+ * day4). pt2-fix-01: the evening is the act's designed trough — relays
+ * pared to one line each, the sign turned early; brevity reads as intent.
+ * Night 9: decay/horn per track; NIGHT_DECAY spread from act2-shared,
+ * fresh diegetic tells, goto d10-morning.
  *
  * Flags this file owns: 'd9:slot' ('clinic'|'walkin'|'ride'),
  * 'd9:room-answer', 'd9:mirror-silence', 'today:fed'. Facts:
@@ -335,6 +338,10 @@ const ride2 = defineScene({
 });
 
 // ——— Evening: retellings for the missed slots ———
+// pt2-fix-01: the trough evening, cut to the half screen. The ritual holds
+// its skeleton — greeting, relay, motif — but every relay is pared to one
+// line and the sign turns early. The brevity is the content: an evening
+// that closes before it fills.
 
 const evening = defineScene({
   id: 'd9-evening',
@@ -349,34 +356,34 @@ const evening = defineScene({
     kind: 'inline',
     paragraphs: [
       {
-        text: 'The supper crowd is thinned by the fog to regulars: the crib board, the radio off again, Moose in the doorway draught where he prefers his post.',
+        text: 'The fog has the supper crowd down to the crib board and the counter regulars. Barb is stacking the far chairs before the coffee has gone around twice.',
       },
       { text: '@line:barb:greeting-d9' },
       // ——— Without-you: the clinic. She waited in the patient chair.
       {
-        text: '“Doctor held your ten o’clock till eleven,” Barb says, when the counter clears. “Sat in the patient chair herself to wait — Dianne could see straight in from the post counter. Then she wrote the hour up like any other.” The pot finds the ring. “Clinic-day people,” she says, and doesn’t finish it.',
+        text: '“Doctor held your ten o’clock till eleven,” Barb says, going past with the pot. “Sat in the patient chair herself to wait, then wrote the hour up like any other.”',
         when: missedClinic,
       },
       {
-        text: 'Under the room, a few piano notes climb the wrong direction, a shade flat — once, again, gone. The upright at the hall is half a town away, and shut.',
+        text: 'Between the counter and the coats, a few piano notes climb the wrong direction, a hair under true, and quit mid-climb.',
         when: missedClinic,
       },
       // ——— Without-you: the walk-in. The help's plate, no help. No motif.
       {
-        text: '“Did the walk-in myself between rushes,” Barb says, no weight on it at all. “Made the help’s plate at noon out of habit, so Moose dined well.” The dog’s tail concedes one beat against the floor — for the plate, not the teller. “Winter order’s shelved. It comes every year, like it or don’t.”',
+        text: '“Did the walk-in myself between rushes,” Barb says, no weight on it. “Made the help’s plate out of habit, so Moose dined well.”',
         when: missedWalkin,
       },
       // ——— Without-you: the ride. Tam asked after somebody.
       {
-        text: '“Tam came back with the tubs and a question,” Barb says. “Asked had Sam been in. Sam.” She lets the plate land. “Seven years that man’s asked after nobody — schedules, yes, people, no. I gave him the answer and he wore it down the hill.”',
+        text: '“Tam came back with the tubs and a question. Asked had Sam been in.” She lets the plate land. “Seven years that man’s asked after nobody. I gave him the answer and he wore it down the hill.”',
         when: missedRide,
       },
       {
-        text: 'Under the crib pegs, low, an engine rhythm surfaces where no engine is — idle, road, idle — a quarter-tone flat, twice through. Then the furnace owns the room again.',
+        text: 'Low in the floor, an engine rhythm where no engine is — idle, road, idle — a hair under true. It doesn’t idle back.',
         when: missedRide,
       },
       {
-        text: 'The fog leans on the glass until the glass gives up its view. Coats, the till, the chairs. Barb turns the sign, and the town turns with it.',
+        text: 'The sign turns at half past eight, an hour shy of itself. Coats, the till, the lamp. The evening is done before it has finished being an evening.',
       },
     ],
   },

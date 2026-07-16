@@ -180,6 +180,32 @@ describe('day 14 — aftermath temperature per verdict', () => {
     expect(run.state.flags['today:fed']).toBe(true);
     expect(run.state.stats.flesh).toBe(4);
   });
+
+  it('defended: the kindness shows its grain — fed in, not up (pt2-fix-02)', () => {
+    const run = play('d14-morning', [], defended);
+    const view = viewOf(run, 'd14-morning').paragraphs.join('\n');
+    expect(view).toContain('only inventory');
+    expect(view).toContain('It is feeding you in.');
+  });
+
+  it('the seam stays off the exiled track', () => {
+    const run = play('d14-morning', [], exiled);
+    expect(viewOf(run, 'd14-morning').paragraphs.join('\n')).not.toContain('feeding you in');
+  });
+});
+
+describe('day 14 — the other lit window (pt2-fix-03)', () => {
+  it('exiled: Sam’s cost is first-hand from the wharf — the plate, no knock', () => {
+    const run = play('d14-morning', [...D14_TO_EVENING], exiled);
+    const view = viewOf(run, 'd14-evening').paragraphs.join('\n');
+    expect(view).toContain('without knocking');
+    expect(view).toContain('They are feeding him the way they feed you.');
+  });
+
+  it('the shed-step plate stays off the defended track', () => {
+    const run = play('d14-morning', [...D14_TO_EVENING], defended);
+    expect(viewOf(run, 'd14-evening').paragraphs.join('\n')).not.toContain('without knocking');
+  });
 });
 
 describe('day 14 — the notebook comes to you', () => {
@@ -431,6 +457,33 @@ describe('day 15 — the table is set on every staging', () => {
     expect(text).toContain('her coat wrong for the wind');
     expect(text).toContain('The dish is the whole speech.');
   });
+
+  // ——— pt2-fix-04: a tracked refuser is never written eating. ———
+
+  it('the refuser’s dish sits differently, and the offset holds by design', () => {
+    const refuser = compose(exiled, seedFact('refused-first-meal', ['barb']));
+    const run = play('d15-morning', ['let-evening-come'], refuser);
+    const view = viewOf(run, 'd15-supper').paragraphs.join('\n');
+    expect(view).toContain('never once looks to see whether the lid has moved');
+    expect(view).toContain('She has learned what you do with what she cooks.');
+    expect(view).toContain('watches the not-eating');
+    expect(view).not.toContain('She stays while you eat');
+    expect(view).not.toContain('watching you eat');
+    expect(run.state.flags['today:fed']).toBe(true);
+  });
+
+  it('a refusal since broken keeps the fed prose: the pattern, not the entry', () => {
+    const brokeIt = compose(
+      exiled,
+      seedFact('refused-first-meal', ['barb']),
+      (s: WorldState): WorldState => ({ ...s, stats: { ...s.stats, flesh: 4 } }),
+    );
+    const run = play('d15-morning', ['let-evening-come'], brokeIt);
+    const view = viewOf(run, 'd15-supper').paragraphs.join('\n');
+    expect(view).toContain('She stays while you eat');
+    expect(view).toContain('watching you eat');
+    expect(view).not.toContain('watches the not-eating');
+  });
 });
 
 describe('night 15 — the harvest', () => {
@@ -472,6 +525,13 @@ describe('night 15 — the harvest', () => {
     expect(view).toContain('the way you go around a missing stair');
     expect(view).toContain('the last of the private ones');
     expect(run.events.some((e) => e.kind === 'tell.visual')).toBe(false);
+  });
+
+  it('the untutored route hears the terms at the brink (pt2-fix-05)', () => {
+    const run = play('d15-morning', [...TO_HARVEST], defended);
+    const view = viewOf(run, 'd15-night').paragraphs.join('\n');
+    expect(view).toContain('say yes and the tune changes houses');
+    expect(view).toContain('the visits will get shorter');
   });
 
   it('the quilt callbacks stay off routes that never saw the offer', () => {

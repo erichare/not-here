@@ -25,12 +25,21 @@
  * to 'none' tonight — the tells below are carried for lint parity and for
  * saves that arrive by paths the act doesn't predict.
  *
+ * pt2-fix-04: the supper prose no longer writes a tracked refuser eating.
+ * 'refused-first-meal' with FLESH still at base gates the variant where the
+ * dish sits and Dianne watches what the not-eating means instead. The
+ * 'today:fed' flag stays set on EVERY variant BY DESIGN — a meal cooked for
+ * you is the offset, eaten or not, and Night 15's decay must resolve 'none'
+ * under the harvest.
+ * pt2-fix-05: the no-quilt fallback names the bargain's edge before the
+ * take/refuse choice — worth AND erasure, one clause, at the brink.
+ *
  * Flags owned here: 'd15:refused'. Act-owned state touched: 'today:fed',
  * 'lullaby-taken'. Facts: 'private:lullaby-taken', 'private:memory-taken'.
  * Prose invariants per design/game-bible.md §Prose grammar.
  */
 
-import { defineScene, type Scene } from '@not-here/engine';
+import { defineScene, type Cond, type Scene } from '@not-here/engine';
 import {
   NIGHT_DECAY,
   decayedEcho,
@@ -49,6 +58,17 @@ const tookQuilt = { op: 'fact.exists', tag: 'private:memory-taken' } as const;
 /** The quilt was only ever offered in d3-room — the callbacks gate on it. */
 const quiltOffered = { op: 'flag', key: 'd3:slot', value: 'room' } as const;
 const quiltRefused = { op: 'flag', key: 'd3:left-quilt' } as const;
+
+// pt2-fix-04: the run-long refusal the game tracks (night1's fact, day19's
+// read-back) — still unbroken while FLESH has never been fed above base.
+const trackedRefuser: Cond = {
+  op: 'all',
+  of: [
+    { op: 'fact.exists', tag: 'refused-first-meal' },
+    { op: 'not', of: { op: 'stat.gte', stat: 'flesh', value: 4 } },
+  ],
+};
+const notTrackedRefuser: Cond = { op: 'not', of: trackedRefuser };
 
 const morning = defineScene({
   id: 'd15-morning',
@@ -99,11 +119,22 @@ const supper = defineScene({
       },
       {
         text: 'At dusk she comes down the wharf with a covered dish and her coat wrong for the wind — the good coat, the town coat, no coat for boards and spray. She sets the dish on the piling head and steps back from it. The dish is the whole speech. She stays while you eat, facing the water, and can’t say the thing, and doesn’t, and stays anyway.',
-        when: exiledVerdict,
+        when: { op: 'all', of: [exiledVerdict, notTrackedRefuser] },
+      },
+      // ——— pt2-fix-04: the refuser's dish. She watches what the not-eating
+      // means; the plate is not made to move. 'today:fed' holds regardless.
+      {
+        text: 'At dusk she comes down the wharf with a covered dish and her coat wrong for the wind — the good coat, the town coat, no coat for boards and spray. She sets the dish on the piling head and steps back from it. The dish is the whole speech. She stays, facing the water, and never once looks to see whether the lid has moved. She has learned what you do with what she cooks. She cooks anyway.',
+        when: { op: 'all', of: [exiledVerdict, trackedRefuser] },
       },
       { text: '@line:dianne:supper-d15' },
       {
         text: 'The food does what food does. For the length of a plate the day has no verdicts in it, only salt and heat and her watching you eat with both hands around a cooling mug.',
+        when: notTrackedRefuser,
+      },
+      {
+        text: 'The dish does what dishes do around you now: sits, and steams itself out, and neither of you says the word for that. She keeps both hands around the cooling mug and watches the not-eating the way she watches the lake in November — a thing she has decided to live beside without naming it.',
+        when: trackedRefuser,
       },
     ],
   },
@@ -158,8 +189,9 @@ const night = defineScene({
         text: 'It is the fold of the quilt again — a story offered corner to corner. You left that one on her side of the fold. This one is smaller, and worth more.',
         when: quiltRefused,
       },
+      // pt2-fix-05: the untutored route hears the terms before the choice.
       {
-        text: 'Nothing has been offered to you like this before — a thing entirely hers, held out whole, corner to corner. The room knows what it is worth before you do.',
+        text: 'Nothing has been offered to you like this before — a thing entirely hers, held out whole, corner to corner. The room knows what it is worth before you do, and knows the terms: say yes and the tune changes houses. It will live in you and only visit her, and the visits will get shorter.',
         when: {
           op: 'not',
           of: { op: 'any', of: [tookQuilt, quiltRefused] },

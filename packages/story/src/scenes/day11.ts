@@ -13,8 +13,11 @@
  * success is today:named, and the register keeps it overnight.
  *
  * Evening: the without-you retelling for the missed slot (both slots are
- * Dianne's, so the hole is dianne-shaped either way; twin in prose), and
- * supper (today:fed offset). Then NIGHT 11 — BARB'S ONE WARNING, fixed on
+ * Dianne's, so the hole is dianne-shaped either way; twin in prose —
+ * 'a finger's width flat' is this night's hearing of it). pt2-fix-01: the
+ * ritual cracks once, hairline, ahead of the warning — a relay Barb starts
+ * and does not finish, and the plate half a beat behind her hand.
+ * Then NIGHT 11 — BARB'S ONE WARNING, fixed on
  * both tracks: the canon Frank text from design/title-thread.md §Act 2,
  * said to the register, not to you. This scene owns the act's FIRST of
  * two spoken title uses (the second is Sam's, at the potluck). Heeding
@@ -191,8 +194,10 @@ const albums2 = defineScene({
         text: '“I did, hon. Winters want projects.” The album under her hands closes on its own weight. She stays pleasant the whole way through it — pleasant to the door, pleasant past it, a pleasantness with the counter inside it. She sells Mrs. Yee her stamps. She recommends the parcel tape. She does not open another album.',
         when: { op: 'fact.knownBy', who: 'dianne', tag: 'pressed-dianne-d11' },
       },
+      // pt2-fix-03: the bargain's edge, rehearsed early and route-free —
+      // what the taking would cost, said in the shelf's own terms.
       {
-        text: 'The morning goes down page by page. You say nothing you’d have to own, and she gives the stories anyway — the hall, the good August — and one of them comes to stay with you a while without leaving her. Being told is not the taking. You learn the difference by the way the room doesn’t lean.',
+        text: 'The morning goes down page by page. You say nothing you’d have to own, and she gives the stories anyway — the hall, the good August — and one of them comes to stay with you a while without leaving her. Being told is not the taking. Taken, it would be yours outright, and some evening her hand would go to the shelf and find bare wood where the story had stood. You learn the difference by the way the room doesn’t lean.',
         when: { op: 'fact.knownBy', who: 'dianne', tag: 'heard-dianne-albums' },
       },
       {
@@ -288,22 +293,24 @@ const evening = defineScene({
         text: 'Supper at the Kettle, thin crowd, the fog leaning its whole weight on the glass. Moose keeps the door. The crib board stays in its drawer tonight.',
       },
       { text: '@line:barb:greeting-d11' },
+      // pt2-fix-01: the ritual shows one hairline crack tonight — a relay
+      // Barb starts and does not finish, ahead of the warning she'll give.
       // ——— Without-you: the albums. Absence hands you the audience.
       {
-        text: '“Dianne had the albums open on the counter glass all day,” Barb says. “Anyone who stood still got a page or two. Mrs. Yee got a wedding entire.” She sets the plate down. “Seven years those were upstairs. Now it’s the shop’s own little museum, and she’s the tour.”',
+        text: '“Dianne had the albums open on the counter glass all day,” Barb says. “Anyone who stood still got a page or two. Mrs. Yee got a wedding entire. Seven years those were upstairs, and now it’s the shop’s own little museum, and she’s—” The pot wants the ring just then. The sentence stands where she left it, and she doesn’t go back for it.',
         when: missedAlbums,
       },
       {
-        text: 'Under the supper noise, a music-box phrase goes by a shade flat — twice through — and takes itself back. The furnace covers for it.',
+        text: 'Under the supper noise, a music-box phrase surfaces a finger’s width flat, starts itself over, and doesn’t finish that either. The furnace covers for it.',
         when: missedAlbums,
       },
       // ——— Without-you: the counter. Absence hands you the waiting line.
       {
-        text: '“Counter’s still a week behind,” Barb says. “And my till rolls are sitting up there — signature stock, mind. Dianne won’t leave them on the shelf overnight, and won’t sign them across to just anyone either. So they wait.” She says it to the soup, mild as anything.',
+        text: '“Counter’s still a week behind,” Barb says. “And my till rolls are sitting up there — signature stock, mind. Dianne won’t leave them on the shelf overnight, and won’t sign them across to just anyone, so they—” She counts the float instead of finishing, from the top, as if the first count had gone somewhere.',
         when: missedCounter,
       },
       {
-        text: 'Back of the room, low, a music-box phrase surfaces a shade flat, once and once more, and is gone before the ladle finds the pot again.',
+        text: 'Back of the room, low, a music-box phrase comes up a finger’s width flat, begins again, and is gone before the ladle finds the pot.',
         when: missedCounter,
       },
       {
@@ -320,7 +327,7 @@ const evening = defineScene({
         when: skippedForShed,
       },
       {
-        text: 'The plate arrives whether you asked or not. That is the house style.',
+        text: 'The plate arrives whether you asked or not. That is the house style. Tonight it lands half a beat behind her hand.',
       },
     ],
   },

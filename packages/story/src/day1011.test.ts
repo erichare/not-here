@@ -216,6 +216,20 @@ describe('day 10 — the ash tin', () => {
     );
   });
 
+  it('pt2-fix-01: the evening ritual is performed at you once the lid has been off', () => {
+    const opened = play('d10-morning', [
+      'go-up-to-the-house', 'open-the-tin', 'put-the-lid-back',
+      'eat-what-she-puts-down', 'down-to-the-kettle',
+    ]);
+    const evening = viewOf(opened, 'd10-evening').paragraphs.join('\n');
+    expect(evening).toContain('what is for you from what is at you');
+    expect(evening).not.toContain('the only arrival he counts');
+    const unopened = play('d10-morning', [...HOUSE_EAT_TO_NIGHT.slice(0, 4)]);
+    const plain = viewOf(unopened, 'd10-evening').paragraphs.join('\n');
+    expect(plain).toContain('the only arrival he counts');
+    expect(plain).not.toContain('what is at you');
+  });
+
   it('eating what she puts down is the offset: today:fed, FLESH fed at her cost', () => {
     const run = play('d10-morning', [
       'go-up-to-the-house', 'keep-to-the-stove', 'eat-what-she-puts-down',
@@ -437,6 +451,13 @@ describe('day 11 — the albums and the sleeve', () => {
       'Being told is not the taking.',
     );
   });
+
+  it('pt2-fix-03: the bargain’s edge is rehearsed here, route-free', () => {
+    const run = play('d11-morning', ['to-the-albums', 'stay-for-the-stories']);
+    expect(viewOf(run, 'd11-albums-2').paragraphs.join('\n')).toContain(
+      'find bare wood where the story had stood',
+    );
+  });
 });
 
 describe('day 11 — the receipt line', () => {
@@ -532,8 +553,8 @@ describe('without-you retellings — the hole has a sound', () => {
     expect(patterns).toContain('sam');
     expect(patterns).not.toContain('dianne');
     const evening = viewOf(run, 'd10-evening').paragraphs.join('\n');
-    expect(evening).toContain('a shade flat');
-    expect(evening).toContain('a quarter-tone flat');
+    expect(evening).toContain('a breath flat'); // pt2-fix-01: night 10's own image
+    expect(evening).toContain('the horn’s fifth bar at a boy’s tempo');
     expect(evening).toContain('nobody’s put a name to');
     expect(evening).toContain('just the door');
   });
@@ -566,6 +587,22 @@ describe('without-you retellings — the hole has a sound', () => {
   it('prose is the twin: no tell.visual toast rides any detune', () => {
     const run = play('d10-morning', ['go-to-the-shed', 'say-its-fair', 'back-up-the-road']);
     expect(run.events.some((e) => e.kind === 'tell.visual')).toBe(false);
+  });
+
+  it('pt2-fix-01: night 11 shows one hairline crack — the relay stops mid-sentence', () => {
+    // Attended the counter → the albums relay breaks off unfinished.
+    const counterRun = play('d11-morning', [...COUNTER_SLIDE]);
+    const albumsHole = viewOf(counterRun, 'd11-evening').paragraphs.join('\n');
+    expect(albumsHole).toContain('doesn’t go back for it');
+    // Attended the albums → the till-roll relay stops for a second count.
+    const albumsRun = play('d11-morning', [...ALBUMS_STAY]);
+    const counterHole = viewOf(albumsRun, 'd11-evening').paragraphs.join('\n');
+    expect(counterHole).toContain('counts the float instead of finishing');
+    // And on every route, the plate is half a beat behind her hand.
+    for (const evening of [albumsHole, counterHole]) {
+      expect(evening).toContain('half a beat behind her hand');
+      expect(evening).toContain('a finger’s width flat'); // night 11's own image
+    }
   });
 });
 

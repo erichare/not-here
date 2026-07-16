@@ -3,7 +3,9 @@
  *
  * Covers: the single quiet morning slot (Day 7 by design owes no without-you
  * retellings — there is nothing simultaneous to miss), the register clue
- * plant (@doc, NAME column still blank), the railroaded walk (< 120 words,
+ * plant (@doc, NAME column still blank), the two evening variants (stay →
+ * 'd7-evening'; shore road → 'd7-shore', a real scene since pt2-fix-01, with
+ * its own unwitnessed trace), the railroaded walk (< 120 words,
  * posture-only), the Foghorn Choice (an open question that returns to the
  * two final options), both branch outcomes with correctly witnessed facts,
  * the decay-seeding announcement, and the ACT TWO card at 'act1-end'.
@@ -65,11 +67,15 @@ describe('day 7 structure — the single quiet slot', () => {
     expect(step.state.slot).toBe('morning');
   });
 
-  it('offers one slot: every morning choice leads to the same evening', () => {
+  it('offers one slot: the morning forks into two evenings that share the night', () => {
     const morning = DAY7_SCENES.find((s) => s.id === 'd7-morning');
-    expect(morning).toBeDefined();
-    for (const choice of morning?.choices ?? []) {
-      expect(choice.goto).toBe('d7-evening');
+    expect(morning?.choices.map((c) => ({ id: c.id, goto: c.goto }))).toEqual([
+      { id: 'stay-the-morning', goto: 'd7-evening' },
+      { id: 'shore-road', goto: 'd7-shore' },
+    ]);
+    for (const id of ['d7-evening', 'd7-shore']) {
+      const scene = DAY7_SCENES.find((s) => s.id === id);
+      expect(scene?.choices.map((c) => c.goto), id).toEqual(['d7-walk']);
     }
   });
 
@@ -99,6 +105,65 @@ describe('the register clue (thread beat 2)', () => {
     const prose = view.paragraphs.join('\n');
     expect(prose).toContain('NAME');
     expect(prose).not.toMatch(/\?/); // a morning without a single question
+  });
+});
+
+describe('the shore road (pt2-fix-01) — the other morning is a real scene', () => {
+  const shore = choose(enterDay7(), 'shore-road');
+
+  it('lands in d7-shore for the evening slot, back under the diner cue', () => {
+    expect(shore.state.sceneId).toBe('d7-shore');
+    expect(shore.state.slot).toBe('evening');
+    expect(shore.events).toContainEqual({ kind: 'music.cue', cue: 'pub-warm' });
+  });
+
+  it('branch parity: the counter feeds FLESH, the shore road feeds UNDERTOW', () => {
+    const base = initialState(7, 'd7-morning').stats;
+    expect(shore.state.stats.undertow).toBe(base.undertow + 1);
+    expect(shore.state.stats.flesh).toBe(base.flesh);
+    const stayed = choose(enterDay7(), 'stay-the-morning');
+    expect(stayed.state.stats.flesh).toBe(base.flesh + 1);
+    expect(stayed.state.stats.undertow).toBe(base.undertow);
+  });
+
+  it("sets 'd7:walked-shore' and plants stood-at-the-pull-in, witnessed by nobody", () => {
+    expect(shore.state.flags['d7:walked-shore']).toBe(true);
+    const fact = shore.state.facts.find((f) => f.tag === 'stood-at-the-pull-in');
+    if (!fact) throw new Error('missing stood-at-the-pull-in');
+    for (const [who, ids] of Object.entries(shore.state.knownBy)) {
+      expect(ids.includes(fact.id), `${who} could not have seen you`).toBe(false);
+    }
+  });
+
+  it('walks the wharf by daylight and finds the ringed Friday in the wild', () => {
+    const text = sceneText('d7-shore');
+    expect(text).toContain('the old wharf comes through the fog in pieces');
+    expect(text).toContain('the same Friday ringed twice');
+    expect(text).toContain('Whoever rings a date twice rings every copy.');
+    // The departure time lives on the @doc card alone (game-lint), and the
+    // act's three card plants are pinned (act1-lint) — the pull-in copy is
+    // prose behind glass, not a fourth document.
+    expect(text).not.toContain('07:40');
+    expect(text).not.toContain('@doc:');
+  });
+
+  it('ends at the same closing: the goodnight rides the shore route too', () => {
+    const prose = shore.view.paragraphs.join('\n');
+    expect(prose).toContain('The fog comes in early and means it.');
+    expect(prose).toContain('Sleep well tonight');
+    expect(prose).toContain('the way she’d call closing');
+    expect(prose).toContain('It is not clear she believes you will.');
+    // No pie on this route — you spent the morning where nobody could vouch.
+    expect(prose).not.toContain('There’s pie for the morning');
+  });
+
+  it('carries one choice, and it walks into the railroad night', () => {
+    expect(shore.view.choices).toEqual([
+      { id: 'cross-the-lot', label: 'Cross the lot to your unit.', locked: false },
+    ]);
+    const step = choose(shore, 'cross-the-lot');
+    expect(step.state.sceneId).toBe('d7-walk');
+    expect(step.state.slot).toBe('night');
   });
 });
 

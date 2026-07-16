@@ -7,11 +7,19 @@
  * ends on the walk back up and the ACT TWO title card ('act1-end', now the
  * unsealed act boundary: one choice carries the player into d8-morning).
  *
+ * The evening comes in two variants (pt2-fix-01: the shore road was a null
+ * branch on the climax day): stay the morning and 'd7-evening' plays as
+ * before; take the shore road and 'd7-shore' carries the walk — the wharf
+ * by daylight, the highway pull-in, the ringed Friday in the wild — and
+ * lands at the same closing-time goodnight. Both converge on 'd7-walk'.
+ *
  * Flags this file owns (Act 2 branches on them):
  *   'horn-on'              — the player told Wade to keep playing
  *   'horn-stopped'         — the player closed the valve herself
  *   'wade-confession-seed' — Wade's confession path opens early (horn-on)
- * Facts: 'let-wade-play' / 'stopped-the-horn', witnessed by wade only.
+ *   'd7:walked-shore'      — the morning went to the shore road
+ * Facts: 'let-wade-play' / 'stopped-the-horn', witnessed by wade only;
+ * 'stood-at-the-pull-in', witnessed by nobody — nobody could have.
  * The presence-decay mechanic itself is Act 2's; Act 1 only announces it —
  * the '(Something has started counting.)' visual tell rides the lie-down
  * choice out of d7-after (playtest fix-03: it is the LAST thing Act 1 says).
@@ -78,10 +86,15 @@ const morning = defineScene({
       goto: 'd7-evening',
     },
     {
+      // pt2-fix-01: the walk feeds UNDERTOW the way the counter feeds FLESH —
+      // a morning spent as nobody, on purpose.
       id: 'shore-road',
       label: 'Take the coffee with you and walk the shore road.',
-      effects: [{ op: 'flag.set', key: 'd7:walked-shore', value: true }],
-      goto: 'd7-evening',
+      effects: [
+        { op: 'flag.set', key: 'd7:walked-shore', value: true },
+        { op: 'stat.add', stat: 'undertow', value: 1 },
+      ],
+      goto: 'd7-shore',
     },
   ],
 });
@@ -98,11 +111,8 @@ const evening = defineScene({
       {
         text: 'The fog comes in early and means it. By four the streetlights are on and might as well not be; by five the hills are gone and the town has pulled its shoulders in. The men look at the window, and settle up, and go while there’s still a road to go by.',
       },
-      // ——— fix-14: the morning you chose gets its one sentence back.
-      {
-        text: 'The shore road gave you back around noon, hands cold, nothing decided.',
-        when: { op: 'flag', key: 'd7:walked-shore' },
-      },
+      // ——— fix-14, resized by pt2-fix-01: the shore branch has its own
+      // evening now ('d7-shore'); this scene plays the stayed morning only.
       {
         text: 'The morning went into the till roll and the pie, and Barb let you stay inside the work of it, and neither of you counted the hours.',
         when: { op: 'fact.exists', tag: 'kept-barb-company' },
@@ -112,6 +122,46 @@ const evening = defineScene({
       },
       {
         text: 'By the till, the EBUS schedule has curled under its tape. Friday the twenty-eighth is still ringed twice, blue on blue, hard as a bruise.',
+      },
+      { text: '@line:barb:goodnight' },
+      { text: 'It is not clear she believes you will.' },
+    ],
+  },
+  choices: [
+    { id: 'cross-the-lot', label: 'Cross the lot to your unit.', goto: 'd7-walk' },
+  ],
+  cue: 'pub-warm',
+});
+
+// ——— The shore road (pt2-fix-01) — the other evening. A held-breath walk:
+// the wharf by daylight, the pull-in above it, the same goodnight. Nothing
+// happens, on purpose; the dread is in what the landscape is for. ———
+
+const shoreRoad = defineScene({
+  id: 'd7-shore',
+  slot: 'evening',
+  onEnter: [
+    { op: 'time.set', slot: 'evening' },
+    // Unwitnessed on purpose: who could see you out there? Nobody did.
+    { op: 'fact.add', tag: 'stood-at-the-pull-in' },
+  ],
+  prose: {
+    kind: 'inline',
+    paragraphs: [
+      {
+        text: 'The shore road takes the heat out of the cup before the first bend. Fog sits on the water in one long held breath; frost fans hold the shade. The town gives you up a house at a time — woodsmoke, a lit kitchen, then gravel and your own boots, the loudest thing left. Nobody passes. Nothing turns to look.',
+      },
+      {
+        text: 'Where the road runs out along the water, the old wharf comes through the fog in pieces: pilings, the shut compressor shed, the breakwater light burning its small daylight nothing. You can see the whole walk of it from here — the boards, the door at the end — and your feet slow without consulting you. By day the horn is just a shape. It has nothing to say until it does.',
+      },
+      {
+        text: 'Above the wharf the road climbs to the highway pull-in: a widening of gravel, a pole, a bench worn bare where people have waited. Behind the scratched glass of the notice frame, the same schedule card as the diner’s — the same Friday ringed twice, blue on blue, all the way out here. Whoever rings a date twice rings every copy.',
+      },
+      {
+        text: 'You sit on the bench until the cold comes through your coat. The highway is one long sound that never arrives. The pull-in is built for one thing, and it goes on doing it empty: holding a place where a person will stand with a bag and wait. You get up before you can learn how long you would have stayed.',
+      },
+      {
+        text: 'The fog comes in early and means it. It walks you back — hills gone first, then roofs, then the diner light, which comes back a piece at a time as you cross to it. The Kettle is chairs-up, the crib board away, Moose at his post facing the lot. You set the cup by the register. Barb turns the sign around at half past seven with you on the warm side of it.',
       },
       { text: '@line:barb:goodnight' },
       { text: 'It is not clear she believes you will.' },
@@ -396,6 +446,7 @@ const actEnd = defineScene({
 export const DAY7_SCENES: readonly Scene[] = [
   morning,
   evening,
+  shoreRoad,
   walk,
   hornroom,
   sixthQuestion,

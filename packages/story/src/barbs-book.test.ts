@@ -6,13 +6,20 @@
  * her observations must visibly change, or the Pleaser's instrument is flat.
  * Plus: tier boundaries at the Act-1 rescale, the verbatim Night-One echo,
  * the margins honesty rule, and the no-numerals discipline.
+ *
+ * pt2-fix-01: the Act 2 margins block proves the ledger stays alive Days
+ * 8–19 — witnessed facts margin as the scenes plant them, gossip-borne
+ * facts wait for the edge, private:* facts never surface, and the whole
+ * table passes the page discipline.
  */
 
 import { describe, expect, it } from 'vitest';
 import {
   advance,
   applyEffects,
+  CHARACTERS,
   initialState,
+  type Effect,
   type WorldState,
 } from '@not-here/engine';
 import { buildBarbsBook, observationFor, staticLineFor } from './barbs-book.ts';
@@ -135,6 +142,128 @@ describe('margins, other hands — only what Barb actually knows', () => {
     expect(buildBarbsBook(after).heldFacts).toContain(
       'carried tables at the hall till the list ran out. Dianne told it twice.',
     );
+  });
+});
+
+describe('margins, other hands — Act 2 keeps the ledger alive (pt2-fix-01)', () => {
+  const plant = (effects: readonly Effect[]): WorldState =>
+    applyEffects(initialState(21, OPENING_SCENE), effects).state;
+
+  it('facts Barb witnesses first-hand margin as the scenes plant them', () => {
+    // Tags + witnesses exactly as the Act 2 scene files add them:
+    // day8.ts (the hub), day9.ts (her walk-in), day10.ts (the inked blank),
+    // day13.ts (the potluck, all six in the hall), day17.ts (the mail run).
+    const state = plant([
+      { op: 'fact.add', tag: 'went-to-sams-shed-d8', witnessedBy: ['barb'] },
+      { op: 'fact.add', tag: 'helped-walkin-d9', witnessedBy: ['barb'] },
+      { op: 'fact.add', tag: 'barb-inked-the-blank', witnessedBy: ['barb'] },
+      { op: 'fact.add', tag: 'potluck-verdict-defended', witnessedBy: CHARACTERS },
+      { op: 'fact.add', tag: 'defended-sam', about: 'sam', witnessedBy: CHARACTERS },
+      { op: 'fact.add', tag: 'ran-the-mail-d17', witnessedBy: ['barb'] },
+    ]);
+    const { heldFacts } = buildBarbsBook(state);
+    expect(heldFacts).toContain(
+      'went to the boat shed because Sam asked. asked. I wrote it the day it happened.',
+    );
+    expect(heldFacts).toContain(
+      'shelved my walk-in for winter, every label face-out. I never asked for face-out.',
+    );
+    expect(heldFacts).toContain(
+      'a blank on the hall list, beside her dish. she let me ink it. I inked it twice.',
+    );
+    expect(heldFacts).toContain(
+      'the boy stood at the hall, and the room moved her way. chairs and all.',
+    );
+    expect(heldFacts).toContain(
+      'spoke for the boy into all that quiet. it cost the room’s comfort. worth the ink.',
+    );
+    expect(heldFacts).toContain(
+      'took my outgoing across in its elastic, ahead of the pickup. the mail came to no harm.',
+    );
+  });
+
+  it('the exiled verdict and the given boy get their lines', () => {
+    const { heldFacts } = buildBarbsBook(
+      plant([
+        { op: 'fact.add', tag: 'potluck-verdict-exiled', witnessedBy: CHARACTERS },
+        { op: 'fact.add', tag: 'sacrificed-sam', about: 'sam', witnessedBy: CHARACTERS },
+      ]),
+    );
+    expect(heldFacts).toContain(
+      'the hall decided without one word said. I had no key to give her. I had nothing.',
+    );
+    expect(heldFacts).toContain(
+      'told the boy to sit down, in the old cadence. I wrote it because it happened.',
+    );
+  });
+
+  it('gossip-borne Act 2 facts wait for the dianne edge to carry them', () => {
+    const before = plant([
+      { op: 'fact.add', tag: 'signed-the-receipt-line', witnessedBy: ['dianne'] },
+      { op: 'fact.add', tag: 'helped-dianne-parcels', witnessedBy: ['dianne'] },
+    ]);
+    expect(buildBarbsBook(before).heldFacts).toEqual([]);
+    const after = applyEffects(before, [
+      { op: 'fact.learn', who: 'barb', tag: 'signed-the-receipt-line' },
+      { op: 'fact.learn', who: 'barb', tag: 'helped-dianne-parcels' },
+    ]).state;
+    expect(buildBarbsBook(after).heldFacts).toEqual([
+      'signed the courier’s pad herself, Dianne says. the line held till morning. that is not nothing.',
+      'held string while the hall’s dishes went home. every lid found its pot, Dianne says.',
+    ]);
+  });
+
+  it('private facts never margin — even if Barb somehow held them', () => {
+    // The gossip layer never carries private: tags; the table must hold
+    // even against a forced learn. The letter night itself plants only
+    // flags, so the Day-19 silence ruling is preserved by construction.
+    const state = plant([
+      { op: 'fact.add', tag: 'private:lullaby-taken', about: 'dianne', witnessedBy: ['dianne'] },
+      { op: 'fact.add', tag: 'private:memory-taken', about: 'dianne', witnessedBy: ['dianne'] },
+      { op: 'fact.add', tag: 'private:letter-memory-taken', about: 'priya', witnessedBy: ['priya'] },
+      { op: 'fact.learn', who: 'barb', tag: 'private:lullaby-taken' },
+      { op: 'fact.learn', who: 'barb', tag: 'private:memory-taken' },
+      { op: 'fact.learn', who: 'barb', tag: 'private:letter-memory-taken' },
+    ]);
+    expect(buildBarbsBook(state).heldFacts).toEqual([]);
+  });
+
+  it('every Act 2 margin passes the page discipline', () => {
+    // Light the whole Act 2 table at once (verdicts are exclusive in play;
+    // for the discipline sweep both may burn) and run the page rules.
+    const ACT2_TAGS = [
+      'helped-stockroom',
+      'went-to-sams-shed-d8',
+      'went-to-clinic-d9',
+      'helped-walkin-d9',
+      'went-to-house-d10',
+      'went-to-shed-d10',
+      'barb-inked-the-blank',
+      'signed-the-receipt-line',
+      'helped-potluck-prep',
+      'potluck-verdict-defended',
+      'potluck-verdict-exiled',
+      'defended-sam',
+      'sacrificed-sam',
+      'went-to-clinic-d17',
+      'ran-the-mail-d17',
+      'helped-dianne-parcels',
+    ] as const;
+    const state = plant(
+      ACT2_TAGS.map((tag) => ({ op: 'fact.add', tag, witnessedBy: ['barb'] }) as const),
+    );
+    const { heldFacts } = buildBarbsBook(state);
+    expect(heldFacts).toHaveLength(ACT2_TAGS.length);
+    expect(new Set(heldFacts).size).toBe(heldFacts.length);
+    for (const line of heldFacts) {
+      expect(line, `numeral on the page: ${line}`).not.toMatch(/[0-9]/);
+      expect(line, `stat name on the page: ${line}`).not.toMatch(
+        /\b(FLESH|NAME|ECHO|UNDERTOW|STATIC|CHORD)\b/,
+      );
+      expect(line, `slug on the page: ${line}`).not.toMatch(/[a-z]+-[a-z]+-[a-z]+/);
+      expect(line, `the title is on a budget: ${line}`).not.toMatch(/not\s+here/i);
+      expect(line, `the name is on a budget: ${line}`).not.toMatch(/\bWren\b/);
+    }
   });
 });
 

@@ -240,8 +240,10 @@ const wharfOn = defineScene({
       {
         text: 'He shows you the duty cycle because you are standing where it happens. The tank breathes up to pressure through the small hours; the governor holds it; at 3:12 the cam wakes and spends the night’s whole savings in five bars. “Forty pounds of air a night,” he says. “Give or take the fog.” Nobody pays for the diesel. You don’t ask. The jerry cans by the door answer.',
       },
+      // pt2-fix-03: the bargain's edge, rehearsed at the horn — what the
+      // machine keeps, its first keeper only visits.
       {
-        text: 'He talks about the horn the way other men talk over a grave they tend — present tense, small facts, no flowers. The fifth bar comes up in the telling, and his hand moves on the brass like it is going somewhere.',
+        text: 'He talks about the horn the way other men talk over a grave they tend — present tense, small facts, no flowers. The fifth bar comes up in the telling, and his hand moves on the brass like it is going somewhere. He does not hum the bar he is describing — the horn has it now, and what the horn has, he only visits.',
       },
     ],
   },
@@ -381,8 +383,10 @@ const shed2 = defineScene({
         text: '“Three tellings,” Sam says. “Same canoe. I wrote them down the year I figured out nobody else was going to.” He squares a corner that is already square. “Ask around long enough, you get a fourth.” There is no X for his own telling, you notice. He was eleven. Nobody asked him.',
         when: { op: 'fact.exists', tag: 'asked-sams-map' },
       },
+      // pt2-fix-02: the folder's clock agrees with Night 6 — eleven files,
+      // all since she walked in, Tuesday's the last.
       {
-        text: '“Because nobody opens a folder called that,” he says. “Including me.” A drive ticks somewhere under the shelf, keeping its copies. “I stopped listening to them in August. Stopped making them in October.” He looks at the tripod, not at you.',
+        text: '“Because nobody opens a folder called that,” he says. “Including me.” A drive ticks somewhere under the shelf, keeping its copies. “Eleven since you walked in — I stopped Tuesday.” He looks at the tripod, not at you.',
         when: { op: 'fact.exists', tag: 'asked-garbage-folder' },
       },
       {

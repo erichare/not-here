@@ -1,9 +1,22 @@
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { initialState, SAVE_SCHEMA_VERSION } from '@not-here/engine';
+import {
+  defineScene,
+  initialState,
+  SAVE_SCHEMA_VERSION,
+  type EngineEvent,
+} from '@not-here/engine';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { appendLedgerLine, formatLedgerLine, loadSave, saveGame } from './save.ts';
+import {
+  appendLedgerLine,
+  classifySave,
+  formatLedgerLine,
+  loadMargin,
+  loadSave,
+  saveGame,
+  saveMargin,
+} from './save.ts';
 
 let dir: string;
 
@@ -44,6 +57,79 @@ describe('saveGame / loadSave', () => {
     const path = join(dir, 'slot1.json');
     writeFileSync(path, JSON.stringify({ v: SAVE_SCHEMA_VERSION }), 'utf8');
     expect(loadSave(path)).toBeUndefined();
+  });
+});
+
+describe('classifySave — act boundaries hold places (pt2-fix-01)', () => {
+  const state = initialState(1971, 'act2-end');
+  const bare = { prose: { kind: 'inline' as const, paragraphs: [] }, choices: [] };
+
+  it('no save, or a save on an unknown scene, means a fresh start', () => {
+    expect(classifySave(undefined, undefined)).toEqual({ kind: 'fresh' });
+    expect(classifySave(state, undefined)).toEqual({ kind: 'fresh' });
+  });
+
+  it('a save parked mid-run resumes', () => {
+    const scene = defineScene({ id: 'd8-morning', ...bare });
+    expect(classifySave(state, scene)).toEqual({ kind: 'resume', state });
+  });
+
+  it('a save parked on the Act 2 boundary is held, never discarded', () => {
+    const scene = defineScene({ id: 'act2-end', ...bare, ending: 'act2-end' });
+    expect(classifySave(state, scene)).toEqual({ kind: 'held', state });
+  });
+
+  it('a save parked on a true ending means a finished run — fresh start', () => {
+    const ash = defineScene({ id: 'act2-ash-2', ...bare, ending: 'ash' });
+    expect(classifySave(state, ash)).toEqual({ kind: 'fresh' });
+  });
+});
+
+describe('slot1.margin.json — the parked step’s events (pt2-fix-04)', () => {
+  const events: readonly EngineEvent[] = [
+    { kind: 'music.cue', cue: 'title' },
+    { kind: 'tell.visual', text: '(Something has started counting.)' },
+    { kind: 'save.autosave' },
+  ];
+
+  it('round-trips sceneId and events, creating the directory', () => {
+    const path = join(dir, '.saves', 'slot1.margin.json');
+    saveMargin('act1-end', events, path);
+    expect(loadMargin(path)).toEqual({
+      v: SAVE_SCHEMA_VERSION,
+      sceneId: 'act1-end',
+      events,
+    });
+  });
+
+  it('returns undefined for a missing file or corrupt JSON', () => {
+    expect(loadMargin(join(dir, 'nope.json'))).toBeUndefined();
+    const path = join(dir, 'slot1.margin.json');
+    writeFileSync(path, '{ not json', 'utf8');
+    expect(loadMargin(path)).toBeUndefined();
+  });
+
+  it('returns undefined for a version mismatch', () => {
+    const path = join(dir, 'slot1.margin.json');
+    const stale = { v: SAVE_SCHEMA_VERSION + 1, sceneId: 'act1-end', events: [] };
+    writeFileSync(path, JSON.stringify(stale), 'utf8');
+    expect(loadMargin(path)).toBeUndefined();
+  });
+
+  it('rejects malformed events wholesale — a bad margin replays nothing', () => {
+    const path = join(dir, 'slot1.margin.json');
+    const broken = {
+      v: SAVE_SCHEMA_VERSION,
+      sceneId: 'act1-end',
+      events: [{ kind: 'music.cue' }], // cue payload missing
+    };
+    writeFileSync(path, JSON.stringify(broken), 'utf8');
+    expect(loadMargin(path)).toBeUndefined();
+  });
+
+  it('write failure is swallowed — the margin is flavour, never run state', () => {
+    // The target path IS a directory, so the write fails; nothing throws.
+    expect(() => saveMargin('x', [], dir)).not.toThrow();
   });
 });
 

@@ -149,6 +149,12 @@ const truthsOf = (state: WorldState): readonly string[] =>
  * 'Margins, other hands' — authored lines keyed to facts Barb KNOWS
  * (witnessed, or arrived over a gossip edge). Mechanically honest: an entry
  * appears only when the knowledge does, which quietly teaches the system.
+ *
+ * The table runs the whole shipped game (pt2-fix-01: Act 2 margins — the
+ * ledger must not go dead after Day 7). Rules the table keeps: only tags
+ * Barb actually holds (witnessed, or reachable over the tam/dianne edges);
+ * never a private:* tag; nothing about the letter night — the Day-19
+ * read-back's silence on it is a ruling, and the page keeps it too.
  */
 const MARGIN_LINES: readonly { readonly tag: FactTag; readonly line: string }[] = [
   { tag: 'kept-barb-company', line: 'sat the morning out with me.' },
@@ -166,6 +172,23 @@ const MARGIN_LINES: readonly { readonly tag: FactTag; readonly line: string }[] 
   { tag: 'visited-dianne-d4', line: 'back up the hill to Dianne’s. some tabs I don’t keep.' },
   { tag: 'went-to-wharf-d4', line: 'out on the wharf in that weather. I didn’t ask.' },
   { tag: 'two-phones-laid-out', line: 'Sam put two phones on my counter. I did not write what they showed.' },
+  // ——— Act 2, Days 8–19 (pt2-fix-01) ———
+  { tag: 'helped-stockroom', line: 'walked Dianne’s shelves in off the frost. fed for it. that pot is never small.' },
+  { tag: 'went-to-sams-shed-d8', line: 'went to the boat shed because Sam asked. asked. I wrote it the day it happened.' },
+  { tag: 'went-to-clinic-d9', line: 'up to the clinic for the doctor’s morning. what’s written there is hers to keep.' },
+  { tag: 'helped-walkin-d9', line: 'shelved my walk-in for winter, every label face-out. I never asked for face-out.' },
+  { tag: 'went-to-house-d10', line: 'up the hill the morning Dianne laid the first fire of the year. wood wanted carrying.' },
+  { tag: 'went-to-shed-d10', line: 'looked in on the boat shed. the boy’s light burns past two. I keep the count here.' },
+  { tag: 'barb-inked-the-blank', line: 'a blank on the hall list, beside her dish. she let me ink it. I inked it twice.' },
+  { tag: 'signed-the-receipt-line', line: 'signed the courier’s pad herself, Dianne says. the line held till morning. that is not nothing.' },
+  { tag: 'helped-potluck-prep', line: 'gave the hall her morning the day before the doings. tables, cups, the urn.' },
+  { tag: 'potluck-verdict-defended', line: 'the boy stood at the hall, and the room moved her way. chairs and all.' },
+  { tag: 'potluck-verdict-exiled', line: 'the hall decided without one word said. I had no key to give her. I had nothing.' },
+  { tag: 'defended-sam', line: 'spoke for the boy into all that quiet. it cost the room’s comfort. worth the ink.' },
+  { tag: 'sacrificed-sam', line: 'told the boy to sit down, in the old cadence. I wrote it because it happened.' },
+  { tag: 'went-to-clinic-d17', line: 'went up to the clinic when the doctor asked. she asks once. I said it once.' },
+  { tag: 'ran-the-mail-d17', line: 'took my outgoing across in its elastic, ahead of the pickup. the mail came to no harm.' },
+  { tag: 'helped-dianne-parcels', line: 'held string while the hall’s dishes went home. every lid found its pot, Dianne says.' },
 ];
 
 const barbKnows = (state: WorldState, tag: FactTag): boolean => {

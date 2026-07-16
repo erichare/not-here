@@ -65,6 +65,34 @@ describe('axisValue', () => {
     expect(axisValue(state, 'dianne', 'trust')).toBe(AXIS_BASELINE);
   });
 
+  it("moves Barb's ledger-trust one point per witnessed kindness (pt2-fix-01)", () => {
+    // The Day-19 counsel gate reads trust:barb >= 7 = baseline 5 + two of
+    // the four barb-witnessed kindness facts. Two rungs is the minimum
+    // pattern; all four reach 9, never the clamp.
+    const twoActs = makeState([
+      { tag: 'kept-barb-company', knownBy: ['barb'] },
+      { tag: 'helped-walkin-d9', knownBy: ['barb'] },
+    ]);
+    expect(axisValue(twoActs, 'barb', 'trust')).toBe(AXIS_BASELINE + 2);
+    const allFour = makeState([
+      { tag: 'helped-barb', knownBy: ['barb'] },
+      { tag: 'helped-barb-walkin', knownBy: ['barb'] },
+      { tag: 'kept-barb-company', knownBy: ['barb'] },
+      { tag: 'helped-walkin-d9', knownBy: ['barb'] },
+    ]);
+    expect(axisValue(allFour, 'barb', 'trust')).toBe(AXIS_BASELINE + 4);
+  });
+
+  it("Barb's ledger-trust rows move nobody else, even when the fact gossips", () => {
+    // helped-barb travels the barb→tam edge in the story wiring; the copy
+    // must not move Tam's trust (knowers: ['barb']). Warmth still applies
+    // to any knower via the helped-* row.
+    const state = makeState([{ tag: 'helped-barb', knownBy: ['barb', 'tam'] }]);
+    expect(axisValue(state, 'barb', 'trust')).toBe(AXIS_BASELINE + 1);
+    expect(axisValue(state, 'tam', 'trust')).toBe(AXIS_BASELINE);
+    expect(axisValue(state, 'tam', 'warmth')).toBe(AXIS_BASELINE + 1);
+  });
+
   it('applies the ECHO paradox: memory-taken cools warmth, raises trust and fear — for the character it is about', () => {
     const state = makeState([
       { tag: 'memory-taken', about: 'barb', knownBy: ['barb', 'priya'] },

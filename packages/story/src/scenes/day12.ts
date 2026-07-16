@@ -28,6 +28,13 @@
  * emits (foghorn-312 on horn-on; music.stop keeps horn-stopped nights
  * cueless); one gated diegetic decay tell per stat, fresh tonight.
  *
+ * pt2-fix-01: the horn's bill arrives onstage. This is the act's one fixed,
+ * track-gated Wade beat — every route passes through prep eve, so a player
+ * who never chose a Wade slot still meets what the nightly feeding costs:
+ * the half plate, the coat, Barb re-inking HIS line in the tab book. Gated
+ * hornOn only; on horn-stopped routes there is no bill, and the beat's
+ * absence is the silence keeping its side of it.
+ *
  * Flags owned: 'd12:carried-tables', 'd12:laid-cutlery', 'd12:worked-through',
  * 'today:fed' (offset — the survivability rule's Day-12 meal), 'knows-truth'
  * + 'early-truth' (set on the counter route only). Facts owned:
@@ -217,6 +224,16 @@ const evening = defineScene({
         text: 'The Kettle takes the prep crowd in shifts and feeds it early. Tomorrow sits in the room like extra furniture: dishes get discussed, ovens negotiated, and the crib board stays in its drawer a second night running.',
       },
       { text: '@line:barb:greeting-d12' },
+      // ——— pt2-fix-01: the bill, at supper. A man is paying for the nights;
+      // here is what paying has started to look like, in a plate and in ink.
+      {
+        text: 'Wade is in at the corner stool, hat on his knee — the night before anything the town does together, he comes up and eats where the town can count him. Barb lands the usual. He gets through half of it, neat about the leaving, and his coat has taken to hanging off him the way coats hang on pegs.',
+        when: hornOn,
+      },
+      {
+        text: 'He pays exact and goes early, down toward the shed and the small hours it keeps. Behind him Barb slides the tab book off its shelf, finds his line among the day’s, and goes over it with the pen, unhurried, pressing the letters back down. She doesn’t do it for the crib players.',
+        when: hornOn,
+      },
       {
         text: 'Down the hill the boat shed window is lit. It was lit when you came in; it is lit at eight, and at nine, a small yellow tooth in all that fog. The crib players find the window between hands and then find their coffee again. Nobody has said Sam’s name all evening. The town can say a name every minute without once using it.',
       },

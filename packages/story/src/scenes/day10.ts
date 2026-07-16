@@ -15,7 +15,10 @@
  *
  * Evening: without-you retellings for both missed slots (spike-fomo rules;
  * each motif surfaces faint and detuned, its visual twin IN THE PROSE of
- * the same scene). Night 10: the canonical decay block (act2-shared
+ * the same scene — 'a breath flat' is this night's hearing of it).
+ * pt2-fix-01: the setting line branches on 'd10:opened-tin' — the same
+ * warmth reads as ritual performed AT you once you've seen inside the tin.
+ * Night 10: the canonical decay block (act2-shared
  * NIGHT_DECAY — never re-authored here); foghorn-312 only on horn-on
  * nights via a conditional emit; horn-stopped nights emit music.stop so
  * nothing loops under the silence.
@@ -446,8 +449,15 @@ const evening = defineScene({
   prose: {
     kind: 'inline',
     paragraphs: [
+      // pt2-fix-01: the evening bends under the day it follows. Same room,
+      // two hearings — the tin decides which one you walked into.
       {
         text: 'The Kettle at supper: the crib board, two orchard crews, the windows sweated soft. Moose holds his post at the door and watches the lot for the only arrival he counts.',
+        when: { op: 'not', of: openedTin },
+      },
+      {
+        text: 'The Kettle at supper: the crib board, two crews, the windows sweated soft, Moose on his post at the door. Every kindness in the room arrives on time and correctly addressed. You have had the lid off the tin, and you can no longer tell what is for you from what is at you.',
+        when: openedTin,
       },
       { text: '@line:barb:greeting-d10' },
       // ——— Without-you: the house. Absence hands you the ritual's shape.
@@ -456,7 +466,7 @@ const evening = defineScene({
         when: missedHouse,
       },
       {
-        text: 'Under the room, a few notes in a music-box register go by a shade flat — once, and once again, and not a third time. The crib pegs click on through it.',
+        text: 'Under the crib pegs, a few notes in a music-box register wind past, the spring gone slack — a breath flat, slower each turn — and the pegs click on through what’s left.',
         when: missedHouse,
       },
       // ——— Without-you: the hall. Absence hands you the blank anyway.
@@ -465,7 +475,7 @@ const evening = defineScene({
         when: missedHall,
       },
       {
-        text: 'Behind the counter talk, three upright-piano notes step the wrong way, a shade flat, twice through, and quit. Nobody in the diner is playing anything.',
+        text: 'Behind the counter talk, three upright-piano notes step the wrong way, a breath flat, and stop stepping. Nobody in the diner is playing anything.',
         when: missedHall,
       },
       // ——— Without-you: the shed. Absence hands you the escalation.
@@ -474,7 +484,7 @@ const evening = defineScene({
         when: missedShed,
       },
       {
-        text: 'Under the crib pegs, faint, a whistled phrase — the horn’s fifth bar at a boy’s tempo — a quarter-tone flat. It surfaces twice and is gone.',
+        text: 'Threaded through the furnace note, the horn’s fifth bar at a boy’s tempo, whistled by no one — a breath flat. It gets one pass tonight and doesn’t ask for two.',
         when: missedShed,
       },
       // ——— The blank, come down the hill for the buns column.

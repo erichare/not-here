@@ -322,6 +322,18 @@ describe('day 8 — the wharf split and the wall', () => {
     const id = factIdOf(run.state, 'asked-sams-map');
     expect(run.state.knownBy.sam).toContain(id);
   });
+
+  it('pt2-fix-02: the folder’s clock agrees with Night 6 — eleven files, stopped Tuesday', () => {
+    const run = play('d8-morning', ['to-shed', 'ask-the-folder'], onTrack('horn-on'));
+    const prose = viewOf(run, 'd8-shed-2').paragraphs.join('\n');
+    expect(prose).toContain('Eleven since you walked in — I stopped Tuesday.');
+    expect(prose).not.toContain('October');
+    expect(prose).not.toContain('August');
+  });
+
+  it('pt2-fix-03: the horn keeps the fifth bar now — the cost, rehearsed in passing', () => {
+    expect(rawText(sceneById('d8-wharf-on'))).toContain('what the horn has, he only visits');
+  });
 });
 
 describe('day 8 evening — retellings and detunes', () => {
@@ -477,9 +489,16 @@ describe('day 9 evening — retellings and detunes', () => {
     const run = play('d9-morning', [...rideRoute]);
     const evening = viewOf(run, 'd9-evening').paragraphs.join('\n');
     expect(evening).toContain('held your ten o’clock till eleven');
-    expect(evening).toContain('a shade flat');
+    expect(evening).toContain('a hair under true'); // pt2-fix-01: night 9's own image
     expect(run.events.some((e) => e.kind === 'music.detune' && e.pattern === 'priya')).toBe(true);
     expect(run.events.some((e) => e.kind === 'tell.visual')).toBe(false);
+  });
+
+  it('pt2-fix-01: the trough evening closes early, and briefly', () => {
+    const run = play('d9-morning', [...rideRoute]);
+    const evening = viewOf(run, 'd9-evening').paragraphs.join('\n');
+    expect(evening).toContain('an hour shy of itself');
+    expect(evening).not.toContain('a shade flat'); // night 8's image stays night 8's
   });
 
   it('missing the ride: Tam asked after Sam — and the engine idles under the room', () => {

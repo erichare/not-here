@@ -10,7 +10,8 @@
  * letter-burned: the lighter-fog day. One beat at the stove tin if the
  * player walks up to Dianne's — the lid doesn't sit flush anymore. Nothing
  * else changes, which is the horror of it. The never-found route gets the
- * same plain day without the tin's new fact.
+ * same plain day with ONE countdown pulse of its own (pt2-fix-03) — a beat
+ * that pays nothing forward but keeps the act's last days taut.
  *
  * Evening (all routes): Dianne at the store wrapping the hall's dishes to
  * go back. The knowing route watches one unbroken domestic minute and
@@ -168,6 +169,15 @@ const fogDay = defineScene({
         text: 'The fog is lighter this morning. You tell yourself that means something. You get most of the way to believing it, which is a distance you are getting good at.',
         when: letterBurned,
       },
+      // pt2-fix-03: the never-found route's one countdown pulse. It pays
+      // nothing forward; it only keeps the last days of the act taut.
+      {
+        text: 'At the General, mid-morning, Dianne weighs a parcel and stops — hand flat on the till drawer, not opening it, resting, the way you’d rest a hand on a gate you were deciding about. On the corkboard the bus card’s tape has been pressed down again. Fresh thumb-shine on old yellow.',
+        when: {
+          op: 'all',
+          of: [{ op: 'not', of: knowsTruth }, { op: 'not', of: letterBurned }],
+        },
+      },
     ],
   },
   choices: [
@@ -179,8 +189,30 @@ const fogDay = defineScene({
         { op: 'flag.set', key: 'd18:kettle-day', value: true },
         { op: 'flag.set', key: 'today:fed', value: true },
       ],
-      goto: 'd18-evening',
+      goto: 'd18-stove',
     },
+  ],
+});
+
+// pt2-fix-04: the stove side of the day gets its minute on screen — the
+// other branch has a whole house; this one had a bare goto. Flags stay on
+// the choice above exactly as authored (d18:kettle-day is Act 3's).
+const stoveDay = defineScene({
+  id: 'd18-stove',
+  slot: 'morning',
+  prose: {
+    kind: 'inline',
+    paragraphs: [
+      {
+        text: 'You keep the stove side of the day: the flat-top’s weather, the pie case’s slow arithmetic, coffee arriving on its own schedule. The Kettle works around you the way water works around a piling, which is one of the ways this town says stay.',
+      },
+      {
+        text: 'In the slack after lunch Barb brings the register up, goes over one line — yesterday’s, not today’s — until the nib bites, and squares the book away without a word spent on it.',
+      },
+    ],
+  },
+  choices: [
+    { id: 'let-the-evening-find-you', label: 'Let the evening find you there.', goto: 'd18-evening' },
   ],
 });
 
@@ -195,8 +227,16 @@ const house = defineScene({
         text: 'You knock now, at this door. It is just what the door is, these days. Dianne’s voice carries you in.',
         when: locksHouse,
       },
+      // pt2-fix-05: the default line narrates the meal landing; the
+      // refused-first-meal variant grants the refusal its history — Barb
+      // witnessed the Night-1 plate, and the barb↔dianne edge carries it.
       {
         text: 'The house holds its morning: the stove going, bread under a towel, the radio talking to itself about the roads. She feeds you at the table without a menu of it — soup, the end of the loaf, “eat that or it travels.”',
+        when: { op: 'not', of: { op: 'fact.exists', tag: 'refused-first-meal' } },
+      },
+      {
+        text: 'The house holds its morning: the stove going, bread under a towel, the radio talking to itself about the roads. Soup lands at your place, and the end of the loaf. “Eat that or it travels.” She doesn’t stay to referee the plate — a courtesy from a kitchen that has heard about the first one.',
+        when: { op: 'fact.exists', tag: 'refused-first-meal' },
       },
       {
         text: 'On the shelf above the stove the tobacco tin sits where it has sat seven years. The lid doesn’t sit flush anymore. Nothing else in the kitchen has changed, which is the size of it.',
@@ -303,6 +343,7 @@ export const DAY18_SCENES: readonly Scene[] = [
   corkboard,
   wharf,
   fogDay,
+  stoveDay,
   house,
   evening,
   night,

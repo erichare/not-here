@@ -203,6 +203,29 @@ describe('day 12 — the table gate and the temperature reads', () => {
   });
 });
 
+describe('day 12 — the bill comes up the hill (pt2-fix-01)', () => {
+  const TO_EVENING = ['lay-cutlery', 'work-through', 'walk-down'] as const;
+
+  it('horn-on: Wade is onstage at the Kettle, visibly less than he was', () => {
+    const run = play('d12-morning', [...TO_EVENING], hornOn);
+    const view = viewOf(run, 'd12-evening').paragraphs.join('\n');
+    expect(view).toContain('hanging off him the way coats hang on pegs');
+    expect(view).toContain('pressing the letters back down');
+    expect(view).toContain('She doesn’t do it for the crib players.');
+  });
+
+  it('horn-stopped: no bill — the beat is gated out whole', () => {
+    const run = play('d12-morning', [...TO_EVENING], hornStopped);
+    const view = viewOf(run, 'd12-evening').paragraphs.join('\n');
+    expect(view).not.toContain('hanging off him');
+    expect(view).not.toContain('pressing the letters back down');
+  });
+
+  it('the beat is fixed on its track: no hub choice can route around prep eve', () => {
+    expect(sceneById('d12-prep-2').choices.map((c) => c.goto)).toEqual(['d12-evening']);
+  });
+});
+
 describe('day 12 — the early-truth counter route', () => {
   const earned = (s: WorldState): WorldState => ({
     ...s,

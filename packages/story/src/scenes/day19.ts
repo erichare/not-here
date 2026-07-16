@@ -42,6 +42,17 @@ import {
 
 const letterBurned: Cond = { op: 'flag', key: 'letter-burned' };
 const notExiled: Cond = { op: 'not', of: exiledVerdict };
+/**
+ * The Long Winter's door (pt2-fix-01). Arithmetic: trust:barb starts at the
+ * 5 baseline and moves ONLY on kindnesses Barb witnessed herself — axes.ts
+ * gives +1 each, knowers ['barb'], to helped-barb (d2), helped-barb-walkin
+ * (d4), kept-barb-company (d7) and helped-walkin-d9 (d9). 5 + 2 = 7: the
+ * seed needs a PATTERN of two or more such acts across the run, never one
+ * click; a cold run holds 5 exactly (no gossip edge feeds barb any
+ * trust-weighted tag, and every authored 'truth-told' is priya's or
+ * sam's). All four rungs land days before this scene, so the derived gate
+ * in the evening's onEnter reads them settled — no same-day timing hole.
+ */
 const barbTrustHigh: Cond = { op: 'derived.gte', key: 'trust:barb', value: 7 };
 const askedNameColumn: Cond = { op: 'fact.exists', tag: 'asked-barb-name-column' };
 
@@ -154,6 +165,17 @@ const evening = defineScene({
       {
         text: 'After close, a knock at the ticket-office door: Barb, down the hill in the dark with the register under her coat, like contraband, like a casserole. She sets it on the stove-side table and takes the good chair without being offered it, which is how you know she means to stay.',
         when: exiledVerdict,
+      },
+      // pt2-fix-06: the morning fork leaves a trace. today:fed is set only
+      // by the morning's first option and nothing else touches it before
+      // evening, so it carries the fork without a new flag.
+      {
+        text: '“You ate today, at least,” she says, setting the book square. “Makes a better entry.”',
+        when: { op: 'flag', key: 'today:fed' },
+      },
+      {
+        text: '“Let the day spend itself, did you,” she says, setting the book square. “It’ll show in the entry.”',
+        when: { op: 'not', of: { op: 'flag', key: 'today:fed' } },
       },
       { text: '“Right,” she says, and opens it to November. “You’ll hear it in my order, not yours.”' },
       {
