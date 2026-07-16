@@ -82,6 +82,24 @@ const enterScene = (
   };
 };
 
+/**
+ * Rebuild the view for the scene the state is already parked on WITHOUT
+ * re-applying onEnter effects (pt2-fix-03). advance(…, {kind:'enter'}) runs
+ * scene.onEnter, which is right on first entry but double-applies decay
+ * blocks, fact appends, and meter moves when a frontend re-enters a loaded
+ * save — the save already holds the post-onEnter state. State passes through
+ * untouched; the scene cue is re-emitted so the frontend can restore the
+ * score. Never emits save.autosave: resuming must not trigger a save.
+ */
+export const resumeScene = (content: StoryContent, state: WorldState): StepResult => {
+  const scene = sceneOrThrow(content, state.sceneId);
+  return {
+    state,
+    view: buildView(content, scene, state),
+    events: scene.cue ? [{ kind: 'music.cue', cue: scene.cue }] : [],
+  };
+};
+
 export const advance = (
   content: StoryContent,
   state: WorldState,

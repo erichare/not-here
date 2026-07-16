@@ -18,7 +18,7 @@ import {
 import { buildContent, OPENING_SCENE } from '@not-here/story';
 import { createAudioPlayer } from './audio.ts';
 import { cueCaptionLine } from './cues.ts';
-import { clearSave, persistSave, resumableSave } from './save.ts';
+import { clearSave, persistSave, resumableSave, resumeStep, saveMargin } from './save.ts';
 import { createUi, type SceneModel, type Ui } from './ui.ts';
 import './styles.css';
 
@@ -59,6 +59,9 @@ const run = (root: HTMLElement): void => {
     state = result.state;
     // Generous autosave: every step lands in storage, not just endings.
     persistSave(storage, result.state);
+    // The step's events ride along so a resumed screen can replay its
+    // margin lines complete (pt2-fix-04). Non-fatal by design.
+    saveMargin(storage, result.state.sceneId, result.events);
     for (const event of result.events) handleEvent(event);
     const model: SceneModel = {
       sceneId: result.state.sceneId,
@@ -106,8 +109,15 @@ const run = (root: HTMLElement): void => {
       return;
     }
     const saved = resumableSave(storage, content.scenes);
-    if (saved !== null) state = saved;
-    enter();
+    if (saved === null) {
+      // The save vanished between the title card and the click.
+      enter();
+      return;
+    }
+    // pt2-fix-03: the save already holds the post-onEnter state — a
+    // re-enter here would run nightly decay twice and swap state-keyed
+    // prose variants between the pre-save render and this one.
+    applyStep(resumeStep(content, saved, storage));
   });
 };
 

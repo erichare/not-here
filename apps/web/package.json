@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "echo 'Phase 1'",
+    "test": "vitest run --passWithNoTests",
     "dev": "vite",
     "build": "vite build"
   },
