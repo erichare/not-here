@@ -18,7 +18,14 @@ import {
 import { buildContent, OPENING_SCENE } from '@not-here/story';
 import { createAudioPlayer } from './audio.ts';
 import { cueCaptionLine } from './cues.ts';
-import { clearSave, persistSave, resumableSave, resumeStep, saveMargin } from './save.ts';
+import {
+  ACT_BOUNDARY_ENDINGS,
+  classifyLaunch,
+  clearSave,
+  persistSave,
+  resumeStep,
+  saveMargin,
+} from './save.ts';
 import { createUi, type SceneModel, type Ui } from './ui.ts';
 import './styles.css';
 
@@ -55,25 +62,33 @@ const run = (root: HTMLElement): void => {
     }
   };
 
-  const applyStep = (result: StepResult): void => {
+  /** Render a step without touching storage — the held card's path. */
+  const renderStep = (result: StepResult): void => {
     state = result.state;
+    for (const event of result.events) handleEvent(event);
+    const ending = result.view.ending;
+    const model: SceneModel = {
+      sceneId: result.state.sceneId,
+      // Ending scenes carry no DAY header — the act is over, not a ninth day.
+      header: ending === undefined ? headerFor(result.state) : '',
+      paragraphs: result.view.paragraphs,
+      choices: result.view.choices,
+      // Barb's book reads the live world, not a stale save.
+      world: result.state,
+      ...(ending !== undefined ? { ending } : {}),
+      // An act-boundary card is a held place (pt2-fix-01): no reset offer.
+      ...(ending !== undefined && ACT_BOUNDARY_ENDINGS.has(ending) ? { held: true } : {}),
+    };
+    ui.renderScene(model);
+  };
+
+  const applyStep = (result: StepResult): void => {
     // Generous autosave: every step lands in storage, not just endings.
     persistSave(storage, result.state);
     // The step's events ride along so a resumed screen can replay its
     // margin lines complete (pt2-fix-04). Non-fatal by design.
     saveMargin(storage, result.state.sceneId, result.events);
-    for (const event of result.events) handleEvent(event);
-    const model: SceneModel = {
-      sceneId: result.state.sceneId,
-      // Ending scenes carry no DAY header — the act is over, not a ninth day.
-      header: result.view.ending === undefined ? headerFor(result.state) : '',
-      paragraphs: result.view.paragraphs,
-      choices: result.view.choices,
-      // Barb's book reads the live world, not a stale save.
-      world: result.state,
-      ...(result.view.ending !== undefined ? { ending: result.view.ending } : {}),
-    };
-    ui.renderScene(model);
+    renderStep(result);
   };
 
   const enter = (): void => {
@@ -98,9 +113,10 @@ const run = (root: HTMLElement): void => {
 
   const ui: Ui = createUi(root, { onChoose: choose, onNewGame: newGame });
 
-  // Mid-run saves resume; a save parked on an ending is a finished run
-  // (mirrors the CLI — resume must never trap the player on the act card).
-  ui.showTitle(resumableSave(storage, content.scenes) !== null, (fresh) => {
+  // Mid-run saves resume; a save parked on a true ending is a finished run;
+  // a save parked on an act boundary is a HELD place (pt2-fix-01) — Act 3
+  // inherits its flags, so nothing on that path may clear or overwrite it.
+  ui.showTitle(classifyLaunch(storage, content.scenes).kind, (fresh) => {
     void audio.start().catch(() => {
       // Audio stays silent (tier-3); the story does not.
     });
@@ -108,8 +124,9 @@ const run = (root: HTMLElement): void => {
       newGame();
       return;
     }
-    const saved = resumableSave(storage, content.scenes);
-    if (saved === null) {
+    // Re-classify at click time — the slot may have changed under the card.
+    const launch = classifyLaunch(storage, content.scenes);
+    if (launch.kind === 'fresh') {
       // The save vanished between the title card and the click.
       enter();
       return;
@@ -117,7 +134,14 @@ const run = (root: HTMLElement): void => {
     // pt2-fix-03: the save already holds the post-onEnter state — a
     // re-enter here would run nightly decay twice and swap state-keyed
     // prose variants between the pre-save render and this one.
-    applyStep(resumeStep(content, saved, storage));
+    const step = resumeStep(content, launch.state, storage);
+    if (launch.kind === 'held') {
+      // pt2-fix-01: re-show the act card and leave storage exactly as it
+      // was — no save, no margin rewrite, no fresh Day 1.
+      renderStep(step);
+      return;
+    }
+    applyStep(step);
   });
 };
 

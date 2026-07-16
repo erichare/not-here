@@ -86,26 +86,51 @@ export const clearSave = (storage: SaveStorage): void => {
 
 export const hasSave = (storage: SaveStorage): boolean => loadSave(storage) !== null;
 
-/** The slice of scene data resume needs: does the id exist, is it an end. */
+// ——— Launch classification (pt2-fix-01) ———————————————————————————————
+
+/** The slice of scene data launch needs: does the id exist, is it an end. */
 export interface ResumableScene {
   readonly ending?: string;
 }
 
 /**
- * The save worth resuming, or null. Mirrors the CLI: a save parked on an
- * ending is a finished run (never trap resume on the act card), and a save
- * referencing a scene this content no longer has (content patch) starts
- * fresh rather than crashing the enter step.
+ * Endings that PARK the run rather than finish it: the act card is a
+ * TO-BE-CONTINUED marker and the next act inherits the save's flags.
+ * True endings (Act 1 hard exits, the Ash ending) are not listed — a save
+ * parked on one means a finished run and a fresh start.
  */
-export const resumableSave = (
+export const ACT_BOUNDARY_ENDINGS: ReadonlySet<string> = new Set(['act2-end']);
+
+export type Launch =
+  | { readonly kind: 'fresh' }
+  | { readonly kind: 'resume'; readonly state: WorldState }
+  /** Parked on an act boundary: re-show the card, never clear storage. */
+  | { readonly kind: 'held'; readonly state: WorldState };
+
+/** What a loaded save means for this launch (pt2-fix-01). Mirrors the CLI. */
+export const classifySave = (
+  loaded: WorldState | null,
+  scene: ResumableScene | undefined,
+): Launch => {
+  if (loaded === null || scene === undefined) return { kind: 'fresh' };
+  if (scene.ending === undefined) return { kind: 'resume', state: loaded };
+  return ACT_BOUNDARY_ENDINGS.has(scene.ending)
+    ? { kind: 'held', state: loaded }
+    : { kind: 'fresh' };
+};
+
+/**
+ * classifySave over the stored slot — the launch the title screen acts on.
+ * A save referencing a scene this content no longer has (content patch)
+ * starts fresh rather than crashing the enter step. Read-only: classifying
+ * must never write or clear the slot.
+ */
+export const classifyLaunch = (
   storage: SaveStorage,
   scenes: ReadonlyMap<string, ResumableScene>,
-): WorldState | null => {
+): Launch => {
   const saved = loadSave(storage);
-  if (saved === null) return null;
-  const scene = scenes.get(saved.sceneId);
-  if (scene === undefined || scene.ending !== undefined) return null;
-  return saved;
+  return classifySave(saved, saved === null ? undefined : scenes.get(saved.sceneId));
 };
 
 // ——— Margin sidecar (pt2-fix-04) ——————————————————————————————————————

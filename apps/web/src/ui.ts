@@ -32,6 +32,8 @@ export interface SceneModel {
   readonly paragraphs: readonly string[];
   readonly choices: readonly ChoiceModel[];
   readonly ending?: string;
+  /** Act-boundary card (pt2-fix-01): the run is parked, not finished. */
+  readonly held?: boolean;
   /** Current world — Barb's book reads it; absent means no book this frame. */
   readonly world?: WorldState;
 }
@@ -41,8 +43,11 @@ export interface UiCallbacks {
   readonly onNewGame: () => void;
 }
 
+/** What the stored slot means for the title screen (pt2-fix-01). */
+export type TitleMode = 'fresh' | 'resume' | 'held';
+
 export interface Ui {
-  readonly showTitle: (canResume: boolean, onBegin: (fresh: boolean) => void) => void;
+  readonly showTitle: (mode: TitleMode, onBegin: (fresh: boolean) => void) => void;
   readonly renderScene: (model: SceneModel) => void;
   readonly addCaption: (text: string) => void;
 }
@@ -76,28 +81,37 @@ const buildParagraph = (text: string): { p: HTMLParagraphElement; words: HTMLSpa
   return { p, words };
 };
 
+/** The held-place card's one line — spoken in the game's register. */
+const HELD_LINE = 'Your November is kept. Act Three is not written yet.';
+
+const TITLE_COPY: Record<TitleMode, { readonly aria: string; readonly hint: string }> = {
+  fresh: {
+    aria: 'The lamp is lit. Begin.',
+    hint: 'the lamp is lit — click the window',
+  },
+  resume: {
+    aria: 'The lamp is lit. Resume your ledger.',
+    hint: 'the lamp is still lit — return to the ledger',
+  },
+  held: {
+    aria: 'The lamp is lit. Your November is kept.',
+    hint: 'the lamp is still lit — your November is kept',
+  },
+};
+
 const buildTitleScreen = (
-  canResume: boolean,
+  mode: TitleMode,
   onBegin: (fresh: boolean) => void,
 ): HTMLElement => {
   const screen = el('section', 'title-screen');
   const name = el('h1', 'title-name', 'NOT HERE');
   const windowButton = el('button', 'lit-window');
   windowButton.type = 'button';
-  windowButton.setAttribute(
-    'aria-label',
-    canResume ? 'The lamp is lit. Resume your ledger.' : 'The lamp is lit. Begin.',
-  );
+  windowButton.setAttribute('aria-label', TITLE_COPY[mode].aria);
   const panes = el('span', 'panes');
   panes.setAttribute('aria-hidden', 'true');
   windowButton.append(panes);
-  const hint = el(
-    'p',
-    'title-hint',
-    canResume
-      ? 'the lamp is still lit — return to the ledger'
-      : 'the lamp is lit — click the window',
-  );
+  const hint = el('p', 'title-hint', TITLE_COPY[mode].hint);
   screen.append(name, windowButton, hint);
   windowButton.addEventListener(
     'click',
@@ -105,12 +119,14 @@ const buildTitleScreen = (
       // Don't let the starting click bubble into the first scene's
       // typewriter-skip listener.
       event.stopPropagation();
-      onBegin(!canResume);
+      onBegin(mode === 'fresh');
     },
     { once: true },
   );
 
-  if (canResume) {
+  // pt2-fix-01: a held place offers no fresh start — nothing on this
+  // screen may clear the storage Act Three inherits.
+  if (mode === 'resume') {
     const fresh = el('button', 'new-game-link', 'begin a new ledger instead');
     fresh.type = 'button';
     fresh.addEventListener(
@@ -207,25 +223,34 @@ export const createUi = (root: HTMLElement, callbacks: UiCallbacks): Ui => {
     }
     if (model.ending !== undefined) {
       const item = el('li', 'choice-line');
-      const again = el('button', 'choice', '— Begin the ledger again.');
-      again.type = 'button';
-      again.addEventListener('click', (event) => {
-        event.stopPropagation();
-        callbacks.onNewGame();
-      });
-      item.append(el('p', 'ending-mark', '— the ledger closes here —'), again);
+      if (model.held === true) {
+        // pt2-fix-01: an act boundary is a held place, not a close — no
+        // reset offer; the next act inherits this ledger.
+        item.append(
+          el('p', 'ending-mark', '— the ledger waits here —'),
+          el('p', 'held-line', HELD_LINE),
+        );
+      } else {
+        const again = el('button', 'choice', '— Begin the ledger again.');
+        again.type = 'button';
+        again.addEventListener('click', (event) => {
+          event.stopPropagation();
+          callbacks.onNewGame();
+        });
+        item.append(el('p', 'ending-mark', '— the ledger closes here —'), again);
+      }
       list.append(item);
     }
     return list;
   };
 
   return {
-    showTitle: (canResume, onBegin) => {
+    showTitle: (mode, onBegin) => {
       cancelReveal?.();
       book.retire();
       page.className = 'page title-page';
       page.removeAttribute('data-scene');
-      page.replaceChildren(buildTitleScreen(canResume, onBegin));
+      page.replaceChildren(buildTitleScreen(mode, onBegin));
     },
 
     renderScene: (model) => {
