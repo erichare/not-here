@@ -249,6 +249,13 @@ button.choice:focus-visible {
   letter-spacing: 0.2em;
 }
 
+/* The held-place card's one line (pt2-fix-01): kept, not closed. */
+.held-line {
+  margin: 0 0 1rem;
+  font-style: italic;
+  color: var(--mist-muted);
+}
+
 /* ---- captions (audio fallbacks, visual tells) ---- */
 
 .captions {

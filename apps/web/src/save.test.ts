@@ -11,13 +11,14 @@ import {
 } from '@not-here/engine';
 import { buildContent, OPENING_SCENE } from '@not-here/story';
 import {
+  classifyLaunch,
+  classifySave,
   clearSave,
   hasSave,
   loadMargin,
   loadSave,
   MARGIN_KEY,
   persistSave,
-  resumableSave,
   resumeStep,
   SAVE_KEY,
   saveMargin,
@@ -119,49 +120,82 @@ describe('save slot', () => {
   });
 });
 
-describe('resumableSave', () => {
+describe('classifySave — act boundaries hold places (pt2-fix-01)', () => {
+  const state = initialState(1971, 'act2-end');
+
+  it('no save, or a save on an unknown scene, means a fresh start', () => {
+    expect(classifySave(null, undefined)).toEqual({ kind: 'fresh' });
+    expect(classifySave(state, undefined)).toEqual({ kind: 'fresh' });
+  });
+
+  it('a save parked mid-run resumes', () => {
+    expect(classifySave(state, {})).toEqual({ kind: 'resume', state });
+  });
+
+  it('a save parked on the Act 2 boundary is held, never discarded', () => {
+    expect(classifySave(state, { ending: 'act2-end' })).toEqual({ kind: 'held', state });
+  });
+
+  it('a save parked on a true ending means a finished run — fresh start', () => {
+    expect(classifySave(state, { ending: 'ash' })).toEqual({ kind: 'fresh' });
+  });
+});
+
+describe('classifyLaunch — the stored slot through classifySave', () => {
   const scenes: ReadonlyMap<string, ResumableScene> = new Map([
     ['n1-room', {}],
     ['act2-end', { ending: 'act2-end' }],
+    ['act2-ash-2', { ending: 'ash' }],
   ]);
 
-  it('returns a mid-run save', () => {
+  it('resumes a mid-run save', () => {
     const storage = memoryStorage();
     const midRun = initialState(3, 'n1-room');
     persistSave(storage, midRun);
-    expect(resumableSave(storage, scenes)).toEqual(midRun);
+    expect(classifyLaunch(storage, scenes)).toEqual({ kind: 'resume', state: midRun });
   });
 
-  it('treats a save parked on an ending as a finished run', () => {
+  it('holds a save parked on the Act 2 boundary — storage untouched', () => {
     const storage = memoryStorage();
-    persistSave(storage, initialState(3, 'act2-end'));
-    expect(resumableSave(storage, scenes)).toBeNull();
+    const parked = initialState(3, 'act2-end');
+    persistSave(storage, parked);
+    expect(classifyLaunch(storage, scenes)).toEqual({ kind: 'held', state: parked });
+    // Classifying is read-only: the slot Act 3 inherits is still there.
+    expect(loadSave(storage)).toEqual(parked);
+  });
+
+  it('a save parked on the Ash ending is a finished run — fresh start', () => {
+    const storage = memoryStorage();
+    persistSave(storage, initialState(3, 'act2-ash-2'));
+    expect(classifyLaunch(storage, scenes)).toEqual({ kind: 'fresh' });
   });
 
   it('starts fresh when the saved scene no longer exists', () => {
     const storage = memoryStorage();
     persistSave(storage, initialState(3, 'gone-in-a-patch'));
-    expect(resumableSave(storage, scenes)).toBeNull();
+    expect(classifyLaunch(storage, scenes)).toEqual({ kind: 'fresh' });
   });
 
-  it('is null with no save at all', () => {
-    expect(resumableSave(memoryStorage(), scenes)).toBeNull();
+  it('is fresh with no save at all', () => {
+    expect(classifyLaunch(memoryStorage(), scenes)).toEqual({ kind: 'fresh' });
   });
 
-  it('accepts the real content map and a real ending scene', () => {
+  it('accepts the real content map — act2-end holds, act2-ash-2 frees the slot', () => {
     const content = buildContent();
     const storage = memoryStorage();
     persistSave(storage, initialState(9, 'act2-end'));
-    expect(resumableSave(storage, content.scenes)).toBeNull();
+    expect(classifyLaunch(storage, content.scenes).kind).toBe('held');
+    persistSave(storage, initialState(9, 'act2-ash-2'));
+    expect(classifyLaunch(storage, content.scenes).kind).toBe('fresh');
     persistSave(storage, initialState(9, OPENING_SCENE));
-    expect(resumableSave(storage, content.scenes)).not.toBeNull();
+    expect(classifyLaunch(storage, content.scenes).kind).toBe('resume');
   });
 
   it('the unsealed act1-end card is mid-run now — a save parked there resumes', () => {
     const content = buildContent();
     const storage = memoryStorage();
     persistSave(storage, initialState(9, 'act1-end'));
-    expect(resumableSave(storage, content.scenes)).not.toBeNull();
+    expect(classifyLaunch(storage, content.scenes).kind).toBe('resume');
   });
 });
 
@@ -343,9 +377,9 @@ describe('resumeStep — save/resume equals continuous play (pt2-fix-03)', () =>
     const entered = advance(content, initialState(1971, OPENING_SCENE), { kind: 'enter' });
     persistSave(storage, entered.state);
     saveMargin(storage, entered.state.sceneId, entered.events);
-    const saved = resumableSave(storage, content.scenes);
-    if (saved === null) throw new Error('expected a resumable save');
-    const resumed = resumeStep(content, saved, storage);
+    const launch = classifyLaunch(storage, content.scenes);
+    if (launch.kind !== 'resume') throw new Error('expected a resumable save');
+    const resumed = resumeStep(content, launch.state, storage);
     expect(resumed.state).toEqual(entered.state);
     expect(resumed.view).toEqual(entered.view);
     expect(resumed.events).toEqual(entered.events);
