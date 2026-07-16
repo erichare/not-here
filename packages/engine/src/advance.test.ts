@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { advance, type EngineInput, type StepResult, type StoryContent } from './advance.ts';
+import {
+  advance,
+  resumeScene,
+  type EngineInput,
+  type StepResult,
+  type StoryContent,
+} from './advance.ts';
 import type { Scene } from './scene.ts';
 import { defineScene } from './scene.ts';
 import { initialState, type WorldState } from './state.ts';
@@ -215,6 +221,68 @@ describe('advance — determinism', () => {
     expect(second).toEqual(first);
     expect(second[second.length - 1]?.state).toEqual(first[first.length - 1]?.state);
     expect(first[first.length - 1]?.view.ending).toBe('the-fog-takes-you');
+  });
+});
+
+describe('resumeScene — save/resume equals continuous play (pt2-fix-03)', () => {
+  it('does not re-apply onEnter effects to the loaded state', () => {
+    const entered = advance(content, start(), { kind: 'enter' });
+    expect(entered.state.staticMeter).toBe(15);
+    const resumed = resumeScene(content, entered.state);
+    // A re-enter would move the meter again (to 20); resume must not.
+    expect(resumed.state).toBe(entered.state);
+    expect(resumed.state.staticMeter).toBe(15);
+  });
+
+  it('a saved-and-reloaded state resumes to the exact continuous state and view', () => {
+    const continuous = advance(content, start(), { kind: 'choose', choiceId: 'walk' });
+    // Round-trip through JSON — what a frontend save file actually does.
+    const loaded = JSON.parse(JSON.stringify(continuous.state)) as WorldState;
+    const resumed = resumeScene(content, loaded);
+    expect(resumed.state).toEqual(continuous.state);
+    expect(resumed.view).toEqual(continuous.view);
+  });
+
+  it('a state-dependent view stays on the continuous variant across resume', () => {
+    // Prose keyed on the meter — the shape of the night-scene variant swap:
+    // enter moves the meter once; a resume that re-entered would swap lines.
+    const variantContent: StoryContent = {
+      ...content,
+      realizeProse: (_scene, state) => [
+        state.staticMeter >= 20 ? 'The margin rots.' : 'The margin holds.',
+      ],
+    };
+    const entered = advance(variantContent, start(), { kind: 'enter' });
+    expect(entered.view.paragraphs).toEqual(['The margin holds.']);
+    const reentered = advance(variantContent, entered.state, { kind: 'enter' });
+    expect(reentered.view.paragraphs).toEqual(['The margin rots.']); // the bug
+    const resumed = resumeScene(variantContent, entered.state);
+    expect(resumed.view.paragraphs).toEqual(['The margin holds.']); // the fix
+  });
+
+  it('re-emits the scene cue and nothing else — never save.autosave', () => {
+    const atDock = advance(content, start(), { kind: 'enter' });
+    expect(resumeScene(content, atDock.state).events).toEqual([
+      { kind: 'music.cue', cue: 'cue-dock' },
+    ]);
+    const atShrine: WorldState = { ...start(), sceneId: 'shrine' };
+    expect(resumeScene(content, atShrine).events).toEqual([]);
+    const atEnding: WorldState = { ...start(), sceneId: 'gone' };
+    expect(resumeScene(content, atEnding).events).toEqual([
+      { kind: 'music.cue', cue: 'cue-gone' },
+    ]);
+  });
+
+  it('builds the ending view when parked on an ending scene', () => {
+    const atEnding: WorldState = { ...start(), sceneId: 'gone' };
+    const { view } = resumeScene(content, atEnding);
+    expect(view.ending).toBe('the-fog-takes-you');
+    expect(view.paragraphs).toEqual(['You are not here.']);
+  });
+
+  it('throws on an unknown scene id', () => {
+    const lost: WorldState = { ...start(), sceneId: 'nowhere' };
+    expect(() => resumeScene(content, lost)).toThrow('Unknown scene: nowhere');
   });
 });
 

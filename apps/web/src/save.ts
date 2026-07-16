@@ -2,12 +2,23 @@
  * Save slot persistence. One slot, keyed 'not-here:slot1', written on
  * `save.autosave` engine events. Storage is injectable (Storage-shaped) so
  * the module is testable in node; the app passes window.localStorage.
- * Never trusts stored data — anything malformed loads as null.
+ * Never trusts stored data — anything malformed loads as null. Plus the
+ * margin sidecar at 'not-here:slot1:margin' — the engine events of the step
+ * that parked the save, so a resumed screen replays its margin lines
+ * complete (pt2-fix-04).
  */
 
-import { SAVE_SCHEMA_VERSION, type WorldState } from '@not-here/engine';
+import {
+  resumeScene,
+  SAVE_SCHEMA_VERSION,
+  type EngineEvent,
+  type StepResult,
+  type StoryContent,
+  type WorldState,
+} from '@not-here/engine';
 
 export const SAVE_KEY = 'not-here:slot1';
+export const MARGIN_KEY = 'not-here:slot1:margin';
 
 /** The subset of the DOM Storage interface we rely on. */
 export interface SaveStorage {
@@ -67,6 +78,7 @@ export const persistSave = (storage: SaveStorage, state: WorldState): boolean =>
 export const clearSave = (storage: SaveStorage): void => {
   try {
     storage.removeItem(SAVE_KEY);
+    storage.removeItem(MARGIN_KEY);
   } catch {
     // Nothing to clear if storage itself is gone.
   }
@@ -94,4 +106,78 @@ export const resumableSave = (
   const scene = scenes.get(saved.sceneId);
   if (scene === undefined || scene.ending !== undefined) return null;
   return saved;
+};
+
+// ——— Margin sidecar (pt2-fix-04) ——————————————————————————————————————
+
+export interface SceneMargin {
+  readonly v: number;
+  readonly sceneId: string;
+  readonly events: readonly EngineEvent[];
+}
+
+const looksLikeEvent = (value: unknown): boolean => {
+  if (!isRecord(value) || typeof value['kind'] !== 'string') return false;
+  // The two display-bearing kinds must carry their payload; anything else
+  // only needs a kind — the frontend ignores what it does not present.
+  if (value['kind'] === 'music.cue') return typeof value['cue'] === 'string';
+  if (value['kind'] === 'tell.visual') return typeof value['text'] === 'string';
+  return true;
+};
+
+const looksLikeMargin = (value: unknown): value is SceneMargin =>
+  isRecord(value) &&
+  value['v'] === SAVE_SCHEMA_VERSION &&
+  typeof value['sceneId'] === 'string' &&
+  Array.isArray(value['events']) &&
+  value['events'].every(looksLikeEvent);
+
+/**
+ * Persist the events of the step being saved. Storage failure is
+ * deliberately non-fatal: the margin sidecar is presentation, never run
+ * state.
+ */
+export const saveMargin = (
+  storage: SaveStorage,
+  sceneId: string,
+  events: readonly EngineEvent[],
+): void => {
+  const margin: SceneMargin = { v: SAVE_SCHEMA_VERSION, sceneId, events };
+  try {
+    storage.setItem(MARGIN_KEY, JSON.stringify(margin));
+  } catch {
+    // Swallowed by design; see docstring.
+  }
+};
+
+/** Load the margin sidecar; anything corrupt, missing, or skewed → null. */
+export const loadMargin = (storage: SaveStorage): SceneMargin | null => {
+  try {
+    const raw = storage.getItem(MARGIN_KEY);
+    if (raw === null) return null;
+    const parsed: unknown = JSON.parse(raw);
+    return looksLikeMargin(parsed) ? parsed : null;
+  } catch {
+    // Unreachable storage or unparseable JSON both mean: nothing to replay.
+    return null;
+  }
+};
+
+/**
+ * Resume a loaded save without re-applying onEnter effects (pt2-fix-03) —
+ * the save already holds the post-onEnter state; a re-enter would run the
+ * nightly decay twice and swap state-keyed prose variants. The margin
+ * sidecar, when it matches, replays the events the first render carried so
+ * the resumed screen is complete (pt2-fix-04).
+ */
+export const resumeStep = (
+  content: StoryContent,
+  state: WorldState,
+  storage: SaveStorage,
+): StepResult => {
+  const step = resumeScene(content, state);
+  const margin = loadMargin(storage);
+  return margin !== null && margin.sceneId === state.sceneId
+    ? { ...step, events: margin.events }
+    : step;
 };
