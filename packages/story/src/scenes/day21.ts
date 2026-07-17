@@ -1008,10 +1008,12 @@ const night = defineScene({
   ],
 });
 
-// ——— The held place: Day 22 is the next phase's to write ———
-// Mirrors d20-end exactly as it was: the card owns `time.set day 22`, so
-// a future d22-morning sets SLOT ONLY. ACT_BOUNDARY_ENDINGS in both apps
-// holds 'd21-end'; unsealing follows the act boundary precedent.
+// ——— The unsealed act boundary (Day 22 shipped) ———
+// The card keeps `time.set day 22` — d22-morning sets SLOT ONLY — but the
+// `ending` marker is gone and one choice walks through, exactly as
+// d20-end and act2-end unsealed before it. Saves parked here classify
+// 'resume' and enter Day 22 with their flags intact; the held place is
+// now 'd22-end' (see day22.ts and ACT_BOUNDARY_ENDINGS in both apps).
 
 const dayEnd = defineScene({
   id: 'd21-end',
@@ -1020,9 +1022,10 @@ const dayEnd = defineScene({
     kind: 'inline',
     paragraphs: [{ text: '' }, { text: 'NOVEMBER 27' }, { text: '' }],
   },
-  choices: [],
+  choices: [
+    { id: 'morning-comes-anyway', label: 'Morning comes anyway.', goto: 'd22-morning' },
+  ],
   cue: 'title',
-  ending: 'd21-end',
 });
 
 export const DAY21_SCENES: readonly Scene[] = [

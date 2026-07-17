@@ -82,7 +82,7 @@ const buildParagraph = (text: string): { p: HTMLParagraphElement; words: HTMLSpa
 };
 
 /** The held-place card's one line — spoken in the game's register. */
-const HELD_LINE = 'Your November is kept. The twenty-seventh is not written yet.';
+const HELD_LINE = 'Your November is kept. The twenty-eighth is not written yet.';
 
 const TITLE_COPY: Record<TitleMode, { readonly aria: string; readonly hint: string }> = {
   fresh: {

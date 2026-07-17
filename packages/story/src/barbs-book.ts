@@ -208,6 +208,13 @@ const MARGIN_LINES: readonly { readonly tag: FactTag; readonly line: string }[] 
   { tag: 'a3:fed-d21', line: 'fed again today. whatever Friday wants of her, it will not find her empty.' },
   { tag: 'rode-with-tam-d21', line: 'rode the morning run out and back, Tam says. he mentioned it, which from Tam is a paragraph.' },
   { tag: 'a3:sat-with-moose', line: 'sat the cold at my door with the dog till the last run came down, Tam says. the dog kept his post the better for the company.' },
+  // ——— Act 3, Day 22 ———
+  // The supper is Dianne's table: her row rides the dianne→barb edge and
+  // lands at the day boundary. The night's confessions keep the Night-20
+  // ruling (flags, not facts — nothing for the page to claim), and the
+  // Day-22 facts witnessed by priya / sam / wade have no edge to Barb
+  // and must never appear here.
+  { tag: 'a3:fed-d22m', line: 'sat to the practice supper up the hill, Dianne says, and ate what was built for her. the day itself will not find her empty.' },
 ];
 
 const barbKnows = (state: WorldState, tag: FactTag): boolean => {

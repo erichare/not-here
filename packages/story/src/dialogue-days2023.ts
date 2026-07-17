@@ -11,6 +11,14 @@
  *  - barb / 'ice-d21' — her line over the dead pie case, Day 21 morning.
  *    Variants key on the exile staging (you came up the hill for this)
  *    and on the Day-7 morning kept (the sat-out morning called in).
+ *  - dianne / 'supper-d22' — her line as the practice supper is set.
+ *    Variants key on the withdrawn substrate (the dark read: no place at
+ *    all, and her sentence has nothing in it) and on the exile staging
+ *    (the door held open against the week's grain).
+ *  - barb / 'goodchair-d22' — her one spoken line from the good chair
+ *    (the day's warm unpriced beat is authored scene prose; this is the
+ *    line inside it). Variants key on the exile staging and on the
+ *    Day-21 ice morning worked.
  *
  * The town never remarks on the wrongness; no weekday is named except
  * Friday; 'Wren' appears zero times in this file. Every (speaker, slot)
@@ -69,5 +77,55 @@ export const RULES: readonly DialogueRule[] = [
     speaker: 'barb',
     slot: 'ice-d21',
     text: '“Case died in the night,” Barb says, two trips in already. “Ice moves or the pies do. Take the tongs.”',
+  },
+
+  // ——— Dianne, Day 22 evening — the practice supper set down ———
+
+  {
+    id: 'dianne-supper-withdrawn',
+    speaker: 'dianne',
+    slot: 'supper-d22',
+    when: { op: 'flag', key: 'a3:fed-withdrawn' },
+    salience: 3,
+    text: '“Sit where you like,” Dianne says, which is the first time in seven years that sentence has had nothing in it.',
+  },
+  {
+    id: 'dianne-supper-exiled',
+    speaker: 'dianne',
+    slot: 'supper-d22',
+    when: { op: 'flag', key: 'potluck:verdict', value: 'exiled' },
+    salience: 2,
+    text: '“Up here you eat first and the town can practise its minding tomorrow,” Dianne says, setting the dish down hard enough to mean it.',
+  },
+  {
+    id: 'dianne-supper-fallback',
+    speaker: 'dianne',
+    slot: 'supper-d22',
+    text: '“A day early, so it comes out right on the day,” Dianne says, to the stove more than to you. “A meal you’ve cooked twice only counts once.”',
+  },
+
+  // ——— Barb, Day 22 evening — one line from the good chair ———
+
+  {
+    id: 'barb-goodchair-exiled',
+    speaker: 'barb',
+    slot: 'goodchair-d22',
+    when: { op: 'flag', key: 'potluck:verdict', value: 'exiled' },
+    salience: 2,
+    text: '“Chair’s mine,” Barb says, settled in it at your table like a woman crossing a picket line of one. “So’s the table. So’s the say.”',
+  },
+  {
+    id: 'barb-goodchair-ice',
+    speaker: 'barb',
+    slot: 'goodchair-d22',
+    when: { op: 'fact.exists', tag: 'helped-barb-ice' },
+    salience: 1,
+    text: '“Case held to tonight on that ice of ours,” Barb says over the cup. “Reckon I can sit the length of one coffee on the strength of it.”',
+  },
+  {
+    id: 'barb-goodchair-fallback',
+    speaker: 'barb',
+    slot: 'goodchair-d22',
+    text: '“Forty years I’ve kept that chair for company that never came,” Barb says, in it now, coffee steaming. “Waste of a good chair.”',
   },
 ];

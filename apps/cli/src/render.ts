@@ -122,6 +122,7 @@ const ENDING_LABELS: Readonly<Record<string, string>> = {
   'act2-end': 'end of the second act',
   'd20-end': 'held for the twenty-sixth',
   'd21-end': 'held for the twenty-seventh',
+  'd22-end': 'held for the twenty-eighth',
 };
 
 const DEFAULT_ENDING_LABEL = 'the ledger closes here';
