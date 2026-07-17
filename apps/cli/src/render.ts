@@ -120,6 +120,7 @@ export const renderChoices = (choices: readonly ChoiceLine[]): RenderedChoices =
 const ENDING_LABELS: Readonly<Record<string, string>> = {
   'act1-end': 'end of the first act',
   'act2-end': 'end of the second act',
+  'd20-end': 'held for the twenty-sixth',
 };
 
 const DEFAULT_ENDING_LABEL = 'the ledger closes here';

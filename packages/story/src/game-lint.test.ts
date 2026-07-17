@@ -24,6 +24,7 @@ import { RULES as RULES_D1011 } from './dialogue-days1011.ts';
 import { RULES as RULES_D1213 } from './dialogue-days1213.ts';
 import { RULES as RULES_D1416 } from './dialogue-days1416.ts';
 import { RULES as RULES_D1719 } from './dialogue-days1719.ts';
+import { RULES as RULES_D2023 } from './dialogue-days2023.ts';
 import {
   collectTexts,
   touchByHand,
@@ -42,6 +43,7 @@ const ALL_RULES: readonly DialogueRule[] = [
   ...RULES_D1213,
   ...RULES_D1416,
   ...RULES_D1719,
+  ...RULES_D2023,
 ];
 
 /** Every authored text surface in the game, with a source label. */

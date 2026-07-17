@@ -129,15 +129,18 @@ describe('hubs and the day ladder', () => {
     expect(run.state.day).toBe(20);
     const card = viewOf(run, 'act2-end');
     expect(card.paragraphs).toEqual(['', 'ACT THREE', '']);
-    expect(card.ending).toBe('act2-end');
+    // The card unsealed when Day 20 shipped: mid-run now, not an ending.
+    expect(card.ending).toBeUndefined();
     expect(run.events).toContainEqual({ kind: 'music.cue', cue: 'title' });
   });
 
-  it('the act2-end card mirrors act1-end: cue title, ending marker, no choices', () => {
+  it('the act2-end card mirrors act1-end: cue title, UNSEALED, one bridging choice', () => {
     const card = sceneById('act2-end');
     expect(card.cue).toBe('title');
-    expect(card.ending).toBe('act2-end');
-    expect(card.choices).toEqual([]);
+    expect(card.ending).toBeUndefined();
+    expect(card.choices.map((c) => ({ id: c.id, goto: c.goto }))).toEqual([
+      { id: 'morning-comes-anyway', goto: 'd20-morning' },
+    ]);
   });
 });
 

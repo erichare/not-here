@@ -94,12 +94,15 @@ export interface ResumableScene {
 }
 
 /**
- * Endings that PARK the run rather than finish it: the act card is a
- * TO-BE-CONTINUED marker and the next act inherits the save's flags.
+ * Endings that PARK the run rather than finish it: the boundary card is a
+ * TO-BE-CONTINUED marker and the next slice inherits the save's flags.
  * True endings (Act 1 hard exits, the Ash ending) are not listed — a save
- * parked on one means a finished run and a fresh start.
+ * parked on one means a finished run and a fresh start. 'act2-end' is
+ * RETIRED from this set (mirrors the CLI): the card unsealed when Day 20
+ * shipped, so saves parked there classify 'resume' and walk into Day 20
+ * with their flags intact. The held place is now 'd20-end'.
  */
-export const ACT_BOUNDARY_ENDINGS: ReadonlySet<string> = new Set(['act2-end']);
+export const ACT_BOUNDARY_ENDINGS: ReadonlySet<string> = new Set(['d20-end']);
 
 export type Launch =
   | { readonly kind: 'fresh' }

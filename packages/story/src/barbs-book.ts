@@ -189,6 +189,12 @@ const MARGIN_LINES: readonly { readonly tag: FactTag; readonly line: string }[] 
   { tag: 'went-to-clinic-d17', line: 'went up to the clinic when the doctor asked. she asks once. I said it once.' },
   { tag: 'ran-the-mail-d17', line: 'took my outgoing across in its elastic, ahead of the pickup. the mail came to no harm.' },
   { tag: 'helped-dianne-parcels', line: 'held string while the hall’s dishes went home. every lid found its pot, Dianne says.' },
+  // ——— Act 3, Day 20 ———
+  // Night 20 stays off the page by the same ruling that keeps the letter
+  // night off it: Sam's confession is witnessed by Sam alone, and no
+  // gossip edge runs sam→barb. The book never claims more than it knows.
+  { tag: 'aired-the-room-d20', line: 'up the hill for the airing, Dianne says. the sash open in that cold. seven years since I last wrote that.' },
+  { tag: 'a3:fed-d20', line: 'ate what was put in front of her today. the week ahead wants her fed.' },
 ];
 
 const barbKnows = (state: WorldState, tag: FactTag): boolean => {

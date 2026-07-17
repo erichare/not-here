@@ -267,6 +267,63 @@ describe('margins, other hands — Act 2 keeps the ledger alive (pt2-fix-01)', (
   });
 });
 
+describe('margins, other hands — Act 3, Day 20 (the table ends at the held card)', () => {
+  const plant = (effects: readonly Effect[]): WorldState =>
+    applyEffects(initialState(21, OPENING_SCENE), effects).state;
+
+  it('the evening plate margins as the scene plants it — Barb’s own witness', () => {
+    const state = plant([{ op: 'fact.add', tag: 'a3:fed-d20', witnessedBy: ['barb'] }]);
+    expect(buildBarbsBook(state).heldFacts).toContain(
+      'ate what was put in front of her today. the week ahead wants her fed.',
+    );
+  });
+
+  it('the airing waits for the dianne edge to carry it', () => {
+    const before = plant([
+      { op: 'fact.add', tag: 'aired-the-room-d20', about: 'dianne', witnessedBy: ['dianne'] },
+    ]);
+    expect(buildBarbsBook(before).heldFacts).toEqual([]);
+    const after = applyEffects(before, [
+      { op: 'fact.learn', who: 'barb', tag: 'aired-the-room-d20' },
+    ]).state;
+    expect(buildBarbsBook(after).heldFacts).toEqual([
+      'up the hill for the airing, Dianne says. the sash open in that cold. seven years since I last wrote that.',
+    ]);
+  });
+
+  it('Night 20 stays off the page — Sam’s witness has no edge into the book', () => {
+    // The confession scene plants truth-told / released-sam witnessed by Sam
+    // alone; no sam→barb gossip edge exists, and the table carries no row
+    // for either tag — the book never claims more than it knows.
+    const state = plant([
+      { op: 'fact.add', tag: 'truth-told', witnessedBy: ['sam'] },
+      { op: 'fact.add', tag: 'released-sam', about: 'sam', witnessedBy: ['sam'] },
+      { op: 'fact.learn', who: 'barb', tag: 'truth-told' },
+      { op: 'fact.learn', who: 'barb', tag: 'released-sam' },
+    ]);
+    expect(buildBarbsBook(state).heldFacts).toEqual([]);
+  });
+
+  it('every Act 3 margin passes the page discipline', () => {
+    const ACT3_TAGS = ['aired-the-room-d20', 'a3:fed-d20'] as const;
+    const state = plant(
+      ACT3_TAGS.map((tag) => ({ op: 'fact.add', tag, witnessedBy: ['barb'] }) as const),
+    );
+    const { heldFacts } = buildBarbsBook(state);
+    expect(heldFacts).toHaveLength(ACT3_TAGS.length);
+    expect(new Set(heldFacts).size).toBe(heldFacts.length);
+    for (const line of heldFacts) {
+      expect(line, `numeral on the page: ${line}`).not.toMatch(/[0-9]/);
+      expect(line, `stat name on the page: ${line}`).not.toMatch(
+        /\b(FLESH|NAME|ECHO|UNDERTOW|STATIC|CHORD)\b/,
+      );
+      expect(line, `slug on the page: ${line}`).not.toMatch(/[a-z]+-[a-z]+-[a-z]+/);
+      expect(line, `the title is on a budget: ${line}`).not.toMatch(/not\s+here/i);
+      expect(line, `the name is on a budget: ${line}`).not.toMatch(/\bWren\b/);
+    }
+  });
+});
+
 describe('the discipline — what the page must never show', () => {
   it('no numerals outside the register line, no stat names, no slugs', () => {
     const book = buildBarbsBook(run.day7);

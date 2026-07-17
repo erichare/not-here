@@ -132,8 +132,14 @@ describe('classifySave — act boundaries hold places (pt2-fix-01)', () => {
     expect(classifySave(state, {})).toEqual({ kind: 'resume', state });
   });
 
-  it('a save parked on the Act 2 boundary is held, never discarded', () => {
-    expect(classifySave(state, { ending: 'act2-end' })).toEqual({ kind: 'held', state });
+  it('a save parked on the held card (d20-end) is held, never discarded', () => {
+    expect(classifySave(state, { ending: 'd20-end' })).toEqual({ kind: 'held', state });
+  });
+
+  it('act2-end is retired from the hold: the unsealed card is mid-run and resumes', () => {
+    // The card lost its `ending` marker when Day 20 shipped — a November
+    // parked there walks into Day 20 with its flags intact (mirrors the CLI).
+    expect(classifySave(state, {})).toEqual({ kind: 'resume', state });
   });
 
   it('a save parked on a true ending means a finished run — fresh start', () => {
@@ -144,7 +150,8 @@ describe('classifySave — act boundaries hold places (pt2-fix-01)', () => {
 describe('classifyLaunch — the stored slot through classifySave', () => {
   const scenes: ReadonlyMap<string, ResumableScene> = new Map([
     ['n1-room', {}],
-    ['act2-end', { ending: 'act2-end' }],
+    ['act2-end', {}], // unsealed when Day 20 shipped
+    ['d20-end', { ending: 'd20-end' }],
     ['act2-ash-2', { ending: 'ash' }],
   ]);
 
@@ -155,12 +162,20 @@ describe('classifyLaunch — the stored slot through classifySave', () => {
     expect(classifyLaunch(storage, scenes)).toEqual({ kind: 'resume', state: midRun });
   });
 
-  it('holds a save parked on the Act 2 boundary — storage untouched', () => {
+  it('holds a save parked on the NOVEMBER 26 card — storage untouched', () => {
+    const storage = memoryStorage();
+    const parked = initialState(3, 'd20-end');
+    persistSave(storage, parked);
+    expect(classifyLaunch(storage, scenes)).toEqual({ kind: 'held', state: parked });
+    // Classifying is read-only: the slot the next slice inherits is still there.
+    expect(loadSave(storage)).toEqual(parked);
+  });
+
+  it('resumes a save parked on the unsealed act2-end card — Day 20 inherits it', () => {
     const storage = memoryStorage();
     const parked = initialState(3, 'act2-end');
     persistSave(storage, parked);
-    expect(classifyLaunch(storage, scenes)).toEqual({ kind: 'held', state: parked });
-    // Classifying is read-only: the slot Act 3 inherits is still there.
+    expect(classifyLaunch(storage, scenes)).toEqual({ kind: 'resume', state: parked });
     expect(loadSave(storage)).toEqual(parked);
   });
 
@@ -180,11 +195,13 @@ describe('classifyLaunch — the stored slot through classifySave', () => {
     expect(classifyLaunch(memoryStorage(), scenes)).toEqual({ kind: 'fresh' });
   });
 
-  it('accepts the real content map — act2-end holds, act2-ash-2 frees the slot', () => {
+  it('accepts the real content map — d20-end holds, act2-end resumes, ash frees the slot', () => {
     const content = buildContent();
     const storage = memoryStorage();
-    persistSave(storage, initialState(9, 'act2-end'));
+    persistSave(storage, initialState(9, 'd20-end'));
     expect(classifyLaunch(storage, content.scenes).kind).toBe('held');
+    persistSave(storage, initialState(9, 'act2-end'));
+    expect(classifyLaunch(storage, content.scenes).kind).toBe('resume');
     persistSave(storage, initialState(9, 'act2-ash-2'));
     expect(classifyLaunch(storage, content.scenes).kind).toBe('fresh');
     persistSave(storage, initialState(9, OPENING_SCENE));
@@ -369,6 +386,45 @@ describe('resumeStep — save/resume equals continuous play (pt2-fix-03)', () =>
     saveMargin(storage, 'shrine', [{ kind: 'tell.visual', text: 'not this scene' }]);
     const resumed = resumeStep(fixtureContent, loadedOrThrow(storage), storage);
     expect(resumed.events).toEqual([{ kind: 'music.cue', cue: 'cue-dock' }]);
+  });
+
+  it('a held act2-end save resumes into Day 20 with every contract flag intact', () => {
+    // The plan's exact requirement, mirrored from the CLI E2E: the parked
+    // November classifies 'resume', the card re-prints with its open
+    // morning, and the choice walks into d20-morning carrying the flags.
+    const content = buildContent();
+    const storage = memoryStorage();
+    const parked: WorldState = {
+      ...initialState(7, 'act2-end'),
+      day: 20,
+      slot: 'morning',
+      flags: {
+        'knows-truth': true,
+        'letter-opened': true,
+        'horn-on': true,
+        'potluck:sam': 'defended',
+        'potluck:verdict': 'defended',
+        'd16:sam-named': true,
+        'd18:kettle-day': true,
+        'barb:counsel-seeded': true,
+      },
+    };
+    persistSave(storage, parked);
+    const launch = classifyLaunch(storage, content.scenes);
+    if (launch.kind !== 'resume') throw new Error(`expected resume, got ${launch.kind}`);
+    const card = resumeStep(content, launch.state, storage);
+    expect(card.state).toEqual(parked);
+    expect(card.view.ending).toBeUndefined();
+    expect(card.view.choices.map((c) => c.id)).toEqual(['morning-comes-anyway']);
+    const morning = advance(content, card.state, {
+      kind: 'choose',
+      choiceId: 'morning-comes-anyway',
+    });
+    expect(morning.state.sceneId).toBe('d20-morning');
+    expect(morning.state.day).toBe(20);
+    for (const [key, value] of Object.entries(parked.flags)) {
+      expect(morning.state.flags[key], `contract flag ${key}`).toBe(value);
+    }
   });
 
   it('resumes a real mid-run save through the exact main.ts path', () => {

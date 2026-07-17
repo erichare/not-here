@@ -231,13 +231,15 @@ describe('graph closure', () => {
     }
   });
 
-  it('exactly two ending scenes — the ACT THREE card and Ash', () => {
+  it('exactly two ending scenes — the NOVEMBER 26 card and Ash', () => {
+    // The ACT THREE card unsealed when Day 20 shipped; the held place moved
+    // to d20-end, where the authored days run out.
     const endings = ALL_SCENES.filter((s) => s.ending !== undefined);
     expect(endings.map((s) => ({ id: s.id, ending: s.ending })).sort((a, b) =>
       a.id.localeCompare(b.id),
     )).toEqual([
       { id: 'act2-ash-2', ending: 'ash' },
-      { id: 'act2-end', ending: 'act2-end' },
+      { id: 'd20-end', ending: 'd20-end' },
     ]);
   });
 
@@ -247,6 +249,15 @@ describe('graph closure', () => {
     expect(boundary?.ending).toBeUndefined();
     expect(boundary?.choices.map((c) => ({ id: c.id, goto: c.goto }))).toEqual([
       { id: 'morning-comes-anyway', goto: 'd8-morning' },
+    ]);
+  });
+
+  it('the second boundary matches: act2-end has no ending and walks into Day 20', () => {
+    const boundary = ALL_SCENES.find((s) => s.id === 'act2-end');
+    expect(boundary).toBeDefined();
+    expect(boundary?.ending).toBeUndefined();
+    expect(boundary?.choices.map((c) => ({ id: c.id, goto: c.goto }))).toEqual([
+      { id: 'morning-comes-anyway', goto: 'd20-morning' },
     ]);
   });
 });

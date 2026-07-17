@@ -25,6 +25,7 @@ import { RULES as RULES_D1011 } from './dialogue-days1011.ts';
 import { RULES as RULES_D1213 } from './dialogue-days1213.ts';
 import { RULES as RULES_D1416 } from './dialogue-days1416.ts';
 import { RULES as RULES_D1719 } from './dialogue-days1719.ts';
+import { RULES as RULES_D2023 } from './dialogue-days2023.ts';
 import { DAY2_SCENES } from './scenes/day2.ts';
 import { DAY3_SCENES } from './scenes/day3.ts';
 import { DAY4_SCENES } from './scenes/day4.ts';
@@ -43,6 +44,7 @@ import { DAY16_SCENES } from './scenes/day16.ts';
 import { DAY17_SCENES } from './scenes/day17.ts';
 import { DAY18_SCENES } from './scenes/day18.ts';
 import { DAY19_SCENES } from './scenes/day19.ts';
+import { DAY20_SCENES } from './scenes/day20.ts';
 import { NIGHT1_SCENES } from './scenes/night1.ts';
 
 /** Where a fresh run begins. */
@@ -59,7 +61,7 @@ export const ACT1_SCENES: readonly Scene[] = [
   ...DAY7_SCENES,
 ];
 
-/** All authored scenes through Act 2. */
+/** All authored scenes through Act 3, Day 20. */
 export const ALL_SCENES: readonly Scene[] = [
   ...ACT1_SCENES,
   ...DAY8_SCENES,
@@ -74,6 +76,7 @@ export const ALL_SCENES: readonly Scene[] = [
   ...DAY17_SCENES,
   ...DAY18_SCENES,
   ...DAY19_SCENES,
+  ...DAY20_SCENES,
 ];
 
 const ALL_RULES = [
@@ -86,6 +89,7 @@ const ALL_RULES = [
   ...RULES_D1213,
   ...RULES_D1416,
   ...RULES_D1719,
+  ...RULES_D2023,
 ];
 
 /**

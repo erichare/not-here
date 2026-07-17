@@ -17,8 +17,8 @@
  * trust:barb ≥ 7 seeds the Long Winter ('barb:counsel-seeded').
  *
  * Night 19: the act close, one paragraph per track; then the ACT THREE
- * card. 'act2-end' owns time.set day 20 and terminates the current build
- * (ending 'act2-end'; Act 3 replaces it).
+ * card. 'act2-end' owns time.set day 20 and is UNSEALED per the act1-end
+ * precedent — d20-morning sets slot only (scenes/day20.ts).
  *
  * Flags this file owns: 'barb:counsel-seeded'. Facts:
  * 'asked-barb-name-column'. The read-back re-inks your line: it sets
@@ -378,7 +378,7 @@ const night = defineScene({
   choices: [{ id: 'sleep-toward-it', label: 'Sleep, if it takes you.', goto: 'act2-end' }],
 });
 
-// ——— ACT THREE title card — the current build terminates here ———
+// ——— ACT THREE title card — the unsealed act boundary (Act 3 continues) ———
 
 const actEnd = defineScene({
   id: 'act2-end',
@@ -387,9 +387,10 @@ const actEnd = defineScene({
     kind: 'inline',
     paragraphs: [{ text: '' }, { text: 'ACT THREE' }, { text: '' }],
   },
-  choices: [],
+  choices: [
+    { id: 'morning-comes-anyway', label: 'Morning comes anyway.', goto: 'd20-morning' },
+  ],
   cue: 'title',
-  ending: 'act2-end',
 });
 
 export const DAY19_SCENES: readonly Scene[] = [morning, evening, night, actEnd];
