@@ -109,3 +109,19 @@ without asking.
   without-you retellings written in full (Day 3: Sam's boathouse via Maud, Ivy's
   surgery via the note under the door); both produce content attendance wouldn't.
   Six calibration rules extracted; the Day-3 retellings are canon and ship.
+
+## Act 3 lock (2026-07-17)
+- **act3-plan.md LOCKED.** All eleven open questions ruled by the creator on
+  2026-07-17 in one sitting; full rulings recorded in the plan's final section.
+  Headlines: Wren, Again promoted to the 07:40 computed catch-all (bus-stop
+  Unwitnessed fallthrough deleted; Unwitnessed stays metabolic/night-only); the
+  only sixth bar ever rendered in any ending is the player's — Wren's stays
+  forever unheard (Long Winter's 3:12 re-staged as the attempt, not the song);
+  potluck:sam 'given' may cost both true endings (the D22 undertow ≥ 6 repair is
+  the only door back); travel-name = the save-name, spoken once by Sam; the
+  Stranger's coda sanctioned as an ending-only epistemic break; both
+  survivability bends confirmed as named rulings; LLM composition judge approved
+  (enum-only, no-key game complete); hum-lock dropped from the bible (canon now
+  matches shipped code); Moose lives, and his lean in Two Wrens is sanctioned
+  with its own line; Barb stays untakeable — the fog never gets the person
+  holding the pen. Do not relitigate without asking.

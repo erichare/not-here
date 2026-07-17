@@ -129,10 +129,10 @@ Last engineer of the lake ferry. The district pays him to maintain the breakwate
 light; nobody pays him for the horn. He keeps it fed from the compressor shed and
 plays her unfinished tune nightly at 3:12 as penance — the last to "see Wren
 alive." **Knows the calling made you and keeps playing anyway** — you are his
-forgiveness made flesh. Tracks what you hum: stay inside bars 1–5 and he weeps and
-confesses early; hum an original sixth bar at him and he goes white ("she never
-finished it") and locks the compressor shed — you've proven you aren't her, and his
-Act 3 confession must be earned another way.
+forgiveness made flesh. *(The hum-lock mechanic that stood here — humming an
+original sixth bar turning him white and locking the compressor shed — was never
+shipped and was dropped by ruling 2026-07-17; his Act 3 confession is gated by
+the confession cascade in act3-plan.md, not by anything you hum.)*
 
 ### Dr. Priya Anand — clinic; Wren's best friend and almost-lover
 Runs the two-day-a-week clinic; came back for it. The antagonist-shaped character

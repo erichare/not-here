@@ -1,11 +1,13 @@
-# Act 3 Plan — The Homecoming, Days 20–23 (DRAFT — awaiting Eric's lock)
+# Act 3 Plan — The Homecoming, Days 20–23 (LOCKED 2026-07-17)
 
-> **Status: DRAFT.** act1-beats.md and act2-beats.md are LOCKED; this document is not.
-> It is the synthesis of four independent design drafts (payoff-architecture,
+> **Status: LOCKED.** act1-beats.md, act2-beats.md, and this document are all locked.
+> Synthesis of four independent design drafts (payoff-architecture,
 > confession-first, endings-back, systems-finale) scored by a three-judge panel, with
-> every graft the judges required folded in and every judgment call that genuinely
-> needs the author collected in **Open questions for Eric** at the end. Nothing here
-> is canon until locked; the music items ship nothing unheard.
+> every graft the judges required folded in, hardened by two adversarial audits, and
+> locked 2026-07-17 when Eric ruled all eleven questions in **Rulings** at the end.
+> Music still ships nothing unheard: the sixth-bar candidates are rendered
+> (auditions/sixthbar-*.wav) and await ears; every new cue stays behind a flag
+> until auditioned.
 
 Act 3 covers Days 20–23 (Nov 25–28; Day 23 is the twice-ringed Friday) plus the
 endings. The thesis, from the winning draft:
@@ -37,7 +39,7 @@ admit — answered by arithmetic the player has been doing since Night 1.
   "last week of November."
 - **The bible's hum-lock mechanic is phantom**: no `hummed-original-sixth-bar` flag
   exists in Acts 1–2 (only `d3:hummed-chart` and `hummed-bar-four`). Nothing in this
-  plan gates on it. See Open Questions.
+  plan gates on it. Ruled 2026-07-17 (Ruling 9): dropped from the bible.
 - **Already fixed in the tree (pt2 wave, 2026-07-16) — do not re-solve**: the
   act-boundary save hold (`act2-end` saves survive relaunch; regression tests in
   apps/cli), Barb's margins through Act 2, trust:barb reachability (axes rows +
@@ -67,7 +69,7 @@ carrier — and Unwitnessed is foreclosed (the fog keeps what it is paid for).
 do not fork it) spreads into Nights 20–22; Wade must be earned; the Stranger's door
 exists; silence is where the sixth bar can be composed.
 
-**Offsets migrate INSIDE the cascade** (named ruling, see Open Questions): from Day
+**Offsets migrate INSIDE the cascade** (named ruling, locked 2026-07-17 — Ruling 5): from Day
 20, today:fed / today:named / today:remembered live inside confession-adjacent
 scenes — attending the truth feeds you; managing decay and pursuing the mystery
 become the same spend. Survivability rule holds every day (≥1 reachable offset)
@@ -440,7 +442,8 @@ hesitation, the first creature in Lorn Bay to greet her — because there was ne
 anything to smell but this. In Wren, Again it is the horror's last turn: the only
 witness who knows her is the one nobody heeds ("he's gotten old"), and he is
 called back, and goes. In Two Wrens he stands between you and her, leaning on
-both (needs its own touch ruling — see Open Questions).
+both (touch ruled 2026-07-17 — Ruling 4: the lean is sanctioned and gets its
+own explicit line).
 
 **The never-find AMBUSH** (canon: live, mid-ending): as she steps down, the
 recontext detonates in **four to six clues, ONE line each** (word-budgeted,
@@ -463,8 +466,8 @@ door hisses; a woman steps down into the sound of her own song finished, and the
 town turns from you to her because the song told them to — and you go with the
 last note, at the wharf's edge, on your own terms: the fog takes its material
 back, but **the horn keeps your bar** (the bible's dissolution beat, restored;
-whether a tell-the-town line precedes it is folded into Open Question 1's
-sign-off). Final screen carries the co-credit the title-thread specifies:
+Ruling 1 signed 2026-07-17 — ships as drafted here, no tell-the-town line
+precedes it). Final screen carries the co-credit the title-thread specifies:
 *"NOT HERE" — Wren Cole & —*. Register line: **"not here. was, though."** A
 'borrowed' verdict at the finale is played anyway and fails gently — the horn
 gives the fog's material back to the fog, and resolution falls through the
@@ -712,45 +715,45 @@ existing cue — auditioned with item 2's mixer work).
 | Sam's potluck cost | PAID D20 (the wall down / the duffel, variant per potluck:sam) + structurally: 'given' prices out his confession (and chord=6) unless the D22 repair lands |
 | Food-refusal dark read | PAID D22 supper (no place set; offsets withdrawn — named ruling) + the empty-stool plate (fed-the-absence) |
 | Day-5 "I remember why it matters" | DELIBERATELY DEFAULTED, on record: the claim was accepted without content in Act 1 and Act 3 does not retroactively invent its why; the register read-back already quoted it as the player's own unpaid word |
-| "Barb is fenced off" (vulture: never a take-target) | DELIBERATELY DEFAULTED, on record: her confession offers no TAKE, ever. The reason is structural, not squeamish — Barb's memory IS the register; the book is the town's witness and the game's save file, and letting the fog eat its keeper would unmake the mechanic the endings all write into. The fog never gets the person holding the pen. (Confirm: Open Question 11.) |
+| "Barb is fenced off" (vulture: never a take-target) | DELIBERATELY DEFAULTED, on record: her confession offers no TAKE, ever. The reason is structural, not squeamish — Barb's memory IS the register; the book is the town's witness and the game's save file, and letting the fog eat its keeper would unmake the mechanic the endings all write into. The fog never gets the person holding the pen. (Confirmed 2026-07-17 — Ruling 11.) |
 
-## Open questions for Eric (nothing below ships without an answer)
+## Rulings — locked by Eric, 2026-07-17 (nothing here is open)
 
-1. **The Wren, Again partition** (blocks ending authoring): promote it from the
-   bible's narrow profile to the 07:40 computed catch-all with three stagings, and
-   delete the bus-stop fallthrough Unwitnessed entirely (Unwitnessed stays
-   metabolic/night-only)? All four drafts and all three judges converge here —
-   without it, a mid-profile innocent first run lands a fail-state ending. One
-   sign-off, once.
-2. **The Stranger's coda** — the shelter reveal shown to the player three hours
-   after the protagonist left is a deliberate player/protagonist epistemic break
-   (the bible's invariant). Sanction it as an ending-only break like the Two Wrens
-   touch, or cut to ending-on-the-headlights?
-3. **Music (nothing ships unheard; audition order in Cues):** the central ruling —
-   **the only sixth bar ever RENDERED in any ending is the player's; Wren's stays
-   forever unheard** (Wren, Again: breath-fog on glass, no sound) — versus the
-   Long Winter staging where Wade plays something at 3:12. They cannot both ship
-   as drafted; pick the rule and Long Winter's sound follows.
-4. **Two Wrens' hand** — confirm the touch whitelist; and rule Moose's contact in
-   the same ending (a dog leaning on both; bible-legal via the FLESH gate but it
-   deserves an explicit line).
-5. **Survivability bends as named rulings**: post-D22 withdrawal of today:fed on
-   refusal-pattern runs, and offsets migrating inside confession scenes.
-6. **Travel-name = the save-name** (the name typed at the title screen), spoken
-   once, by Sam. Confirm — the alternative (a diegetic typed name at d16) would be
-   new input UI and a canon change.
-7. **potluck:sam = 'given' pricing**: the cadence-theft forecloses both true
-   endings unless the D22 repair (undertow ≥ 6) lands. Confirm that Act 2 cruelty
-   may cost the true endings — it is the plan's strongest consequence and its
-   harshest gate.
-8. **LLM composition judge** (classification only, enum borrowed/new, deterministic
-   notated fallback — the no-key game is complete). Comfortable?
-9. **The hum-lock mechanic** in the bible was never shipped. Drop it from the
-   bible, or retrofit a Day 20–22 hum interaction? (This plan gates nothing on it.)
-10. **Moose lives** — ruling recorded here against the death-beat draft; confirm.
-11. **Barb stays untakeable** — every other named character can be harvested;
-    her confession deliberately offers no TAKE verb (reason on record in the IOU
-    table). The vulture playtester called the fence "exactly the safety the
-    vulture notices" — this plan keeps the fence anyway, as structure rather
-    than safety. Confirm, or ask for the devastating alternative and we design
-    what taking the keeper's memory does to the register itself.
+All eleven questions were put to the creator on 2026-07-17 and ruled in one
+sitting. The plan is canon as amended by these rulings. Do not relitigate
+without asking.
+
+1. **The Wren, Again partition — PROMOTED.** Wren, Again is the 07:40 computed
+   catch-all with three stagings; the bus-stop fallthrough Unwitnessed is
+   DELETED (Unwitnessed stays metabolic/night-only). Ending authoring is
+   unblocked. (All four drafts and all three judges had converged here.)
+2. **The Stranger's coda — SANCTIONED** as an ending-only epistemic break, same
+   class as the Two Wrens touch: the player sees the shelter three hours after
+   the protagonist left.
+3. **Sixth-bar rendering — PLAYER'S BAR ONLY.** The only sixth bar ever
+   RENDERED in any ending is the player's; Wren's stays forever unheard (Wren,
+   Again: breath-fog on glass, no sound). Long Winter's 3:12 must be re-staged
+   as something other than Wade audibly playing a sixth bar — the attempt, not
+   the song. Its cue audition (Cues item 6) follows this rule.
+4. **Two Wrens' hand — WHITELIST CONFIRMED; MOOSE LEANS.** The touch whitelist
+   stands as drafted, and Moose's contact in the same ending is sanctioned with
+   its own explicit line (a dog leaning on both).
+5. **Survivability bends — BOTH CONFIRMED** as named rulings: post-D22
+   withdrawal of today:fed on refusal-pattern runs, and offsets migrating
+   inside confession scenes.
+6. **Travel-name = the save-name — CONFIRMED.** The name typed at the title
+   screen, spoken once, by Sam. No new input UI; no canon change; the
+   title-screen input retroactively becomes diegetic.
+7. **potluck:sam = 'given' pricing — CONFIRMED.** The cadence-theft forecloses
+   both true endings unless the D22 repair (undertow ≥ 6) lands. Act 2 cruelty
+   may cost the true endings.
+8. **LLM composition judge — APPROVED** (classification only, enum
+   borrowed/new, deterministic notated fallback; the no-key game is complete).
+9. **Hum-lock — DROPPED from the bible.** Canon now matches shipped code; no
+   hum gate exists anywhere and this plan gates nothing on it. game-bible.md
+   amended 2026-07-17.
+10. **Moose LIVES.** The ruling against the death-beat draft stands, on record:
+    the act's darkness is spent on the people, not the dog.
+11. **Barb stays UNTAKEABLE.** Her confession never offers TAKE; the fence
+    ships as structure, reason on record in the IOU table. The fog never gets
+    the person holding the pen.
