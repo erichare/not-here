@@ -65,11 +65,15 @@ export const DEFAULT_AXIS_WEIGHTS: readonly AxisWeightRule[] = [
   // the dead-axis trap Act 1's fix-15 closed once (see dialogue-day7.ts).
   // Plant sites, all witnessedBy ['barb']: helped-barb (Day 2, the pots),
   // helped-barb-walkin (Day 4), kept-barb-company (Day 7), helped-walkin-d9
-  // (Day 9). Knowers-restricted so a gossiped copy moves nobody else.
+  // (Day 9), helped-barb-ice (Day 21, the pie-case morning — the FIFTH
+  // rung; act3-plan §Day 21: it rescues Barb's Night-21 confession gate,
+  // and her confession re-runs the counsel seed check). Knowers-restricted
+  // so a gossiped copy moves nobody else.
   { tag: 'helped-barb', axis: 'trust', delta: 1, knowers: ['barb'] },
   { tag: 'helped-barb-walkin', axis: 'trust', delta: 1, knowers: ['barb'] },
   { tag: 'kept-barb-company', axis: 'trust', delta: 1, knowers: ['barb'] },
   { tag: 'helped-walkin-d9', axis: 'trust', delta: 1, knowers: ['barb'] },
+  { tag: 'helped-barb-ice', axis: 'trust', delta: 1, knowers: ['barb'] },
 
   // Standing up for Sam matters to Sam — and Tam is watching.
   { tag: 'defended-sam', axis: 'trust', delta: 2, knowers: ['tam', 'sam'] },

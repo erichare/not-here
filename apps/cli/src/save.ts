@@ -59,13 +59,13 @@ export const saveGame = (state: WorldState, path: string): void => {
  * Endings that PARK the run rather than finish it: the boundary card is a
  * TO-BE-CONTINUED marker and the next slice inherits the save's flags.
  * True endings (Act 1 hard exits, the Ash ending) are not listed — a save
- * parked on one means a finished run and a fresh start. 'act2-end' is
- * RETIRED from this set: the card unsealed when Day 20 shipped (it lost
- * its `ending` marker, so saves parked there classify 'resume' and walk
- * into Day 20 with their flags intact). The held place is now 'd20-end',
- * where the authored days run out.
+ * parked on one means a finished run and a fresh start. 'act2-end' and
+ * 'd20-end' are RETIRED from this set: each card unsealed when the next
+ * day shipped (it lost its `ending` marker, so saves parked there
+ * classify 'resume' and walk forward with their flags intact). The held
+ * place is now 'd21-end', where the authored days run out.
  */
-export const ACT_BOUNDARY_ENDINGS: ReadonlySet<string> = new Set(['d20-end']);
+export const ACT_BOUNDARY_ENDINGS: ReadonlySet<string> = new Set(['d21-end']);
 
 export type Launch =
   | { readonly kind: 'fresh' }

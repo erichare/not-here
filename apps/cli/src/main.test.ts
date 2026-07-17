@@ -127,20 +127,73 @@ describe('the unsealed boundary — a held act2-end save resumes into Day 20', (
   });
 });
 
-describe('the held place moved to the NOVEMBER 26 card (pt2-fix-01)', () => {
-  const held: WorldState = {
+describe('the unsealed NOVEMBER 26 card — a held d20-end save resumes into Day 21', () => {
+  // The full Day 20 contract Day 21 reads, parked as a real run leaves it
+  // (pt2-fix-01 retired for d20-end: the card lost its ending marker).
+  const parked: WorldState = {
     ...initialState(7, 'd20-end'),
     day: 21,
     slot: 'morning',
-    flags: { 'knows-truth': true, 'conf:sam': true },
+    chord: 1,
+    flags: {
+      'knows-truth': true,
+      'horn-on': true,
+      'potluck:sam': 'defended',
+      'potluck:verdict': 'defended',
+      'conf:sam': true,
+      'lever:wade': true,
+      'dianne:ready': true,
+      'priya:ready': true,
+      'wade:door-thawing': 1,
+      'a3:unpayable-armed': true,
+      'barb:counsel-seeded': true,
+    },
   };
 
-  it('relaunching on d20-end re-prints the card and exits', () => {
-    parkSave(held);
+  it('relaunching re-prints the card with the open morning — no held exit, no fresh Day 1', () => {
+    parkSave(parked);
     const plain = play([]);
     expect(plain).toContain('NOVEMBER 26');
-    expect(plain).toContain('held for the twenty-sixth');
-    expect(plain).toContain('Your November is kept. The twenty-sixth is not written yet.');
+    expect(plain).toContain('Morning comes anyway.');
+    expect(plain).not.toContain('held for the twenty-sixth');
+    expect(plain).not.toContain('Your November is kept.');
+    expect(plain).not.toContain('DAY 1 —');
+  });
+
+  it('a no-choice relaunch leaves the parked state exactly as it was', () => {
+    parkSave(parked);
+    play([]);
+    expect(loadSave(SAVE_FILE())).toEqual(parked);
+  });
+
+  it('choosing the morning walks into d21-morning with every contract flag and the chord intact', () => {
+    parkSave(parked);
+    const plain = play(['1', 'q']);
+    expect(plain).toContain('DAY 21 — MORNING');
+    const saved = loadSave(SAVE_FILE());
+    expect(saved?.sceneId).toBe('d21-morning');
+    expect(saved?.day).toBe(21);
+    expect(saved?.chord).toBe(1);
+    for (const [key, value] of Object.entries(parked.flags)) {
+      expect(saved?.flags[key], `contract flag ${key} did not survive the boundary`).toBe(value);
+    }
+  });
+});
+
+describe('the held place moved to the NOVEMBER 27 card (pt2-fix-01)', () => {
+  const held: WorldState = {
+    ...initialState(7, 'd21-end'),
+    day: 22,
+    slot: 'morning',
+    flags: { 'knows-truth': true, 'conf:sam': true, 'conf:dianne': true, 'conf:barb': true },
+  };
+
+  it('relaunching on d21-end re-prints the card and exits', () => {
+    parkSave(held);
+    const plain = play([]);
+    expect(plain).toContain('NOVEMBER 27');
+    expect(plain).toContain('held for the twenty-seventh');
+    expect(plain).toContain('Your November is kept. The twenty-seventh is not written yet.');
     // No fresh Day 1, no prompt, no day header on the card.
     expect(plain).not.toContain('DAY 1 —');
     expect(plain).not.toContain('a number chooses');
@@ -152,7 +205,7 @@ describe('the held place moved to the NOVEMBER 26 card (pt2-fix-01)', () => {
     play([]);
     play([]); // stable across as many launches as it takes
     expect(readFileSync(SAVE_FILE(), 'utf8')).toBe(before);
-    expect(loadSave(SAVE_FILE())?.flags['conf:sam']).toBe(true);
+    expect(loadSave(SAVE_FILE())?.flags['conf:barb']).toBe(true);
   });
 
   it('a save parked on the Ash ending still means a fresh start', () => {

@@ -164,7 +164,7 @@ const resumeStep = (content: StoryContent, state: WorldState): StepResult => {
 };
 
 /** The held-place card's one line — spoken in the game's register. */
-const HELD_LINE = 'Your November is kept. The twenty-sixth is not written yet.';
+const HELD_LINE = 'Your November is kept. The twenty-seventh is not written yet.';
 
 const runGame = async (input: LineSource, audio: AudioSink): Promise<void> => {
   const content = buildContent();

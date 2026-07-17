@@ -45,6 +45,7 @@ import { DAY17_SCENES } from './scenes/day17.ts';
 import { DAY18_SCENES } from './scenes/day18.ts';
 import { DAY19_SCENES } from './scenes/day19.ts';
 import { DAY20_SCENES } from './scenes/day20.ts';
+import { DAY21_SCENES } from './scenes/day21.ts';
 import { NIGHT1_SCENES } from './scenes/night1.ts';
 
 /** Where a fresh run begins. */
@@ -61,7 +62,7 @@ export const ACT1_SCENES: readonly Scene[] = [
   ...DAY7_SCENES,
 ];
 
-/** All authored scenes through Act 3, Day 20. */
+/** All authored scenes through Act 3, Day 21. */
 export const ALL_SCENES: readonly Scene[] = [
   ...ACT1_SCENES,
   ...DAY8_SCENES,
@@ -77,6 +78,7 @@ export const ALL_SCENES: readonly Scene[] = [
   ...DAY18_SCENES,
   ...DAY19_SCENES,
   ...DAY20_SCENES,
+  ...DAY21_SCENES,
 ];
 
 const ALL_RULES = [

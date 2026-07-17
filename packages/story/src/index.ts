@@ -20,6 +20,7 @@ export { DAY17_SCENES } from './scenes/day17.ts';
 export { DAY18_SCENES } from './scenes/day18.ts';
 export { DAY19_SCENES } from './scenes/day19.ts';
 export { DAY20_SCENES } from './scenes/day20.ts';
+export { DAY21_SCENES } from './scenes/day21.ts';
 export { TRUTH_TAGS, truthFlag } from './truths.ts';
 export type { TruthTag } from './truths.ts';
 export {

@@ -132,14 +132,19 @@ describe('classifySave — act boundaries hold places (pt2-fix-01)', () => {
     expect(classifySave(state, {})).toEqual({ kind: 'resume', state });
   });
 
-  it('a save parked on the held card (d20-end) is held, never discarded', () => {
-    expect(classifySave(state, { ending: 'd20-end' })).toEqual({ kind: 'held', state });
+  it('a save parked on the held card (d21-end) is held, never discarded', () => {
+    expect(classifySave(state, { ending: 'd21-end' })).toEqual({ kind: 'held', state });
   });
 
-  it('act2-end is retired from the hold: the unsealed card is mid-run and resumes', () => {
-    // The card lost its `ending` marker when Day 20 shipped — a November
-    // parked there walks into Day 20 with its flags intact (mirrors the CLI).
+  it('act2-end and d20-end are retired from the hold: the unsealed cards are mid-run and resume', () => {
+    // Each card lost its `ending` marker when the next day shipped — a
+    // November parked there walks forward with its flags intact (mirrors
+    // the CLI).
     expect(classifySave(state, {})).toEqual({ kind: 'resume', state });
+    expect(classifySave(initialState(1971, 'd20-end'), {})).toEqual({
+      kind: 'resume',
+      state: initialState(1971, 'd20-end'),
+    });
   });
 
   it('a save parked on a true ending means a finished run — fresh start', () => {
@@ -151,7 +156,8 @@ describe('classifyLaunch — the stored slot through classifySave', () => {
   const scenes: ReadonlyMap<string, ResumableScene> = new Map([
     ['n1-room', {}],
     ['act2-end', {}], // unsealed when Day 20 shipped
-    ['d20-end', { ending: 'd20-end' }],
+    ['d20-end', {}], // unsealed when Day 21 shipped
+    ['d21-end', { ending: 'd21-end' }],
     ['act2-ash-2', { ending: 'ash' }],
   ]);
 
@@ -162,9 +168,9 @@ describe('classifyLaunch — the stored slot through classifySave', () => {
     expect(classifyLaunch(storage, scenes)).toEqual({ kind: 'resume', state: midRun });
   });
 
-  it('holds a save parked on the NOVEMBER 26 card — storage untouched', () => {
+  it('holds a save parked on the NOVEMBER 27 card — storage untouched', () => {
     const storage = memoryStorage();
-    const parked = initialState(3, 'd20-end');
+    const parked = initialState(3, 'd21-end');
     persistSave(storage, parked);
     expect(classifyLaunch(storage, scenes)).toEqual({ kind: 'held', state: parked });
     // Classifying is read-only: the slot the next slice inherits is still there.
@@ -174,6 +180,14 @@ describe('classifyLaunch — the stored slot through classifySave', () => {
   it('resumes a save parked on the unsealed act2-end card — Day 20 inherits it', () => {
     const storage = memoryStorage();
     const parked = initialState(3, 'act2-end');
+    persistSave(storage, parked);
+    expect(classifyLaunch(storage, scenes)).toEqual({ kind: 'resume', state: parked });
+    expect(loadSave(storage)).toEqual(parked);
+  });
+
+  it('resumes a save parked on the unsealed NOVEMBER 26 card — Day 21 inherits it', () => {
+    const storage = memoryStorage();
+    const parked = initialState(3, 'd20-end');
     persistSave(storage, parked);
     expect(classifyLaunch(storage, scenes)).toEqual({ kind: 'resume', state: parked });
     expect(loadSave(storage)).toEqual(parked);
@@ -195,11 +209,13 @@ describe('classifyLaunch — the stored slot through classifySave', () => {
     expect(classifyLaunch(memoryStorage(), scenes)).toEqual({ kind: 'fresh' });
   });
 
-  it('accepts the real content map — d20-end holds, act2-end resumes, ash frees the slot', () => {
+  it('accepts the real content map — d21-end holds, the unsealed cards resume, ash frees the slot', () => {
     const content = buildContent();
     const storage = memoryStorage();
-    persistSave(storage, initialState(9, 'd20-end'));
+    persistSave(storage, initialState(9, 'd21-end'));
     expect(classifyLaunch(storage, content.scenes).kind).toBe('held');
+    persistSave(storage, initialState(9, 'd20-end'));
+    expect(classifyLaunch(storage, content.scenes).kind).toBe('resume');
     persistSave(storage, initialState(9, 'act2-end'));
     expect(classifyLaunch(storage, content.scenes).kind).toBe('resume');
     persistSave(storage, initialState(9, 'act2-ash-2'));
@@ -422,6 +438,51 @@ describe('resumeStep — save/resume equals continuous play (pt2-fix-03)', () =>
     });
     expect(morning.state.sceneId).toBe('d20-morning');
     expect(morning.state.day).toBe(20);
+    for (const [key, value] of Object.entries(parked.flags)) {
+      expect(morning.state.flags[key], `contract flag ${key}`).toBe(value);
+    }
+  });
+
+  it('a held d20-end save resumes into Day 21 with every contract flag intact', () => {
+    // The Day-21 boundary move, mirrored from the CLI E2E: the parked
+    // November classifies 'resume', the card re-prints with its open
+    // morning, and the choice walks into d21-morning carrying the flags
+    // and the chord.
+    const content = buildContent();
+    const storage = memoryStorage();
+    const parked: WorldState = {
+      ...initialState(7, 'd20-end'),
+      day: 21,
+      slot: 'morning',
+      chord: 1,
+      flags: {
+        'knows-truth': true,
+        'horn-on': true,
+        'potluck:sam': 'defended',
+        'potluck:verdict': 'defended',
+        'conf:sam': true,
+        'lever:wade': true,
+        'dianne:ready': true,
+        'priya:ready': true,
+        'wade:door-thawing': 1,
+        'a3:unpayable-armed': true,
+        'barb:counsel-seeded': true,
+      },
+    };
+    persistSave(storage, parked);
+    const launch = classifyLaunch(storage, content.scenes);
+    if (launch.kind !== 'resume') throw new Error(`expected resume, got ${launch.kind}`);
+    const card = resumeStep(content, launch.state, storage);
+    expect(card.state).toEqual(parked);
+    expect(card.view.ending).toBeUndefined();
+    expect(card.view.choices.map((c) => c.id)).toEqual(['morning-comes-anyway']);
+    const morning = advance(content, card.state, {
+      kind: 'choose',
+      choiceId: 'morning-comes-anyway',
+    });
+    expect(morning.state.sceneId).toBe('d21-morning');
+    expect(morning.state.day).toBe(21);
+    expect(morning.state.chord).toBe(1);
     for (const [key, value] of Object.entries(parked.flags)) {
       expect(morning.state.flags[key], `contract flag ${key}`).toBe(value);
     }

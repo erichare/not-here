@@ -169,11 +169,13 @@ describe('the act boundary — act2-end unsealed, d20-end parks (act1-end preced
     }
   });
 
-  it('d20-end mirrors act2-end as it was: cue title, ending marker, no choices, owns day 21', () => {
+  it('d20-end unsealed when Day 21 shipped: the card keeps day 21 and walks into the morning', () => {
     const card = sceneById('d20-end');
     expect(card.cue).toBe('title');
-    expect(card.ending).toBe('d20-end');
-    expect(card.choices).toEqual([]);
+    expect(card.ending).toBeUndefined();
+    expect(card.choices.map((c) => ({ id: c.id, goto: c.goto }))).toEqual([
+      { id: 'morning-comes-anyway', goto: 'd21-morning' },
+    ]);
     expect(card.onEnter).toContainEqual({ op: 'time.set', day: 21, slot: 'morning' });
     expect(rawText(card)).toContain('NOVEMBER 26');
   });
@@ -498,11 +500,14 @@ describe('the shed — ANSWER, STAY SILENT, the release; TAKE is not offered', (
     );
   });
 
-  it('whichever verb, the confession was given: conf:sam and the chord move in shed-2', () => {
+  it('whichever verb, the confession was given: conf:sam, the chord, and the lever move in shed-2', () => {
     for (const verb of ['answer-him', 'stay-silent']) {
       const run = play('d20-shed', [verb]);
       expect(run.state.flags['conf:sam']).toBe(true);
       expect(run.state.chord).toBe(1);
+      // The lever chain (act3-plan contract, retrofit landed with Day 21):
+      // Sam's confession names Wade's 3:12 — lever:wade ← conf:sam.
+      expect(run.state.flags['lever:wade']).toBe(true);
     }
   });
 });
@@ -811,7 +816,7 @@ describe('Barb’s margins — Day 20 rows travel their real edges', () => {
     ).toBe(true);
     const { heldFacts } = buildBarbsBook(parked.state);
     expect(heldFacts).toContain(
-      'up the hill for the airing, Dianne says. the sash open in that cold. seven years since I last wrote that.',
+      'up the hill for the airing, Dianne says. the sash open in that cold. seven years shut, and now twice in the month.',
     );
     expect(heldFacts).toContain(
       'ate what was put in front of her today. the week ahead wants her fed.',

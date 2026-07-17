@@ -32,7 +32,8 @@
  * Flags this file owns: 'd20:went-dianne' / 'd20:went-wade' /
  * 'd20:went-priya', 'd20:second-leg', 'd20:guitar-held', 'd20:answered',
  * 'd20:silent', 'd20:spent-the-sentence', 'dianne:ready', 'priya:ready',
- * 'wade:door-thawing' (number, step 1), 'conf:sam', 'a3:unpayable-armed'.
+ * 'wade:door-thawing' (number, step 1), 'conf:sam', 'lever:wade'
+ * (the lever chain: conf:sam names Wade's 3:12), 'a3:unpayable-armed'.
  * Act-owned state touched: 'today:fed', 'today:remembered', chord (+1).
  * Facts: 'aired-the-room-d20' (dianne), 'a3:fed-d20' (fed-pattern
  * substrate, dianne/barb), 'asked-who-the-room-is-for' (dianne),
@@ -673,6 +674,10 @@ const shed2 = defineScene({
   slot: 'night',
   onEnter: [
     { op: 'flag.set', key: 'conf:sam', value: true },
+    // The lever chain (act3-plan contract): each confession names the next
+    // keeper. Sam's names Wade's 3:12 — lever:wade ← conf:sam. Retrofit
+    // landed with Day 21 (the carried Day-20 ruling, resolved: real flag).
+    { op: 'flag.set', key: 'lever:wade', value: true },
     // Bar 5 returns to the ensemble. Fragment audio stays off (the
     // act3-ensemble mixer is unauditioned); the prose carries the return.
     { op: 'chord.add', value: 1 },
@@ -778,10 +783,12 @@ const night = defineScene({
   ],
 });
 
-// ——— The held place: Day 21 is the next phase's to write ———
-// Mirrors act2-end exactly: the card owns `time.set day 21`, so a future
-// d21-morning sets SLOT ONLY. ACT_BOUNDARY_ENDINGS in both apps holds
-// 'd20-end'; unsealing follows the act1-end/act2-end precedent.
+// ——— The unsealed act boundary (Day 21 shipped) ———
+// The card keeps `time.set day 21` — d21-morning sets SLOT ONLY — but the
+// `ending` marker is gone and one choice walks through, exactly as
+// act1-end and act2-end unsealed before it. Saves parked here classify
+// 'resume' and enter Day 21 with their flags intact; the held place is
+// now 'd21-end' (see day21.ts and ACT_BOUNDARY_ENDINGS in both apps).
 
 const dayEnd = defineScene({
   id: 'd20-end',
@@ -790,9 +797,10 @@ const dayEnd = defineScene({
     kind: 'inline',
     paragraphs: [{ text: '' }, { text: 'NOVEMBER 26' }, { text: '' }],
   },
-  choices: [],
+  choices: [
+    { id: 'morning-comes-anyway', label: 'Morning comes anyway.', goto: 'd21-morning' },
+  ],
   cue: 'title',
-  ending: 'd20-end',
 });
 
 export const DAY20_SCENES: readonly Scene[] = [

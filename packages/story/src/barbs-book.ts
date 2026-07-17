@@ -193,8 +193,21 @@ const MARGIN_LINES: readonly { readonly tag: FactTag; readonly line: string }[] 
   // Night 20 stays off the page by the same ruling that keeps the letter
   // night off it: Sam's confession is witnessed by Sam alone, and no
   // gossip edge runs sam→barb. The book never claims more than it knows.
-  { tag: 'aired-the-room-d20', line: 'up the hill for the airing, Dianne says. the sash open in that cold. seven years since I last wrote that.' },
+  // The airing count keeps honest books: the Day-3 airing was the first in
+  // seven years (day3.ts canon), so the Day-20 row counts the shut years
+  // and then the month, and claims nothing about her own last inking.
+  { tag: 'aired-the-room-d20', line: 'up the hill for the airing, Dianne says. the sash open in that cold. seven years shut, and now twice in the month.' },
   { tag: 'a3:fed-d20', line: 'ate what was put in front of her today. the week ahead wants her fed.' },
+  // ——— Act 3, Day 21 ———
+  // Night 21 keeps the Night-20 ruling: Barb's own confession is a flag,
+  // not a fact — there is nothing for the page to claim, and the page's
+  // sanctioned self-acknowledgment is the register itself (gate-pass) or
+  // the unread double ink (gate-fail). Tam-witnessed rows below arrive at
+  // the Day-21→22 boundary over the tam edge; the ice row is hers same-day.
+  { tag: 'helped-barb-ice', line: 'hauled ice with me the morning the pie case quit. never once asked was there an easier way.' },
+  { tag: 'a3:fed-d21', line: 'fed again today. whatever Friday wants of her, it will not find her empty.' },
+  { tag: 'rode-with-tam-d21', line: 'rode the morning run out and back, Tam says. he mentioned it, which from Tam is a paragraph.' },
+  { tag: 'a3:sat-with-moose', line: 'sat the cold at my door with the dog till the last run came down, Tam says. the dog kept his post the better for the company.' },
 ];
 
 const barbKnows = (state: WorldState, tag: FactTag): boolean => {

@@ -287,7 +287,7 @@ describe('margins, other hands — Act 3, Day 20 (the table ends at the held car
       { op: 'fact.learn', who: 'barb', tag: 'aired-the-room-d20' },
     ]).state;
     expect(buildBarbsBook(after).heldFacts).toEqual([
-      'up the hill for the airing, Dianne says. the sash open in that cold. seven years since I last wrote that.',
+      'up the hill for the airing, Dianne says. the sash open in that cold. seven years shut, and now twice in the month.',
     ]);
   });
 
@@ -304,8 +304,48 @@ describe('margins, other hands — Act 3, Day 20 (the table ends at the held car
     expect(buildBarbsBook(state).heldFacts).toEqual([]);
   });
 
+  it('the ice morning margins the same day — Barb’s own witness, no edge involved', () => {
+    const state = plant([{ op: 'fact.add', tag: 'helped-barb-ice', witnessedBy: ['barb'] }]);
+    expect(buildBarbsBook(state).heldFacts).toContain(
+      'hauled ice with me the morning the pie case quit. never once asked was there an easier way.',
+    );
+  });
+
+  it('the Day 21 tam-witnessed rows wait for the tam edge to carry them', () => {
+    // The ride and the vigil are Tam's to have seen; the page cannot know
+    // them before the Day-21→22 boundary runs tam→barb.
+    const before = plant([
+      { op: 'fact.add', tag: 'rode-with-tam-d21', witnessedBy: ['tam'] },
+      { op: 'fact.add', tag: 'a3:sat-with-moose', witnessedBy: ['tam'] },
+    ]);
+    expect(buildBarbsBook(before).heldFacts).toEqual([]);
+    const after = applyEffects(before, [
+      { op: 'fact.learn', who: 'barb', tag: 'rode-with-tam-d21' },
+      { op: 'fact.learn', who: 'barb', tag: 'a3:sat-with-moose' },
+    ]).state;
+    expect(buildBarbsBook(after).heldFacts).toEqual([
+      'rode the morning run out and back, Tam says. he mentioned it, which from Tam is a paragraph.',
+      'sat the cold at my door with the dog till the last run came down, Tam says. the dog kept his post the better for the company.',
+    ]);
+  });
+
+  it('Night 21 stays off the page — her own confession is a flag, not a fact', () => {
+    // The Night-20 ruling extended: conf:barb is flag-only, so there is
+    // nothing for the page to claim; the sanctioned self-acknowledgment is
+    // the register @doc (gate-pass) or the unread double ink (gate-fail).
+    const state = applyEffects(plant([]), [
+      { op: 'flag.set', key: 'conf:barb', value: true },
+      { op: 'flag.set', key: 'barb:counsel-live', value: true },
+      { op: 'flag.set', key: 'd21:sixth-answer', value: 'ill-be-there' },
+    ]).state;
+    expect(buildBarbsBook(state).heldFacts).toEqual([]);
+  });
+
   it('every Act 3 margin passes the page discipline', () => {
-    const ACT3_TAGS = ['aired-the-room-d20', 'a3:fed-d20'] as const;
+    const ACT3_TAGS = [
+      'aired-the-room-d20', 'a3:fed-d20',
+      'helped-barb-ice', 'a3:fed-d21', 'rode-with-tam-d21', 'a3:sat-with-moose',
+    ] as const;
     const state = plant(
       ACT3_TAGS.map((tag) => ({ op: 'fact.add', tag, witnessedBy: ['barb'] }) as const),
     );
