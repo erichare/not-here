@@ -32,6 +32,20 @@ weeps and holds you and never once says your name. Barb's old dog walks through 
 space where you stand. Your little brother says, to your face, "You're not my
 sister," and no one in the diner will meet his eye.
 
+## The outside record
+
+The lie survived contact with the world because the world barely looked. The
+RCMP file ran one season: a missing-person poster at the General and the
+Penticton detachment, two interviews, a shoreline search everyone already knew
+the shape of. The coroner entered "presumed drowned" by spring — Okanagan
+Lake is deep and cold off the breakwater and keeps what it takes; the file
+closed the way the lake's files do. Dianne gave the statement and kept her
+answers consistent, but she never asked anyone to lie out loud — she only ever
+said the canoe came in empty, and let the town do the rest. Nobody from
+outside Lorn Bay has opened the file since. Sam keeps the poster on his shed
+wall, gone soft at the folds: the only place the official story appears in
+print, kept where only he looks.
+
 ## The Twist (LOCKED)
 
 **Wren never drowned. She left.**
@@ -278,7 +292,8 @@ documents, not description: the **EBUS winter schedule card** (Nov 28 circled
 twice, pen pressed through), Barb's **register page**, Tam's **mileage log** ("one
 passenger, cash, no name — 04:10"), Priya's **clinic intake form** with fields she
 couldn't fill, the **memorial potluck flyer** (community hall, "seven years"),
-Dianne's **unburned letter** (Act 2, the till drawer).
+Dianne's **unburned letter** (Act 2, the till drawer), the **missing-person
+poster** (Sam's wall; the official version of the lie, seven years faded).
 
 ## Prose grammar (invariants — mechanically linted)
 

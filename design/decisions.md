@@ -125,3 +125,26 @@ without asking.
   matches shipped code); Moose lives, and his lean in Two Wrens is sanctioned
   with its own line; Barb stays untakeable — the fog never gets the person
   holding the pen. Do not relitigate without asking.
+
+## Quality-pass amendments (2026-08-19)
+
+Made after a full-story review; content additions only — no locked ruling touched.
+
+- **The outside record** (game-bible): the drowning lie's survival of RCMP /
+  coroner contact is now canon (one-season file, "presumed drowned," Dianne's
+  consistent statement, nobody asked to lie out loud). Twist-table row 8 and
+  Sam's wall (Act 2 Day 8) carry it in-world via the faded missing-person poster.
+- **Wren's voice, earlier:** her handwriting now appears twice before the letter —
+  chord-sheet marginalia (Act 1 Day 3) and a setlist in the guitar case (Act 3
+  Day 21) — and her Night-17 letter must state why she warned the town three
+  weeks out (deliberate, in her terms, one line).
+- **Sam's Day-3 trap:** gate unchanged (ECHO ≥ 3), but the correction choice now
+  carries a lockedLabel below the gate ("You almost say it. You don't know how
+  you know.") so the trap is felt even when unspringable.
+- **Wade's crown** (Act 3 Night 22): his knowledge of what the player is now has
+  a physical, dated anchor — the compressor was down nine days the first winter
+  (invoice clipped in the valve ledger) and the horn played anyway.
+- **Act 3 pacing:** the breath rule (no two confession scenes without a
+  zero-confession beat between) joins the must-not-do list, lint-targeted.
+- **Gate legibility** (Act 3): every ending gate must have at least one
+  in-fiction signal before Day 23. No thresholds changed; Ruling 1 stands.

@@ -140,8 +140,10 @@ Morning hub, three-way (Barb names them over coffee, no menu language):
   the light." That's all he says, all day.
 - **C. Sam's wall.** The boat shed, inside: a lake map over the workbench,
   three X's where the canoe came ashore in three tellings, a column of
-  printed screenshots (the memorial page, post dates), a phone on a tripod
-  aimed at the door. He shows you because showing you is a test too. The
+  printed screenshots (the memorial page, post dates), the missing-person
+  poster from the General's window, seven years faded — MISSING spelled over
+  her school photo, the official version of the lie in print — a phone on a
+  tripod aimed at the door. He shows you because showing you is a test too. The
   room-tone clip from Night 6 sits in a folder named GARBAGE.
 
 Evening: Kettle; without-you retellings for both missed slots (calibration
@@ -427,8 +429,11 @@ in Dianne's hand, folded twice, never sent.
 - **Open them (stakes major)** → **THE REVEAL, knowing route.** Wren's
   letter as @doc, short, alive, unmistakably a person and not a memory of
   one — sign-off per title-thread: *"Tell Sam he can stop keeping it. I
-  was never here anyway — that was the whole trouble. — W."* Then
-  Dianne's unsent reply-draft as @doc, salutation **"Wren —"**, and the
+  was never here anyway — that was the whole trouble. — W."* The letter
+  must also carry the warning's reason, one line, in her terms, no apology:
+  she gave the date on purpose — *"I'm telling you because I'm done being
+  a thing that happens to this town. You get three weeks of knowing. I got
+  seven years of it."* Then Dianne's unsent reply-draft as @doc, salutation **"Wren —"**, and the
   double edge in her own hand — the draft breaks off mid-line where the
   truth of the house got too close; final legible line guidance: she asks
   her daughter to hurry, *"before I get too good at the other one."*

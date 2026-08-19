@@ -17,12 +17,18 @@ three over coffee, no menu UI):
   next visit: she can no longer remember who made it.** Act 1's warning shot,
   played quiet. Also in the room: the **chord sheet** `@doc:` artifact —
   hand-ruled chart, five systems filled, sixth empty, headed *not here
-  (unfinished)*. Nobody names the song aloud (title rule 3).
+  (unfinished)*. The margins are hers — half-lines crossed out, one kept
+  (*"…the fog gets in the house / the house gets in the song"*), a note to
+  no one: *bridge is a coward's bar, cut it.* The player's first contact
+  with Wren's actual voice, arriving as artifact, seven years stale.
+  Nobody names the song aloud (title rule 3).
 - **B. Sam at the boat shed**, re-caulking the canoe nobody uses, loudly,
   alone. **Trap test #1**: he misquotes a private joke of Wren's to see if
   you correct him with detail nobody gave you. Correct him (needs ECHO≥3,
   which a Day-3 player can barely have) → he goes white and leaves — trap
-  sprung. Say nothing / admit you don't know → a long look; `fact:
+  sprung. Below the gate the choice carries a lockedLabel ache — *"You
+  almost say it. You don't know how you know."* — so the trap is felt even
+  by players who can't spring it. Say nothing / admit you don't know → a long look; `fact:
   sam-test-1-passed` (UNDERTOW path seed).
 - **C. Priya's clinic hours** ("she's asked after you." Everyone agrees you
   should go. Everyone.) Intake questions; she writes everything down; the

@@ -202,7 +202,10 @@ arms tonight (see Unwitnessed).
   trust +1, knowers-restricted — the fifth rung).
 - **C. The guitar — Wren's room alone** (gate: FLESH ≥ 5 AND dianne:ready). Your
   hands know chords they were never taught. **Sixth-bar composition moment 1 of 3**
-  (flag sixthbar:1) — see Mechanics: composition.
+  (flag sixthbar:1) — see Mechanics: composition. In the case's pick pocket: a
+  folded setlist in her hand — three songs, the third just *the fog one (FINISH
+  IT)* with the sixth bar boxed and empty. Her voice mid-run, paper from before,
+  no doctrine risk: instruments refuse to corroborate YOU, not her artifacts.
 
 **Evening (set piece).** **DIANNE'S CONFESSION** — defended staging: her kitchen
 after supper; on locks-house runs she UNLOCKS the door for you while you watch, the
@@ -356,7 +359,11 @@ the whole sleeping town in the only language she had left — and he lay in bed 
 let it finish. (3) Seven years of 3:12 as penance and calling: the horn room's
 ledger, and seven years of crossed-out pencil sixth bars, every attempt his, every
 attempt wrong — "It wasn't mine to finish." (arms the composition finale's
-'borrowed' trap). Then **the horn speech from title-thread.md, verbatim, at full
+'borrowed' trap). (4) How he knows what you are — physical, dated, anchored in
+paper, not faith: the first winter the compressor was down nine days for seals
+(the invoice is still clipped in the valve ledger), and the horn played 3:12
+anyway, every night, on air he did not put in it. He has not needed to believe
+anything since; he has maintenance records. Then **the horn speech from title-thread.md, verbatim, at full
 value** — the act's one spoken "not here." The bleed-through anchor lands inside
 it: **"Some nights the lake hums back what I put in. Wrong by a hair. Copies
 always are."** (19 days of detuned motifs, anchored — and the player named to
@@ -650,6 +657,16 @@ existing cue — auditioned with item 2's mixer work).
   ACT_BOUNDARY_ENDINGS hold path (pt2-fix-01) retires for 'act2-end' — held
   saves resume straight into Day 20 with all contract flags intact, which is
   what the hold existed to protect.
+- **The breath rule:** no two confession scenes without a zero-confession beat
+  between them. The manifest laugh, the ice haul, Moose's vigil, the tuned
+  piano, the Last Supper's good chair are the sanctioned breaths — the cascade
+  escalates by spacing, not stacking. Lint-targeted: each of Days 20–22 must
+  contain at least one scene or beat with no confession content.
+- **Gate legibility (no ruling touched):** every ending gate must have at least
+  one in-fiction signal before Day 23 — Wade offers the valves, Barb's "winters
+  end on purpose," Tam's 4:10, the standing-place described in prose as a
+  choice of where to watch from. The anti-fail-state requirement made visible
+  to the player, not only to tests. Thresholds unchanged; Ruling 1 stands.
 
 ## Testing (act3 gates)
 
