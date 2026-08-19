@@ -79,6 +79,76 @@ describe('createAudioSink', () => {
   });
 });
 
+describe('act3 ensemble events', () => {
+  const LAYER_FILES = ['sea', 'sam', 'dianne', 'barb', 'priya', 'tam', 'wade'];
+
+  const writeLayers = (): void => {
+    for (const id of LAYER_FILES) {
+      writeFileSync(join(dir, `act3-ensemble-${id}.wav`), 'not really a wav');
+    }
+  };
+
+  it('music.layer and music.chord print nothing — the scenes carry the prose', () => {
+    const s = createAudioSink(dir, { silent: true });
+    const lines = s.handle([
+      { kind: 'music.layer', pattern: 'sam', gain: 1 },
+      { kind: 'music.chord', fragments: 3 },
+      { kind: 'music.layer', pattern: 'sam', gain: 0 },
+    ]);
+    expect(lines).toEqual([]);
+  });
+
+  it('ignores non-ensemble patterns (the day-15 lullaby stays untouched)', () => {
+    const s = createAudioSink(dir, { silent: true });
+    expect(() =>
+      s.handle([
+        { kind: 'music.layer', pattern: 'lullaby', gain: 1 },
+        { kind: 'music.layer', pattern: 'lullaby', gain: 0 },
+      ]),
+    ).not.toThrow();
+  });
+
+  it('never spawns when silent, even with WAVs present', () => {
+    writeLayers();
+    const s = createAudioSink(dir, { silent: true });
+    expect(() =>
+      s.handle([
+        { kind: 'music.chord', fragments: 6 },
+        { kind: 'music.chord', fragments: 0 },
+      ]),
+    ).not.toThrow();
+  });
+
+  it('handles layer/chord events with WAVs present and survives stop()', () => {
+    writeLayers();
+    const s = sink();
+    s.handle([
+      { kind: 'music.chord', fragments: 2 },
+      { kind: 'music.layer', pattern: 'barb', gain: 1 },
+      { kind: 'music.layer', pattern: 'sam', gain: 0 },
+    ]);
+    expect(() => s.stop()).not.toThrow();
+  });
+
+  it('a scene cue after the ensemble still captions and stops cleanly', () => {
+    writeLayers();
+    writeFileSync(join(dir, 'title.wav'), 'not really a wav');
+    const s = sink();
+    s.handle([{ kind: 'music.chord', fragments: 4 }]);
+    const lines = s.handle([{ kind: 'music.cue', cue: 'title' }]);
+    expect(lines.map(stripAnsi)).toEqual([`♪ ${cueCaption('title')}`]);
+    expect(() => s.stop()).not.toThrow();
+  });
+
+  it('music.stop after layers prints nothing and never throws', () => {
+    writeLayers();
+    const s = sink();
+    s.handle([{ kind: 'music.chord', fragments: 6 }]);
+    expect(s.handle([{ kind: 'music.stop' }])).toEqual([]);
+    expect(() => s.stop()).not.toThrow();
+  });
+});
+
 describe('caption map totality', () => {
   it('every cue the story ships has a diegetic caption with no raw id', () => {
     const content = buildContent();

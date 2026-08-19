@@ -47,6 +47,11 @@ export const CUE_META: Readonly<Record<string, CueMeta>> = {
     caption: 'the horn at arm’s length, all five bars returning',
     loop: true,
   },
+  // The Act 3 chord.add ensemble — the night's five bars reassembling.
+  'act3-ensemble': {
+    caption: 'five bars over the water, gaining voices',
+    loop: true,
+  },
 };
 
 /** What plays when a cue nobody catalogued drifts through. Never the id. */

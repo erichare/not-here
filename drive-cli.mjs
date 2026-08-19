@@ -9,20 +9,20 @@ const out = createWriteStream(outPath);
 
 let buf = '';
 let busy = false;
-const strip = (s) => s.replace(/\x1b\[[0-9;]*[A-Za-z]/g, '');
+const strip = (s) => s.replace(/\x1b\[[0-9;?]*[A-Za-z]/g, '');
 
 child.stdout.on('data', (d) => {
   out.write(d);
   buf += d.toString();
   if (busy) return;
-  // Prompt appears as trailing "> " or the invalid-input reminder line
-  const tail = buf.slice(-400);
+  const clean = strip(buf);
+  const tail = clean.slice(-300);
   if (/>\s*$/.test(tail) || tail.includes('a number chooses')) {
     busy = true;
     setTimeout(() => {
-      const clean = strip(buf);
       const nums = [...clean.matchAll(/^\s*!?\s*(\d+)\.\s+\S/gm)].map((m) => Number(m[1]));
       const pick = nums.length ? Math.max(...nums) : 1;
+      console.error(`pick ${pick} of [${nums}]`);
       child.stdin.write(`${pick}\n`);
       buf = '';
       busy = false;

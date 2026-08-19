@@ -22,9 +22,9 @@
  * Night 20 (fixed): SAM'S CONFESSION — 2 AM, the gutted shed, mirror of
  * Night 6. OR-door gate: (told-sam-dont-know OR d16:sam-named OR derived
  * trust:sam ≥ 7) AND potluck:sam ≠ 'given'. TAKE is not offered — Sam
- * hands you nothing. chord.add +1 (bar 5, the whistle voice; fragment
- * audio stays off — the act3-ensemble mixer is unauditioned; the prose
- * carries the return). On 'given' runs the scene does not fire: the shed
+ * hands you nothing. chord.add +1 (bar 5, the whistle voice — the
+ * act3-ensemble mixer answers music.chord; the night doors re-assert the
+ * count at 3:12). On 'given' runs the scene does not fire: the shed
  * light burns and you are outside it. NIGHT_DECAY spreads verbatim from
  * act2-shared into BOTH night doors; the unpayable-night rule arms
  * tonight (state only — 'a3:unpayable-armed'; Unwitnessed ships later).
@@ -678,8 +678,8 @@ const shed2 = defineScene({
     // keeper. Sam's names Wade's 3:12 — lever:wade ← conf:sam. Retrofit
     // landed with Day 21 (the carried Day-20 ruling, resolved: real flag).
     { op: 'flag.set', key: 'lever:wade', value: true },
-    // Bar 5 returns to the ensemble. Fragment audio stays off (the
-    // act3-ensemble mixer is unauditioned); the prose carries the return.
+    // Bar 5 returns to the ensemble: the act3-ensemble mixer answers
+    // music.chord, and the night doors re-assert the count at 3:12.
     { op: 'chord.add', value: 1 },
   ],
   prose: {
@@ -739,6 +739,18 @@ const night = defineScene({
       cond: hornOn,
       then: [{ op: 'emit', event: { kind: 'music.cue', cue: 'foghorn-312' } }],
       else: [{ op: 'emit', event: { kind: 'music.stop' } }],
+    },
+    // The night ensemble re-forms at 3:12: with the horn on and at least
+    // one fragment returned, re-assert the chord so the act3-ensemble
+    // mixer rebuilds the night's texture (chord.add 0 emits music.chord
+    // with the current count; the mixers let the ensemble replace
+    // foghorn-312 — the five bars ARE the returned fragments). Emitted
+    // AFTER the horn branch so the ensemble, not the solo cue, is the
+    // final state. Horn-stopped nights keep their silence.
+    {
+      op: 'when',
+      cond: { op: 'all', of: [hornOn, { op: 'chord.gte', value: 1 }] },
+      then: [{ op: 'chord.add', value: 0 }],
     },
     ...NIGHT_DECAY,
     // The unpayable-night rule arms tonight — state only (see d20-shed).

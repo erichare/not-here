@@ -514,7 +514,7 @@ describe('the shed — ANSWER, STAY SILENT, the release; TAKE is not offered', (
 
 // ——— The chord substrate ———
 
-describe('the chord substrate — bar 5 enters the ensemble, audio stays off', () => {
+describe('the chord substrate — bar 5 enters the ensemble via music.chord', () => {
   it('shed-2 adds exactly one fragment and the count is gate-readable', () => {
     const run = play('d20-shed', ['answer-him']);
     expect(run.state.chord).toBe(1);
@@ -532,8 +532,9 @@ describe('the chord substrate — bar 5 enters the ensemble, audio stays off', (
   });
 
   it('no scene in the fleet emits a new audible cue for the fragment', () => {
-    // The act3-ensemble mixer is unauditioned: shed and shed-2 carry no cue
-    // and the shed's only emit is the mirror-of-Night-6 music.stop.
+    // The fragment's return rides music.chord (the act3-ensemble mixer's
+    // door), never a new cue: shed and shed-2 carry no cue and the shed's
+    // only emit is the mirror-of-Night-6 music.stop.
     expect(sceneById('d20-shed').cue).toBeUndefined();
     expect(sceneById('d20-shed-2').cue).toBeUndefined();
     const events = play('d20-shed', ['answer-him']).events.filter(
@@ -783,6 +784,44 @@ describe('night 20 — the count, the arming, the fresh tells', () => {
     expect(viewOf(shed, 'd20-shed-2').paragraphs.join('\n')).toContain(
       'spends you like the last of a purse',
     );
+  });
+});
+
+// ——— The night ensemble — the chord re-asserts at 3:12 ———
+
+describe('night 20 — the ensemble re-forms at 3:12', () => {
+  const withChord =
+    (chord: number, flags: Readonly<Record<string, boolean>>) =>
+    (s: WorldState): WorldState => ({ ...withFlags(flags)(s), chord });
+
+  it('horn on, fragments banked: the count re-asserts AFTER the horn cue', () => {
+    const run = play('d20-night', [], withChord(2, { 'horn-on': true }));
+    const cueIdx = run.events.findIndex(
+      (e) => e.kind === 'music.cue' && e.cue === 'foghorn-312',
+    );
+    const chordIdx = run.events.findIndex((e) => e.kind === 'music.chord');
+    expect(cueIdx).toBeGreaterThanOrEqual(0);
+    // The ensemble must be the final audible state: the mixers let a later
+    // music.chord stand the solo cue down, never the reverse.
+    expect(chordIdx).toBeGreaterThan(cueIdx);
+    expect(run.events[chordIdx]).toEqual({ kind: 'music.chord', fragments: 2 });
+  });
+
+  it('the re-assert never moves the count', () => {
+    const run = play('d20-night', [], withChord(2, { 'horn-on': true }));
+    expect(run.state.chord).toBe(2);
+  });
+
+  it('horn on, nothing banked: the night keeps the solo cue grammar', () => {
+    const run = play('d20-night', [], withFlags({ 'horn-on': true }));
+    expect(run.events).toContainEqual({ kind: 'music.cue', cue: 'foghorn-312' });
+    expect(run.events.filter((e) => e.kind === 'music.chord')).toEqual([]);
+  });
+
+  it('horn stopped: the silence is kept even with fragments banked', () => {
+    const run = play('d20-night', [], withChord(3, { 'horn-stopped': true }));
+    expect(run.events).toContainEqual({ kind: 'music.stop' });
+    expect(run.events.filter((e) => e.kind === 'music.chord')).toEqual([]);
   });
 });
 

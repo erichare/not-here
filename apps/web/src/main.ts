@@ -52,12 +52,21 @@ const run = (root: HTMLElement): void => {
         // The silence is the score: nothing plays until the next cue.
         audio.stop();
         break;
+      case 'music.layer':
+        audio.layer(event.pattern, event.gain);
+        break;
+      case 'music.chord':
+        audio.chord(event.fragments);
+        break;
+      case 'music.detune':
+        audio.detune(event.pattern, event.cents);
+        break;
       case 'tell.visual':
         ui.addCaption(event.text);
         break;
       default:
         // save.autosave is subsumed by the persist-every-step below;
-        // layering/stinger/fx events are tier-2 polish in this slice.
+        // stinger/static/fx events are tier-2 polish in this slice.
         break;
     }
   };

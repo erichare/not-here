@@ -642,8 +642,8 @@ const confession2 = defineScene({
     // The lever chain: Dianne's confession names Priya's letter.
     { op: 'flag.set', key: 'lever:priya', value: true },
     // Her fragment enters the ensemble — on lullaby-taken runs it returns
-    // to the ensemble and not to her. Fragment audio stays off (mixer
-    // unauditioned); the prose carries it.
+    // to the ensemble and not to her. The act3-ensemble mixer answers
+    // music.chord; the night doors re-assert the count at 3:12.
     { op: 'chord.add', value: 1 },
   ],
   prose: {
@@ -902,8 +902,8 @@ const lamp2 = defineScene({
       cond: { op: 'flag', key: 'barb:counsel-seeded' },
       then: [{ op: 'flag.set', key: 'barb:counsel-live', value: true }],
     },
-    // Her chords enter — the score gets its harmony. Fragment audio stays
-    // off (mixer unauditioned); the prose carries it.
+    // Her chords enter — the score gets its harmony. The act3-ensemble
+    // mixer answers music.chord; the night doors re-assert at 3:12.
     { op: 'chord.add', value: 1 },
   ],
   prose: {
@@ -966,6 +966,15 @@ const night = defineScene({
       cond: hornOn,
       then: [{ op: 'emit', event: { kind: 'music.cue', cue: 'foghorn-312' } }],
       else: [{ op: 'emit', event: { kind: 'music.stop' } }],
+    },
+    // The night ensemble re-forms at 3:12 (the d20-night shape): horn on
+    // and at least one fragment returned → re-assert the chord so the
+    // act3-ensemble mixer rebuilds the night's texture, replacing the
+    // solo foghorn-312. Horn-stopped nights keep their silence.
+    {
+      op: 'when',
+      cond: { op: 'all', of: [hornOn, { op: 'chord.gte', value: 1 }] },
+      then: [{ op: 'chord.add', value: 0 }],
     },
     ...NIGHT_DECAY,
     // The unpayable-night rule stays armed (state only; the day20 shape).

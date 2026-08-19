@@ -1113,6 +1113,37 @@ describe('night 21 — the count, the arming, the fresh tells', () => {
   });
 });
 
+// ——— The night ensemble — the chord re-asserts at 3:12 (the d20 shape) ———
+
+describe('night 21 — the ensemble re-forms at 3:12', () => {
+  const withChord =
+    (chord: number, flags: Readonly<Record<string, boolean>>) =>
+    (s: WorldState): WorldState => ({ ...withFlags(flags)(s), chord });
+
+  it('horn on, fragments banked: the count re-asserts AFTER the horn cue', () => {
+    const run = play('d21-night', [], withChord(3, { 'horn-on': true }));
+    const cueIdx = run.events.findIndex(
+      (e) => e.kind === 'music.cue' && e.cue === 'foghorn-312',
+    );
+    const chordIdx = run.events.findIndex((e) => e.kind === 'music.chord');
+    expect(cueIdx).toBeGreaterThanOrEqual(0);
+    expect(chordIdx).toBeGreaterThan(cueIdx);
+    expect(run.events[chordIdx]).toEqual({ kind: 'music.chord', fragments: 3 });
+    expect(run.state.chord).toBe(3); // the re-assert never moves the count
+  });
+
+  it('horn on, nothing banked: no chord event leaves the night door', () => {
+    const run = play('d21-night', [], withFlags({ 'horn-on': true }));
+    expect(run.events.filter((e) => e.kind === 'music.chord')).toEqual([]);
+  });
+
+  it('horn stopped: the silence is kept even with fragments banked', () => {
+    const run = play('d21-night', [], withChord(4, { 'horn-stopped': true }));
+    expect(run.events).toContainEqual({ kind: 'music.stop' });
+    expect(run.events.filter((e) => e.kind === 'music.chord')).toEqual([]);
+  });
+});
+
 // ——— Survivability (h) — Ruling 5 across every route and staging ———
 
 describe('offset survivability — at least one reachable offset on every Day 21 route', () => {

@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOT HERE — Story Map</title>
+<style>
+  :root {
+    --ink: #0b1016;
+    --ink2: #101823;
+    --fog: #9fb0bd;
+    --fog-dim: #5d6d7a;
+    --bone: #e8e2d5;
+    --beat: #3d5a73;
+    --beat-hi: #6f9ec4;
+    --branch: #c9922e;
+    --computed: #8f6fc4;
+    --confess: #b56a7a;
+    --ending: #4fa08a;
+    --dark: #a34040;
+    --track: #4a7a96;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    background:
+      radial-gradient(ellipse 120% 60% at 50% -10%, #1a2634 0%, transparent 60%),
+      radial-gradient(ellipse 80% 50% at 80% 110%, #14202c 0%, transparent 55%),
+      var(--ink);
+    color: var(--fog);
+    font-family: "Iowan Old Style", "Palatino", Georgia, serif;
+    user-select: none;
+  }
+
+  /* ---------- header ---------- */
+  #header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+    display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+    padding: 12px 20px;
+    background: linear-gradient(to bottom, rgba(11,16,22,.96), rgba(11,16,22,.75) 80%, transparent);
+    pointer-events: none;
+  }
+  #header > * { pointer-events: auto; }
+  #header h1 {
+    font-size: 20px; letter-spacing: .35em; color: var(--bone); font-weight: 500;
+  }
+  #header h1 span { color: var(--fog-dim); letter-spacing: .12em; font-size: 12px; display: block; margin-top: 2px; font-style: italic; }
+  #traces { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  #traces .lbl { font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--fog-dim); margin-right: 2px; }
+  .tbtn {
+    font-family: inherit; font-size: 12px; padding: 5px 11px; cursor: pointer;
+    color: var(--fog); background: rgba(61,90,115,.18); border: 1px solid rgba(111,158,196,.3);
+    border-radius: 3px; transition: all .15s;
+  }
+  .tbtn:hover { background: rgba(61,90,115,.4); color: var(--bone); }
+  .tbtn.active { background: var(--beat); color: var(--bone); border-color: var(--beat-hi); }
+  .tbtn.ending-btn { border-color: rgba(79,160,138,.45); }
+  .tbtn.ending-btn:hover, .tbtn.ending-btn.active { background: rgba(79,160,138,.3); border-color: var(--ending); }
+  .tbtn.dark-btn { border-color: rgba(163,64,64,.5); }
+  .tbtn.dark-btn:hover, .tbtn.dark-btn.active { background: rgba(163,64,64,.3); border-color: var(--dark); }
+  #zoomctl { margin-left: auto; display: flex; gap: 6px; }
+
+  /* ---------- viewport / world ---------- */
+  #viewport { position: absolute; inset: 0; overflow: hidden; cursor: grab; }
+  #viewport.dragging { cursor: grabbing; }
+  #world { position: absolute; top: 0; left: 0; transform-origin: 0 0; }
+  #edges, #tracelayer { position: absolute; top: 0; left: 0; overflow: visible; pointer-events: none; }
+  #tracelayer { z-index: 5; }
+
+  .actband {
+    position: absolute; border: 1px solid rgba(111,158,196,.12); border-radius: 8px;
+    background: rgba(61,90,115,.05); pointer-events: none;
+  }
+  .actband .actlabel {
+    position: absolute; top: -11px; left: 18px; padding: 1px 10px;
+    background: var(--ink); font-size: 11px; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--fog-dim);
+  }
+  .actband .actdates { position: absolute; top: -10px; right: 18px; background: var(--ink); padding: 1px 8px; font-size: 10px; color: var(--fog-dim); font-style: italic; }
+
+  /* ---------- nodes ---------- */
+  .node {
+    position: absolute; width: 150px; padding: 8px 10px 7px;
+    background: linear-gradient(160deg, #16202c, #101823);
+    border: 1px solid var(--beat); border-left-width: 3px; border-radius: 4px;
+    cursor: pointer; transition: box-shadow .15s, border-color .15s, opacity .3s, filter .3s;
+    z-index: 6;
+  }
+  .node:hover { border-color: var(--beat-hi); box-shadow: 0 0 18px rgba(111,158,196,.25); }
+  .node .k { font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: var(--fog-dim); }
+  .node .t { font-size: 13px; color: var(--bone); margin-top: 2px; line-height: 1.25; }
+  .node .s { font-size: 10.5px; color: var(--fog); font-style: italic; margin-top: 2px; line-height: 1.3; }
+  .node.branch { border-color: var(--branch); }
+  .node.branch:hover { box-shadow: 0 0 18px rgba(201,146,46,.3); }
+  .node.branch .k { color: var(--branch); }
+  .node.computed { border-color: var(--computed); }
+  .node.computed .k { color: var(--computed); }
+  .node.confess { border-color: var(--confess); }
+  .node.confess .k { color: var(--confess); }
+  .node.track { border-color: var(--track); border-style: dashed; border-left-style: solid; }
+  .node.track .k { color: var(--track); }
+  .node.ending { border-color: var(--ending); background: linear-gradient(160deg, #12251f, #101823); }
+  .node.ending .k { color: var(--ending); }
+  .node.ending:hover { box-shadow: 0 0 20px rgba(79,160,138,.35); }
+  .node.darkend { border-color: var(--dark); background: linear-gradient(160deg, #241416, #101823); }
+  .node.darkend .k { color: var(--dark); }
+  .node.darkend:hover { box-shadow: 0 0 20px rgba(163,64,64,.35); }
+  .node.selected { box-shadow: 0 0 0 2px var(--bone), 0 0 24px rgba(232,226,213,.25); }
+  .node.dimmed { opacity: .18; filter: saturate(.3); }
+
+  /* ---------- edges ---------- */
+  .edge { fill: none; stroke: #3a4a58; stroke-width: 1.5; transition: opacity .3s, stroke .15s; }
+  .edge.dashed { stroke-dasharray: 5 5; }
+  .edge.hot { stroke: var(--beat-hi); stroke-width: 2.5; }
+  .edge.dimmed { opacity: .12; }
+  .elabel { font-size: 10px; fill: var(--fog-dim); font-style: italic; font-family: inherit; transition: opacity .3s; }
+  .elabel.dimmed { opacity: .12; }
+  .elabel-bg { fill: var(--ink); opacity: .85; }
+
+  /* ---------- trace path ---------- */
+  .trace-line {
+    fill: none; stroke: var(--bone); stroke-width: 2.5; opacity: .9;
+    stroke-dasharray: 8 6; filter: drop-shadow(0 0 6px rgba(232,226,213,.6));
+    animation: march 1.2s linear infinite;
+  }
+  @keyframes march { to { stroke-dashoffset: -14; } }
+  .trace-node-pulse { animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 1px var(--bone), 0 0 10px rgba(232,226,213,.3);} 50% { box-shadow: 0 0 0 2px var(--bone), 0 0 26px rgba(232,226,213,.55);} }
+
+  /* ---------- side panel ---------- */
+  #panel {
+    position: fixed; top: 0; right: 0; bottom: 0; width: 340px; z-index: 25;
+    background: linear-gradient(200deg, rgba(16,24,35,.97), rgba(11,16,22,.97));
+    border-left: 1px solid rgba(111,158,196,.2);
+    padding: 76px 22px 24px; overflow-y: auto;
+    transform: translateX(0); transition: transform .25s;
+  }
+  #panel.hidden { transform: translateX(105%); }
+  #panel h2 { color: var(--bone); font-size: 17px; font-weight: 500; line-height: 1.3; }
+  #panel .kick { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--branch); margin-bottom: 6px; }
+  #panel .sub { font-style: italic; color: var(--fog); font-size: 13px; margin: 6px 0 14px; }
+  #panel p { font-size: 13.5px; line-height: 1.55; margin-bottom: 12px; color: #c3cfd8; }
+  #panel .gates { margin: 14px 0; }
+  #panel .gates h3 { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--fog-dim); margin-bottom: 8px; }
+  #panel .gates li {
+    list-style: none; font-size: 12.5px; padding: 5px 9px; margin-bottom: 5px;
+    background: rgba(61,90,115,.15); border-left: 2px solid var(--beat-hi); border-radius: 2px; color: #c3cfd8;
+  }
+  #panel .quote { border-left: 2px solid var(--branch); padding: 4px 12px; font-style: italic; color: var(--bone); font-size: 13px; margin: 12px 0; }
+  #closepanel { position: absolute; top: 70px; right: 16px; background: none; border: none; color: var(--fog-dim); font-size: 20px; cursor: pointer; font-family: inherit; }
+  #closepanel:hover { color: var(--bone); }
+
+  /* ---------- legend ---------- */
+  #legend {
+    position: fixed; left: 16px; bottom: 16px; z-index: 20;
+    background: rgba(11,16,22,.88); border: 1px solid rgba(111,158,196,.18); border-radius: 6px;
+    padding: 12px 16px; font-size: 11.5px; max-width: 300px;
+  }
+  #legend h4 { font-size: 9.5px; letter-spacing: .22em; text-transform: uppercase; color: var(--fog-dim); margin-bottom: 8px; }
+  #legend .row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; color: var(--fog); }
+  #legend .sw { width: 14px; height: 10px; border-radius: 2px; border: 1px solid; flex: none; }
+  #legend .stats { margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(111,158,196,.15); color: var(--fog-dim); line-height: 1.5; }
+  #legend .stats b { color: var(--fog); font-weight: 500; }
+  #hint { position: fixed; bottom: 16px; right: 356px; z-index: 20; font-size: 11px; color: var(--fog-dim); font-style: italic; transition: right .25s; }
+  #hint.wide { right: 16px; }
+</style>
+</head>
+<body>
+
+<div id="header">
+  <h1>NOT HERE <span>seven years after you drowned, you walk back into the town that never stopped grieving you</span></h1>
+  <div id="traces">
+    <span class="lbl">Trace an ending:</span>
+  </div>
+  <div id="zoomctl">
+    <button class="tbtn" id="zin">+</button>
+    <button class="tbtn" id="zout">−</button>
+    <button class="tbtn" id="zfit">fit</button>
+  </div>
+</div>
+
+<div id="viewport">
+  <div id="world">
+    <svg id="edges"></svg>
+    <svg id="tracelayer"></svg>
+  </div>
+</div>
+
+<div id="panel"><button id="closepanel">×</button><div id="panelbody"></div></div>
+
+<div id="legend">
+  <h4>Node types</h4>
+  <div class="row"><span class="sw" style="border-color:var(--beat)"></span> story beat</div>
+  <div class="row"><span class="sw" style="border-color:var(--branch)"></span> hard branch (player choice)</div>
+  <div class="row"><span class="sw" style="border-color:var(--computed)"></span> computed outcome (stats, not choice)</div>
+  <div class="row"><span class="sw" style="border-color:var(--confess)"></span> confession (returns a song fragment)</div>
+  <div class="row"><span class="sw" style="border-color:var(--track)"></span> track state (horn-on / horn-stopped)</div>
+  <div class="row"><span class="sw" style="border-color:var(--ending)"></span> ending &nbsp;·&nbsp; <span class="sw" style="border-color:var(--dark)"></span> dark ending</div>
+  <div class="stats">
+    <b>Stats:</b> FLESH body · NAME record · ECHO her memories · UNDERTOW self · CHORD song (0–6) · STATIC fog's claim (0–100).<br>
+    No stat rises without cost to a named person.
+  </div>
+</div>
+<div id="hint">drag to pan · scroll to zoom · click a node</div>
+
+<script>
+/* ================= DATA ================= */
+
+const NODES = {
+  /* ACT 1 */
+  start:    {x:60,   y:190, k:"Day 1 · Nov 6",      t:"The Beach", s:"you wake on the gravel", type:"beat", act:1,
+    desc:"You wake below the breakwater light, \u201csoaked,\u201d and walk into a town that greets you as a miracle: Wren Cole, drowned seven years ago this month. The wrongness is stated as fact — no lake smell, hair dry at the roots, no cold in you, on a November night that would kill a swimmer in forty minutes.",
+    gates:["The save name typed here is never spoken by any resident — until the endings where it matters"]},
+  ci:       {x:230,  y:190, k:"Night 1",            t:"The Counter Interview", s:"Barb pours decaf; five strange questions", type:"beat", act:1,
+    desc:"Character creation as diner conversation. Barb's five questions seed stat weights and three self-truth tags, and hide a musical fingerprint (inverted) in the main theme from the title screen. The EBUS winter schedule card is on screen from Night 1: Friday, Nov 28, circled twice, pen pressed through.",
+    gates:["Answers seed stats + 3 self-truth tags","The bus date is visible from Day 1"]},
+  hubs:     {x:400,  y:190, k:"Days 3–6",           t:"Memory Hubs", s:"the town offers you her", type:"beat", act:1,
+    desc:"Three-way morning hubs: Dianne airing Wren's room (the quilt — first ECHO harvest; next visit she can't remember who made it), Sam's trap test at the boat shed, Priya's intake notebook, Wade's first lie-detune, Tam's ride (\u201cYou planning to stay past the 28th?\u201d). Night 6: Sam plays a clip with room tone where your voice should be. \u201cI don't know\u201d — the honest answer — seeds the game's most guarded friendship.",
+    gates:["ECHO harvests cost the giver the memory forever","Day 6: \u201cI don't know\u201d → UNDERTOW +2, told-sam-dont-know","Missed scenes return as biased \u201cwithout-you\u201d retellings"]},
+  foghorn:  {x:580,  y:190, k:"Night 7 · 3:12 AM",  t:"THE FOGHORN CHOICE", s:"Wade at the valves, playing her song", type:"branch", act:1,
+    desc:"The one railroad in the act: the fog parts you down to the wharf. Wade is playing your tune into the fog — the first time you hear it at full volume. He sees you. He doesn't stop. Ask about the sixth bar and he answers truthfully: \u201cThere wasn't one. She never finished it.\u201d",
+    gates:["KEEP PLAYING → complicity; presence stats stay fed; Wade's confession opens early","STOP → you close the valve yourself; nightly presence decay begins; the only road to the Stranger endings"]},
+
+  /* ACT 2 tracks */
+  hon:      {x:750,  y:70,  k:"Track",              t:"Horn-On", s:"something is feeding you, and you know who pays", type:"track", act:2,
+    desc:"The horn plays nightly at 3:12; the town sleeps; presence stats stay fed. Complicity is the texture of every night scene. Wade's confession path opens early. Unwitnessed is foreclosed — the fog keeps what it is paid for.",
+    gates:["No nightly decay","foghorn-312 under every night scene"]},
+  hoff:     {x:750,  y:320, k:"Track",              t:"Horn-Stopped", s:"the silence is the loudest thing in the act", type:"track", act:2,
+    desc:"Wade locks the compressor shed. From Night 8, one presence stat (−1, rotating flesh→name→echo) decays per night unless offset that day by being fed, named, or remembered. No music under any night scene — the act is scored by its absence. The Stranger path seeds through Sam.",
+    gates:["Decay offset only by today:fed / today:named / today:remembered","Unmanaged decay → Unwitnessed (Act 3)"]},
+  barbwarn: {x:920,  y:190, k:"Night 11",           t:"Barb's One Warning", s:"\u201cHe was here — and he was not here.\u201d", type:"beat", act:2,
+    desc:"After close, chairs up, one lamp. Barb tells the register, not you: her Frank came back, one winter, forty years ago. \u201cAnd the second one wore the first one out.\u201d She never explains. She never repeats it. She knew from Day 1 what you are — and said nothing, because that winter was the best of her life.",
+    gates:["Ask what he was → heeded-barbs-warning","Make it a joke → STATIC +2","One warning, ever — mechanical, not just tonal"]},
+  earlytruth:{x:1100, y:60, k:"Night 12 · gated",   t:"Early Truth", s:"Barb answers, this once", type:"computed", act:2,
+    desc:"One night only: if you heeded the warning, pressed Dianne three times, and your UNDERTOW is high enough, Barb tells you what Frank was, what winter did to him, and what she chose. From here the act plays dramatic irony inverted — you know; they don't know you know.",
+    gates:["Requires: UNDERTOW ≥ 6 · pressed-dianne = 3 · heeded-barbs-warning","Sets knows-truth + early-truth","Knowing at the potluck is the route's payoff"]},
+  potluck:  {x:1100, y:190, k:"Night 13",           t:"THE MEMORIAL POTLUCK", s:"\u201cThat is not my sister.\u201d", type:"computed", act:2,
+    desc:"The midpoint set piece. Sam stands up in front of everyone and says the true thing into casserole silence. The verdict is computed, not chosen: witness (FLESH + NAME) ≥ 9 and the town's chairs scrape TOWARD you; otherwise the room reaches a verdict without saying a word of it. Your choice inside the verdict: defend Sam (\u201cOut of everyone — he's allowed\u201d), say nothing, or give the town its night in her cadence — the cruelest cheap heat in the act.",
+    gates:["Verdict: witness = FLESH + NAME ≥ 9 → defended, else exiled","Defend Sam → Tam's trust, Sam's friendship","Sacrifice Sam → ECHO +1, STATIC +4, Tam's route \u201crescheduled\u201d"]},
+  defended: {x:1270, y:90,  k:"Verdict",            t:"Defended", s:"\u201cThat's Wren, son. Sit down.\u201d", type:"track", act:2,
+    desc:"The room votes on what is real one act before it learns the answer. The walk home is warm at your back — and Sam is alone in the lot, ostracized from tonight: a cost you carry. The town overwarms, overcorrects, feeds you — and the ease should feel like what it is.",
+    gates:["Act 3 staged from town","Defending Sam here buys the friendship offer early"]},
+  exiled:   {x:1270, y:300, k:"Verdict",            t:"Half-Exiled", s:"the ticket office door is open, cot made", type:"track", act:2,
+    desc:"Nobody moves toward you. You don't go back to your unit — it isn't said, it is arranged. Wade knew the count before the town did; the old ticket office waits with a kettle filled. Mornings start at the wharf; a thermos appears on the piling before first light, no note.",
+    gates:["Act 3 staged from the wharf","Barb serves you like nothing happened — the kindest lie in the act"]},
+  lullaby:  {x:1440, y:190, k:"Night 15",           t:"The Lullaby", s:"the first erasing harvest", type:"branch", act:2,
+    desc:"Over the washing-up, Dianne hums bars 1–2 and offers them the way the quilt was offered: \u201cYou remember this one, hon.\u201d Take it and tomorrow she calls you Wren — her only use of the name, and it lands like a door closing; she can no longer hum it herself. Refuse, and for four bars the kitchen is seven years ago and nobody in it is dead.",
+    gates:["TAKE → ECHO +2; Dianne says \u201cWren\u201d Day 16; Two Wrens closes","REFUSE → UNDERTOW +1; Two Wrens stays open"]},
+  d16:      {x:1610, y:190, k:"Day 16",             t:"The Log & the Name", s:"proof, and a way out", type:"beat", act:2,
+    desc:"If you defended Sam at the potluck, Tam unfolds the mileage log unprompted — one passenger, cash, no name — 04:10 — the single paper proof Wren lived. If you told Sam the truth on Night 6, he asks the guarded question: \u201cYou're not her. Fine. Then who are you?\u201d — and what name you'd travel under. He writes nothing down, which from Sam is sacrament.",
+    gates:["Tam's log shown only if defended-sam","The name you'd travel under → the Stranger's seat (d16:sam-named)"]},
+  letter:   {x:1780, y:190, k:"Night 17",           t:"THE LETTER", s:"the trail ends at the till drawer", type:"branch", act:2,
+    desc:"The General after hours. Inside the drawer: Wren's letter — short, alive, unmistakably a person and not a memory of one — and Dianne's unsent reply, breaking off where the truth got too close: she asks her daughter to hurry, \u201cbefore I get too good at the other one.\u201d Opening it plays bars 1–5 complete for the first time in the game, then holds the rest where bar 6 should be. You and the protagonist learn what you are in the same breath.",
+    gates:["OPEN → knows-truth (the knowing route)","BURN UNREAD → STATIC +10; the reveal will ambush you at the bus stop, live","Never found (missed Day-17 mail run) → the ambush route, innocent"]},
+  opened:   {x:1950, y:60,  k:"Route",              t:"Knowing", s:"\u201cYou get three weeks of knowing. I got seven years of it.\u201d", type:"track", act:2,
+    desc:"Day 18 becomes the Return Pass: four quiet scenes re-rendering one line each with its post-reveal reading — the beach (no cold in you, and now you know why), the register, the circled card, Wade's back. The prose does not gasp; it puts things down gently where they were always standing.",
+    gates:["letter-opened + knows-truth","Required for Two Wrens (early-truth alone does not qualify)"]},
+  burned:   {x:1950, y:190, k:"Route",              t:"Willful Innocence", s:"the fire takes it the way the lake takes things", type:"track", act:2,
+    desc:"Both papers, unread. The tin on Dianne's shelf gains company; the lid never sits flush again. The fog lifts a little and you tell yourself that means something. The truth will arrive anyway — at 07:40 on Nov 28, mid-ending, live, complicity-flavored: the stove smell on your sleeves; you chose this door.",
+    gates:["STATIC +10","Distinct live ambush at the bus stop"]},
+  neverfound:{x:1950, y:320, k:"Route",             t:"Innocent", s:"the ambush route", type:"track", act:2,
+    desc:"Miss the mail run and Night 17 never fires. The game lets you reach the bus stop knowing nothing — and as Wren steps down, four to six clues detonate one line each: no cold in you; the circled card; the dog; the photos; the name never said; the sixth bar she finished.",
+    gates:["No flag set — distinguished from burned by its absence","Ambush fires inside whichever ending staging lands"]},
+  ash:      {x:1950, y:470, k:"Ending 7 · dark exit", t:"ASH", s:"burn the other book", type:"darkend", act:2,
+    desc:"Hidden unless STATIC ≥ 16: cross the dark lot to the Kettle and burn Barb's register. It works. The town wakes with no Wren in it at all — the banner says SEVEN YEARS above a hall nobody can name the reason for; Dianne holds the guitar out to Sam and asks whose it is; Sam, promise horribly voided, doesn't know. You are still here. Nobody ever calls you anything again.",
+    gates:["Requires STATIC ≥ 16 to even appear","Terminal — Act 3 never happens","The double-inked pages go last, fighting"]},
+  readback: {x:2120, y:190, k:"Day 19 evening",     t:"The Register Read-Back", s:"Barb reads your winter back to you", type:"beat", act:2,
+    desc:"She opens the book and reads your run's real record in her own hand — including one entry you will have genuinely forgotten; that is the scene's proof the book is truer than you are. If her trust is high: \u201cWinters end, you know. Best ones end on purpose.\u201d The Long Winter's door, one sentence, never pushed.",
+    gates:["Exiled runs: Barb walks the book down to the wharf — the act's one unbent kindness","Trust high → barb:counsel-seeded (Long Winter)"]},
+
+  /* ACT 3 cascade */
+  csam:     {x:2290, y:190, k:"Night 20 · 2 AM",    t:"Sam's Confession", s:"he waved her off", type:"confess", act:3,
+    desc:"The gutted shed, mirror of Night 6. She woke him climbing past his window; he watched her paddle out dark toward the highway shore; she came back within voice-reach and made an eleven-year-old promise: \u201cLet them decide.\u201d The guilt: he thought it was an adventure and he waved. \u201cThe dog walked her to the pull-in. Came back alone. He's been seeing her off every night since.\u201d",
+    gates:["Fires if: told-sam-dont-know OR sam-named OR trust ≥ 7 — and you didn't give him up","CHORD +1 — bar 5 returns, whistled","Verbs: ANSWER / STAY SILENT (TAKE is not offered — Sam hands you nothing)"]},
+  cdianne:  {x:2460, y:190, k:"Day 21 evening",     t:"Dianne's Confession", s:"the burned note; the second letter", type:"confess", act:3,
+    desc:"Her kitchen (or the Kettle's back table, if the locks went on). She found the goodbye note the next morning and burned it, choosing \u201cdrowned\u201d over \u201cshe left us\u201d — and three weeks ago the second letter came. If you took the lullaby, the confession is worse: she tries to hum it and goes around the missing stair without noticing.",
+    gates:["CHORD +1 — bars 1–2 return","Verbs: TAKE her memory of the burning / ANSWER / STAY SILENT","Her confession names the next keeper (lever → Priya)"]},
+  cbarb:    {x:2630, y:190, k:"Night 21",           t:"Barb's Confession", s:"the NAME column, forty years deep", type:"confess", act:3,
+    desc:"The register opened to the NAME column at last: Frank's winter, how it ended — she ended it — and what it cost to watch him thin. On knows-truth runs she says the second thing under the first. Her confession re-runs the Long Winter seed: this is the last chance to earn the game's gentlest door.",
+    gates:["Gate: trust ≥ 7 OR knows-truth","CHORD +1 — the accompaniment chords","Re-seeds Long Winter if trust was short"]},
+  cpriya:   {x:2800, y:190, k:"Day 22 morning",     t:"Priya's Confession", s:"the unanswered letter", type:"confess", act:3,
+    desc:"The clinic's last open day, exam room half in boxes. She has carried Wren's real goodbye letter for seven years, unanswered — her forensic hostility was always displaced guilt. If you took her letter-memory, the devastating variant fires: she found the envelope in her own files and cannot remember reading it. \u201cI'm not trying to catch you. I'm trying to be wrong.\u201d",
+    gates:["CHORD +1 — bar 4 un-inverts live","Her confession names Tam's mileage math (lever → Tam)"]},
+  ctam:     {x:2970, y:190, k:"Day 22 afternoon",   t:"Tam's Confession", s:"the 4:10 run, seven years back", type:"confess", act:3,
+    desc:"The depot bay, the empty bus. He drove her out on the 4:10 AM Penticton run and kept his columns — one passenger, cash, no name. The pulse that carried Wren out is the pitchless rhythm under everything. He is booked to drive her home: the man who drove her out does the Friday pickup.",
+    gates:["CHORD +1 — the road ostinato","Needs Priya's lever, or defended-sam, or Moose's evening"]},
+  cwade:    {x:3140, y:190, k:"Night 22 · 3:12",    t:"Wade's Confession", s:"the man who made you", type:"confess", act:3,
+    desc:"The crown, at the last 3:12. He argued with her that last night, heard her at the horn, and didn't come down — and has played her unfinished tune nightly for seven years as penance. He knows the calling made you and kept playing anyway: you are his forgiveness made flesh. Horn-on he is expecting you; horn-stopped he comes down because tonight he cannot stand the silence he agreed to.",
+    gates:["CHORD +1 — the drone + bar 3 (completes 6/6 if none missed)","Horn-stopped: can teach you the valves — the Sixth Bar prerequisite","Night 22 also holds the pack-the-name choice (Stranger) and the Long Winter door"]},
+  unwitnessed:{x:2460,y:420, k:"Ending 6 · metabolic", t:"UNWITNESSED", s:"the game continues without you", type:"darkend", act:3,
+    desc:"Checked Nights 20–22 after decay resolves: horn-stopped and two of flesh/name/echo at 0. The night scene starts and your prompt is dead. Four authored minutes with input disabled: Barb tells Tam the unit's free Friday; Dianne asks after nobody; a register entry stops mid-word, and Barb's steady hand finishes it: \u201c— not here.\u201d",
+    gates:["horn-stopped only — complicity forecloses this by design","Presence was always other people's work; you let them stop"]},
+  longwinter:{x:2800,y:420, k:"Ending 5",           t:"THE LONG WINTER", s:"one winter, no more", type:"ending", act:3,
+    desc:"The only ending selected by declining the finale — it never sees Nov 28. You choose your last night the way Barb taught: on purpose. The goodbyes are small and unannounced — a shelf squared, the thermos returned. At 3:12 Wade plays you out, and Barb writes the NAME column at last, double-inked: the save-name. It is not \u201cnot here.\u201d",
+    gates:["barb:counsel-seeded + Barb's confession + the Night-22 door taken","STATIC < 60 — the fog won't let you end on purpose above that","On refuser runs: the first food you have ever accepted — one bite, for her"]},
+  stranger: {x:3140, y:420, k:"Ending 4 · 04:10",   t:"THE STRANGER ON THE GRAVEL", s:"her seat, your name", type:"ending", act:3,
+    desc:"Tam's headlights on frost at the pull-in, before the town wakes. Sam is there, hood up, holding nothing — and at the bus door he speaks the save-name aloud: the first resident ever to say your name, and the last. The log takes its second entry in seven years: \u201cone passenger, cash. Name given.\u201d The register entry holds overnight. The title escaped, once.",
+    gates:["horn-stopped + d16:sam-named + UNDERTOW ≥ 6 + Sam alliance","flesh/name/echo all ≥ 1 — collapse forecloses escape","pack-the-name chosen Night 22; executed 04:10"]},
+  bus:      {x:3310, y:190, k:"Day 23 · 07:40",     t:"THE FRIDAY BUS", s:"the door hisses — bar 6 as interface", type:"computed", act:3,
+    desc:"Nov 28, the twice-ringed Friday. Dawn offers the standing-place choice — walk up to the pull-in, stay on the boards, down to the horn — reading as where you want to watch from; it decides which gate you face. Then a four-second mechanical rest, no input accepted: bar 6 rendered as interface. The resolution ladder runs; first match wins. Moose crosses the crowd straight to the woman on the bus step — the first creature in Lorn Bay to greet her; there was never anything to smell but this.",
+    gates:["1 · THE SIXTH BAR — at the horn, new bar, CHORD 6, UNDERTOW ≥ 7, STATIC < 30, knows-truth, valves taught","2 · TWO WRENS — on the boards, letter opened, CHORD 6, no erasing harvests, witness ≥ 10, STATIC < 30","3 · WREN, AGAIN — the computed catch-all (three stagings + ambush overlays)"]},
+  sixthbar: {x:3480, y:60,  k:"Ending 1 · true",    t:"THE SIXTH BAR", s:"devastating grace", type:"ending", act:3,
+    desc:"You are at the valves as the bus crests the hill. Bars 1–5 complete, every returned voice in the mix — then YOUR bar, once, new, over the water: the first sixth bar the lake has ever heard. The town turns from you to her because the song told them to — and you go with the last note, at the wharf's edge, on your own terms. The fog takes its material back, but the horn keeps your bar. Register line: \u201cnot here. was, though.\u201d",
+    gates:["Compose an ORIGINAL sixth bar (a borrowed one fails gently)","All six confessions · CHORD = 6","UNDERTOW ≥ 7 · STATIC < 30 · knows-truth · wade:taught-valves"]},
+  twowrens: {x:3480, y:190, k:"Ending 2 · hidden",  t:"TWO WRENS", s:"uncanny hope", type:"ending", act:3,
+    desc:"She reads the bus stop in one look — her mother's face doing arithmetic, the dog leaning on a stranger — and she is her mother's daughter about it: she doesn't ask the town. She crosses and TAKES YOUR HAND — the game's first unprompted touch, twenty-three days of invariant detonated in one gesture — and says the title's only affirmation: \u201cYou're here.\u201d The book makes room: a second ruled line where no line was.",
+    gates:["Letter OPENED (early-truth alone does not qualify) · CHORD = 6","Refused BOTH erasing harvests (lullaby, letter-memory)","Witness (FLESH+NAME) ≥ 10 · STATIC < 30 · stay on the boards · step forward"]},
+  wrenagain:{x:3480, y:320, k:"Ending 3 · catch-all", t:"WREN, AGAIN", s:"quiet horror", type:"ending", act:3,
+    desc:"A woman steps down — road-worn, real — and the town looks at her, and past her, and back at you. Nobody moves toward her. Moose does, and is called back, and goes. \u201cThere's nobody here by that name,\u201d someone says, kindly, and the town waves at you while the bus pulls away with her behind the glass. Achievement: \u201cWelcome Home.\u201d Register line: \u201cWren.\u201d — the book finally perjured, because the town made it true.",
+    gates:["The computed catch-all — every run that clears no higher rung","Three stagings: canonical pass / knowing / thin (+ exile's-twin: Sam leaves WITH her)","Ambush overlays fire live inside the staging on never-found and burned routes"]},
+};
+
+const EDGES = [
+  {a:"start", b:"ci"},
+  {a:"ci", b:"hubs"},
+  {a:"hubs", b:"foghorn"},
+  {a:"foghorn", b:"hon",  label:"Keep playing"},
+  {a:"foghorn", b:"hoff", label:"Stop the horn"},
+  {a:"hon", b:"barbwarn"},
+  {a:"hoff", b:"barbwarn", label:"decay nightly", dashed:true},
+  {a:"barbwarn", b:"earlytruth", label:"heeded · pressed×3 · undertow≥6", dashed:true},
+  {a:"barbwarn", b:"potluck"},
+  {a:"earlytruth", b:"potluck", dashed:true},
+  {a:"potluck", b:"defended", label:"witness ≥ 9"},
+  {a:"potluck", b:"exiled", label:"witness < 9"},
+  {a:"defended", b:"lullaby"},
+  {a:"exiled", b:"lullaby"},
+  {a:"lullaby", b:"d16"},
+  {a:"d16", b:"letter"},
+  {a:"letter", b:"opened", label:"open it"},
+  {a:"letter", b:"burned", label:"burn unread"},
+  {a:"letter", b:"ash", label:"burn the register · STATIC≥16", dashed:true},
+  {a:"d16", b:"neverfound", label:"miss the mail run", dashed:true},
+  {a:"opened", b:"readback"},
+  {a:"burned", b:"readback"},
+  {a:"neverfound", b:"readback"},
+  {a:"readback", b:"csam"},
+  {a:"csam", b:"cdianne"},
+  {a:"cdianne", b:"cbarb"},
+  {a:"cbarb", b:"cpriya"},
+  {a:"cpriya", b:"ctam"},
+  {a:"ctam", b:"cwade"},
+  {a:"readback", b:"unwitnessed", label:"horn-stopped · 2 stats at 0", dashed:true},
+  {a:"cbarb", b:"longwinter", label:"the Night-22 door", dashed:true},
+  {a:"cwade", b:"stranger", label:"04:10 · pack-the-name", dashed:true},
+  {a:"cwade", b:"bus"},
+  {a:"bus", b:"sixthbar", label:"1"},
+  {a:"bus", b:"twowrens", label:"2"},
+  {a:"bus", b:"wrenagain", label:"3"},
+];
+
+const TRACES = {
+  sixthbar: {label:"The Sixth Bar", cls:"ending-btn", path:["start","ci","hubs","foghorn","hoff","barbwarn","potluck","defended","lullaby","d16","letter","opened","readback","csam","cdianne","cbarb","cpriya","ctam","cwade","bus","sixthbar"],
+    note:"The sleuth's road. Stop the horn, live with the decay, open the letter, refuse nothing you need — take nothing that erases — bring all six keepers to confession, learn the valves from Wade, and compose a sixth bar that is yours. Then let go."},
+  twowrens: {label:"Two Wrens", cls:"ending-btn", path:["start","ci","hubs","foghorn","hon","barbwarn","potluck","defended","lullaby","d16","letter","opened","readback","csam","cdianne","cbarb","cpriya","ctam","cwade","bus","twowrens"],
+    note:"The open-heart's road. Stay fed enough to be solid (witness ≥ 10), but refuse both erasing harvests — let Dianne keep her lullaby, let Priya keep the letter. Open the letter, complete the song, and at the bus: stay on the boards, and step forward."},
+  wrenagain: {label:"Wren, Again", cls:"ending-btn", path:["start","ci","hubs","foghorn","hon","barbwarn","potluck","defended","lullaby","d16","letter","burned","readback","bus","wrenagain"],
+    note:"The skimmer's road — the catch-all that catches most. Keep the horn playing, take the lullaby, burn the letter unread, and let the town's comfort do the arithmetic. You pass. Nobody recognizes the woman on the bus."},
+  stranger: {label:"The Stranger", cls:"ending-btn", path:["start","ci","hubs","foghorn","hoff","barbwarn","potluck","defended","lullaby","d16","letter","opened","readback","csam","cwade","stranger"],
+    note:"The flinch's road. Stop the horn, tell Sam \u201cI don't know\u201d on Night 6, defend him at the potluck, give him a name to travel under — then pack it on Night 22 and be at the pull-in at 04:10, before the Friday bus ever arrives."},
+  longwinter: {label:"The Long Winter", cls:"ending-btn", path:["start","ci","hubs","foghorn","hon","barbwarn","potluck","defended","lullaby","d16","letter","opened","readback","csam","cdianne","cbarb","longwinter"],
+    note:"Barb's road. Earn her trust across three weeks, heed the one warning, hear her confession, and when the Night-22 door opens — take it. Choose the last night on purpose. The only ending that never sees Nov 28."},
+  unwitnessed: {label:"Unwitnessed", cls:"dark-btn", path:["start","ci","hubs","foghorn","hoff","barbwarn","potluck","defended","lullaby","d16","letter","burned","readback","unwitnessed"],
+    note:"The wanderer's road — no road at all. Stop the horn and then stop tending yourself: skip the meals, the names, the memories, until two of your three presence stats reach zero. The game continues without you for four minutes."},
+  ash: {label:"Ash", cls:"dark-btn", path:["start","ci","hubs","foghorn","hon","barbwarn","potluck","defended","lullaby","d16","letter","ash"],
+    note:"The vulture's road. Lie and force and look away until STATIC ≥ 16, and on the night of the letter, ignore the drawer — cross the lot and burn Barb's register instead. The town forgets Wren entirely: you, her, both."},
+};
+
+/* ================= RENDER ================= */
+
+const world = document.getElementById('world');
+const svg = document.getElementById('edges');
+const tracer = document.getElementById('tracelayer');
+const NODE_W = 150, NODE_H = 64;
+
+const W = 3660, H = 620;
+world.style.width = W+'px'; world.style.height = H+'px';
+svg.setAttribute('width', W); svg.setAttribute('height', H);
+tracer.setAttribute('width', W); tracer.setAttribute('height', H);
+
+/* act bands */
+const BANDS = [
+  {x:20,  w:660,  label:"Act One — The Return",  dates:"Days 1–7 · Nov 6–12"},
+  {x:710, w:1420, label:"Act Two — The Seams",   dates:"Days 8–19 · Nov 13–24"},
+  {x:2160,w:1480, label:"Act Three — The Homecoming", dates:"Days 20–23 · Nov 25–28"},
+];
+BANDS.forEach(b => {
+  const d = document.createElement('div');
+  d.className = 'actband';
+  d.style.cssText = `left:${b.x}px; top:20px; width:${b.w}px; height:560px;`;
+  d.innerHTML = `<span class="actlabel">${b.label}</span><span class="actdates">${b.dates}</span>`;
+  world.appendChild(d);
+});
+
+/* edges */
+function edgePath(a, b) {
+  const x1 = NODES[a].x + NODE_W/2, y1 = NODES[a].y;
+  const x2 = NODES[b].x - NODE_W/2, y2 = NODES[b].y;
+  const dx = Math.max(40, (x2-x1)/2);
+  return { d: `M ${x1} ${y1} C ${x1+dx} ${y1}, ${x2-dx} ${y2}, ${x2} ${y2}`,
+           mx: (x1+x2)/2, my: cubicMid(y1,y2), x1, y1, x2, y2, dx };
+}
+function cubicMid(y1, y2) { return (y1+y2)/2; }
+
+const edgeEls = [];
+EDGES.forEach((e, i) => {
+  const p = edgePath(e.a, e.b);
+  const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+  path.setAttribute('d', p.d);
+  path.setAttribute('class', 'edge' + (e.dashed ? ' dashed' : ''));
+  path.dataset.a = e.a; path.dataset.b = e.b;
+  svg.appendChild(path);
+  let labelEl = null, bgEl = null;
+  if (e.label) {
+    bgEl = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    labelEl = document.createElementNS('http://www.w3.org/2000/svg','text');
+    labelEl.textContent = e.label;
+    labelEl.setAttribute('class','elabel');
+    labelEl.setAttribute('text-anchor','middle');
+    labelEl.setAttribute('x', p.mx); labelEl.setAttribute('y', p.my - 5);
+    svg.appendChild(bgEl); svg.appendChild(labelEl);
+    requestAnimationFrame(() => {
+      const bb = labelEl.getBBox();
+      bgEl.setAttribute('x', bb.x-4); bgEl.setAttribute('y', bb.y-2);
+      bgEl.setAttribute('width', bb.width+8); bgEl.setAttribute('height', bb.height+4);
+      bgEl.setAttribute('class','elabel-bg');
+    });
+  }
+  edgeEls.push({e, path, labelEl, bgEl});
+});
+
+/* nodes */
+const nodeEls = {};
+Object.entries(NODES).forEach(([id, n]) => {
+  const d = document.createElement('div');
+  d.className = `node ${n.type}`;
+  d.style.left = (n.x - NODE_W/2)+'px';
+  d.style.top = (n.y - 34)+'px';
+  d.innerHTML = `<div class="k">${n.k}</div><div class="t">${n.t}</div><div class="s">${n.s}</div>`;
+  d.addEventListener('click', ev => { ev.stopPropagation(); selectNode(id); });
+  world.appendChild(d);
+  nodeEls[id] = d;
+});
+
+/* ================= PANEL ================= */
+
+const panel = document.getElementById('panel');
+const panelbody = document.getElementById('panelbody');
+const hint = document.getElementById('hint');
+
+function showPanel(html) {
+  panelbody.innerHTML = html;
+  panel.classList.remove('hidden');
+  hint.classList.remove('wide');
+}
+function hidePanel() {
+  panel.classList.add('hidden');
+  hint.classList.add('wide');
+}
+document.getElementById('closepanel').addEventListener('click', () => { clearSelection(); hidePanel(); });
+
+const TYPE_NAMES = {beat:"Story beat", branch:"Hard branch", computed:"Computed outcome", confess:"Confession", track:"Track state", ending:"Ending", darkend:"Dark ending"};
+
+function nodeHTML(id) {
+  const n = NODES[id];
+  const gates = n.gates.map(g => `<li>${g}</li>`).join('');
+  return `<div class="kick">${TYPE_NAMES[n.type]} · Act ${n.act}</div>
+    <h2>${n.t}</h2><div class="sub">${n.k} — ${n.s}</div>
+    <p>${n.desc}</p>
+    <div class="gates"><h3>Gates &amp; consequences</h3><ul>${gates}</ul></div>`;
+}
+
+function overviewHTML() {
+  return `<div class="kick">Overview</div><h2>NOT HERE — primary paths</h2>
+  <div class="sub">23 days · 3 acts · 2 hard branches · 6 confessions · 7 endings</div>
+  <p>Wren never drowned. She left. You are not Wren returned — you are what seven years of calling finally called: the town's remembering, condensed by fog into a body. The real Wren arrives on the Friday bus, Nov 28. Every ending answers the same question: whose absence does Lorn Bay finally admit?</p>
+  <div class="quote">Five bars, then silence where a sixth should be.</div>
+  <p><b style="color:var(--bone)">The spine:</b> two hard branches — the Foghorn Choice (Night 7) splits the game into horn-on / horn-stopped tracks; the Letter (Night 17) splits it into knowing / ambush / innocent routes. Act 3 inverts the harvest: six confessions return six fragments of the song, and the endings resolve from everything you have been doing since Night 1.</p>
+  <p>Click any node for detail. Use the buttons above to trace a canonical path to each ending.</p>`;
+}
+showPanel(overviewHTML());
+
+/* ================= SELECTION ================= */
+
+let selected = null;
+function clearSelection() {
+  selected = null;
+  Object.values(nodeEls).forEach(el => el.classList.remove('selected','dimmed','trace-node-pulse'));
+  edgeEls.forEach(({path,labelEl,bgEl}) => { path.classList.remove('hot','dimmed'); labelEl && labelEl.classList.remove('dimmed'); bgEl && bgEl.classList.remove('dimmed'); });
+  tracer.innerHTML = '';
+  document.querySelectorAll('#traces .tbtn').forEach(b => b.classList.remove('active'));
+}
+
+function selectNode(id) {
+  clearTraceOnly();
+  selected = id;
+  Object.entries(nodeEls).forEach(([nid, el]) => el.classList.toggle('selected', nid === id));
+  edgeEls.forEach(({e, path}) => path.classList.toggle('hot', e.a === id || e.b === id));
+  showPanel(nodeHTML(id));
+}
+
+/* ================= TRACING ================= */
+
+function clearTraceOnly() {
+  tracer.innerHTML = '';
+  Object.values(nodeEls).forEach(el => el.classList.remove('dimmed','trace-node-pulse'));
+  edgeEls.forEach(({path,labelEl,bgEl}) => { path.classList.remove('dimmed'); labelEl && labelEl.classList.remove('dimmed'); bgEl && bgEl.classList.remove('dimmed'); });
+  document.querySelectorAll('#traces .tbtn').forEach(b => b.classList.remove('active'));
+}
+
+function trace(key, btn) {
+  clearSelection();
+  const t = TRACES[key];
+  btn.classList.add('active');
+  const onPath = new Set(t.path);
+  Object.entries(nodeEls).forEach(([nid, el]) => {
+    if (onPath.has(nid)) el.classList.add('trace-node-pulse');
+    else el.classList.add('dimmed');
+  });
+  edgeEls.forEach(({path,labelEl,bgEl}) => { path.classList.add('dimmed'); labelEl && labelEl.classList.add('dimmed'); bgEl && bgEl.classList.add('dimmed'); });
+  /* glowing polyline through path node centers */
+  let d = '';
+  for (let i = 0; i < t.path.length - 1; i++) {
+    const a = NODES[t.path[i]], b = NODES[t.path[i+1]];
+    if (i === 0) d += `M ${a.x} ${a.y} `;
+    const dx = Math.max(40, (b.x - a.x)/2);
+    d += `C ${a.x+dx} ${a.y}, ${b.x-dx} ${b.y}, ${b.x} ${b.y} `;
+  }
+  const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+  p.setAttribute('d', d); p.setAttribute('class','trace-line');
+  tracer.appendChild(p);
+  const end = NODES[t.path[t.path.length-1]];
+  showPanel(nodeHTML(t.path[t.path.length-1]) +
+    `<div class="gates"><h3>Traced path — how this run reads</h3></div><p>${t.note}</p>`);
+  /* scroll end into view gently */
+  centerOn(end.x, end.y);
+}
+
+const traceBar = document.getElementById('traces');
+Object.entries(TRACES).forEach(([key, t]) => {
+  const b = document.createElement('button');
+  b.className = `tbtn ${t.cls}`;
+  b.textContent = t.label;
+  b.addEventListener('click', () => {
+    if (b.classList.contains('active')) { clearSelection(); showPanel(overviewHTML()); }
+    else trace(key, b);
+  });
+  traceBar.appendChild(b);
+});
+
+/* ================= PAN / ZOOM ================= */
+
+const viewport = document.getElementById('viewport');
+let scale = 1, tx = 0, ty = 0;
+
+function apply() { world.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`; }
+
+function fit() {
+  const vw = viewport.clientWidth, vh = viewport.clientHeight;
+  scale = Math.min((vw-40)/W, (vh-120)/H, 1);
+  scale = Math.max(scale, 0.2);
+  tx = (vw - W*scale)/2;
+  ty = Math.max(70, (vh - H*scale)/2 + 30);
+  apply();
+}
+fit();
+window.addEventListener('resize', fit);
+
+function centerOn(x, y) {
+  const vw = viewport.clientWidth, vh = viewport.clientHeight;
+  const targetScale = Math.max(scale, 0.55);
+  scale = targetScale;
+  tx = vw/2 - x*scale - 170; /* panel offset */
+  ty = vh/2 - y*scale;
+  world.style.transition = 'transform .5s ease';
+  apply();
+  setTimeout(() => world.style.transition = '', 520);
+}
+
+let dragging = false, sx = 0, sy = 0;
+viewport.addEventListener('mousedown', e => { dragging = true; sx = e.clientX - tx; sy = e.clientY - ty; viewport.classList.add('dragging'); });
+window.addEventListener('mousemove', e => { if (!dragging) return; tx = e.clientX - sx; ty = e.clientY - sy; apply(); });
+window.addEventListener('mouseup', () => { dragging = false; viewport.classList.remove('dragging'); });
+viewport.addEventListener('click', e => { if (e.target === viewport || e.target === world || e.target === svg) { clearSelection(); hidePanel(); } });
+
+viewport.addEventListener('wheel', e => {
+  e.preventDefault();
+  const rect = viewport.getBoundingClientRect();
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+  const old = scale;
+  scale = Math.min(2.2, Math.max(0.15, scale * (e.deltaY < 0 ? 1.1 : 0.9)));
+  tx = mx - (mx - tx) * (scale/old);
+  ty = my - (my - ty) * (scale/old);
+  apply();
+}, {passive:false});
+
+document.getElementById('zin').addEventListener('click', () => { scale = Math.min(2.2, scale*1.25); apply(); });
+document.getElementById('zout').addEventListener('click', () => { scale = Math.max(0.15, scale/1.25); apply(); });
+document.getElementById('zfit').addEventListener('click', fit);
+
+/* touch pan */
+let lastTouch = null;
+viewport.addEventListener('touchstart', e => { if (e.touches.length === 1) lastTouch = {x: e.touches[0].clientX - tx, y: e.touches[0].clientY - ty}; }, {passive:true});
+viewport.addEventListener('touchmove', e => {
+  if (e.touches.length === 1 && lastTouch) { tx = e.touches[0].clientX - lastTouch.x; ty = e.touches[0].clientY - lastTouch.y; apply(); }
+}, {passive:true});
+viewport.addEventListener('touchend', () => lastTouch = null);
+</script>
+</body>
+</html>

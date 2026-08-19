@@ -433,9 +433,9 @@ const clinic2 = defineScene({
         // First write of lever:tam in the game.
         { op: 'flag.set', key: 'lever:tam', value: true },
         // Bar 4 comes back right side up. The un-invert crossfade is
-        // AUDITION-GATED music (2026-07-17 hold, no new cue); fragment
-        // audio stays off (the act3-ensemble mixer is unauditioned); the
-        // prose carries the return.
+        // AUDITION-GATED music (2026-07-17 hold, no new cue); the
+        // act3-ensemble mixer answers music.chord, and the night doors
+        // re-assert the count at 3:12.
         { op: 'chord.add', value: 1 },
       ],
     },
@@ -596,8 +596,8 @@ const dianne2 = defineScene({
     { op: 'flag.set', key: 'conf:dianne', value: true },
     // The chain holds even here: Dianne's confession names Priya's letter.
     { op: 'flag.set', key: 'lever:priya', value: true },
-    // Her fragment enters late but whole. Fragment audio stays off (the
-    // act3-ensemble mixer is unauditioned); the prose carries it.
+    // Her fragment enters late but whole: the act3-ensemble mixer answers
+    // music.chord, and the night doors re-assert the count at 3:12.
     { op: 'chord.add', value: 1 },
   ],
   prose: {
@@ -802,8 +802,8 @@ const shed2 = defineScene({
         // night scene, not one of the true endings Ruling 7 prices.
         { op: 'flag.set', key: 'lever:wade', value: true },
         // Bar 5 returns detuned a quarter-tone (the -50-cent house
-        // detune). Fragment audio stays off (the act3-ensemble mixer is
-        // unauditioned); the prose carries the wrong-footed return.
+        // detune). The act3-ensemble mixer answers music.chord; the night
+        // doors re-assert the count at 3:12.
         { op: 'chord.add', value: 1 },
         detune('sam'),
       ],
@@ -898,9 +898,9 @@ const depot2 = defineScene({
   slot: 'afternoon',
   onEnter: [
     { op: 'flag.set', key: 'conf:tam', value: true },
-    // The pitchless ostinato enters the ensemble as its PULSE. Fragment
-    // audio stays off (the act3-ensemble mixer is unauditioned); the
-    // prose carries it.
+    // The pitchless ostinato enters the ensemble as its PULSE: the
+    // act3-ensemble mixer answers music.chord, and the night doors
+    // re-assert the count at 3:12.
     { op: 'chord.add', value: 1 },
   ],
   prose: {
@@ -1181,9 +1181,9 @@ const crown2 = defineScene({
     // Arms the composition finale's 'borrowed' trap: every pencil bar
     // was his, and every one was wrong — "It wasn't mine to finish."
     { op: 'flag.set', key: 'wade:not-his-to-finish', value: true },
-    // Bar 3 and the drone return. Fragment audio stays off (the
-    // act3-ensemble mixer is unauditioned); the foghorn-312 conviction
-    // variant is audition-gated (existing cues only); the prose carries it.
+    // Bar 3 and the drone return: the act3-ensemble mixer answers
+    // music.chord. The foghorn-312 conviction variant stays audition-gated
+    // (existing cues only).
     { op: 'chord.add', value: 1 },
   ],
   prose: {
@@ -1274,6 +1274,15 @@ const night = defineScene({
       cond: hornOn,
       then: [{ op: 'emit', event: { kind: 'music.cue', cue: 'foghorn-312' } }],
       else: [{ op: 'emit', event: { kind: 'music.stop' } }],
+    },
+    // The night ensemble re-forms at 3:12 (the d20-night shape): horn on
+    // and at least one fragment returned → re-assert the chord so the
+    // act3-ensemble mixer rebuilds the night's texture, replacing the
+    // solo foghorn-312. Horn-stopped nights keep their silence.
+    {
+      op: 'when',
+      cond: { op: 'all', of: [hornOn, { op: 'chord.gte', value: 1 }] },
+      then: [{ op: 'chord.add', value: 0 }],
     },
     ...NIGHT_DECAY,
     // The unpayable-night rule stays armed (state only; the d20 shape).
