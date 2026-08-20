@@ -537,6 +537,7 @@ function trace(key, btn) {
 }
 
 const traceBar = document.getElementById('traces');
+const traceBtns = {};
 Object.entries(TRACES).forEach(([key, t]) => {
   const b = document.createElement('button');
   b.className = `tbtn ${t.cls}`;
@@ -545,8 +546,12 @@ Object.entries(TRACES).forEach(([key, t]) => {
     if (b.classList.contains('active')) { clearSelection(); showPanel(overviewHTML()); }
     else trace(key, b);
   });
+  traceBtns[key] = b;
   traceBar.appendChild(b);
 });
+/* deep-link: story-map.html#trace=sixthbar */
+const hashTrace = location.hash.match(/trace=(\w+)/);
+if (hashTrace && traceBtns[hashTrace[1]]) trace(hashTrace[1], traceBtns[hashTrace[1]]);
 
 /* ================= PAN / ZOOM ================= */
 
@@ -556,11 +561,12 @@ let scale = 1, tx = 0, ty = 0;
 function apply() { world.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`; }
 
 function fit() {
-  const vw = viewport.clientWidth, vh = viewport.clientHeight;
-  scale = Math.min((vw-40)/W, (vh-120)/H, 1);
+  const panelW = panel.classList.contains('hidden') ? 0 : 360;
+  const vw = viewport.clientWidth - panelW, vh = viewport.clientHeight;
+  scale = Math.min((vw-40)/W, (vh-150)/H, 1);
   scale = Math.max(scale, 0.2);
-  tx = (vw - W*scale)/2;
-  ty = Math.max(70, (vh - H*scale)/2 + 30);
+  tx = Math.max(20, (vw - W*scale)/2);
+  ty = Math.max(85, (vh - H*scale)/2 + 30);
   apply();
 }
 fit();
