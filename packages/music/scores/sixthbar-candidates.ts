@@ -21,6 +21,18 @@
  * Each candidate renders two ways: SOLO on the guitar voice (the player's
  * instrument), and IN CONTEXT — bars 1–5 exactly as shipped on the music box,
  * the candidate answering in bar 6 over the sea and the horn's low D.
+ *
+ * Bar 6 is framed to be unmistakable (2026-08-20 pass):
+ *   - the sea holds its breath — its swell pattern skips the sixth bar, so
+ *     the bar opens out of a hush instead of a wash;
+ *   - the horn's drone is ducked under the bar so the guitar clears it;
+ *   - each variant gets its own harmonium chord, the only bar-6 harmony the
+ *     song has ever had: 'never' sits on the ii triad it climbs (no D, no
+ *     cadence), 'forgot' gets bar 1's Dm cut off at the same beat the memory
+ *     fails, 'door' gets bar 1's Dm held the full bar — the resolution the
+ *     tune has been waiting for since the title screen;
+ *   - the guitar is brought forward in the mix (gain up, pan centered, a
+ *     touch more echo) — the player's voice in front of the town's.
  */
 
 import type { Instrument, NoteEvent, Song } from '../src/types.ts';
@@ -31,6 +43,12 @@ import { CHORDS_BARB, MELODY, VERSE_BEATS } from './foghorn-song.ts';
 const D2 = 38;
 const F2 = 41;
 const A2 = 45;
+const D3 = 50;
+const E3 = 52;
+const G3 = 55;
+const A3 = 57;
+const B3 = 59;
+const F4 = 65;
 const B4 = 71;
 const D5 = 74;
 const E5 = 76;
@@ -67,6 +85,26 @@ export const SIXTHBAR_FORGOT: readonly NoteEvent[] = [
 export const SIXTHBAR_DOOR: readonly NoteEvent[] = [
   n(0, 1, F5, 0.85), n(1, 1, E5, 0.8), n(2, 4, D5, 0.9),
 ];
+
+// ---------------------------------------------------------------------------
+// Bar-6 harmony — one chord per variant, the only sixth-bar chords the song
+// has ever had. Times relative to beat 0 of the sixth bar.
+
+const chord = (t: number, dur: number, pitches: readonly number[], vel = 1): NoteEvent[] =>
+  pitches.map((p) => n(t, dur, p, vel));
+
+/** 'never' — the ii triad (E–G–B) the melody climbs, held 5 beats and
+ *  abandoned with it. No D anywhere; the chord that most wants to lead home,
+ *  left leading nowhere. */
+export const SIXTHBAR_CHORD_NEVER: readonly NoteEvent[] = chord(0, 5, [E3, G3, B3], 0.7);
+
+/** 'forgot' — bar 1's Dm, cut off at beat 3, the same moment the figure
+ *  breaks on its peak. The harmony forgets too. */
+export const SIXTHBAR_CHORD_FORGOT: readonly NoteEvent[] = chord(0, 3, [D3, A3, F4], 0.8);
+
+/** 'door' — bar 1's Dm held the full bar under the held D: the resolution
+ *  the tune has been waiting for since the title screen. */
+export const SIXTHBAR_CHORD_DOOR: readonly NoteEvent[] = chord(0, 6, [D3, A3, F4], 0.85);
 
 // ---------------------------------------------------------------------------
 // Voices — mirrors of the shipped instruments in foghorn-song.ts (which keeps
@@ -148,13 +186,20 @@ const VERSE = INTRO;
 const BAR_SIX = VERSE + 5 * BAR;
 const LENGTH = VERSE + VERSE_BEATS + 2 * BAR;
 
-const seaSwells = (from: number, to: number): NoteEvent[] => {
+const seaSwells = (from: number, to: number, skip?: number): NoteEvent[] => {
   const swells: NoteEvent[] = [];
-  for (let t = from; t < to; t += BAR) swells.push(n(t, 4, 0, 0.9));
+  for (let t = from; t < to; t += BAR) {
+    if (t === skip) continue; // the sea holds its breath for the sixth bar
+    swells.push(n(t, 4, 0, 0.9));
+  }
   return swells;
 };
 
-const context = (id: string, bar: readonly NoteEvent[]): Song => ({
+const context = (
+  id: string,
+  bar: readonly NoteEvent[],
+  barChord: readonly NoteEvent[],
+): Song => ({
   id,
   bpm: 144,
   lengthBeats: LENGTH,
@@ -163,7 +208,7 @@ const context = (id: string, bar: readonly NoteEvent[]): Song => ({
     {
       id: 'sea',
       instrument: sea,
-      notes: seaSwells(0, LENGTH - BAR),
+      notes: seaSwells(0, LENGTH - BAR, BAR_SIX),
       gain: 0.055,
       pan: -0.2,
     },
@@ -178,8 +223,18 @@ const context = (id: string, bar: readonly NoteEvent[]): Song => ({
     {
       id: 'horn-drone',
       instrument: foghorn,
-      notes: [n(VERSE, VERSE_BEATS + BAR, D2, 0.7)],
+      notes: [n(VERSE, 5 * BAR, D2, 0.7)],
       gain: 0.4,
+      pan: 0,
+    },
+    {
+      // The drone bows out at the bar-6 downbeat and re-enters softly — its
+      // long release crossfades into this quiet swell, so the low D still
+      // cradles the bar but the guitar clears it.
+      id: 'horn-drone-bar6',
+      instrument: foghorn,
+      notes: [n(BAR_SIX, 2 * BAR, D2, 0.6)],
+      gain: 0.22,
       pan: 0,
     },
     {
@@ -210,19 +265,40 @@ const context = (id: string, bar: readonly NoteEvent[]): Song => ({
       pan: 0.1,
     },
     {
+      // The only sixth-bar harmony the song has ever had — one chord per
+      // variant, cradling the player's bar.
+      id: 'chords-harmonium-bar6',
+      instrument: harmonium,
+      notes: shift(barChord, BAR_SIX),
+      gain: 0.22,
+      pan: 0.05,
+    },
+    {
       id: 'candidate-guitar',
       instrument: guitar,
       notes: shift(bar, BAR_SIX),
-      gain: 0.5,
-      pan: 0.3,
-      echo: 0.3,
+      gain: 0.7, // brought forward — the player's voice in front of the town's
+      pan: 0.15,
+      echo: 0.35,
     },
   ],
 });
 
-export const sixthbarNeverContext: Song = context('sixthbar-never-context', SIXTHBAR_NEVER);
-export const sixthbarForgotContext: Song = context('sixthbar-forgot-context', SIXTHBAR_FORGOT);
-export const sixthbarDoorContext: Song = context('sixthbar-door-context', SIXTHBAR_DOOR);
+export const sixthbarNeverContext: Song = context(
+  'sixthbar-never-context',
+  SIXTHBAR_NEVER,
+  SIXTHBAR_CHORD_NEVER,
+);
+export const sixthbarForgotContext: Song = context(
+  'sixthbar-forgot-context',
+  SIXTHBAR_FORGOT,
+  SIXTHBAR_CHORD_FORGOT,
+);
+export const sixthbarDoorContext: Song = context(
+  'sixthbar-door-context',
+  SIXTHBAR_DOOR,
+  SIXTHBAR_CHORD_DOOR,
+);
 
 export const SIXTHBAR_AUDITION: readonly Song[] = [
   sixthbarNeverSolo,

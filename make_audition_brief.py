@@ -102,7 +102,11 @@ story.append(Paragraph(
     "interview literally composes your bar. Per Ruling 3, the only sixth bar ever rendered in any "
     "ending is the player's; Wren's own ending stays unheard. Each candidate renders solo on guitar "
     "and in context — bars 1–5 as shipped, the candidate answering in bar 6 over the sea and the "
-    "horn's low D drone.", BODY))
+    "horn's low D drone. In this pass the sixth bar is framed to be unmistakable: the sea's swell "
+    "pattern skips bar 6 so the bar opens out of a hush, the drone bows out at the downbeat and "
+    "re-enters softly underneath, the guitar is brought forward in the mix, and each variant gets "
+    "the only sixth-bar harmony the song has ever had — 'never' on the ii triad it climbs, 'forgot' "
+    "on bar 1's Dm cut off where the memory fails, 'door' on bar 1's Dm held the full bar.", BODY))
 
 story.append(Image(str(FIG), width=17.4 * cm, height=6.3 * cm))
 story.append(Paragraph(
@@ -155,12 +159,18 @@ story.append(Paragraph(
     "<b>1. The hand-off.</b> In each context render, bar 5's hanging E should feel like a question "
     "the candidate answers — or pointedly refuses to. 'door' should land like a held breath let go; "
     "'never' like a sentence interrupted politely; 'forgot' like a radio losing the station.<br/>"
-    "<b>2. The voice.</b> The candidate enters on guitar against the town's music box — it should "
-    "read as <i>a person answering a music box</i>, not a new verse of the same tune.<br/>"
-    "<b>3. The drone.</b> The horn holds its low D under all of bar 6. Only 'door' agrees with it; "
-    "'never' and 'forgot' should audibly withhold that agreement.<br/>"
-    "<b>4. Tempo feel.</b> 144 bpm eighth-note pulse — slow, tidal. If a candidate feels rushed "
-    "against the sea swells, the fault is the render, not the notes.", BODY))
+    "<b>2. The voice.</b> The candidate enters on guitar, forward in the mix against the town's "
+    "music box — it should read as <i>a person answering a music box</i>, not a new verse of the "
+    "same tune.<br/>"
+    "<b>3. The hush.</b> The sea skips its bar-6 swell and the horn's drone bows out at the "
+    "downbeat, re-entering softly underneath — the bar should feel held up in air, not washed "
+    "over. Only 'door' fully agrees with the low D; 'never' and 'forgot' should audibly withhold "
+    "that agreement.<br/>"
+    "<b>4. The chord.</b> Each variant carries its own bar-6 harmonium chord: ii for 'never' "
+    "(leading nowhere), bar 1's Dm cut short for 'forgot' (the harmony forgets too), bar 1's Dm "
+    "held the full bar for 'door' (the resolution the tune has waited for).<br/>"
+    "<b>5. Tempo feel.</b> 144 bpm eighth-note pulse — slow, tidal. If a candidate feels rushed, "
+    "the fault is the render, not the notes.", BODY))
 
 story.append(Paragraph(
     "<b>Decision requested:</b> approve each variant (or send it back) so Act 3 prose can harden "
