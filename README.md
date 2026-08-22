@@ -4,7 +4,7 @@
 
 *Seven years after you drowned, you walk back into the town that never stopped grieving you.*
 
-<img src="docs/screenshots/title.png" alt="The title screen: a single lit window in the dark, beneath the words NOT HERE" width="820">
+<img src="docs/screenshots/title.jpg" alt="The title screen: the lit window standing on the shore below the old wharf, the breakwater light's beam crossing the fog, beneath the words NOT HERE" width="820">
 
 **A branching narrative mystery.** Lorn Bay, Okanagan Valley, British Columbia — present day, early November.
 Playable in the browser and in the terminal, from one shared engine.
@@ -22,7 +22,7 @@ Every night at 3:12 AM, the horn on the old wharf plays five bars of a song you 
 You have twenty-three days. There is a date on the corkboard, ringed twice in blue pen, pressed through to the cork.
 
 <div align="center">
-<img src="docs/screenshots/arrival.png" alt="The arrival on the gravel beach, second-person prose with choices as ledger lines" width="820">
+<img src="docs/screenshots/arrival.jpg" alt="The arrival on the gravel beach, second-person prose with choices as ledger lines" width="820">
 </div>
 
 ## The score is the mystery
@@ -37,12 +37,25 @@ There is no reputation bar. There is a fact ledger: what happened, who saw it, w
 
 Where you *aren't* matters as much as where you are. Each morning offers more scenes than you can attend; the ones you miss still happen, and come back that evening as secondhand retellings — warm, biased, and occasionally wrong in ways worth noticing.
 
+## The town, staged
+
+Every scene plays on a stage drawn in light — CSS and inline SVG, no images anywhere: the wharf and its horn, the Kettle's one lamp over the counter, the fog that never quite lifts. Whoever is in the room is sketched in the margin and fades as their trust does; the strip above keeps the day, the hill, and a snowline falling toward November 28. The page is the same page on a phone.
+
+<div align="center">
+<img src="docs/screenshots/wharf.jpg" alt="Day 4 on the old ferry wharf: Wade Pike sketched in the margin, the breakwater light's beam crossing the fog behind the reading column" width="820">
+<img src="docs/screenshots/kettle.jpg" alt="The Kettle at evening: Barb sketched in the margin, the window and the counter, her confession in the prose" width="820">
+</div>
+
+<div align="center">
+<img src="docs/screenshots/title-phone.jpg" alt="The title on a phone: the lit window on the shore, the wharf behind" width="300"> <img src="docs/screenshots/wharf-phone.jpg" alt="Day 4 on the wharf on a phone: the day strip, the sketch above the entry, the three ledger affordances in a bar at the thumb" width="300">
+</div>
+
 ## Barb's book
 
 Your character sheet is a book a woman keeps by the till, and consulting it is asking to see what she's written about you. Her observations move as you change — no numbers, anywhere, ever. The NAME column of your register line stays blank. She's waiting to see what she'll get to write.
 
 <div align="center">
-<img src="docs/screenshots/barbs-book.png" alt="Barb's Book: a lit ledger page over dimmed prose — the register with a blank NAME column, observations in her hand, your interview answers verbatim" width="820">
+<img src="docs/screenshots/barbs-book.jpg" alt="Barb's Book: a paper page under the lamp, over the dimmed scene — the register with a blank NAME column, observations in her hand, your interview answers verbatim" width="820">
 </div>
 
 ## Documents render as documents
@@ -50,7 +63,7 @@ Your character sheet is a book a woman keeps by the till, and consulting it is a
 Letters, schedules, chord sheets, and register pages appear as artifacts, not descriptions. Some of them are clues. All of them are on screen longer than you think.
 
 <div align="center">
-<img src="docs/screenshots/timetable.png" alt="The EBUS winter schedule card, one Friday ringed twice in blue pen" width="820">
+<img src="docs/screenshots/timetable.jpg" alt="The EBUS winter schedule card as a paper object pinned in the prose, one Friday ringed twice in blue pen" width="820">
 </div>
 
 ## The cast
@@ -86,15 +99,18 @@ packages/music    score-as-data: note-event JSON → one chiptune-folk synth, th
 packages/story    the authored scenes, dialogue rules, and Barb's book model
 packages/ai       (in progress) limited LLM touchpoints — classification only, never authorship,
                   with complete deterministic fallbacks: the no-key game is the whole game
-apps/web          Vite, vanilla TS — phosphor-on-dark ledger, typewriter prose, margin sketches
-apps/cli          zero-dependency ANSI terminal build
+apps/web          Vite, vanilla TS, zero frameworks — a procedural stage behind a reading column, the
+                  day strip, paper documents, margin sketches, typewriter prose; the lamp (settings) and
+                  the ledger so far (history) as sheets
+apps/cli          zero-dependency ANSI terminal build — slot-toned header, ruled documents, the 3:12 line
 ```
 
 Every ending, clue, and consequence is authored and deterministic. The story graph is tested mechanically: reachability of every ending, scripted golden-path walkthroughs, and a lint that enforces the game's own rules of prose — including some this README is careful not to explain.
 
 ```sh
-pnpm typecheck && pnpm exec vitest run   # 350 tests
+pnpm typecheck && pnpm exec vitest run   # 1077 tests
 node packages/music/scripts/render-audition.ts   # render the score to auditions/*.wav
+node apps/web/scripts/capture.mjs                # refresh docs/screenshots from a running dev server
 ```
 
 Design documents live in [`design/`](design/) — start with the [game bible](design/game-bible.md). *(Spoilers, obviously.)*

@@ -202,6 +202,12 @@
     padding: 3rem 1rem calc(5rem + var(--safe-bottom));
   }
 
+  /* full-bleed sheets are paper, not glass: nothing of the page shows through */
+  .sheet {
+    background: rgb(10, 14, 19);
+    border: none;
+  }
+
   .sheet-close,
   button.book-close {
     position: fixed;
@@ -219,6 +225,17 @@
 
   .lamp-row {
     grid-template-columns: 1fr;
+  }
+
+  /* the pen ticks are thumb-sized */
+  .tick {
+    min-height: 44px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .tick::before {
+    top: 19px;
   }
 
   .inter-column {

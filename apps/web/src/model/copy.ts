@@ -51,7 +51,7 @@ export const SETTINGS = {
   aria: 'the lamp',
   pace: { label: 'the pen’s pace', note: 'how fast she writes.', slow: 'slow', steady: 'steady', quick: 'quick', instant: 'at once' },
   print: { label: 'the print', note: 'for the reading glasses.', smaller: 'smaller', normal: 'as printed', larger: 'larger', largest: 'largest' },
-  lamp: { label: 'the lamp', note: 'how far the horn carries.', lit: 'lit', unlit: 'unlit' },
+  lamp: { label: 'the horn', note: 'how far it carries.', lit: 'lit', unlit: 'silent' },
   weather: { label: 'the weather', note: 'the fog holds still if you ask it.', move: 'let it move', still: 'hold still', system: 'as the room is' },
   stutter: { label: 'the lamp’s stutter', note: 'a lived-in lamp stutters, once in a while.', on: 'let it stutter', off: 'keep it steady' },
 } as const;
