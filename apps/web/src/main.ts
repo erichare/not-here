@@ -38,10 +38,11 @@ const run = (root: HTMLElement): void => {
 
   const audio = createAudioPlayer((cue) => ui.addCaption(cueCaptionLine(cue)));
 
-  const headerFor = (next: WorldState): string => {
-    const slot = content.scenes.get(next.sceneId)?.slot ?? next.slot;
-    return `DAY ${next.day} — ${slot.toUpperCase()}`;
-  };
+  const slotFor = (next: WorldState): string =>
+    content.scenes.get(next.sceneId)?.slot ?? next.slot;
+
+  const headerFor = (next: WorldState): string =>
+    `DAY ${next.day} — ${slotFor(next).toUpperCase()}`;
 
   const handleEvent = (event: EngineEvent): void => {
     switch (event.kind) {
@@ -78,6 +79,8 @@ const run = (root: HTMLElement): void => {
     const ending = result.view.ending;
     const model: SceneModel = {
       sceneId: result.state.sceneId,
+      // The slot drives the page's ambient grade (ui.ts keys body[data-slot]).
+      slot: slotFor(result.state),
       // Ending scenes carry no DAY header — the act is over, not a ninth day.
       header: ending === undefined ? headerFor(result.state) : '',
       paragraphs: result.view.paragraphs,

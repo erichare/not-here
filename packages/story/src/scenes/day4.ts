@@ -52,7 +52,7 @@ const morning = defineScene({
         text: '“Wade Pike’s down the old wharf, mornings,” she says. “District pays him to mind the breakwater light. What else he minds out there is his own business. He could stand a visitor who doesn’t want anything off him.”',
       },
       {
-        text: '“Or my walk-in wants shelving before the frost order lands. Or Dianne’s on her own at the store till noon — she’s been carrying boxes up to the house all week.” She tops the coffee. “Pick one. The day’ll spend itself regardless.”',
+        text: '“Or my walk-in needs shelving before the frost order lands. Or Dianne’s on her own at the store till noon — she’s been carrying boxes up to the house all week.” She tops the coffee. “Pick one. The day goes by either way.”',
       },
     ],
   },

@@ -532,7 +532,7 @@ const evening = defineScene({
       },
       // ——— Without-you: Wade and the door (horn-on staging).
       {
-        text: '“Green door’s getting its paint,” Barb says, like a weather item. “Had the office propped open to the cold the day long — wanted it witnessed, is my reading. Fresh green over the old, someone said.”',
+        text: '“Green door’s getting its paint,” Barb says, like a weather item. “Had the office propped open to the cold all day — wanted it witnessed, if you ask me. Fresh green over the old, someone said.”',
         when: { op: 'all', of: [missedWade, hornOn] },
       },
       // ——— Without-you: Wade and the battery (stopped staging).

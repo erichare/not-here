@@ -137,7 +137,7 @@ const hall = defineScene({
         text: 'The banner is up at the stage end at last: SEVEN YEARS, white on blue. Nobody reads it out. It gets glanced at the way the snowline gets glanced at, and the coffee gets refilled around it.',
       },
       {
-        text: 'Moose comes up with the crowd as far as the door and stops there. You are just inside it. People edge around him with plates held high; somebody pats a leg; somebody says, “He’s got old, that dog,” and hangs a coat. He settles on the cold side of the threshold, chin up, facing the light, and does not cross it all night.',
+        text: 'Moose comes up with the crowd as far as the door and stops there. You are just inside it. People edge around him with plates held high; somebody pats a leg; somebody says, “He’s getting old, that dog,” and hangs a coat. He settles on the cold side of the threshold, chin up, facing the light, and does not cross it all night.',
       },
       {
         text: 'Your shirt holds its crease. It is the one thing in the hall that arrived with you, and it behaves.',

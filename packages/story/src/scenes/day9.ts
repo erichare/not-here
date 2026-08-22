@@ -77,7 +77,7 @@ const morning = defineScene({
         text: '“Or my walk-in wants its winter shelving, and I want a second pair of arms more than I want the last word. Which is saying something.”',
       },
       {
-        text: '“Or Tam’s holding the 07:10. He asked was anybody riding. He means you — ‘anybody’ is as far as his grammar bends.” She sets the pot back on the ring. “One of the three. The morning won’t be told twice.”',
+        text: '“Or Tam’s holding the 07:10. He asked if anybody was riding. He means you — ‘anybody’ is as far as his grammar bends.” She sets the pot back on the ring. “One of the three. The morning won’t be told twice.”',
       },
     ],
   },

@@ -95,7 +95,7 @@ export const RULES: readonly DialogueRule[] = [
     slot: 'supper-d22',
     when: { op: 'flag', key: 'potluck:verdict', value: 'exiled' },
     salience: 2,
-    text: '“Up here you eat first and the town can practise its minding tomorrow,” Dianne says, setting the dish down hard enough to mean it.',
+    text: '“Up here you eat first — the town can practise its manners tomorrow,” Dianne says, setting the dish down hard enough to mean it.',
   },
   {
     id: 'dianne-supper-fallback',

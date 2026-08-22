@@ -83,7 +83,7 @@ const morning = defineScene({
         when: defendedVerdict,
       },
       {
-        text: '“Doctor’s holding clinic till noon,” Barb says, at the flat-top, not turning. “She asked would you come up. She doesn’t ask things twice, so I’m saying it once.”',
+        text: '“Doctor’s holding clinic till noon,” Barb says, at the flat-top, not turning. “She asked if you’d come up. She doesn’t ask things twice, so I’m saying it once.”',
       },
       {
         text: '“And that—” the outgoing mail in its elastic, squared on the counter’s end “—wants walking over to Dianne’s counter before the pickup at two. Morning won’t stretch over both. You know how they are.”',
@@ -130,7 +130,7 @@ const clinic = defineScene({
         text: 'Clinic hours are thinning out when you come up: one truck leaving, the waiting chairs empty, the scale idle in its corner. Priya doesn’t reach for the intake pad. On the desk in front of her, square to the blotter, sits an envelope gone soft at the corners, the way paper goes when it has been carried more than kept.',
       },
       {
-        text: '“She wrote me a letter, the week it happened,” she says. Clinic voice, which is how you know it isn’t. “One letter. I never answered it. Seven years I have been the town’s doctor about that fact.”',
+        text: '“She wrote me a letter, the week it happened,” she says. Clinic voice, which is how you know it isn’t. “One letter. I never answered it. I’ve been the town’s doctor about that fact for seven years.”',
       },
       {
         text: 'She doesn’t open it. She looks at you, eyes open, level, and lays the line down from memory the way you’d lay down a card you had spent years not playing: “‘I can’t stay where everyone has already decided who I am.’”',

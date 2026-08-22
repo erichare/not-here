@@ -36,6 +36,8 @@ export interface SceneModel {
   readonly held?: boolean;
   /** Current world — Barb's book reads it; absent means no book this frame. */
   readonly world?: WorldState;
+  /** Time-of-day slot — the page's ambient grade keys off it (body[data-slot]). */
+  readonly slot?: string;
 }
 
 export interface UiCallbacks {
@@ -104,6 +106,12 @@ const buildTitleScreen = (
   onBegin: (fresh: boolean) => void,
 ): HTMLElement => {
   const screen = el('section', 'title-screen');
+  // The breakwater beam and the town's few lit windows: pure CSS dressing,
+  // aria-hidden — the title's weather, never its content.
+  const beam = el('span', 'title-beam');
+  beam.setAttribute('aria-hidden', 'true');
+  const shore = el('span', 'title-shore');
+  shore.setAttribute('aria-hidden', 'true');
   const name = el('h1', 'title-name', 'NOT HERE');
   const windowButton = el('button', 'lit-window');
   windowButton.type = 'button';
@@ -112,7 +120,7 @@ const buildTitleScreen = (
   panes.setAttribute('aria-hidden', 'true');
   windowButton.append(panes);
   const hint = el('p', 'title-hint', TITLE_COPY[mode].hint);
-  screen.append(name, windowButton, hint);
+  screen.append(beam, shore, name, windowButton, hint);
   windowButton.addEventListener(
     'click',
     (event) => {
@@ -163,6 +171,30 @@ export const createUi = (root: HTMLElement, callbacks: UiCallbacks): Ui => {
   const book = createBookLayer(root, { onExitBeat: addCaption });
 
   let cancelReveal: (() => void) | null = null;
+  let cancelChoiceKeys: (() => void) | null = null;
+
+  /** Number keys pick choices, the CLI's grammar carried into the browser. */
+  const armChoiceKeys = (after: HTMLElement): void => {
+    cancelChoiceKeys?.();
+    const buttons = [...after.querySelectorAll<HTMLButtonElement>('button.choice')];
+    if (buttons.length === 0) {
+      cancelChoiceKeys = null;
+      return;
+    }
+    const onKey = (event: KeyboardEvent): void => {
+      if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) return;
+      // The book owns the page while it's open — no ledger moves under it.
+      if (document.querySelector('.book-overlay:not([hidden])') !== null) return;
+      const digit = Number(event.key);
+      if (!Number.isInteger(digit) || digit < 1 || digit > buttons.length) return;
+      const button = buttons[digit - 1];
+      if (button === undefined) return;
+      event.preventDefault();
+      button.click();
+    };
+    document.addEventListener('keydown', onKey);
+    cancelChoiceKeys = () => document.removeEventListener('keydown', onKey);
+  };
 
   const finishReveal = (items: readonly RevealItem[], after: HTMLElement): void => {
     for (const item of items) item.node.classList.add('on');
@@ -170,6 +202,7 @@ export const createUi = (root: HTMLElement, callbacks: UiCallbacks): Ui => {
     after.setAttribute('aria-hidden', 'false');
     after.classList.add('shown');
     cancelReveal = null;
+    armChoiceKeys(after);
   };
 
   const startReveal = (items: readonly RevealItem[], after: HTMLElement): void => {
@@ -247,17 +280,24 @@ export const createUi = (root: HTMLElement, callbacks: UiCallbacks): Ui => {
   return {
     showTitle: (mode, onBegin) => {
       cancelReveal?.();
+      cancelChoiceKeys?.();
       book.retire();
       page.className = 'page title-page';
       page.removeAttribute('data-scene');
+      delete document.body.dataset.slot;
       page.replaceChildren(buildTitleScreen(mode, onBegin));
     },
 
     renderScene: (model) => {
       cancelReveal?.();
+      cancelChoiceKeys?.();
       page.className = model.ending === undefined ? 'page scene-page' : 'page ending-page';
       if (model.sceneId === undefined) page.removeAttribute('data-scene');
       else page.dataset.scene = model.sceneId;
+      // The ambient grade follows the scene's slot; endings take no grade.
+      if (model.ending === undefined && model.slot !== undefined)
+        document.body.dataset.slot = model.slot;
+      else delete document.body.dataset.slot;
 
       const header = model.header.length > 0 ? el('header', 'slot-header', model.header) : null;
       const entry = el('section', 'entry');

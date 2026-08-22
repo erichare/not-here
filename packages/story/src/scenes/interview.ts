@@ -45,10 +45,10 @@ const q1 = defineScene({
         text: 'Barb comes back with the decaf pot and two mugs, pours both, pushes one across the counter. She does not sit. Owners don’t.',
       },
       {
-        text: '"Now," she says. "Few things I ask anybody who stops here. No harm in any of them."',
+        text: '"Now," she says. "Couple things I ask everybody who stops here. No harm in any of them."',
       },
       {
-        text: '"Where’ll you want to sit, mornings? Window looks at the lake. Booth’s by the kitchen and looks at nothing."',
+        text: '"Where do you want to sit, mornings? Window looks at the lake. Booth’s by the kitchen — looks at nothing."',
       },
     ],
   },
@@ -184,7 +184,7 @@ const q4 = defineScene({
         text: 'Whatever she writes, she writes it small and does not show you. The pen stays out.',
       },
       {
-        text: '"Sleep light or heavy? Horn goes at night, out on the wharf. Some can’t keep from listening for it."',
+        text: '"Sleep light or heavy? The horn goes at night, out on the wharf. Some people can’t help listening for it."',
       },
     ],
   },

@@ -867,7 +867,7 @@ const depot = defineScene({
         text: '“I keep my columns. Both directions now.” He folds the book away, and nothing in his hand shook writing either line.',
       },
       {
-        text: 'The idle runs on. Then, to the windshield, in the voice he keeps for the road: “I kept checking would you take her seat. Every ride. You never once didn’t.”',
+        text: 'The idle runs on. Then, to the windshield, in the voice he keeps for the road: “I kept checking if you’d take her seat. Every ride. You never once didn’t.”',
       },
     ],
   },

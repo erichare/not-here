@@ -45,10 +45,10 @@ const morning = defineScene({
         text: 'Toast on the counter, coffee beside it, no ceremony. Barb is already elbow-deep in the day.',
       },
       {
-        text: '"Dianne Cole’s asking for you," she says. "The General. Word goes round a town this size faster than the plow, and Dianne is where the word ends up." She lets that be all it is.',
+        text: '"Dianne Cole’s asking for you," she says. "The General. News moves fast in a town this size, and most of it moves through Dianne." She lets that be all it is.',
       },
       {
-        text: '"Or you can stay — keg truck’s due, the back room wants clearing first, and my knees are past it. Suit yourself. One or the other — the morning’s not wide enough for both."',
+        text: '"Or you can stay — keg truck’s due, the back room needs clearing first, and my knees are done. Suit yourself, but it’s one or the other. The morning’s not long enough for both."',
       },
     ],
   },
@@ -263,15 +263,15 @@ const evening = defineScene({
       { text: '@line:barb:greeting' },
       // ——— Without-you retelling: the delivery morning, told by Barb (you were at Dianne's).
       {
-        text: '"You missed the show," Barb says, arriving with your plate. "Truck came early. Tam Osei helps me get the kegs down the ramp — and the last one gets away from him. Slow, mind. The dignified kind of away."',
+        text: '"You missed the show," Barb says, arriving with your plate. "Truck came early. Tam Osei helped me get the kegs down the ramp, and the last one got away from him. Slow, though. Real dignified about it."',
         when: wentToDianne,
       },
       {
-        text: '"And Tam walks alongside it the whole way down the lot with his hand out, talking to it — whoa now, whoa now — like it was a horse he was disappointed in. Keg fetches up against the wall sweet as you like. Not a drop troubled."',
+        text: '"Tam walks next to it the whole way down the lot, hand out, talking to it — whoa now, whoa now — like it’s a horse that let him down. The keg ends up against the wall, gentle as anything. Didn’t spill a drop."',
         when: wentToDianne,
       },
       {
-        text: '"He’s told it twice tonight already himself, and the keg’s bigger every telling." She goes off to see to the crib board, taking the story with her.',
+        text: '"He’s told it twice tonight already. The keg gets bigger every time." She goes off to see to the crib board, taking the story with her.',
         when: wentToDianne,
       },
       {

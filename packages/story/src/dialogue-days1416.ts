@@ -54,7 +54,7 @@ export const RULES: readonly DialogueRule[] = [
     slot: 'supper-d15',
     when: { op: 'flag', key: 'potluck:verdict', value: 'exiled' },
     salience: 2,
-    text: '“It wanted eating hot,” Dianne says, to the dish, after — as near to sorry as the wind lets her get. “I’ll come down again. It’s no walk at all.” It is a long walk, and the whole town watched her take it.',
+    text: '“It needed eating hot,” Dianne says, to the dish, after — as near to sorry as the wind lets her get. “I’ll come down again. It’s no walk at all.” It is a long walk, and the whole town watched her take it.',
   },
   {
     id: 'dianne-s15-locks',

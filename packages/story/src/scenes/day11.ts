@@ -114,7 +114,7 @@ const morning = defineScene({
         text: '“Albums are back on the shelf at the General,” she says. “Sorted — that’s the word going round with them. Dianne’s showing pages to anyone who stands still.”',
       },
       {
-        text: '“And the counter’s a week behind on parcels. Tam brought three tubs down and the bench eats her mornings. She’d not ask.” Barb squares the sugar. “I’m asking.”',
+        text: '“And the counter’s a week behind on parcels. Tam brought three tubs down and the bench eats her mornings. She wouldn’t ask.” Barb squares the sugar. “I’m asking.”',
       },
     ],
   },
@@ -153,7 +153,7 @@ const albums = defineScene({
         text: 'The long shelf behind the till has its spines back — seven fat Novembers of them, squared and dusted, the stripe of unfaded paint gone under them like it was never bare. Dianne has one open on the counter glass between customers.',
       },
       {
-        text: '“There’s the hall the year the roof went,” she says, corner by corner. “There’s the beach in the good August. There’s the packinghouse crew, the whole daft lot of them.” The pages turn at her pace and the morning goes with them, warm as the heater.',
+        text: '“There’s the hall the year the roof went,” she says, corner by corner. “There’s the beach in the good August. There’s the packinghouse crew, the whole bunch of them.” The pages turn at her pace and the morning goes with them, warm as the heater.',
       },
       {
         text: 'Each album keeps a sleeve of loose prints inside the back cover. Seven sleeves back, the year the canoe went over is not thin, the way a hard year would be thin. It is empty. And its label is newer ink than its neighbours — the year written twice, the second hand over the ghost of the first, steadier.',
@@ -297,7 +297,7 @@ const evening = defineScene({
       // Barb starts and does not finish, ahead of the warning she'll give.
       // ——— Without-you: the albums. Absence hands you the audience.
       {
-        text: '“Dianne had the albums open on the counter glass all day,” Barb says. “Anyone who stood still got a page or two. Mrs. Yee got a wedding entire. Seven years those were upstairs, and now it’s the shop’s own little museum, and she’s—” The pot wants the ring just then. The sentence stands where she left it, and she doesn’t go back for it.',
+        text: '“Dianne had the albums open on the counter glass all day,” Barb says. “Anyone who stood still got a page or two. Mrs. Yee got a whole wedding. Seven years those were upstairs, and now it’s the shop’s own little museum, and she’s—” The pot wants the ring just then. The sentence stands where she left it, and she doesn’t go back for it.',
         when: missedAlbums,
       },
       {
@@ -306,7 +306,7 @@ const evening = defineScene({
       },
       // ——— Without-you: the counter. Absence hands you the waiting line.
       {
-        text: '“Counter’s still a week behind,” Barb says. “And my till rolls are sitting up there — signature stock, mind. Dianne won’t leave them on the shelf overnight, and won’t sign them across to just anyone, so they—” She counts the float instead of finishing, from the top, as if the first count had gone somewhere.',
+        text: '“Counter’s still a week behind,” Barb says. “And my till rolls are sitting up there — signature stock, no less. Dianne won’t leave them on the shelf overnight, and won’t sign them across to just anyone, so they—” She counts the float instead of finishing, from the top, as if the first count had gone somewhere.',
         when: missedCounter,
       },
       {

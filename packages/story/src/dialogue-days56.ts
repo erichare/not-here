@@ -59,7 +59,7 @@ export const RULES: readonly DialogueRule[] = [
     speaker: 'tam',
     slot: 'evening-d5',
     requires: ['went-to-dianne'],
-    text: '"Heard you gave Dianne your first morning here," Tam says, to his coffee, not to you. "Barb keeps me current whether I ask or not." A while later, unattached to anything: "That store runs on string and her nerve. It was good you went."',
+    text: '"Heard you gave Dianne your first morning here," Tam says, to his coffee, not to you. "Barb keeps me current whether I ask or not." A while later, unattached to anything: "That store runs on string and her nerve. Good that you went."',
   },
   // The Refuser's route reaches the gossip mechanic too (playtest fix-15):
   // Barb witnessed the refused plate on Night 1; the barb→tam edge carried
@@ -95,7 +95,7 @@ export const RULES: readonly DialogueRule[] = [
     speaker: 'barb',
     slot: 'greeting-d6',
     requires: ['rode-with-tam'],
-    text: '"Tam allows the run went fine yesterday," Barb says, pouring. "That’s him raving, so it must have."',
+    text: '"Tam says the run went fine yesterday," Barb says, pouring. "For him that’s raving, so it must have."',
   },
   {
     id: 'barb-g6-helped-hall',

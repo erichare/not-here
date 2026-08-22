@@ -82,6 +82,6 @@ export const RULES: readonly DialogueRule[] = [
     slot: 'greeting',
     when: onDay(4),
     requires: ['went-to-dianne-d4'],
-    text: '“Two mornings up that hill inside a week,” Barb says. “She’ll take to baking for you next. Nobody comes through that the same size.”',
+    text: '“Two mornings up that hill in one week,” Barb says. “Next she’ll be baking for you. Nobody comes back from that the same size.”',
   },
 ];

@@ -57,7 +57,7 @@ export const RULES: readonly DialogueRule[] = [
     slot: 'greeting-d11',
     requires: ['sat-dianne-stove-d10'],
     salience: 1,
-    text: '“Dianne says you sat her kitchen yesterday and did a bowl the credit it was owed,” Barb says, pouring. “She’d have told the whole street by noon. May have.”',
+    text: '“Dianne says you sat her kitchen yesterday and gave a bowl its due,” Barb says, pouring. “She’d have told the whole street by noon. May have.”',
   },
   {
     id: 'barb-g11-albums',

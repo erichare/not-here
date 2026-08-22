@@ -105,7 +105,7 @@ const morning = defineScene({
         text: 'The tenth morning smells of woodsmoke for the first time — one chimney, up the hill, working out its draw. The snowline has taken the top rail of the orchard fence. Coffee arrives before you do.',
       },
       {
-        text: '“Dianne’s laid the first house fire of the year,” Barb says, counting the float. “She’s asked would you stop up. Wood wants carrying, and she won’t say so twice.”',
+        text: '“Dianne’s laid the first house fire of the year,” Barb says, counting the float. “She asked if you’d stop up. Wood wants carrying, and she won’t say so twice.”',
       },
       {
         text: '“Hall’s got its committee morning — the dish list goes up today, and the doctor’s down there pinning it. And Sam’s light was burning past two again.” She sets the pot back on the ring. “That’s the morning. It won’t seat all three.”',

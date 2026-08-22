@@ -571,7 +571,7 @@ const confession = defineScene({
         text: '“I’m going to tell you a morning,” she says. “I’ve told it to the stove and I’ve told it to the dark, and it comes out clean now, which is how I know it’s ready. Nobody else gets it. You do.”',
       },
       {
-        text: '“I found the note by six. She’d have wanted more of a head start than that, knowing her, and she got it — I stood at the cold stove and read it the once. Just the once. Then I lit the stove with it.” Her thumb moves on her own knuckle, one pass. “And before the kettle had boiled I was out on the step telling the neighbours the canoe was gone. The canoe’s gone. Three words, and I had them ready, and I have wondered every day since how long I’d had them ready.”',
+        text: '“I found the note by six. She’d have wanted more of a head start than that, knowing her, and she got it — I stood at the cold stove and read it once. Just once. Then I lit the stove with it.” Her thumb moves on her own knuckle, one pass. “And before the kettle had boiled I was out on the step telling the neighbours the canoe was gone. The canoe’s gone. Three words, and I had them ready, and I have wondered every day since how long I’d had them ready.”',
       },
       {
         text: '“There was never a search I believed in. I walked the shore with the rest of them and I believed in none of it. You can’t drag a lake for a girl whose goodbye you lit the stove with.”',
@@ -835,7 +835,7 @@ const lamp = defineScene({
         text: '“You asked me once what Frank was,” she says. “I told you to finish your coffee. What he was isn’t the part I owe you.”',
       },
       {
-        text: '“You already paid for the other part,” she says, “so I’ll not charge you twice: you know what came in off the ice wearing him, and what the keeping cost. This is the part I kept back even then.”',
+        text: '“You already paid for the other part,” she says, “so I won’t charge you twice: you know what came in off the ice wearing him, and what the keeping cost. This is the part I kept back even then.”',
         when: earlyTruth,
       },
       {

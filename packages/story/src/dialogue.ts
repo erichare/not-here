@@ -41,7 +41,7 @@ export const DIALOGUE_RULES: readonly DialogueRule[] = [
     slot: 'greeting',
     requires: ['refused-first-meal'],
     salience: 1,
-    text: '"Eating tonight?" Barb asks. "Or shall I cook for the pleasure of it, like last night." There is no edge on it. There is a little edge on it.',
+    text: '"Eating tonight?" Barb asks. "Or am I cooking for one again, like last night." There is no edge on it. There is a little edge on it.',
   },
 
   // Guaranteed fallback — no conditions, always eligible, chosen last.

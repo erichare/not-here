@@ -271,10 +271,10 @@ const counter = defineScene({
         text: 'The room empties by nods. You stay, and Barb lets you — banks the grill, drops the lights to the one over the register, turns the chairs herself. She pours two coffees and doesn’t slide yours over so much as station it.',
       },
       {
-        text: '“You asked what my Frank was.” To the register, not to you. “I said finish your coffee. Well. It’s a long coffee.” She squares the book on its shelf without opening it. “I’ll say it the once, and then it’s said.”',
+        text: '“You asked what my Frank was.” To the register, not to you. “I said finish your coffee. Well. It’s a long coffee.” She squares the book on its shelf without opening it. “I’ll say it once, and then it’s said.”',
       },
       {
-        text: '“Frank went through the ice at the narrows, November of the year I bought the second fryer. The lake kept him; you know how it keeps. And the week after freeze-up the door went, and a man walked in with the cold on his coat and Frank’s way of not filling a room, and I poured, and my hands knew before I did. The weight of a step. What came in had the step I remembered.” The furnace ticks. “Remembered, mind. Not the same animal at all.”',
+        text: '“Frank went through the ice at the narrows, November of the year I bought the second fryer. The lake kept him; you know how it keeps. And the week after freeze-up the door went, and a man walked in with the cold on his coat and Frank’s way of not filling a room, and I poured, and my hands knew before I did. The weight of a step. What came in had the step I remembered.” The furnace ticks. “Remembered, though. Not the same animal at all.”',
       },
       {
         text: '“I could have said. There’s a phone on that wall and a doctor in town and a priest down the lake, and I looked at him across this counter and chose the winter instead.” She turns her wedding band with a thumb, once. “Best winter of my life. I’d choose it again. Both of those things are true, and I’ve had forty years to get them to sit in the same room.”',

@@ -111,7 +111,7 @@ const morning = defineScene({
         when: hornStopped,
       },
       {
-        text: '“And Sam asked would you stop by the boat shed.” She lets the pot finish pouring. “Asked. From him that’s a carpet rolled out.” She goes back to the float. “The morning won’t stretch. You know that by now.”',
+        text: '“And Sam asked if you’d stop by the boat shed.” She lets the pot finish pouring. “Asked. From him that’s a carpet rolled out.” She goes back to the float. “The morning won’t stretch. You know that by now.”',
       },
     ],
   },
@@ -278,7 +278,7 @@ const wharfOn2 = defineScene({
         when: { op: 'fact.exists', tag: 'wade-told-fifth-bar' },
       },
       {
-        text: '“You always hummed the end different, mind,” he says. Still to the gauge, like a reading he’s taking. “Past where the cam stops. Like you had somewhere the rest of it lived.” The tank breathes. He doesn’t ask where.',
+        text: '“You always hummed the end different, though,” he says. Still to the gauge, like a reading he’s taking. “Past where the cam stops. Like you had somewhere the rest of it lived.” The tank breathes. He doesn’t ask where.',
         when: { op: 'fact.exists', tag: 'wade-told-fifth-bar' },
       },
       {

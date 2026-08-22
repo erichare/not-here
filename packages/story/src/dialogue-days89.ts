@@ -27,7 +27,7 @@ export const RULES: readonly DialogueRule[] = [
     speaker: 'barb',
     slot: 'greeting-d8',
     when: { op: 'flag', key: 'd8:slot', value: 'stockroom' },
-    text: '“You’ve the General’s back room on your sleeves,” Barb says, setting the plate down. “Shelf dust and brine. Dianne rang her order in an hour lighter than usual, so whatever you lifted, it wasn’t only jars.”',
+    text: '“You’ve got the General’s back room on your sleeves,” Barb says, setting the plate down. “Shelf dust and brine. Dianne rang her order in an hour lighter than usual, so whatever you lifted, it wasn’t only jars.”',
   },
   {
     id: 'barb-g8-wharf',
@@ -65,14 +65,14 @@ export const RULES: readonly DialogueRule[] = [
     speaker: 'barb',
     slot: 'greeting-d9',
     when: { op: 'flag', key: 'd9:slot', value: 'clinic' },
-    text: '“Clinic kept, then,” Barb says, with the pot. “The doctor writes her page either way — you may as well be on it warm. Soup’s barley. Sit.”',
+    text: '“Clinic kept, then,” Barb says, with the pot. “The doctor writes her page either way — better warm on it than not. Soup’s barley. Sit.”',
   },
   {
     id: 'barb-g9-ride',
     speaker: 'barb',
     slot: 'greeting-d9',
     when: { op: 'flag', key: 'd9:slot', value: 'ride' },
-    text: '“Town and back with Tam again,” Barb says. “He’ll allow you ride quiet, and from Tam that’s a testimonial. Soup’s barley; the bread’s yesterday’s but the butter isn’t.”',
+    text: '“Town and back with Tam again,” Barb says. “He let you ride quiet, and from Tam that’s a testimonial. Soup’s barley; the bread’s yesterday’s but the butter isn’t.”',
   },
   {
     id: 'barb-g9-walkin',

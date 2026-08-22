@@ -202,7 +202,7 @@ const shed = defineScene({
         text: '“Hold that end steady if you’re staying,” he says. You take the gunwale. For a while there is the gun clicking, the smell of the caulk, and the lake saying nothing.',
       },
       {
-        text: '“She had a name for the November wind off the bench,” Sam says, to the hull. “The landlord. On account of it come round the first of the month.” The gun stops. He is not looking at you the way only he can entirely not look at you.',
+        text: '“She had a name for the November wind off the bench,” Sam says, to the hull. “The landlord. Because it came around the first of the month.” The gun stops. He is not looking at you the way only he can entirely not look at you.',
       },
     ],
   },
