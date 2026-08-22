@@ -1,0 +1,83 @@
+.page {
+  max-width: 66ch;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 5rem 2rem 8rem;
+}
+
+.scene-page .slot-header,
+.scene-page .entry {
+  animation: ledger-settle 0.28s ease-out both;
+}
+
+@keyframes ledger-settle {
+  from {
+    opacity: 0;
+    transform: translateY(0.35rem);
+  }
+}
+
+/* ---- scene turn: the page breathes out and back in ---- */
+
+/* className is reassigned on every render, so this replays per scene — a
+   short cross-fade under the word-by-word settle. */
+.page {
+  animation: page-in 0.38s ease-out;
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ---- ledger header ---- */
+
+.slot-header {
+  font-size: 0.7rem;
+  font-family: var(--mono);
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--mist-muted);
+  border-bottom: 1px solid var(--cold-line);
+  padding-bottom: 0.65rem;
+  margin-bottom: 2.6rem;
+}
+
+/* ---- the slot header keeps the hour, not just the day ---- */
+
+.slot-header::before {
+  margin-right: 0.9em;
+  color: var(--mist-dim);
+}
+
+body[data-slot='morning'] .slot-header::before {
+  content: '○';
+}
+
+body[data-slot='afternoon'] .slot-header::before {
+  content: '◔';
+}
+
+body[data-slot='evening'] .slot-header::before {
+  content: '◑';
+}
+
+body[data-slot='night'] .slot-header::before {
+  content: '●';
+}
+
+/* ---- prose ---- */
+
+.entry .prose {
+  margin-bottom: 1.5rem;
+}
+
+.w {
+  opacity: 0;
+  transition: opacity 0.14s ease-out;
+}
+
+.w.on {
+  opacity: 1;
+}

@@ -1,30 +1,25 @@
 /**
- * DOM rendering for the ledger. Scenes render as entries in Maud's ledger:
- * a faint 'DAY N — SLOT' rule, prose paragraphs revealed word-by-word
- * (skippable on click, instant under prefers-reduced-motion), then choices
- * as dash-prefixed ledger lines. Locked choices dim behind a '·'.
+ * The UI façade: composes the persistent skeleton, the revealer, the book,
+ * and the captions into the three verbs main.ts speaks — showTitle,
+ * renderScene, addCaption. Scenes render as entries in Barb's ledger: a
+ * faint 'DAY N — SLOT' rule, prose revealed word-by-word (skippable on
+ * click, instant under motion-off), then choices as dash-prefixed ledger
+ * lines. Only the page's children are replaced per scene; everything else
+ * is updated in place.
  */
 
 import type { WorldState } from '@not-here/engine';
 import { createBookLayer } from './book.ts';
+import type { SceneFrame } from './model/derive.ts';
 import { loadSave } from './save.ts';
-import { renderMarginSketch } from './sketches.ts';
+import { createCaptions } from './ui/captions.ts';
+import { armChoiceKeys, type ChoiceModel } from './ui/choices.ts';
+import { createRevealer, WORD_INTERVAL_MS } from './ui/reveal.ts';
+import { renderEntry } from './ui/scene.ts';
+import { buildSkeleton } from './ui/skeleton.ts';
+import { buildTitleScreen, type TitleMode } from './ui/title.ts';
 
-const WORD_INTERVAL_MS = 26;
-const ARTIFACT_PAUSE_MS = 180;
-const CAPTION_LIFETIME_MS = 6500;
-
-interface RevealItem {
-  readonly node: HTMLElement;
-  readonly delayMs: number;
-}
-
-export interface ChoiceModel {
-  readonly id: string;
-  readonly label: string;
-  readonly locked: boolean;
-  readonly stakes?: 'major';
-}
+export type { ChoiceModel, TitleMode };
 
 export interface SceneModel {
   readonly sceneId?: string;
@@ -38,300 +33,95 @@ export interface SceneModel {
   readonly world?: WorldState;
   /** Time-of-day slot — the page's ambient grade keys off it (body[data-slot]). */
   readonly slot?: string;
+  /** Everything the persistent regions need (stage, frame, margin, FX). */
+  readonly frame?: SceneFrame;
 }
 
 export interface UiCallbacks {
   readonly onChoose: (choiceId: string) => void;
   readonly onNewGame: () => void;
+  /** Milliseconds per revealed word — the lamp's pace (0 = at once). */
+  readonly wordIntervalMs?: () => number;
 }
 
-/** What the stored slot means for the title screen (pt2-fix-01). */
-export type TitleMode = 'fresh' | 'resume' | 'held';
-
 export interface Ui {
-  readonly showTitle: (mode: TitleMode, onBegin: (fresh: boolean) => void) => void;
+  readonly showTitle: (mode: TitleMode, onBegin: (fresh: boolean) => void, subtitle?: string) => void;
   readonly renderScene: (model: SceneModel) => void;
   readonly addCaption: (text: string) => void;
 }
 
-const el = <K extends keyof HTMLElementTagNameMap>(
-  tag: K,
-  className: string,
-  text?: string,
-): HTMLElementTagNameMap[K] => {
-  const node = document.createElement(tag);
-  node.className = className;
-  if (text !== undefined) node.textContent = text;
-  return node;
-};
-
-const prefersReducedMotion = (): boolean =>
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-/** Paragraphs with this prefix are document artifacts: rendered verbatim. */
-const DOC_PREFIX = '@doc:\n';
-
-/** Split a paragraph into word spans; returns the spans for the typewriter. */
-const buildParagraph = (text: string): { p: HTMLParagraphElement; words: HTMLSpanElement[] } => {
-  const p = el('p', 'prose');
-  const words: HTMLSpanElement[] = [];
-  for (const word of text.split(/\s+/).filter((w) => w.length > 0)) {
-    const span = el('span', 'w', word);
-    words.push(span);
-    p.append(span, ' ');
-  }
-  return { p, words };
-};
-
-/** The held-place card's one line — spoken in the game's register. */
-const HELD_LINE = 'Your November is kept. The twenty-eighth is not written yet.';
-
-const TITLE_COPY: Record<TitleMode, { readonly aria: string; readonly hint: string }> = {
-  fresh: {
-    aria: 'The lamp is lit. Begin.',
-    hint: 'the lamp is lit — click the window',
-  },
-  resume: {
-    aria: 'The lamp is lit. Resume your ledger.',
-    hint: 'the lamp is still lit — return to the ledger',
-  },
-  held: {
-    aria: 'The lamp is lit. Your November is kept.',
-    hint: 'the lamp is still lit — your November is kept',
-  },
-};
-
-const buildTitleScreen = (
-  mode: TitleMode,
-  onBegin: (fresh: boolean) => void,
-): HTMLElement => {
-  const screen = el('section', 'title-screen');
-  // The breakwater beam and the town's few lit windows: pure CSS dressing,
-  // aria-hidden — the title's weather, never its content.
-  const beam = el('span', 'title-beam');
-  beam.setAttribute('aria-hidden', 'true');
-  const shore = el('span', 'title-shore');
-  shore.setAttribute('aria-hidden', 'true');
-  const name = el('h1', 'title-name', 'NOT HERE');
-  const windowButton = el('button', 'lit-window');
-  windowButton.type = 'button';
-  windowButton.setAttribute('aria-label', TITLE_COPY[mode].aria);
-  const panes = el('span', 'panes');
-  panes.setAttribute('aria-hidden', 'true');
-  windowButton.append(panes);
-  const hint = el('p', 'title-hint', TITLE_COPY[mode].hint);
-  screen.append(beam, shore, name, windowButton, hint);
-  windowButton.addEventListener(
-    'click',
-    (event) => {
-      // Don't let the starting click bubble into the first scene's
-      // typewriter-skip listener.
-      event.stopPropagation();
-      onBegin(mode === 'fresh');
-    },
-    { once: true },
-  );
-
-  // pt2-fix-01: a held place offers no fresh start — nothing on this
-  // screen may clear the storage Act Three inherits.
-  if (mode === 'resume') {
-    const fresh = el('button', 'new-game-link', 'begin a new ledger instead');
-    fresh.type = 'button';
-    fresh.addEventListener(
-      'click',
-      (event) => {
-        event.stopPropagation();
-        onBegin(true);
-      },
-      { once: true },
-    );
-    screen.append(fresh);
-  }
-  return screen;
-};
-
 export const createUi = (root: HTMLElement, callbacks: UiCallbacks): Ui => {
-  const page = el('main', 'page');
-  const captions = el('div', 'captions');
-  captions.setAttribute('aria-live', 'polite');
-  captions.setAttribute('aria-relevant', 'additions');
-  root.append(page, captions);
-
-  const addCaption = (text: string): void => {
-    const note = el('p', 'caption', text);
-    captions.append(note);
-    window.setTimeout(() => {
-      note.remove();
-    }, CAPTION_LIFETIME_MS);
-  };
+  const skeleton = buildSkeleton(root);
+  const { page, stage } = skeleton;
+  const captions = createCaptions(skeleton.captions);
 
   // Barb's book lives beside the page, never inside it: opening or closing
   // the overlay must not rebuild the scene, restart the typewriter, or
   // re-emit tells.
-  const book = createBookLayer(root, { onExitBeat: addCaption });
+  const book = createBookLayer(skeleton.overlays, {
+    onExitBeat: captions.add,
+    inertTargets: skeleton.inertTargets,
+  });
 
-  let cancelReveal: (() => void) | null = null;
+  const revealer = createRevealer({
+    skipTargets: [page],
+    wordIntervalMs: callbacks.wordIntervalMs ?? (() => WORD_INTERVAL_MS),
+  });
   let cancelChoiceKeys: (() => void) | null = null;
 
-  /** Number keys pick choices, the CLI's grammar carried into the browser. */
-  const armChoiceKeys = (after: HTMLElement): void => {
-    cancelChoiceKeys?.();
-    const buttons = [...after.querySelectorAll<HTMLButtonElement>('button.choice')];
-    if (buttons.length === 0) {
-      cancelChoiceKeys = null;
+  const applyStage = (model: SceneModel): void => {
+    // Invisible in phase 1 (no CSS reads these yet); the persistent stage
+    // learns the place and hour so later phases only add styles.
+    const frame = model.frame;
+    if (frame === undefined) {
+      delete stage.dataset['place'];
+      delete stage.dataset['slot'];
       return;
     }
-    const onKey = (event: KeyboardEvent): void => {
-      if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) return;
-      // The book owns the page while it's open — no ledger moves under it.
-      if (document.querySelector('.book-overlay:not([hidden])') !== null) return;
-      const digit = Number(event.key);
-      if (!Number.isInteger(digit) || digit < 1 || digit > buttons.length) return;
-      const button = buttons[digit - 1];
-      if (button === undefined) return;
-      event.preventDefault();
-      button.click();
-    };
-    document.addEventListener('keydown', onKey);
-    cancelChoiceKeys = () => document.removeEventListener('keydown', onKey);
-  };
-
-  const finishReveal = (items: readonly RevealItem[], after: HTMLElement): void => {
-    for (const item of items) item.node.classList.add('on');
-    after.inert = false;
-    after.setAttribute('aria-hidden', 'false');
-    after.classList.add('shown');
-    cancelReveal = null;
-    armChoiceKeys(after);
-  };
-
-  const startReveal = (items: readonly RevealItem[], after: HTMLElement): void => {
-    cancelReveal?.();
-    if (prefersReducedMotion() || items.length === 0) {
-      finishReveal(items, after);
-      return;
-    }
-    let index = 0;
-    let timer = 0;
-    const skip = (): void => finishRevealAndCleanup();
-    const finishRevealAndCleanup = (): void => {
-      window.clearTimeout(timer);
-      page.removeEventListener('click', skip);
-      finishReveal(items, after);
-    };
-    const tick = (): void => {
-      const item = items[index];
-      if (item === undefined) {
-        finishRevealAndCleanup();
-        return;
-      }
-      item.node.classList.add('on');
-      index += 1;
-      timer = window.setTimeout(tick, item.delayMs);
-    };
-    page.addEventListener('click', skip);
-    cancelReveal = finishRevealAndCleanup;
-    tick();
-  };
-
-  const buildChoices = (model: SceneModel): HTMLElement => {
-    const list = el('ul', 'choices');
-    list.inert = true;
-    list.setAttribute('aria-hidden', 'true');
-    for (const choice of model.choices) {
-      const item = el('li', 'choice-line');
-      const className = choice.stakes === 'major' ? 'choice major' : 'choice';
-      if (choice.locked) {
-        item.append(el('span', `${className} locked`, `· ${choice.label}`));
-      } else {
-        const button = el('button', className, `— ${choice.label}`);
-        button.type = 'button';
-        button.addEventListener('click', (event) => {
-          event.stopPropagation();
-          callbacks.onChoose(choice.id);
-        });
-        item.append(button);
-      }
-      list.append(item);
-    }
-    if (model.ending !== undefined) {
-      const item = el('li', 'choice-line');
-      if (model.held === true) {
-        // pt2-fix-01: an act boundary is a held place, not a close — no
-        // reset offer; the next act inherits this ledger.
-        item.append(
-          el('p', 'ending-mark', '— the ledger waits here —'),
-          el('p', 'held-line', HELD_LINE),
-        );
-      } else {
-        const again = el('button', 'choice', '— Begin the ledger again.');
-        again.type = 'button';
-        again.addEventListener('click', (event) => {
-          event.stopPropagation();
-          callbacks.onNewGame();
-        });
-        item.append(el('p', 'ending-mark', '— the ledger closes here —'), again);
-      }
-      list.append(item);
-    }
-    return list;
+    stage.dataset['place'] = frame.stage.place;
+    if (frame.stage.slot === 'none') delete stage.dataset['slot'];
+    else stage.dataset['slot'] = frame.stage.slot;
   };
 
   return {
-    showTitle: (mode, onBegin) => {
-      cancelReveal?.();
+    showTitle: (mode, onBegin, subtitle) => {
+      revealer.cancel();
       cancelChoiceKeys?.();
+      cancelChoiceKeys = null;
       book.retire();
       page.className = 'page title-page';
       page.removeAttribute('data-scene');
-      delete document.body.dataset.slot;
-      page.replaceChildren(buildTitleScreen(mode, onBegin));
+      delete document.body.dataset['slot'];
+      delete stage.dataset['place'];
+      delete stage.dataset['slot'];
+      page.replaceChildren(buildTitleScreen(mode, onBegin, subtitle === undefined ? {} : { subtitle }));
     },
 
     renderScene: (model) => {
-      cancelReveal?.();
+      revealer.cancel();
       cancelChoiceKeys?.();
+      cancelChoiceKeys = null;
       page.className = model.ending === undefined ? 'page scene-page' : 'page ending-page';
       if (model.sceneId === undefined) page.removeAttribute('data-scene');
-      else page.dataset.scene = model.sceneId;
+      else page.dataset['scene'] = model.sceneId;
       // The ambient grade follows the scene's slot; endings take no grade.
-      if (model.ending === undefined && model.slot !== undefined)
-        document.body.dataset.slot = model.slot;
-      else delete document.body.dataset.slot;
+      if (model.ending === undefined && model.slot !== undefined) document.body.dataset['slot'] = model.slot;
+      else delete document.body.dataset['slot'];
+      applyStage(model);
 
-      const header = model.header.length > 0 ? el('header', 'slot-header', model.header) : null;
-      const entry = el('section', 'entry');
-      const revealItems: RevealItem[] = [];
-      for (const paragraph of model.paragraphs) {
-        if (paragraph.startsWith(DOC_PREFIX)) {
-          const document = el('pre', 'doc', paragraph.slice(DOC_PREFIX.length));
-          entry.append(document);
-          revealItems.push({ node: document, delayMs: ARTIFACT_PAUSE_MS });
-          continue;
-        }
-        const { p, words } = buildParagraph(paragraph);
-        revealItems.push(...words.map((node) => ({ node, delayMs: WORD_INTERVAL_MS })));
-        entry.append(p);
-      }
-      const choices = buildChoices(model);
-      const sketch = renderMarginSketch(model.sceneId);
-      const children: HTMLElement[] = [];
-      if (header !== null) children.push(header);
-      children.push(entry);
-      if (sketch !== null) {
-        children.push(sketch);
-        revealItems.push({ node: sketch, delayMs: ARTIFACT_PAUSE_MS });
-      }
-      children.push(choices);
-      page.replaceChildren(...children);
+      const rendered = renderEntry(model, callbacks);
+      page.replaceChildren(...rendered.children);
       window.scrollTo({ top: 0 });
       // The book reads the world the model carries; failing that, the save
       // slot — main.ts persists every step before rendering, so it is
       // current by the time a scene draws.
       book.update(model.world ?? loadSave(window.localStorage));
-      startReveal(revealItems, choices);
+      revealer.start(rendered.revealItems, rendered.choices, () => {
+        cancelChoiceKeys?.();
+        cancelChoiceKeys = armChoiceKeys(rendered.choices);
+      });
     },
 
-    addCaption,
+    addCaption: captions.add,
   };
 };

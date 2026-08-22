@@ -1,0 +1,204 @@
+/* ---- Barb's book: the tab book by the till ---- */
+
+/* The consult button: title-hint register, bottom-left. It sits just above
+   the vignette so the real control remains legible; the fog still crosses it. */
+button.book-consult {
+  position: fixed;
+  left: 1.4rem;
+  bottom: 1rem;
+  z-index: 32;
+  background: linear-gradient(90deg, rgba(6, 9, 13, 0.9), rgba(6, 9, 13, 0.48));
+  border: none;
+  border-left: 1px solid rgba(232, 180, 90, 0.32);
+  font: inherit;
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--mist-muted);
+  cursor: pointer;
+  padding: 0.38rem 0.65rem;
+}
+
+button.book-consult:hover,
+button.book-consult:focus-visible {
+  color: var(--lamp-bright);
+  outline: none;
+}
+
+button.book-consult:focus-visible {
+  outline: 1px dashed rgba(232, 180, 90, 0.4);
+  outline-offset: 4px;
+}
+
+/* One pulse on unlock — never again. Killed under prefers-reduced-motion. */
+button.book-consult.pulse {
+  animation: book-pulse 1.8s ease-in-out 1;
+}
+
+@keyframes book-pulse {
+  0%, 100% {
+    color: var(--mist-muted);
+    text-shadow: none;
+  }
+  40% {
+    color: var(--lamp-bright);
+    text-shadow: 0 0 14px rgba(255, 217, 143, 0.55);
+  }
+}
+
+.book-page {
+  width: min(64ch, 100%);
+  max-height: calc(100dvh - 4rem);
+  overflow-y: auto;
+  padding: 2.8rem 2.2rem 2.4rem;
+  position: relative;
+  color: #dcc9a2; /* Barb's ink, warm under the lamp */
+  background:
+    radial-gradient(
+      ellipse 120% 90% at 50% 0%,
+      rgba(232, 180, 90, 0.1),
+      rgba(232, 180, 90, 0.04) 60%,
+      transparent 100%
+    ),
+    #14100a;
+  border: 1px solid rgba(232, 180, 90, 0.38);
+  border-radius: 2px;
+  box-shadow:
+    0 0 26px rgba(232, 180, 90, 0.22),
+    0 0 90px rgba(232, 180, 90, 0.1),
+    inset -3px 0 0 rgba(232, 180, 90, 0.12); /* the page has an edge */
+}
+
+.book-page:focus {
+  outline: none;
+}
+
+button.book-close {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.9rem;
+  border: none;
+  border-bottom: 1px dotted rgba(232, 180, 90, 0.42);
+  background: none;
+  color: var(--lamp-dim);
+  font: inherit;
+  font-size: 0.74rem;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+button.book-close:hover,
+button.book-close:focus-visible {
+  color: var(--lamp-bright);
+  outline: 1px dashed rgba(232, 180, 90, 0.42);
+  outline-offset: 4px;
+}
+
+.book-title {
+  font-size: 0.84rem;
+  font-weight: normal;
+  letter-spacing: 0.5em;
+  color: var(--lamp);
+  text-shadow: var(--lamp-glow);
+}
+
+.book-subtitle {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--lamp-dim);
+  margin-bottom: 1.4rem;
+}
+
+.book-register {
+  margin: 1.2rem 0 1.6rem;
+  font-size: 0.85rem;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.book-section-label {
+  font-size: 0.7rem;
+  font-family: var(--mono);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--lamp-dim);
+  margin: 1.6rem 0 0.4rem;
+}
+
+.book-entry {
+  font-style: italic;
+  margin: 0.7rem 0;
+  padding-left: 1.2rem;
+  text-indent: -1.2rem;
+}
+
+.book-entry::before {
+  content: '~  ';
+  font-style: normal;
+  color: var(--lamp-dim);
+}
+
+.book-quote::before {
+  content: '—  ';
+}
+
+/* ---- STATIC gets into the page itself (CSS only, static under
+        prefers-reduced-motion by construction — nothing here animates) ---- */
+
+/* the ink fights her: a doubled, second-pass hand */
+.book-page.rot-inked .book-entry {
+  text-shadow: 0.6px 0.3px 0 rgba(232, 180, 90, 0.5);
+}
+
+/* a hiss under the vowels: words smear */
+.book-page.rot-hissing .book-entry {
+  text-shadow: 0.7px 0.3px 0 rgba(232, 180, 90, 0.55);
+}
+
+.book-page.rot-hissing .book-hand-lines .book-entry:nth-child(odd) {
+  filter: blur(0.5px);
+}
+
+/* the letters walk: a fainter hand, struck entries, ink blots */
+.book-page.rot-walking {
+  color: #9b8560;
+}
+
+.book-page.rot-walking .book-entry {
+  text-shadow: none;
+  filter: blur(0.3px);
+}
+
+.book-page.rot-walking .book-hand-lines .book-entry:nth-child(odd) {
+  filter: blur(0.7px);
+}
+
+.book-page.rot-walking .book-hand-lines .book-entry:nth-child(3n + 2) {
+  text-decoration: line-through;
+  text-decoration-color: rgba(232, 180, 90, 0.45);
+  text-decoration-thickness: 1px;
+}
+
+.book-page.rot-walking::before,
+.book-page.rot-walking::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(4, 3, 2, 0.85) 0%, rgba(4, 3, 2, 0.5) 55%, transparent 75%);
+}
+
+.book-page.rot-walking::before {
+  width: 4.5rem;
+  height: 3rem;
+  top: 22%;
+  right: 8%;
+  transform: rotate(-14deg);
+}
+
+.book-page.rot-walking::after {
+  width: 3rem;
+  height: 2.2rem;
+  bottom: 12%;
+  left: 12%;
+  transform: rotate(9deg);
+}

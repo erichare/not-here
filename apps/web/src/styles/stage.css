@@ -1,0 +1,98 @@
+/* The weather and the hour: far and near fog banks, the slot grades, the
+   vignette and grain. Phase 2 moves these onto the persistent #stage. */
+
+/* A far fog bank behind the near one — same weather, slower clock. The two
+   layers drift at different speeds, which is what makes the fog have depth. */
+html::before {
+  content: '';
+  position: fixed;
+  inset: -50%;
+  z-index: 39;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 40% 26% at 68% 22%, rgba(146, 168, 188, 0.055), transparent 70%),
+    radial-gradient(ellipse 48% 30% at 22% 66%, rgba(128, 150, 170, 0.045), transparent 70%);
+  animation: fog-drift-far 150s ease-in-out infinite alternate;
+}
+
+@keyframes fog-drift-far {
+  0% {
+    transform: translate3d(2%, 1%, 0) scale(1.04);
+  }
+  100% {
+    transform: translate3d(-2.5%, -1%, 0) scale(1);
+  }
+}
+
+/* The ambient grade follows the scene's slot (ui.ts sets body[data-slot]).
+   Morning is the lifted grey of the Bay's short days; evening carries the
+   last ember of the sun low under the fog; night is the horn's hour. */
+body[data-slot='morning'] {
+  background:
+    radial-gradient(ellipse 120% 90% at 50% -10%, rgba(148, 166, 182, 0.16), transparent 62%),
+    linear-gradient(180deg, #121a23 0%, #0d131b 45%, #0a0e13 100%);
+}
+
+body[data-slot='afternoon'] {
+  background:
+    radial-gradient(ellipse 120% 90% at 50% -10%, rgba(128, 148, 166, 0.13), transparent 60%),
+    linear-gradient(180deg, #0f151d 0%, #0c1118 45%, #090d12 100%);
+}
+
+body[data-slot='evening'] {
+  background:
+    radial-gradient(ellipse 110% 42% at 50% 112%, rgba(232, 180, 90, 0.055), transparent 62%),
+    radial-gradient(ellipse 120% 90% at 50% -10%, rgba(110, 128, 148, 0.1), transparent 60%),
+    linear-gradient(180deg, #0c1119 0%, #0a0f15 45%, #080b0f 100%);
+}
+
+body[data-slot='night'] {
+  background:
+    radial-gradient(ellipse 120% 90% at 50% -10%, rgba(88, 106, 128, 0.08), transparent 58%),
+    linear-gradient(180deg, #070b11 0%, #05080d 50%, #04060a 100%);
+}
+
+/* Fog — three slow banks drifting over the page. Oversized fixed layer
+   animated by transform only, so it stays off the layout and on the GPU. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: -35%;
+  z-index: 40;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 44% 30% at 24% 32%, rgba(146, 168, 188, 0.09), transparent 70%),
+    radial-gradient(ellipse 52% 34% at 78% 58%, rgba(128, 150, 170, 0.07), transparent 70%),
+    radial-gradient(ellipse 38% 26% at 46% 82%, rgba(158, 178, 196, 0.06), transparent 70%);
+  animation: fog-drift 90s ease-in-out infinite alternate;
+}
+
+@keyframes fog-drift {
+  0% {
+    transform: translate3d(-2.5%, -1.5%, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(1.5%, 1%, 0) scale(1.06);
+  }
+  100% {
+    transform: translate3d(3%, -0.5%, 0) scale(1.02);
+  }
+}
+
+/* Vignette + grain — the fog holds the edges of the page, and the night
+   has a tooth to it. The noise carries its own low alpha in the SVG. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 92% 78% at 50% 42%,
+      transparent 34%,
+      rgba(5, 8, 12, 0.5) 76%,
+      rgba(5, 8, 12, 0.88) 100%
+    ),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.72 0 0 0 0 0.78 0 0 0 0 0.85 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}

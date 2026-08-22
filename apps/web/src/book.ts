@@ -8,7 +8,7 @@
  *      (barbs-book.ts): one source of truth for both builds, per the spec's
  *      CLI PARITY rule. This half only re-exports it plus web-only shaping
  *      (the register box, the StaticTier used as a CSS rot class).
- *   2. A DOM layer (createBookLayer) — a sibling overlay owned by ui.ts.
+ *   2. A DOM layer (createBookLayer) — a sibling overlay on ui/overlay.ts.
  *      Opening and closing never touches the prose page, so the typewriter
  *      is never re-triggered and no tells are re-emitted.
  *
@@ -17,6 +17,9 @@
 
 import type { WorldState } from '@not-here/engine';
 import { buildBarbsBook, isBookUnlocked, staticTierFor } from '@not-here/story';
+import { BOOK } from './model/copy.ts';
+import { el } from './ui/dom.ts';
+import { createOverlay, type OverlayPanel } from './ui/overlay.ts';
 
 export { isBookUnlocked, staticTierFor };
 export { observationFor, staticLineFor, type StaticTier } from '@not-here/story';
@@ -68,124 +71,84 @@ export interface BookLayer {
 export interface BookLayerHooks {
   /** The one-line exit beat, surfaced as a caption by ui.ts. */
   readonly onExitBeat: (text: string) => void;
+  /** The regions an open book makes inert. */
+  readonly inertTargets: readonly HTMLElement[];
 }
 
-const EXIT_BEAT = 'the book goes back under the counter.';
-
-const element = <K extends keyof HTMLElementTagNameMap>(
-  tag: K,
-  className: string,
-  text?: string,
-): HTMLElementTagNameMap[K] => {
-  const node = document.createElement(tag);
-  node.className = className;
-  if (text !== undefined) node.textContent = text;
-  return node;
-};
-
-const sectionLabel = (text: string): HTMLElement =>
-  element('p', 'book-section-label', text);
+const sectionLabel = (text: string): HTMLElement => el('p', 'book-section-label', text);
 
 const buildPageElement = (page: BookPage): HTMLElement => {
-  const panel = element('article', `book-page rot-${page.staticTier}`);
+  const panel = el('article', `book-page rot-${page.staticTier}`);
   panel.setAttribute('tabindex', '-1');
 
-  panel.append(
-    element('h2', 'book-title', 'BARB’S BOOK'),
-    element('p', 'book-subtitle', 'double-inked, a steady hand, the guest’s page'),
-  );
+  panel.append(el('h2', 'book-title', BOOK.title), el('p', 'book-subtitle', BOOK.subtitle));
 
-  const register = element('pre', 'doc book-register', page.registerDoc);
+  const register = el('pre', 'doc book-register', page.registerDoc);
   panel.append(register);
 
-  const hand = element('div', 'book-hand-lines');
-  for (const line of page.observations) hand.append(element('p', 'book-entry', line));
-  hand.append(element('p', 'book-entry book-static', page.staticLine));
+  const hand = el('div', 'book-hand-lines');
+  for (const line of page.observations) hand.append(el('p', 'book-entry', line));
+  hand.append(el('p', 'book-entry book-static', page.staticLine));
   panel.append(hand);
 
   if (page.told.length > 0) {
-    panel.append(sectionLabel('what you told her, night one'));
-    const told = element('div', 'book-hand-lines');
-    for (const line of page.told) told.append(element('p', 'book-entry book-quote', line));
+    panel.append(sectionLabel(BOOK.told));
+    const told = el('div', 'book-hand-lines');
+    for (const line of page.told) told.append(el('p', 'book-entry book-quote', line));
     panel.append(told);
   }
 
   if (page.margins.length > 0) {
-    panel.append(sectionLabel('margins, other hands'));
-    const margins = element('div', 'book-hand-lines');
-    for (const line of page.margins) {
-      margins.append(element('p', 'book-entry', line));
-    }
+    panel.append(sectionLabel(BOOK.margins));
+    const margins = el('div', 'book-hand-lines');
+    for (const line of page.margins) margins.append(el('p', 'book-entry', line));
     panel.append(margins);
   }
 
   return panel;
 };
 
-export const createBookLayer = (root: HTMLElement, hooks: BookLayerHooks): BookLayer => {
+export const createBookLayer = (host: HTMLElement, hooks: BookLayerHooks): BookLayer => {
   let world: WorldState | null = null;
   let unlocked = false;
   let unlockSeen: boolean | null = null;
-  let open = false;
-  let restoreFocus: HTMLElement | null = null;
-  let currentPanel: HTMLElement | null = null;
-  let currentClose: HTMLButtonElement | null = null;
 
-  const button = element('button', 'book-consult', 'consult Barb’s book');
+  const button = el('button', 'book-consult', BOOK.consult);
   button.type = 'button';
   button.hidden = true;
   button.setAttribute('aria-haspopup', 'dialog');
   button.setAttribute('aria-expanded', 'false');
+  host.append(button);
 
-  const overlay = element('div', 'book-overlay');
-  overlay.hidden = true;
-  overlay.setAttribute('role', 'dialog');
-  overlay.setAttribute('aria-modal', 'true');
-  overlay.setAttribute('aria-label', 'Barb’s book');
+  const overlay = createOverlay({
+    host,
+    className: 'book-overlay',
+    label: BOOK.aria,
+    hotkey: 'l',
+    inertTargets: hooks.inertTargets,
+    onExitBeat: () => {
+      button.setAttribute('aria-expanded', 'false');
+      button.inert = false;
+      hooks.onExitBeat(BOOK.exitBeat);
+    },
+    canOpen: () => unlocked && world !== null,
+    build: () => build(),
+  });
 
-  root.append(button, overlay);
-  const scenePage = root.querySelector<HTMLElement>('.page');
-
-  const close = (withBeat: boolean): void => {
-    if (!open) return;
-    open = false;
-    overlay.hidden = true;
-    overlay.replaceChildren();
-    button.setAttribute('aria-expanded', 'false');
-    scenePage?.removeAttribute('inert');
-    button.inert = false;
-    if (withBeat) hooks.onExitBeat(EXIT_BEAT);
-    // Give focus back to wherever the player left it — never the choices'
-    // problem that the book was open.
-    restoreFocus?.focus?.();
-    restoreFocus = null;
-    currentPanel = null;
-    currentClose = null;
+  const build = (): OverlayPanel => {
+    if (world === null) throw new Error('NOT HERE: the book has no world to read');
+    const panel = buildPageElement(buildBookPage(world));
+    const close = el('button', 'book-close', BOOK.close);
+    close.type = 'button';
+    panel.prepend(close);
+    button.setAttribute('aria-expanded', 'true');
+    button.inert = true;
+    return { panel, close };
   };
 
   const openBook = (): void => {
-    if (open || !unlocked || world === null) return;
-    const page = buildBookPage(world);
-    const panel = buildPageElement(page);
-    const closeButton = element('button', 'book-close', 'close the book');
-    closeButton.type = 'button';
-    closeButton.addEventListener('click', (event) => {
-      event.stopPropagation();
-      close(true);
-    });
-    panel.prepend(closeButton);
-
-    const active = document.activeElement;
-    restoreFocus = active instanceof HTMLElement ? active : null;
-    currentPanel = panel;
-    currentClose = closeButton;
-    overlay.replaceChildren(panel);
-    overlay.hidden = false;
-    open = true;
-    button.setAttribute('aria-expanded', 'true');
-    scenePage?.setAttribute('inert', '');
-    button.inert = true;
-    panel.focus();
+    if (overlay.isOpen() || !unlocked || world === null) return;
+    overlay.open(build);
   };
 
   button.addEventListener('click', (event) => {
@@ -193,48 +156,12 @@ export const createBookLayer = (root: HTMLElement, hooks: BookLayerHooks): BookL
     openBook();
   });
 
-  overlay.addEventListener('click', (event) => {
-    // Click-outside closes; clicks on the page itself stay on the page.
-    if (event.target === overlay) {
-      event.stopPropagation();
-      close(true);
-    }
-  });
-
-  window.addEventListener('keydown', (event) => {
-    if (event.metaKey || event.ctrlKey || event.altKey) return;
-    if (event.key === 'Tab' && open && currentPanel !== null && currentClose !== null) {
-      event.preventDefault();
-      const active = document.activeElement;
-      if (event.shiftKey) {
-        (active === currentPanel ? currentClose : currentPanel).focus();
-      } else {
-        (active === currentClose ? currentPanel : currentClose).focus();
-      }
-      return;
-    }
-    if (event.key === 'Escape' && open) {
-      event.preventDefault();
-      close(true);
-      return;
-    }
-    if (event.key === 'l' || event.key === 'L') {
-      const target = event.target;
-      if (
-        target instanceof HTMLElement &&
-        (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)
-      ) {
-        return;
-      }
-      if (open) {
-        event.preventDefault();
-        close(true);
-      } else if (unlocked && world !== null) {
-        event.preventDefault();
-        openBook();
-      }
-    }
-  });
+  const closeQuiet = (): void => {
+    if (!overlay.isOpen()) return;
+    overlay.close(false);
+    button.setAttribute('aria-expanded', 'false');
+    button.inert = false;
+  };
 
   const update = (next: WorldState | null): void => {
     world = next;
@@ -253,11 +180,11 @@ export const createBookLayer = (root: HTMLElement, hooks: BookLayerHooks): BookL
         { once: true },
       );
     }
-    if (!unlocked) close(false);
+    if (!unlocked) closeQuiet();
   };
 
   const retire = (): void => {
-    close(false);
+    closeQuiet();
     world = null;
     unlocked = false;
     unlockSeen = null;
@@ -265,9 +192,5 @@ export const createBookLayer = (root: HTMLElement, hooks: BookLayerHooks): BookL
     button.classList.remove('pulse');
   };
 
-  return {
-    update,
-    retire,
-    isOpen: () => open,
-  };
+  return { update, retire, isOpen: overlay.isOpen };
 };

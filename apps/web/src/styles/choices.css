@@ -1,0 +1,113 @@
+/* ---- choices: ledger lines ---- */
+
+.choices {
+  list-style: none;
+  margin-top: 3rem;
+  border-top: 1px solid var(--cold-line);
+  padding-top: 1.4rem;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(0.4rem);
+  transition:
+    opacity 0.45s ease-in,
+    transform 0.45s ease-out,
+    visibility 0s linear 0.45s;
+}
+
+.choices.shown {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: none;
+  transition-delay: 0s;
+}
+
+.choice-line {
+  margin: 0.4rem 0;
+}
+
+button.choice {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  font: inherit;
+  line-height: inherit;
+  color: var(--mist);
+  cursor: pointer;
+  padding: 0.45rem 0.65rem 0.45rem 0.15rem;
+  transition:
+    color 0.16s ease-out,
+    text-shadow 0.16s ease-out,
+    transform 0.12s ease-out;
+}
+
+/* Major choices are lamplit — the one warmth on the page. */
+button.choice.major,
+.choice.major.locked {
+  border-left: 1px solid rgba(232, 180, 90, 0.5);
+  margin: 0.75rem 0;
+  padding: 0.45rem 0.75rem;
+  color: var(--lamp-bright);
+  background: linear-gradient(90deg, rgba(232, 180, 90, 0.08), transparent 72%);
+  text-shadow: var(--lamp-glow);
+}
+
+button.choice:hover,
+button.choice:focus-visible {
+  color: var(--mist-bright);
+  text-shadow: 0 0 12px rgba(200, 218, 232, 0.25);
+  outline: none;
+}
+
+button.choice.major:hover,
+button.choice.major:focus-visible {
+  color: var(--lamp-bright);
+  text-shadow: 0 0 14px rgba(255, 217, 143, 0.5);
+}
+
+button.choice:active {
+  transform: translateX(0.18rem);
+}
+
+button.choice:focus-visible {
+  outline: 1px dashed var(--cold-line-strong);
+  outline-offset: 4px;
+}
+
+.choice.locked {
+  display: block;
+  padding: 0.45rem 0.65rem 0.45rem 0.15rem;
+  color: var(--mist-dim);
+  opacity: 0.6;
+  cursor: default;
+}
+
+.choice.major.locked {
+  color: var(--lamp-dim);
+  text-shadow: none;
+  background: linear-gradient(90deg, rgba(232, 180, 90, 0.04), transparent 72%);
+  border-left-color: rgba(232, 180, 90, 0.22);
+}
+
+.ending-mark {
+  margin: 2rem 0 1rem;
+  color: var(--mist-muted);
+  letter-spacing: 0.2em;
+}
+
+/* The held-place card's one line (pt2-fix-01): kept, not closed. */
+.held-line {
+  margin: 0 0 1rem;
+  font-style: italic;
+  color: var(--mist-muted);
+}
+
+/* ---- choices: the ledger line leans toward you ---- */
+
+button.choice:hover,
+button.choice:focus-visible {
+  transform: translateX(0.12rem);
+}

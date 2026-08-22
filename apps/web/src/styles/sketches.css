@@ -1,0 +1,40 @@
+/* ---- margin sketches: ink portraits in the book's margin ---- */
+
+.margin-sketch {
+  position: fixed;
+  top: 50%;
+  right: 2.4rem;
+  transform: translateY(-50%);
+  width: clamp(120px, 12vw, 180px);
+  z-index: 20; /* under the vignette (30): the fog holds it too */
+  pointer-events: none;
+  opacity: 0;
+  color: var(--mist); /* the sketches are inked in currentColor */
+}
+
+.margin-sketch.on {
+  animation: sketch-settle 2.8s ease-out forwards;
+}
+
+.margin-sketch svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 0 6px rgba(163, 180, 195, 0.16));
+}
+
+@keyframes sketch-settle {
+  to {
+    opacity: 0.45;
+  }
+}
+
+@media (max-width: 1100px) {
+  .margin-sketch {
+    position: relative;
+    inset: auto;
+    transform: none;
+    width: clamp(96px, 24vw, 142px);
+    margin: 1.5rem 0 0.25rem auto;
+  }
+}

@@ -1,0 +1,52 @@
+/* Structural cards are pauses, not ordinary ledger entries. */
+.ending-page {
+  max-width: 72ch;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 4rem;
+  text-align: center;
+}
+
+.ending-page .entry .prose {
+  margin: 0.8rem 0;
+  font-size: clamp(1.05rem, 3vw, 1.45rem);
+  letter-spacing: 0.55em;
+  padding-left: 0.55em;
+  color: var(--mist-bright);
+  text-shadow: 0 0 16px rgba(200, 218, 232, 0.3);
+}
+
+.ending-page .margin-sketch {
+  position: relative;
+  inset: auto;
+  transform: none;
+  width: clamp(120px, 18vw, 180px);
+  margin: 1.5rem auto 0;
+}
+
+.ending-page .choices {
+  width: min(42ch, 100%);
+  margin-top: 1.5rem;
+  border-top: none;
+}
+
+.ending-page button.choice {
+  text-align: center;
+}
+
+/* ---- ending cards: the letters arrive slowly, out of the fog ---- */
+
+.ending-page .entry .prose {
+  animation: ending-settle 1.6s ease-out both;
+}
+
+@keyframes ending-settle {
+  from {
+    opacity: 0;
+    letter-spacing: 0.85em;
+    filter: blur(2px);
+  }
+}

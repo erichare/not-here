@@ -1,0 +1,36 @@
+/*
+ * NOT HERE — entries in Barb's book.
+ *
+ * November fog over Lorn Bay: pale, moonlit ink on a cold blue-black night.
+ * Fog is real here — layered drifting gradients and a breath of grain —
+ * and warmth is scarce: lamplight amber is reserved for the lit window,
+ * major choices, and Barb's book. One warm thing in a cold world.
+ *
+ * Prose is set in a book serif; monospace belongs only to document
+ * artifacts (tide tables, the register). All animation is disabled under
+ * prefers-reduced-motion.
+ */
+
+:root {
+  /* the night */
+  --night: #0a0e13;
+  --night-deep: #05080c;
+  /* the fog's ink — cool, pale */
+  --mist: #c3ccd4;
+  --mist-bright: #edf3f8;
+  --mist-muted: #7e8a96;
+  --mist-dim: #4d5862;
+  --cold-line: rgba(163, 180, 195, 0.16);
+  --cold-line-strong: rgba(163, 180, 195, 0.32);
+  --cold-surface: rgba(18, 24, 31, 0.78);
+  /* lamplight — scarce, warm */
+  --lamp: #e8b45a;
+  --lamp-bright: #ffd98f;
+  --lamp-dim: #8a6c3c;
+  --lamp-glow: 0 0 10px rgba(232, 180, 90, 0.35);
+  /* type */
+  --serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua',
+    Georgia, 'Times New Roman', serif;
+  --mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas,
+    'Liberation Mono', monospace;
+}

@@ -1,0 +1,28 @@
+/* Overlay backdrops: the book today; the ledger-so-far and the lamp share
+   the same mechanics (ui/overlay.ts). */
+
+/* The overlay: one lamplit ledger page over the dimmed cold prose. The book
+   is read under the counter lamp — it is allowed to be warm. */
+.book-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.4rem;
+  background: rgba(4, 6, 9, 0.84);
+  animation: book-appear 0.2s ease-out;
+}
+
+/* The hidden attribute must always win over the flex display above —
+   otherwise the closed backdrop blankets the page and eats every click. */
+.book-overlay[hidden] {
+  display: none;
+}
+
+@keyframes book-appear {
+  from {
+    opacity: 0;
+  }
+}

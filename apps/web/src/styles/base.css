@@ -1,0 +1,21 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--night-deep);
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 120% 90% at 50% -10%, rgba(97, 118, 138, 0.1), transparent 60%),
+    linear-gradient(180deg, #0c1117 0%, var(--night) 45%, #080c10 100%);
+  color: var(--mist);
+  font-family: var(--serif);
+  font-size: 1.06rem;
+  line-height: 1.8;
+  overflow-x: hidden;
+}

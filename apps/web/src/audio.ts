@@ -28,7 +28,7 @@
 
 import { ACT3_FRAGMENT_ORDER } from '@not-here/music';
 import { cueLoops } from './cues.ts';
-import { createEnsembleMixer } from './mixer.ts';
+import { createEnsembleMixer, type EnsembleSnapshot } from './mixer.ts';
 
 const CROSSFADE_SECONDS = 1;
 const STOP_FADE_SECONDS = 1.5;
@@ -51,6 +51,12 @@ interface EnsembleNode {
 export interface AudioPlayer {
   /** Create/resume the AudioContext. Call from a user gesture. */
   readonly start: () => Promise<void>;
+  /** The lamp's volume, 0..1 — applied to the master gain (not the cues). */
+  readonly setVolume: (volume: number) => void;
+  /** Mute is a gain of zero, never a stop — the silence stays the score. */
+  readonly setMuted: (muted: boolean) => void;
+  /** The Act 3 ensemble's returned fragments — for the visual twin. */
+  readonly snapshot: () => EnsembleSnapshot;
   /** Transition to a cue by name. Fire-and-forget; never throws. */
   readonly cue: (name: string) => void;
   /** Fade to silence; no cue plays until the next cue(). Never throws. */
@@ -67,6 +73,10 @@ export const createAudioPlayer = (
   onFallback: (cue: string) => void,
 ): AudioPlayer => {
   let ctx: AudioContext | null = null;
+  /** Every cue and ensemble layer runs through this; the lamp sets it. */
+  let master: GainNode | null = null;
+  let volume = 1;
+  let muted = false;
   let current: PlayingCue | null = null;
   /** Latest requested cue — stale fetches resolve and bow out. */
   let wanted: string | null = null;
@@ -77,6 +87,21 @@ export const createAudioPlayer = (
   let ensemble: { readonly nodes: Map<string, EnsembleNode> } | null = null;
   /** Supersession counter for async ensemble starts. */
   let ensembleGeneration = 0;
+
+  const applyMaster = (): void => {
+    if (!ctx || !master) return;
+    const now = ctx.currentTime;
+    master.gain.setTargetAtTime(muted ? 0 : volume, now, 0.05);
+  };
+
+  const masterOf = (context: AudioContext): GainNode => {
+    if (!master) {
+      master = context.createGain();
+      master.gain.value = muted ? 0 : volume;
+      master.connect(context.destination);
+    }
+    return master;
+  };
 
   const load = async (context: AudioContext, name: string): Promise<AudioBuffer | null> => {
     const cached = buffers.get(name);
@@ -118,7 +143,7 @@ export const createAudioPlayer = (
     gain.gain.setValueAtTime(0, now);
     gain.gain.linearRampToValueAtTime(1, now + CROSSFADE_SECONDS);
     source.connect(gain);
-    gain.connect(context.destination);
+    gain.connect(masterOf(context));
     const started: PlayingCue = { cue: name, source, gain };
     if (!source.loop) {
       // One-shot beat: when it ends on its own, it leaves real silence.
@@ -191,7 +216,7 @@ export const createAudioPlayer = (
       const gain = context.createGain();
       gain.gain.setValueAtTime(0, now);
       source.connect(gain);
-      gain.connect(context.destination);
+      gain.connect(masterOf(context));
       source.start(now); // all layers start together — the stack stays in sync
       nodes.set(id, { source, gain });
     }
@@ -218,6 +243,7 @@ export const createAudioPlayer = (
   return {
     start: async () => {
       ctx ??= new AudioContext();
+      masterOf(ctx);
       if (ctx.state === 'suspended') await ctx.resume();
       if (wanted !== null && current === null) void transition(wanted);
       if (mixer.snapshot().active) syncEnsemble();
@@ -253,6 +279,15 @@ export const createAudioPlayer = (
       mixer.chord(fragments);
       syncEnsemble();
     },
+    setVolume: (next) => {
+      volume = Math.max(0, Math.min(1, next));
+      applyMaster();
+    },
+    setMuted: (next) => {
+      muted = next;
+      applyMaster();
+    },
+    snapshot: () => mixer.snapshot(),
     detune: (pattern, cents) => {
       if (!ctx || !ensemble) return;
       const node = ensemble.nodes.get(pattern);
