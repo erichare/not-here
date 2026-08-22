@@ -213,7 +213,7 @@ const GIVEN_TO_D20_END = [
 
 // ——— The boundary, moved ———
 
-describe('the boundary — d20-end unsealed, d21-end parks (the act boundary precedent)', () => {
+describe('the boundary — d20-end unsealed, d21-end walks through (the act boundary precedent)', () => {
   it('d21-morning sets SLOT ONLY — day 21 stays the NOVEMBER 26 card’s', () => {
     const onEnter = sceneById('d21-morning').onEnter ?? [];
     expect(onEnter).toContainEqual({ op: 'time.set', slot: 'morning' });
@@ -223,11 +223,13 @@ describe('the boundary — d20-end unsealed, d21-end parks (the act boundary pre
     }
   });
 
-  it('d21-end mirrors d20-end as it was: cue title, ending marker, no choices, owns day 22', () => {
+  it('d21-end unsealed when Day 22 shipped: the card keeps day 22 and walks into the morning', () => {
     const card = sceneById('d21-end');
     expect(card.cue).toBe('title');
-    expect(card.ending).toBe('d21-end');
-    expect(card.choices).toEqual([]);
+    expect(card.ending).toBeUndefined();
+    expect(card.choices.map((c) => ({ id: c.id, goto: c.goto }))).toEqual([
+      { id: 'morning-comes-anyway', goto: 'd22-morning' },
+    ]);
     expect(card.onEnter).toContainEqual({ op: 'time.set', day: 22, slot: 'morning' });
     expect(rawText(card)).toContain('NOVEMBER 27');
   });

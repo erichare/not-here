@@ -231,15 +231,15 @@ describe('graph closure', () => {
     }
   });
 
-  it('exactly two ending scenes — the NOVEMBER 27 card and Ash', () => {
-    // The NOVEMBER 26 card unsealed when Day 21 shipped; the held place
-    // moved to d21-end, where the authored days run out.
+  it('exactly two ending scenes — the NOVEMBER 28 card and Ash', () => {
+    // The NOVEMBER 27 card unsealed when Day 22 shipped; the held place
+    // moved to d22-end, where the authored days run out.
     const endings = ALL_SCENES.filter((s) => s.ending !== undefined);
     expect(endings.map((s) => ({ id: s.id, ending: s.ending })).sort((a, b) =>
       a.id.localeCompare(b.id),
     )).toEqual([
       { id: 'act2-ash-2', ending: 'ash' },
-      { id: 'd21-end', ending: 'd21-end' },
+      { id: 'd22-end', ending: 'd22-end' },
     ]);
   });
 

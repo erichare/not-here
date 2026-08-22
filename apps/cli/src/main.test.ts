@@ -180,20 +180,20 @@ describe('the unsealed NOVEMBER 26 card — a held d20-end save resumes into Day
   });
 });
 
-describe('the held place moved to the NOVEMBER 27 card (pt2-fix-01)', () => {
+describe('the held place moved to the NOVEMBER 28 card (pt2-fix-01)', () => {
   const held: WorldState = {
-    ...initialState(7, 'd21-end'),
-    day: 22,
+    ...initialState(7, 'd22-end'),
+    day: 23,
     slot: 'morning',
     flags: { 'knows-truth': true, 'conf:sam': true, 'conf:dianne': true, 'conf:barb': true },
   };
 
-  it('relaunching on d21-end re-prints the card and exits', () => {
+  it('relaunching on d22-end re-prints the card and exits', () => {
     parkSave(held);
     const plain = play([]);
-    expect(plain).toContain('NOVEMBER 27');
-    expect(plain).toContain('held for the twenty-seventh');
-    expect(plain).toContain('Your November is kept. The twenty-seventh is not written yet.');
+    expect(plain).toContain('NOVEMBER 28');
+    expect(plain).toContain('held for the twenty-eighth');
+    expect(plain).toContain('Your November is kept. The twenty-eighth is not written yet.');
     // No fresh Day 1, no prompt, no day header on the card.
     expect(plain).not.toContain('DAY 1 —');
     expect(plain).not.toContain('a number chooses');

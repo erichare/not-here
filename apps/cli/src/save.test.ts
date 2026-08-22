@@ -74,8 +74,8 @@ describe('classifySave — act boundaries hold places (pt2-fix-01)', () => {
     expect(classifySave(state, scene)).toEqual({ kind: 'resume', state });
   });
 
-  it('a save parked on the held card (d21-end) is held, never discarded', () => {
-    const scene = defineScene({ id: 'd21-end', ...bare, ending: 'd21-end' });
+  it('a save parked on the held card (d22-end) is held, never discarded', () => {
+    const scene = defineScene({ id: 'd22-end', ...bare, ending: 'd22-end' });
     expect(classifySave(state, scene)).toEqual({ kind: 'held', state });
   });
 
@@ -90,6 +90,13 @@ describe('classifySave — act boundaries hold places (pt2-fix-01)', () => {
     // The NOVEMBER 26 card lost its `ending` marker when Day 21 shipped —
     // a November parked there walks into Day 21 with its flags intact.
     const scene = defineScene({ id: 'd20-end', ...bare });
+    expect(classifySave(state, scene)).toEqual({ kind: 'resume', state });
+  });
+
+  it('d21-end is retired from the hold: the unsealed card is mid-run and resumes', () => {
+    // The NOVEMBER 27 card lost its `ending` marker when Day 22 shipped —
+    // a November parked there walks into Day 22 with its flags intact.
+    const scene = defineScene({ id: 'd21-end', ...bare });
     expect(classifySave(state, scene)).toEqual({ kind: 'resume', state });
   });
 

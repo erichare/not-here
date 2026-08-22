@@ -132,11 +132,11 @@ describe('classifySave — act boundaries hold places (pt2-fix-01)', () => {
     expect(classifySave(state, {})).toEqual({ kind: 'resume', state });
   });
 
-  it('a save parked on the held card (d21-end) is held, never discarded', () => {
-    expect(classifySave(state, { ending: 'd21-end' })).toEqual({ kind: 'held', state });
+  it('a save parked on the held card (d22-end) is held, never discarded', () => {
+    expect(classifySave(state, { ending: 'd22-end' })).toEqual({ kind: 'held', state });
   });
 
-  it('act2-end and d20-end are retired from the hold: the unsealed cards are mid-run and resume', () => {
+  it('act2-end, d20-end and d21-end are retired from the hold: the unsealed cards are mid-run and resume', () => {
     // Each card lost its `ending` marker when the next day shipped — a
     // November parked there walks forward with its flags intact (mirrors
     // the CLI).
@@ -144,6 +144,10 @@ describe('classifySave — act boundaries hold places (pt2-fix-01)', () => {
     expect(classifySave(initialState(1971, 'd20-end'), {})).toEqual({
       kind: 'resume',
       state: initialState(1971, 'd20-end'),
+    });
+    expect(classifySave(initialState(1971, 'd21-end'), {})).toEqual({
+      kind: 'resume',
+      state: initialState(1971, 'd21-end'),
     });
   });
 
@@ -157,7 +161,8 @@ describe('classifyLaunch — the stored slot through classifySave', () => {
     ['n1-room', {}],
     ['act2-end', {}], // unsealed when Day 20 shipped
     ['d20-end', {}], // unsealed when Day 21 shipped
-    ['d21-end', { ending: 'd21-end' }],
+    ['d21-end', {}], // unsealed when Day 22 shipped
+    ['d22-end', { ending: 'd22-end' }],
     ['act2-ash-2', { ending: 'ash' }],
   ]);
 
@@ -168,9 +173,9 @@ describe('classifyLaunch — the stored slot through classifySave', () => {
     expect(classifyLaunch(storage, scenes)).toEqual({ kind: 'resume', state: midRun });
   });
 
-  it('holds a save parked on the NOVEMBER 27 card — storage untouched', () => {
+  it('holds a save parked on the NOVEMBER 28 card — storage untouched', () => {
     const storage = memoryStorage();
-    const parked = initialState(3, 'd21-end');
+    const parked = initialState(3, 'd22-end');
     persistSave(storage, parked);
     expect(classifyLaunch(storage, scenes)).toEqual({ kind: 'held', state: parked });
     // Classifying is read-only: the slot the next slice inherits is still there.
@@ -193,6 +198,14 @@ describe('classifyLaunch — the stored slot through classifySave', () => {
     expect(loadSave(storage)).toEqual(parked);
   });
 
+  it('resumes a save parked on the unsealed NOVEMBER 27 card — Day 22 inherits it', () => {
+    const storage = memoryStorage();
+    const parked = initialState(3, 'd21-end');
+    persistSave(storage, parked);
+    expect(classifyLaunch(storage, scenes)).toEqual({ kind: 'resume', state: parked });
+    expect(loadSave(storage)).toEqual(parked);
+  });
+
   it('a save parked on the Ash ending is a finished run — fresh start', () => {
     const storage = memoryStorage();
     persistSave(storage, initialState(3, 'act2-ash-2'));
@@ -209,11 +222,13 @@ describe('classifyLaunch — the stored slot through classifySave', () => {
     expect(classifyLaunch(memoryStorage(), scenes)).toEqual({ kind: 'fresh' });
   });
 
-  it('accepts the real content map — d21-end holds, the unsealed cards resume, ash frees the slot', () => {
+  it('accepts the real content map — d22-end holds, the unsealed cards resume, ash frees the slot', () => {
     const content = buildContent();
     const storage = memoryStorage();
-    persistSave(storage, initialState(9, 'd21-end'));
+    persistSave(storage, initialState(9, 'd22-end'));
     expect(classifyLaunch(storage, content.scenes).kind).toBe('held');
+    persistSave(storage, initialState(9, 'd21-end'));
+    expect(classifyLaunch(storage, content.scenes).kind).toBe('resume');
     persistSave(storage, initialState(9, 'd20-end'));
     expect(classifyLaunch(storage, content.scenes).kind).toBe('resume');
     persistSave(storage, initialState(9, 'act2-end'));

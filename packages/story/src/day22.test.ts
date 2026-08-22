@@ -80,3 +80,32 @@ describe('night 22 — the ensemble re-forms at 3:12', () => {
     expect(run.events.filter((e) => e.kind === 'music.chord')).toEqual([]);
   });
 });
+
+// ——— The boundary — d21-end unsealed, d22-end parks (the precedent) ———
+
+describe('the boundary — d21-end unsealed, d22-end parks (the act boundary precedent)', () => {
+  it('d22-end is the held place: cue title, ending marker, no choices, owns day 23', () => {
+    const card = content.scenes.get('d22-end');
+    if (card === undefined) throw new Error('d22-end is not registered');
+    expect(card.cue).toBe('title');
+    expect(card.ending).toBe('d22-end');
+    expect(card.choices).toEqual([]);
+    expect(card.onEnter).toContainEqual({ op: 'time.set', day: 23, slot: 'morning' });
+    const text =
+      card.prose.kind === 'inline'
+        ? card.prose.paragraphs.map((p) => p.text).join('\n')
+        : '';
+    expect(text).toContain('NOVEMBER 28');
+  });
+
+  it('d21-end unsealed when Day 22 shipped: the card keeps day 22 and walks into the morning', () => {
+    const card = content.scenes.get('d21-end');
+    if (card === undefined) throw new Error('d21-end is not registered');
+    expect(card.cue).toBe('title');
+    expect(card.ending).toBeUndefined();
+    expect(card.choices.map((c) => ({ id: c.id, goto: c.goto }))).toEqual([
+      { id: 'morning-comes-anyway', goto: 'd22-morning' },
+    ]);
+    expect(card.onEnter).toContainEqual({ op: 'time.set', day: 22, slot: 'morning' });
+  });
+});

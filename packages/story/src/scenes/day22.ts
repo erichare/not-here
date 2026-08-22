@@ -691,7 +691,7 @@ const open2 = defineScene({
     kind: 'inline',
     paragraphs: [
       {
-        text: 'The weight goes between you, down the boards, up onto the shelf, and the winter is stacked. At the end he stands a moment with his hand on the crate, not on you, and says, “Tomorrow’s loud enough already.” Which is not about crates. You are not asked to understand it yet.',
+        text: 'The weight goes between you, down the boards, up onto the shelf, and the winter is stacked. At the end he stands a moment with a hand on the crate, not on you, and says, “Tomorrow’s loud enough already.” Which is not about crates. You are not asked to understand it yet.',
         when: { op: 'fact.exists', tag: 'stood-with-wade-d22' },
       },
       {
