@@ -1,7 +1,8 @@
 /**
  * The title screen: the wordmark, the one lit window (the verb), the hint in
  * the mode's copy, and — only when a run is merely parked — the offer of a
- * fresh ledger. The beam and shore are pure CSS dressing, aria-hidden.
+ * fresh ledger. The weather (the wharf, its beam, the town's eleven
+ * windows) is the stage's; the title adds nothing to it.
  */
 
 import { NEW_LEDGER, TITLE_COPY, WORDMARK } from '../model/copy.ts';
@@ -21,12 +22,6 @@ export const buildTitleScreen = (
   options: TitleOptions = {},
 ): HTMLElement => {
   const screen = el('section', 'title-screen');
-  // The breakwater beam and the town's few lit windows: pure CSS dressing,
-  // aria-hidden — the title's weather, never its content.
-  const beam = el('span', 'title-beam');
-  beam.setAttribute('aria-hidden', 'true');
-  const shore = el('span', 'title-shore');
-  shore.setAttribute('aria-hidden', 'true');
   const name = el('h1', 'title-name', WORDMARK);
   const windowButton = el('button', 'lit-window');
   windowButton.type = 'button';
@@ -35,7 +30,7 @@ export const buildTitleScreen = (
   panes.setAttribute('aria-hidden', 'true');
   windowButton.append(panes);
   const hint = el('p', 'title-hint', TITLE_COPY[mode].hint);
-  screen.append(beam, shore, name);
+  screen.append(name);
   if (options.subtitle !== undefined) screen.append(el('p', 'title-subtitle', options.subtitle));
   screen.append(windowButton, hint);
   windowButton.addEventListener(

@@ -139,7 +139,7 @@ export const createBookLayer = (host: HTMLElement, hooks: BookLayerHooks): BookL
 
   const overlay = createOverlay({
     host,
-    className: 'book-overlay',
+    className: 'overlay book-overlay',
     label: BOOK.aria,
     hotkey: 'l',
     inertTargets: hooks.inertTargets,

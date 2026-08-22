@@ -1,9 +1,8 @@
-/* Overlay backdrops: the book today; the ledger-so-far and the lamp share
-   the same mechanics (ui/overlay.ts). */
+/* Overlays: the book, the ledger so far, the lamp — one mechanism
+   (ui/overlay.ts), one backdrop, and cold sheets for the two that are not
+   the book. The book is the only warm one; the others are chrome. */
 
-/* The overlay: one lamplit ledger page over the dimmed cold prose. The book
-   is read under the counter lamp — it is allowed to be warm. */
-.book-overlay {
+.overlay {
   position: fixed;
   inset: 0;
   z-index: 60;
@@ -12,17 +11,199 @@
   justify-content: center;
   padding: 2rem 1.4rem;
   background: rgba(4, 6, 9, 0.84);
-  animation: book-appear 0.2s ease-out;
+  animation: overlay-appear 0.2s ease-out;
 }
 
 /* The hidden attribute must always win over the flex display above —
    otherwise the closed backdrop blankets the page and eats every click. */
-.book-overlay[hidden] {
+.overlay[hidden] {
   display: none;
 }
 
-@keyframes book-appear {
+@keyframes overlay-appear {
   from {
     opacity: 0;
   }
+}
+
+/* ---- the cold sheets ---- */
+
+.sheet {
+  width: min(64ch, 100%);
+  max-height: calc(100dvh - 4rem);
+  overflow-y: auto;
+  padding: 2.6rem 2.2rem 2.4rem;
+  position: relative;
+  color: var(--mist);
+  background: linear-gradient(180deg, rgba(12, 17, 23, 0.97), rgba(8, 11, 15, 0.97));
+  border: 1px solid var(--cold-line-strong);
+  border-radius: 2px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  scrollbar-width: thin;
+  scrollbar-color: var(--mist-dim) transparent;
+}
+
+.sheet:focus {
+  outline: none;
+}
+
+.sheet-close {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.9rem;
+  border: none;
+  border-bottom: 1px dotted var(--cold-line-strong);
+  background: none;
+  color: var(--mist-muted);
+  font: inherit;
+  font-style: italic;
+  font-size: 0.74rem;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.sheet-close:hover,
+.sheet-close:focus-visible {
+  color: var(--mist-bright);
+  outline: 1px dashed var(--cold-line-strong);
+  outline-offset: 4px;
+}
+
+.sheet-title {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 1.1rem;
+  color: var(--mist);
+  margin-bottom: 1.2rem;
+}
+
+/* ---- the lamp ---- */
+
+.lamp-rows {
+  display: grid;
+  gap: 1.4rem;
+}
+
+.lamp-row {
+  display: grid;
+  grid-template-columns: 9em 1fr;
+  gap: 6px 16px;
+  align-items: baseline;
+}
+
+.lamp-label {
+  font-style: italic;
+  color: var(--mist);
+}
+
+.lamp-note {
+  grid-column: 1 / -1;
+  font-size: 0.8rem;
+  color: var(--mist-muted);
+  margin-top: -2px;
+}
+
+.ticks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+
+.tick {
+  background: none;
+  border: none;
+  font: inherit;
+  color: var(--mist-muted);
+  cursor: pointer;
+  position: relative;
+  padding: 4px 0 4px 16px;
+  min-height: 32px;
+}
+
+/* a pen tick, double-inked when chosen */
+.tick::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 13px;
+  width: 9px;
+  height: 5px;
+  border-left: 1.4px solid var(--mist-dim);
+  border-bottom: 1.4px solid var(--mist-dim);
+  transform: rotate(-50deg) scaleX(0.8);
+  opacity: 0.5;
+}
+
+.tick.on {
+  color: var(--mist-bright);
+}
+
+.tick.on::before {
+  border-color: var(--mist-bright);
+  opacity: 1;
+  box-shadow: -0.6px 0.6px 0 var(--mist-bright);
+}
+
+.tick:hover,
+.tick:focus-visible {
+  color: var(--mist-bright);
+  outline: none;
+}
+
+.tick:focus-visible {
+  outline: 1px dashed var(--cold-line-strong);
+  outline-offset: 2px;
+}
+
+/* ---- the ledger so far ---- */
+
+.ledger-entry {
+  padding: 1.2rem 0 1.4rem;
+  border-bottom: 1px solid var(--cold-line);
+  content-visibility: auto;
+  contain-intrinsic-size: auto 12rem;
+}
+
+.ledger-rule {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--mist-dim);
+  margin-bottom: 0.8rem;
+}
+
+.ledger-prose {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--mist-muted);
+  margin: 0 0 0.8em;
+}
+
+.ledger-entry:nth-last-child(-n + 3) .ledger-prose {
+  color: var(--mist);
+}
+
+.ledger-chosen {
+  font-style: italic;
+  color: var(--mist);
+  text-shadow: 0.5px 0 0 rgba(195, 204, 212, 0.5);
+}
+
+.ledger-chosen::before {
+  content: '— ';
+}
+
+.ledger-empty {
+  color: var(--mist-muted);
+  font-style: italic;
+}
+
+.paper--small {
+  font-size: 0.72rem;
+  transform: none;
+  margin: 0.8em 0;
 }

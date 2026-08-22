@@ -187,4 +187,46 @@
   .ending-page {
     padding: 3rem 1.25rem 5rem;
   }
+
+  /* sheets fill the phone; the close sits where the thumb is */
+  .overlay {
+    padding: 0;
+  }
+
+  .sheet,
+  .book-page {
+    width: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+    padding: 3rem 1rem calc(5rem + var(--safe-bottom));
+  }
+
+  .sheet-close,
+  button.book-close {
+    position: fixed;
+    top: auto;
+    bottom: calc(1.2rem + var(--safe-bottom));
+    right: 1.2rem;
+    z-index: 1;
+    padding: 0.7rem 1rem;
+    min-height: 44px;
+    background: rgba(5, 8, 12, 0.92);
+    border: 1px solid var(--cold-line-strong);
+    border-radius: 2px;
+    font-size: 0.85rem;
+  }
+
+  .lamp-row {
+    grid-template-columns: 1fr;
+  }
+
+  .inter-column {
+    grid-column: 1 / -1;
+    padding: 40vh 22px 0;
+  }
+
+  #interstitial {
+    display: block;
+  }
 }

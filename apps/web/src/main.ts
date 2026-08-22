@@ -28,6 +28,7 @@ import {
   cssVarsFor,
   effectiveMotion,
   loadSettings,
+  saveSettings,
   type Settings,
 } from './model/settings-model.ts';
 import {
@@ -54,6 +55,7 @@ const freshSeed = (): number => (Date.now() ^ Math.floor(Math.random() * 0xfffff
 const applySettings = (settings: Settings): void => {
   setVars(document.documentElement, cssVarsFor(settings));
   document.documentElement.dataset['motion'] = effectiveMotion(settings, prefersReducedMotion());
+  document.documentElement.dataset['flicker'] = settings.flicker ? 'on' : 'off';
 };
 
 const run = (root: HTMLElement): void => {
@@ -107,10 +109,8 @@ const run = (root: HTMLElement): void => {
     }
   };
 
-  /** Render a step without touching storage — the held card's path. */
-  const renderStep = (result: StepResult): void => {
-    state = result.state;
-    for (const event of result.events) handleEvent(event);
+  /** Build the scene model for a step (and derive its frame). */
+  const modelFor = (result: StepResult): SceneModel => {
     const ending = result.view.ending;
     const frame = deriveSceneFrame({
       content,
@@ -135,8 +135,25 @@ const run = (root: HTMLElement): void => {
       // An act-boundary card is a held place (pt2-fix-01): no reset offer.
       ...(ending !== undefined && ACT_BOUNDARY_ENDINGS.has(ending) ? { held: true } : {}),
     };
+    return model;
+  };
+
+  /** Render a step without touching storage — the held card's path. */
+  const renderStep = (result: StepResult): void => {
+    state = result.state;
+    for (const event of result.events) handleEvent(event);
+    const model = modelFor(result);
     lastChoices = model.choices.map((c) => ({ id: c.id, label: c.label }));
     ui.renderScene(model);
+  };
+
+  /** The live path: persist, then turn the page (with the 3:12 beat if it is one). */
+  const turnStep = (result: StepResult): void => {
+    state = result.state;
+    for (const event of result.events) handleEvent(event);
+    const model = modelFor(result);
+    lastChoices = model.choices.map((c) => ({ id: c.id, label: c.label }));
+    void ui.turn(model, model.frame?.beat ?? null);
   };
 
   /** The ledger so far: append this step's entry after the save lands. */
@@ -154,30 +171,42 @@ const run = (root: HTMLElement): void => {
     if (ending !== undefined && !ACT_BOUNDARY_ENDINGS.has(ending)) recordEnding(storage, ending);
   };
 
-  const applyStep = (result: StepResult): void => {
+  const persistStep = (result: StepResult): void => {
     // Generous autosave: every step lands in storage, not just endings.
     persistSave(storage, result.state);
     // The step's events ride along so a resumed screen can replay its
     // margin lines complete (pt2-fix-04). Non-fatal by design.
     saveMargin(storage, result.state.sceneId, result.events);
     recordEntry(result);
+  };
+
+  /** Resume: persist and render synchronously — no beat replays. */
+  const applyStep = (result: StepResult): void => {
+    persistStep(result);
     renderStep(result);
   };
 
+  /** A live step: persist and turn the page. */
+  const applyLiveStep = (result: StepResult): void => {
+    persistStep(result);
+    turnStep(result);
+  };
+
   const enter = (): void => {
-    applyStep(advance(content, state, { kind: 'enter' }));
+    applyLiveStep(advance(content, state, { kind: 'enter' }));
   };
 
   /** The latest open choices by id, so a chosen label can be recorded. */
   let lastChoices: readonly { id: string; label: string }[] = [];
 
   const choose = (choiceId: string): void => {
+    if (ui.busy()) return; // one turn at a time
     try {
       const label = lastChoices.find((c) => c.id === choiceId)?.label;
       if (label !== undefined) {
         saveTranscript(storage, markChosen(loadTranscript(storage), state.sceneId, label));
       }
-      applyStep(advance(content, state, { kind: 'choose', choiceId }));
+      applyLiveStep(advance(content, state, { kind: 'choose', choiceId }));
     } catch (error: unknown) {
       // A locked/stale choice click; the ledger simply declines to move.
       ui.addCaption(PEN_HESITATES);
@@ -191,10 +220,20 @@ const run = (root: HTMLElement): void => {
     enter();
   };
 
+  const onSettings = (next: Settings): void => {
+    settings = next;
+    applySettings(settings);
+    audio.setVolume(settings.volume);
+    audio.setMuted(settings.muted);
+    saveSettings(storage, settings);
+  };
+
   const ui: Ui = createUi(root, {
     onChoose: choose,
     onNewGame: newGame,
     wordIntervalMs: () => settings.revealMs,
+    settings: { get: () => settings, onChange: onSettings },
+    transcript: () => loadTranscript(storage),
   });
 
   // The weather keeps still while nobody is looking.
@@ -239,14 +278,6 @@ const run = (root: HTMLElement): void => {
     subtitle,
   );
 
-  // Settings may change under us later (phase 7 adds the lamp's controls);
-  // keep the binding reachable for that wiring.
-  void ((next: Settings) => {
-    settings = next;
-    applySettings(settings);
-    audio.setVolume(settings.volume);
-    audio.setMuted(settings.muted);
-  });
 };
 
 const root = document.querySelector<HTMLElement>('#app');

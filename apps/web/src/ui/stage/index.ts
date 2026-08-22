@@ -55,6 +55,8 @@ export const createStage = (host: HTMLElement): Stage => {
   const grain = el('div', 'stage-grain');
   const vignette = el('div', 'stage-vignette');
   const beats = el('div', 'stage-beats');
+  // five rings from the horn bell — one per bar; CSS stages their delays
+  for (let i = 0; i < 5; i += 1) beats.append(el('span', 'ring312'));
   host.append(slots[0], slots[1], grain, vignette, beats);
 
   let active = 0;

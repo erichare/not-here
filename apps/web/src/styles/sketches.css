@@ -64,3 +64,49 @@
     transform: translateX(0.6px);
   }
 }
+
+/* ---- Wren's chart completing (Act 3): one system inks per returned fragment ---- */
+
+.chord {
+  width: clamp(120px, 12vw, 180px);
+  margin-top: 8px;
+  display: grid;
+  gap: 7px;
+}
+
+.chord[hidden] {
+  display: none;
+}
+
+.chord-sys {
+  position: relative;
+  height: 22px;
+  border-bottom: 1px solid rgba(163, 180, 195, 0.28);
+}
+
+.chord-sys::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(163, 180, 195, 0.14);
+}
+
+.chord-ink {
+  position: absolute;
+  left: 6px;
+  top: -2px;
+  font: 400 15px/1 var(--hand-wren);
+  font-style: normal;
+  color: var(--mist);
+  letter-spacing: 0.06em;
+  white-space: pre;
+  opacity: 0;
+  transition: opacity 2s ease; /* a fragment returning is a confession landing */
+}
+
+.chord-sys.inked .chord-ink {
+  opacity: 0.55;
+}

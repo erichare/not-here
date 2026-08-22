@@ -145,14 +145,14 @@
   right: calc(50% - 740 * var(--su));
   top: calc(100% - 589 * var(--su));
   width: calc(2200 * var(--su));
-  height: calc(460 * var(--su));
+  height: calc(360 * var(--su));
   transform-origin: 100% 50%;
   transform: translateY(-50%) rotate(-8deg);
   clip-path: polygon(100% 50%, 0 0, 0 100%);
   background: linear-gradient(
     270deg,
-    rgba(190, 210, 226, 0.16),
-    rgba(190, 210, 226, 0.07) 45%,
+    rgba(190, 210, 226, 0.1),
+    rgba(190, 210, 226, 0.045) 40%,
     transparent 100%
   );
   animation: beam-sweep 16s ease-in-out infinite alternate;
@@ -163,14 +163,14 @@
 @keyframes beam-sweep {
   0% {
     transform: translateY(-50%) rotate(-8deg);
-    opacity: 0.5;
+    opacity: 0.35;
   }
   50% {
-    opacity: 1;
+    opacity: 0.9;
   }
   100% {
     transform: translateY(-50%) rotate(10deg);
-    opacity: 0.5;
+    opacity: 0.35;
   }
 }
 
@@ -450,6 +450,97 @@
   }
 }
 
+/* ---- the 3:12 beat: night-deep, the window frame gone, five rings from the horn bell ---- */
+
+.stage-beats {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.stage-beats::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 6, 10, 0.38);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+#stage.beat-horn .stage-beats::before,
+#stage.beat-silence .stage-beats::before {
+  opacity: 1;
+}
+
+#stage.beat-horn .unit-frame,
+#stage.beat-silence .unit-frame {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.ring312 {
+  position: absolute;
+  left: calc(50% + 700 * var(--su));
+  top: calc(100% - 527 * var(--su));
+  width: calc(1000 * var(--su));
+  height: calc(1000 * var(--su));
+  margin: calc(-500 * var(--su)) 0 0 calc(-500 * var(--su));
+  border-radius: 50%;
+  border: 1.5px solid rgba(195, 210, 225, 0.18);
+  opacity: 0;
+  transform: scale(0.05);
+}
+
+#stage.beat-horn .ring312 {
+  animation: ring-out 1.3s ease-out forwards;
+  will-change: transform, opacity;
+}
+
+#stage.beat-horn .ring312:nth-child(2) { animation-delay: 1.12s; }
+#stage.beat-horn .ring312:nth-child(3) { animation-delay: 2.24s; }
+#stage.beat-horn .ring312:nth-child(4) { animation-delay: 3.36s; }
+#stage.beat-horn .ring312:nth-child(5) { animation-delay: 4.48s; }
+
+@keyframes ring-out {
+  0% {
+    transform: scale(0.05);
+    opacity: 0.22;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+/* the stinger: the place's one light stutters, once */
+#stage.beat-stinger .lamp-pool,
+#stage.beat-stinger .pane,
+#stage.beat-stinger .hall-bulb,
+#stage.beat-stinger .stove-slot,
+#stage.beat-stinger .sig,
+#stage.beat-stinger .lamp-head {
+  animation: lamp-stutter 0.7s ease-in-out 1;
+}
+
+@keyframes lamp-stutter {
+  0%, 100% { opacity: 1; }
+  30% { opacity: 0.86; }
+  55% { opacity: 1; }
+  75% { opacity: 0.94; }
+}
+
+/* the lamp's stutter can be asked to keep steady */
+html[data-flicker='off'] .pane,
+html[data-flicker='off'] .hall-bulb,
+html[data-flicker='off'] button.lit-window {
+  animation-name: lamp-breathe-steady;
+}
+
+@keyframes lamp-breathe-steady {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.1); }
+}
+
 /* The weather keeps still while nobody is looking. */
 #stage[data-paused] *,
 #stage[data-paused] *::before,
@@ -478,5 +569,9 @@
 
   .fog--far {
     display: none;
+  }
+
+  .ring312 {
+    left: calc(100% - 100 * var(--su));
   }
 }
