@@ -1,0 +1,70 @@
+/* Self-hosted faces (assets/fonts/FONTS.md — all OFL). Local alias names so
+   the shipped files never collide with a player's installed fonts; every
+   token keeps a system stack behind them. Swap, never block: the prose
+   arrives in Georgia for a frame on a slow line rather than not at all. */
+
+@font-face {
+  font-family: 'NH Serif';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/literata-400.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+266A, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'NH Serif';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/literata-400i.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+266A, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'NH Hand';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('../assets/fonts/kalam-300.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'NH Hand';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/kalam-400.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'NH Hand';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../assets/fonts/kalam-700.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'NH Hand Wren';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/caveat-400.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'NH Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/plex-mono-400.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'NH Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../assets/fonts/plex-mono-600.woff2') format('woff2');
+}

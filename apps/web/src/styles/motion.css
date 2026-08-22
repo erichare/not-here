@@ -1,0 +1,57 @@
+/* Stillness on request — the OS preference and the lamp's 'hold still' are
+   one switch. Imported LAST so the kill wins every cascade. Static state
+   that must survive it (captions shown, choices shown, sketches settled,
+   paper on the table) is restated inside. */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .caption {
+    opacity: 0.95;
+  }
+
+  .choices.shown {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .sketch {
+    opacity: var(--sketch-opacity, 0.45);
+  }
+
+  .stage-slot.active {
+    opacity: 1;
+  }
+}
+
+/* The lamp's switch mirrors the media query exactly. */
+html[data-motion='off'] *,
+html[data-motion='off'] *::before,
+html[data-motion='off'] *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+html[data-motion='off'] .caption {
+  opacity: 0.95;
+}
+
+html[data-motion='off'] .choices.shown {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+html[data-motion='off'] .sketch {
+  opacity: var(--sketch-opacity, 0.45);
+}
+
+html[data-motion='off'] .stage-slot.active {
+  opacity: 1;
+}

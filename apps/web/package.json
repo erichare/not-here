@@ -12,10 +12,11 @@
   "dependencies": {
     "@not-here/engine": "workspace:*",
     "@not-here/memory": "workspace:*",
-    "@not-here/story": "workspace:*",
-    "@not-here/music": "workspace:*"
+    "@not-here/music": "workspace:*",
+    "@not-here/story": "workspace:*"
   },
   "devDependencies": {
+    "jsdom": "^30.0.1",
     "vite": "^8.2.2"
   }
 }

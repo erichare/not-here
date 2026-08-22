@@ -32,6 +32,9 @@ import {
   renderEnding,
   renderHeader,
   renderParagraphs,
+  renderThreeTwelve,
+  threeTwelveKind,
+  type ChoiceRot,
 } from './render.ts';
 import {
   appendLedgerLine,
@@ -62,6 +65,12 @@ const parseSeed = (raw: string | undefined): number => {
 const slotOf = (content: StoryContent, state: WorldState): SlotId =>
   content.scenes.get(state.sceneId)?.slot ?? state.slot;
 
+/** The choice labels read through the fog's claim; NH_PLAIN=1 keeps them clean. */
+const rotFor = (state: WorldState): ChoiceRot | undefined =>
+  env['NH_PLAIN'] === '1'
+    ? undefined
+    : { staticMeter: state.staticMeter, seed: state.rngState };
+
 const trySave = (step: StepResult): void => {
   try {
     saveGame(step.state, SAVE_PATH);
@@ -82,7 +91,11 @@ const drawScene = (
   stdout.write(clearScreen());
   // Ending scenes carry no DAY header — the act is over, not a ninth day.
   if (step.view.ending === undefined) {
-    write(renderHeader(step.state.day, slotOf(content, step.state)));
+    const slot = slotOf(content, step.state);
+    write(renderHeader(step.state.day, slot));
+    // 3:12 is a line under the header here — the horn's, or the silence's.
+    const beat = threeTwelveKind(step.state.sceneId, slot, step.state.flags, step.events);
+    if (beat !== undefined) write(renderThreeTwelve(beat));
     write('');
   }
   write(renderParagraphs(step.view.paragraphs));
@@ -208,7 +221,7 @@ const runGame = async (input: LineSource, audio: AudioSink): Promise<void> => {
       return;
     }
 
-    const rendered = renderChoices(step.view.choices);
+    const rendered = renderChoices(step.view.choices, rotFor(step.state));
     const showLedgerHint =
       !ledgerHintShown && step.state.sceneId === LEDGER_HINT_SCENE;
     if (showLedgerHint) ledgerHintShown = true;

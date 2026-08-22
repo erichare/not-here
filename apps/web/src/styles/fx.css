@@ -1,0 +1,109 @@
+/* Reactive FX — the fog getting into the page.
+   STATIC: the grain thickens, the vignette closes in, the strip jitters,
+   choice labels space and walk (the accessible name stays whole).
+   PRESENCE: prose, choices and frame thin together — with a floor — once
+   the horn is stopped and the decay bites. Everything static under motion-off. */
+
+/* ---- STATIC tiers (set on #stage[data-rot] and #app[data-rot]) ---- */
+
+.stage-grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--noise);
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+#stage[data-rot='inked'] .stage-grain::after {
+  opacity: 0.35;
+}
+
+#stage[data-rot='hissing'] .stage-grain::after {
+  opacity: 0.85;
+}
+
+#stage[data-rot='walking'] .stage-grain::after {
+  opacity: 1;
+}
+
+#stage[data-rot='hissing'] .stage-vignette {
+  background: radial-gradient(ellipse 92% 78% at 50% 42%, transparent 29%, rgba(5, 8, 12, 0.55) 74%, rgba(5, 8, 12, 0.9) 100%);
+}
+
+#stage[data-rot='walking'] .stage-vignette {
+  background: radial-gradient(ellipse 92% 78% at 50% 42%, transparent 26%, rgba(5, 8, 12, 0.6) 72%, rgba(5, 8, 12, 0.92) 100%);
+}
+
+#app[data-rot='hissing'] .frame-top {
+  animation: strip-jitter 9s linear infinite;
+}
+
+#app[data-rot='walking'] .frame-top {
+  animation: strip-jitter 6s linear infinite;
+}
+
+@keyframes strip-jitter {
+  0%, 1.6%, 100% {
+    transform: none;
+  }
+  0.8% {
+    transform: translateX(1px);
+  }
+}
+
+/* the labels: one word spaced; letters walking; the tail decaying into the title */
+.rot-spaced {
+  letter-spacing: 0.18em;
+}
+
+.rot-sub {
+  color: var(--mist-muted);
+}
+
+.rot-attract {
+  letter-spacing: 0.2em;
+  opacity: 0.7;
+}
+
+/* on touch the rot is spacing and opacity only, never a letter swapped (the label is the target) */
+@media (pointer: coarse) {
+  .rot-sub {
+    color: inherit;
+  }
+}
+
+/* hover or focus restores the true text */
+button.choice:hover .rot-attract,
+button.choice:focus-visible .rot-attract {
+  opacity: 1;
+}
+
+/* ---- PRESENCE (set on #app: --presence 0..1, data-presence tier) ---- */
+
+.page.scene-page {
+  color: color-mix(in srgb, var(--mist) calc(var(--presence) * 100%), var(--mist-muted));
+}
+
+.choice-line {
+  opacity: calc(0.7 + 0.3 * var(--presence));
+}
+
+#frame {
+  opacity: calc(0.55 + 0.45 * var(--presence));
+}
+
+.sig,
+.stage-vignette {
+  opacity: calc(0.6 + 0.4 * var(--presence));
+}
+
+#app[data-presence='faint'] .page.scene-page::before,
+#app[data-presence='gone'] .page.scene-page::before {
+  background: none;
+  border-left: 1px dashed var(--cold-line);
+}
+
+#app[data-presence='gone'] .page.scene-page {
+  background: linear-gradient(180deg, rgba(8, 11, 15, 0.3), rgba(8, 11, 15, 0.4) 30% 70%, rgba(8, 11, 15, 0.25));
+}

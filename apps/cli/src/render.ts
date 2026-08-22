@@ -4,6 +4,8 @@
  * Pure string builders; main.ts owns the actual writes.
  */
 
+import type { EngineEvent } from '@not-here/engine';
+
 export const WRAP_WIDTH = 72;
 
 const ESC = '\u001b';
@@ -50,23 +52,108 @@ export const wrap = (text: string, width: number = WRAP_WIDTH): readonly string[
   return lines;
 };
 
-/** One-line header, right-aligned faint: 'DAY N — SLOT'. */
+/** The strip's slot glyphs — the same four the web frame draws. */
+const SLOT_GLYPHS: Readonly<Record<string, string>> = {
+  morning: '○',
+  afternoon: '◔',
+  evening: '◑',
+  night: '●',
+};
+
+/** Per-slot tones, dim: grey mornings, the one warm evening, blue night. */
+const SLOT_TONES: Readonly<Record<string, string>> = {
+  morning: '2;38;5;251',
+  afternoon: '2;38;5;248',
+  evening: '2;38;5;180',
+  night: '2;38;5;67',
+};
+
+/** One-line header, right-aligned and slot-toned: '○  DAY N — SLOT'. */
 export const renderHeader = (
   day: number,
   slot: string,
   width: number = WRAP_WIDTH,
 ): string => {
-  const label = `DAY ${day} — ${slot.toUpperCase()}`;
-  return faint(label.padStart(width));
+  const glyph = SLOT_GLYPHS[slot];
+  const label = `${glyph === undefined ? '' : `${glyph}  `}DAY ${day} — ${slot.toUpperCase()}`;
+  const tone = SLOT_TONES[slot];
+  const paint = tone === undefined ? faint : style(tone);
+  return paint(label.padStart(width));
+};
+
+// ——— 3:12 ————————————————————————————————————————————————————————————
+// The web build drops the room away for the horn; here 3:12 is a line
+// under the header — the horn's five bars, or the silence in their place.
+
+export type ThreeTwelveKind = 'horn' | 'silence';
+
+const HORN_CUE = 'foghorn-312';
+const NIGHT_ID = /-night(-\d+)?$/;
+
+/** Which 3:12 a step is, if any: the horn's cue, or a night under the stop. */
+export const threeTwelveKind = (
+  sceneId: string,
+  slot: string | undefined,
+  flags: Readonly<Record<string, unknown>>,
+  events: readonly EngineEvent[],
+): ThreeTwelveKind | undefined => {
+  if (events.some((event) => event.kind === 'music.cue' && event.cue === HORN_CUE)) {
+    return 'horn';
+  }
+  if (slot === 'night' && NIGHT_ID.test(sceneId) && flags['horn-stopped'] === true) {
+    return 'silence';
+  }
+  return undefined;
+};
+
+const THREE_TWELVE_LINES: Readonly<Record<ThreeTwelveKind, string>> = {
+  horn: '— 3:12 —',
+  silence: '— 3:12 — no horn —',
+};
+
+/** Centered, faint 3:12 line under the header. */
+export const renderThreeTwelve = (
+  kind: ThreeTwelveKind,
+  width: number = WRAP_WIDTH,
+): string => {
+  const label = THREE_TWELVE_LINES[kind];
+  const pad = Math.max(0, Math.floor((width - label.length) / 2));
+  return `${' '.repeat(pad)}${faint(label)}`;
 };
 
 /** Verbatim document artifacts — '@doc:' paragraphs render unwrapped. */
 const DOC_PREFIX = '@doc:\n';
 
+/** Documents that arrive already drawn keep their own frame. */
+const BOX_OPENERS = ['┌', '╔', '╭'];
+
+/** Indent plus the frame's own two columns either side. */
+const FRAME_COST = 8;
+
+/**
+ * A plain document gets a single ruled frame — the paper the web build
+ * draws, in box characters. Drawn docs pass through; a doc too wide for
+ * the frame at the wrap width stays as authored (never re-wrapped).
+ */
+export const frameDoc = (
+  lines: readonly string[],
+  width: number = WRAP_WIDTH,
+): readonly string[] => {
+  const first = (lines[0] ?? '').trimStart();
+  if (BOX_OPENERS.some((glyph) => first.startsWith(glyph))) return lines;
+  const widths = lines.map((line) => [...line].length);
+  const inner = Math.max(0, ...widths);
+  if (inner > width - FRAME_COST) return lines;
+  const bar = '─'.repeat(inner + 2);
+  return [
+    `┌${bar}┐`,
+    ...lines.map((line, i) => `│ ${line}${' '.repeat(inner - (widths[i] ?? 0))} │`),
+    `└${bar}┘`,
+  ];
+};
+
 const renderDoc = (paragraph: string): string =>
-  paragraph
-    .slice(DOC_PREFIX.length)
-    .split('\n')
+  frameDoc(paragraph.slice(DOC_PREFIX.length).split('\n'))
     .map((line) => `    ${faint(line)}`)
     .join('\n');
 
@@ -102,13 +189,28 @@ export interface RenderedChoices {
  */
 const stripLockedGlyph = (label: string): string => label.replace(/^·\s*/u, '');
 
-/** Numbered open choices; locked ones dim with a '·' prefix, unnumbered. */
-export const renderChoices = (choices: readonly ChoiceLine[]): RenderedChoices => {
+/** The STATIC reading the choice labels are read through (web parity). */
+export interface ChoiceRot {
+  readonly staticMeter: number;
+  readonly seed: number;
+}
+
+/**
+ * Numbered open choices; locked ones dim with a '·' prefix, unnumbered.
+ * Under `rot`, the labels alone pass through degradeMargin — the numbers,
+ * glyphs and stakes marks stay legible so a choice can always be made.
+ */
+export const renderChoices = (
+  choices: readonly ChoiceLine[],
+  rot?: ChoiceRot,
+): RenderedChoices => {
   const open = choices.filter((choice) => !choice.locked);
-  const lines = choices.map((choice) =>
+  const labelOf = (label: string, index: number): string =>
+    rot === undefined ? label : degradeMargin(label, rot.staticMeter, rot.seed + index);
+  const lines = choices.map((choice, index) =>
     choice.locked
-      ? dim(`${choice.stakes === 'major' ? '  !' : '  '}  · ${stripLockedGlyph(choice.label)}`)
-      : `${choice.stakes === 'major' ? warm('! ') : '  '}${warm(`${open.indexOf(choice) + 1}.`)} ${choice.label}`,
+      ? dim(`${choice.stakes === 'major' ? '  !' : '  '}  · ${labelOf(stripLockedGlyph(choice.label), index)}`)
+      : `${choice.stakes === 'major' ? warm('! ') : '  '}${warm(`${open.indexOf(choice) + 1}.`)} ${labelOf(choice.label, index)}`,
   );
   return { text: lines.join('\n'), openIds: open.map((choice) => choice.id) };
 };

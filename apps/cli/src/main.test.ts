@@ -63,6 +63,21 @@ describe('terminal build, Night 1 walk', () => {
     expect(plain).toContain('♪ ');
   });
 
+  it("prints the 3:12 line once, under the horn's header", () => {
+    // One step past the room: the walk's last '1' is the window, the horn.
+    const plain = play([...NIGHT1_WALK.slice(0, -1), '1', 'q']);
+    expect(plain.split('— 3:12 —').length - 1).toBe(1);
+    expect(plain.indexOf('DAY 1 — NIGHT')).toBeLessThan(plain.indexOf('— 3:12 —'));
+  });
+
+  it('frames the interview card as paper — no raw box left unruled', () => {
+    const plain = play(['1', '1', '1', '1', '1', 'q']);
+    // Every document in the walk is ruled: a ┌ for every @doc the walk shows.
+    const docs = (plain.match(/^    ┌/gm) ?? []).length;
+    const closes = (plain.match(/^    └/gm) ?? []).length;
+    expect(docs).toBe(closes);
+  });
+
   it('opening the ledger does not re-print the scene captions', () => {
     const plain = play(['1', 'l', '', 'q']);
     const captions = plain.split('♪ small waves working the gravel').length - 1;

@@ -16,6 +16,7 @@ import {
   type StoryContent,
   type WorldState,
 } from '@not-here/engine';
+import { TRANSCRIPT_KEY } from './model/transcript.ts';
 
 export const SAVE_KEY = 'not-here:slot1';
 export const MARGIN_KEY = 'not-here:slot1:margin';
@@ -79,6 +80,8 @@ export const clearSave = (storage: SaveStorage): void => {
   try {
     storage.removeItem(SAVE_KEY);
     storage.removeItem(MARGIN_KEY);
+    // The ledger-so-far belongs to the run; the lamp's settings do not.
+    storage.removeItem(TRANSCRIPT_KEY);
   } catch {
     // Nothing to clear if storage itself is gone.
   }

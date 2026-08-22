@@ -1,0 +1,112 @@
+/* The margin rail: whoever is in the room, drawn in ink in the margin of
+   the book. Trust fades the ink (never to nothing); a lie makes it waver
+   once and leaves a doubled line. Wren's frame neither fades nor wavers. */
+
+#margin {
+  grid-column: 3;
+  padding: 64px 0 0 22px;
+  pointer-events: none;
+}
+
+#margin[hidden] {
+  display: none;
+}
+
+.sketch {
+  margin: 0 0 18px;
+  width: clamp(120px, 12vw, 180px);
+  color: var(--mist); /* the sketches are inked in currentColor */
+  opacity: 0;
+  animation: sketch-settle 2.8s ease-out forwards;
+}
+
+.sketch svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 0 6px rgba(163, 180, 195, 0.16));
+}
+
+@keyframes sketch-settle {
+  to {
+    opacity: var(--sketch-opacity, 0.45);
+  }
+}
+
+/* the detune's silent twin: the line doubles, and wavers once */
+.sketch.detuned svg {
+  filter: drop-shadow(1px 0 0 currentColor) drop-shadow(0 0 6px rgba(163, 180, 195, 0.16));
+  opacity: 0.85;
+}
+
+.sketch.waver svg {
+  animation: waver 2.4s ease-in-out 1;
+}
+
+@keyframes waver {
+  0%,
+  100% {
+    transform: none;
+  }
+  10% {
+    transform: translateX(1.5px) skewX(0.6deg);
+  }
+  25% {
+    transform: translateX(-1.5px) skewX(-0.6deg);
+  }
+  40% {
+    transform: translateX(1.2px) skewX(0.5deg);
+  }
+  55% {
+    transform: translateX(-1px) skewX(-0.4deg);
+  }
+  70% {
+    transform: translateX(0.6px);
+  }
+}
+
+/* ---- Wren's chart completing (Act 3): one system inks per returned fragment ---- */
+
+.chord {
+  width: clamp(120px, 12vw, 180px);
+  margin-top: 8px;
+  display: grid;
+  gap: 7px;
+}
+
+.chord[hidden] {
+  display: none;
+}
+
+.chord-sys {
+  position: relative;
+  height: 22px;
+  border-bottom: 1px solid rgba(163, 180, 195, 0.28);
+}
+
+.chord-sys::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(163, 180, 195, 0.14);
+}
+
+.chord-ink {
+  position: absolute;
+  left: 6px;
+  top: -2px;
+  font: 400 15px/1 var(--hand-wren);
+  font-style: normal;
+  color: var(--mist);
+  letter-spacing: 0.06em;
+  white-space: pre;
+  opacity: 0;
+  transition: opacity 2s ease; /* a fragment returning is a confession landing */
+}
+
+.chord-sys.inked .chord-ink {
+  opacity: 0.55;
+}

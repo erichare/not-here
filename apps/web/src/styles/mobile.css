@@ -1,0 +1,249 @@
+/* Phone portrait is a first-class composition, not a fallback: the stage
+   full-bleed, the column full-width, the sketch small above the entry, the
+   strip on top, and the margins' affordances in a bar the thumb can reach.
+   Tablets keep the column and put the sketch above it. */
+
+@media (max-width: 1039px) and (min-width: 721px) {
+  #reading {
+    grid-template-columns: 1fr min(72ch, calc(100% - 2.5rem)) 1fr;
+  }
+
+  .page {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  #margin {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    justify-content: flex-end;
+    padding: 56px 40px 0 0;
+  }
+
+  .sketch {
+    width: 96px;
+    margin: 0;
+  }
+}
+
+@media (max-width: 720px) {
+  body {
+    font-size: calc(1rem * var(--text-scale));
+    line-height: 1.72;
+  }
+
+  #reading {
+    display: flex;
+    flex-direction: column;
+    padding-top: calc(40px + var(--safe-top));
+    padding-bottom: calc(62px + var(--safe-bottom));
+  }
+
+  #reading:has(> .title-page) {
+    padding-bottom: 0;
+  }
+
+  .page {
+    width: 100%;
+    padding: 18px 18px 24px;
+    font-size: calc(1.0625rem * var(--text-scale));
+    line-height: 1.65;
+    min-height: 0;
+  }
+
+  .page.scene-page {
+    -webkit-mask: none;
+    mask: none;
+    background: linear-gradient(180deg, rgba(8, 11, 15, 0.35), rgba(8, 11, 15, 0.6) 20% 80%, rgba(8, 11, 15, 0.4));
+  }
+
+  .page.scene-page::before {
+    display: none;
+  }
+
+  #margin {
+    order: -1;
+    display: flex;
+    justify-content: flex-end;
+    padding: 8px 18px 0;
+  }
+
+  .sketch {
+    width: 64px;
+    margin: 0;
+  }
+
+  /* the strip */
+  .frame-top {
+    height: calc(40px + var(--safe-top));
+    padding: calc(8px + var(--safe-top)) 20px 0 14px;
+    gap: 10px;
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+  }
+
+  .hill {
+    width: 110px;
+    height: 18px;
+  }
+
+  .frame-slot,
+  .frame-nav {
+    display: none;
+  }
+
+  /* the bar */
+  .frame-bar {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    align-items: center;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: calc(62px + var(--safe-bottom));
+    padding: 0 10px var(--safe-bottom);
+    background: linear-gradient(0deg, rgba(5, 8, 12, 0.92), rgba(5, 8, 12, 0.6) 70%, transparent);
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.02em;
+    text-align: center;
+    pointer-events: auto;
+  }
+
+  .frame-bar button {
+    padding: 12px 0;
+    min-height: 44px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.82rem;
+    white-space: nowrap;
+  }
+
+  /* choices are thumb-sized */
+  button.choice,
+  .choice.locked {
+    min-height: 48px;
+    padding: 0.6em 0.4em 0.6em 0;
+  }
+
+  .choice-line + .choice-line {
+    margin-top: 4px;
+  }
+
+  button.choice.major,
+  .choice.major.locked {
+    margin-left: -10px;
+    padding-left: 10px;
+  }
+
+  .paper {
+    font-size: clamp(0.66rem, 2.6vw, 0.82rem);
+    padding: 12px 12px 10px;
+    max-width: 100%;
+    transform: none;
+  }
+
+  .paper.on {
+    transform: none;
+  }
+
+  .captions {
+    right: 1rem;
+    bottom: calc(70px + var(--safe-bottom));
+    left: 1rem;
+    width: auto;
+    text-align: left;
+  }
+
+  .caption {
+    width: 100%;
+    margin-left: 0;
+    border-right: none;
+    border-left: 1px solid var(--cold-line-strong);
+    background: linear-gradient(90deg, var(--cold-surface), transparent 115%);
+  }
+
+  .book-overlay {
+    padding: 0.75rem;
+  }
+
+  .book-page {
+    width: 100%;
+    max-height: calc(100dvh - 1.5rem);
+    padding: 3rem 1rem 1.5rem;
+  }
+
+  .book-title {
+    letter-spacing: 0.2em;
+  }
+
+  .book-register {
+    font-size: 0.72rem;
+  }
+
+  .ending-page {
+    padding: 3rem 1.25rem 5rem;
+  }
+
+  /* sheets fill the phone; the close sits where the thumb is */
+  .overlay {
+    padding: 0;
+  }
+
+  .sheet,
+  .book-page {
+    width: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+    padding: 3rem 1rem calc(5rem + var(--safe-bottom));
+  }
+
+  /* full-bleed sheets are paper, not glass: nothing of the page shows through */
+  .sheet {
+    background: rgb(10, 14, 19);
+    border: none;
+  }
+
+  .sheet-close,
+  button.book-close {
+    position: fixed;
+    top: auto;
+    bottom: calc(1.2rem + var(--safe-bottom));
+    right: 1.2rem;
+    z-index: 1;
+    padding: 0.7rem 1rem;
+    min-height: 44px;
+    background: rgba(5, 8, 12, 0.92);
+    border: 1px solid var(--cold-line-strong);
+    border-radius: 2px;
+    font-size: 0.85rem;
+  }
+
+  .lamp-row {
+    grid-template-columns: 1fr;
+  }
+
+  /* the pen ticks are thumb-sized */
+  .tick {
+    min-height: 44px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .tick::before {
+    top: 19px;
+  }
+
+  .inter-column {
+    grid-column: 1 / -1;
+    padding: 40vh 22px 0;
+  }
+
+  #interstitial {
+    display: block;
+  }
+}
