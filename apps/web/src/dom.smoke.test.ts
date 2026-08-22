@@ -70,11 +70,13 @@ describe('skeleton', () => {
     ]);
     const page = root.querySelector('#reading > main.page') as HTMLElement;
     expect(page.classList.contains('scene-page')).toBe(true);
-    expect(page.querySelector('header.slot-header')?.textContent).toBe('DAY 1 — NIGHT');
+    expect(page.querySelector('header.slot-header')).toBeNull(); // the strip carries the day now
     expect(page.querySelectorAll('.entry p.prose span.w').length).toBeGreaterThan(5);
-    expect(page.querySelector('.entry pre.doc')?.textContent).toBe('EBUS — WINTER SCHEDULE');
+    expect(page.querySelector('.entry .paper .paper-text')?.textContent).toBe('EBUS — WINTER SCHEDULE');
+    expect(root.querySelector('#stage .stage-slot.active')).toBeNull(); // no frame given → no place drawn
     expect(page.querySelectorAll('ul.choices button.choice')).toHaveLength(2);
-    expect(page.querySelector('.choice.locked')?.textContent).toBe('· Stay down.');
+    expect(page.querySelector('.choice.locked')?.textContent).toBe('Stay down.');
+    expect(page.querySelector('.choice.locked .stroke--dot')).not.toBeNull();
     expect(document.body.dataset['slot']).toBe('night');
     const pageBefore = page;
     ui.renderScene(model({ sceneId: 'n1-walk' }));
@@ -87,7 +89,7 @@ describe('the book', () => {
     const { ui, root, onChoose } = mount();
     document.documentElement.dataset['motion'] = 'off';
     ui.renderScene(model({ world: unlockedWorld() }));
-    const consult = root.querySelector<HTMLButtonElement>('button.book-consult') as HTMLButtonElement;
+    const consult = root.querySelector<HTMLButtonElement>('#frame button.book-consult') as HTMLButtonElement;
     expect(consult.hidden).toBe(false);
     const proseBefore = [...root.querySelectorAll('.entry p.prose')];
     consult.focus();
@@ -111,18 +113,25 @@ describe('the book', () => {
 });
 
 describe('choices', () => {
-  it('a press advances exactly once, and the keys pick the nth open choice', () => {
+  it('a press advances exactly once per list, and the keys pick the nth open choice', () => {
     const { ui, root, onChoose } = mount();
     document.documentElement.dataset['motion'] = 'off';
     ui.renderScene(model());
-    const [first] = root.querySelectorAll<HTMLButtonElement>('button.choice');
-    first?.click();
-    expect(onChoose).toHaveBeenCalledTimes(1);
-    expect(onChoose).toHaveBeenCalledWith('look');
     key('2');
-    expect(onChoose).toHaveBeenCalledTimes(2);
+    expect(onChoose).toHaveBeenCalledTimes(1);
     expect(onChoose).toHaveBeenLastCalledWith('walk');
-    key('3'); // the locked line has no number
+    // the list has committed: nothing else on it moves the ledger
+    key('1');
+    root.querySelector<HTMLButtonElement>('button.choice')?.click();
+    expect(onChoose).toHaveBeenCalledTimes(1);
+    expect(root.querySelector('ul.choices')?.classList.contains('committed')).toBe(true);
+    expect(root.querySelector('button.choice.inked .label')?.textContent).toBe('Walk toward the lights.');
+    // a fresh entry arms fresh lines
+    ui.renderScene(model({ sceneId: 'n1-walk' }));
+    root.querySelector<HTMLButtonElement>('button.choice')?.click();
+    expect(onChoose).toHaveBeenCalledTimes(2);
+    expect(onChoose).toHaveBeenLastCalledWith('look');
+    key('3'); // the locked line has no number, and the list is committed anyway
     expect(onChoose).toHaveBeenCalledTimes(2);
   });
 });

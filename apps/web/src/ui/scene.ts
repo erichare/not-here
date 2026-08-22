@@ -1,12 +1,13 @@
 /**
- * One ledger entry: the DAY — SLOT header, prose paragraphs split into word
- * spans for the reveal, `@doc:` artifacts rendered verbatim, the margin
- * sketch, and the choices. Returns the nodes in order plus the reveal plan.
+ * One ledger entry: prose paragraphs split into word spans for the reveal,
+ * `@doc:` artifacts rendered as paper, and the choices. The DAY — SLOT
+ * header lives in the frame now (the strip); ending and held cards keep
+ * their own marks in the choices list. Returns the nodes plus the reveal plan.
  */
 
-import { renderMarginSketch } from './margin.ts';
+import { renderDoc } from './docs.ts';
 import { ARTIFACT_PAUSE_MS, WORD_INTERVAL_MS, type RevealItem } from './reveal.ts';
-import { buildChoices, type ChoicesCallbacks, type ChoicesInput } from './choices.ts';
+import { buildChoices, type ChoicesCallbacks, type ChoicesInput, type RotInput } from './choices.ts';
 import { el } from './dom.ts';
 
 /** Paragraphs with this prefix are document artifacts: rendered verbatim. */
@@ -36,13 +37,12 @@ export const buildParagraph = (text: string): { p: HTMLParagraphElement; words: 
   return { p, words };
 };
 
-export const renderEntry = (model: EntryModel, callbacks: ChoicesCallbacks): RenderedEntry => {
-  const header = model.header.length > 0 ? el('header', 'slot-header', model.header) : null;
+export const renderEntry = (model: EntryModel, callbacks: ChoicesCallbacks, rot?: RotInput): RenderedEntry => {
   const entry = el('section', 'entry');
   const revealItems: RevealItem[] = [];
   for (const paragraph of model.paragraphs) {
     if (paragraph.startsWith(DOC_PREFIX)) {
-      const doc = el('pre', 'doc', paragraph.slice(DOC_PREFIX.length));
+      const doc = renderDoc(paragraph.slice(DOC_PREFIX.length));
       entry.append(doc);
       revealItems.push({ node: doc, delayMs: ARTIFACT_PAUSE_MS });
       continue;
@@ -51,15 +51,6 @@ export const renderEntry = (model: EntryModel, callbacks: ChoicesCallbacks): Ren
     revealItems.push(...words.map((node) => ({ node, delayMs: WORD_INTERVAL_MS })));
     entry.append(p);
   }
-  const choices = buildChoices(model, callbacks);
-  const sketch = renderMarginSketch(model.sceneId);
-  const children: HTMLElement[] = [];
-  if (header !== null) children.push(header);
-  children.push(entry);
-  if (sketch !== null) {
-    children.push(sketch);
-    revealItems.push({ node: sketch, delayMs: ARTIFACT_PAUSE_MS });
-  }
-  children.push(choices);
-  return { children, revealItems, choices };
+  const choices = buildChoices(model, callbacks, rot);
+  return { children: [entry, choices], revealItems, choices };
 };

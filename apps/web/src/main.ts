@@ -89,6 +89,11 @@ const run = (root: HTMLElement): void => {
         break;
       case 'music.detune':
         audio.detune(event.pattern, event.cents);
+        // The silent twin: the named sketch wavers once (the prose carries the tell).
+        ui.beat('detune', event.pattern);
+        break;
+      case 'music.stinger':
+        ui.beat('stinger');
         break;
       case 'tell.visual':
         ui.addCaption(event.text);
@@ -190,6 +195,12 @@ const run = (root: HTMLElement): void => {
     onChoose: choose,
     onNewGame: newGame,
     wordIntervalMs: () => settings.revealMs,
+  });
+
+  // The weather keeps still while nobody is looking.
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') ui.pause();
+    else ui.resume();
   });
 
   // Mid-run saves resume; a save parked on a true ending is a finished run;

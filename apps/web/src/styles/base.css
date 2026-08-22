@@ -6,16 +6,67 @@
 
 html {
   background: var(--night-deep);
+  overflow-x: clip;
 }
 
 body {
   min-height: 100vh;
-  background:
-    radial-gradient(ellipse 120% 90% at 50% -10%, rgba(97, 118, 138, 0.1), transparent 60%),
-    linear-gradient(180deg, #0c1117 0%, var(--night) 45%, #080c10 100%);
+  min-height: 100dvh;
+  background: var(--night);
   color: var(--mist);
   font-family: var(--serif);
-  font-size: 1.06rem;
+  font-size: calc(1.06rem * var(--text-scale));
   line-height: 1.8;
-  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+/* The persistent regions and their stacking. Nothing on these containers
+   may carry transform/filter/contain — the fixed layers inside must keep
+   the viewport as their frame. */
+#app {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+#stage {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  contain: strict;
+  pointer-events: none;
+}
+
+#reading {
+  position: relative;
+  z-index: 10;
+}
+
+#frame {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+
+#frame[hidden] {
+  display: none;
+}
+
+#interstitial {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+}
+
+#interstitial[hidden] {
+  display: none;
+}
+
+#overlays {
+  position: relative;
+  z-index: 60;
 }

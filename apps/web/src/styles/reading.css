@@ -1,11 +1,66 @@
-.page {
-  max-width: 66ch;
+/* The reading column — the ledger entry on cold glass in front of the
+   place. A measured column, edges dissolved so the weather still crosses
+   the words; a rail beside it for the margin sketch. The title and the
+   cards opt out of the glass. */
+
+#reading {
   min-height: 100vh;
-  margin: 0 auto;
-  padding: 5rem 2rem 8rem;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: 1fr var(--col-w) var(--rail-w) 1fr;
+  align-content: start;
+  padding-top: calc(var(--frame-h) + var(--safe-top));
 }
 
-.scene-page .slot-header,
+/* the title owns the whole width and no frame */
+#reading:has(> .title-page) {
+  display: block;
+  padding-top: 0;
+}
+
+.page {
+  grid-column: 2;
+  position: relative;
+  padding: 60px 40px 120px;
+  font-size: calc(1.125rem * var(--text-scale));
+  line-height: 1.72;
+  color: var(--mist);
+  min-height: calc(100dvh - var(--frame-h) - var(--safe-top));
+}
+
+.page.scene-page {
+  background: linear-gradient(180deg, rgba(8, 11, 15, 0.55), rgba(8, 11, 15, 0.68) 30% 70%, rgba(8, 11, 15, 0.5));
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent, #000 64px, #000 calc(100% - 64px), transparent),
+    linear-gradient(180deg, transparent, #000 56px, #000 calc(100% - 56px), transparent);
+  mask-image:
+    linear-gradient(90deg, transparent, #000 64px, #000 calc(100% - 64px), transparent),
+    linear-gradient(180deg, transparent, #000 56px, #000 calc(100% - 56px), transparent);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+  animation: page-in 0.38s ease-out;
+}
+
+/* the margin rule the book is ruled with */
+.page.scene-page::before {
+  content: '';
+  position: absolute;
+  left: 18px;
+  top: 72px;
+  bottom: 80px;
+  width: 1px;
+  background: var(--cold-line);
+  pointer-events: none;
+}
+
+.page.title-page {
+  grid-column: 1 / -1;
+  padding: 0;
+  min-height: 100dvh;
+  font-size: calc(1.06rem * var(--text-scale));
+  line-height: 1.8;
+}
+
 .scene-page .entry {
   animation: ledger-settle 0.28s ease-out both;
 }
@@ -17,60 +72,21 @@
   }
 }
 
-/* ---- scene turn: the page breathes out and back in ---- */
-
-/* className is reassigned on every render, so this replays per scene — a
-   short cross-fade under the word-by-word settle. */
-.page {
-  animation: page-in 0.38s ease-out;
-}
-
+/* the page breathes out and back in on every scene */
 @keyframes page-in {
   from {
     opacity: 0;
   }
 }
 
-/* ---- ledger header ---- */
-
-.slot-header {
-  font-size: 0.7rem;
-  font-family: var(--mono);
-  letter-spacing: 0.42em;
-  text-transform: uppercase;
-  color: var(--mist-muted);
-  border-bottom: 1px solid var(--cold-line);
-  padding-bottom: 0.65rem;
-  margin-bottom: 2.6rem;
-}
-
-/* ---- the slot header keeps the hour, not just the day ---- */
-
-.slot-header::before {
-  margin-right: 0.9em;
-  color: var(--mist-dim);
-}
-
-body[data-slot='morning'] .slot-header::before {
-  content: '○';
-}
-
-body[data-slot='afternoon'] .slot-header::before {
-  content: '◔';
-}
-
-body[data-slot='evening'] .slot-header::before {
-  content: '◑';
-}
-
-body[data-slot='night'] .slot-header::before {
-  content: '●';
-}
-
 /* ---- prose ---- */
 
 .entry .prose {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.15em;
+}
+
+.entry .prose:last-child {
+  margin-bottom: 0;
 }
 
 .w {

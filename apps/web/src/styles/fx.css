@@ -1,2 +1,16 @@
-/* Reactive FX: page-wide rot tiers, presence thinning, the chord strip,
-   detune and stinger beats — drawn in phase 5. */
+/* Reactive FX — the fog getting into the page. STATIC rot on choice labels
+   (the accessible name stays whole); presence thinning via --presence.
+   Tiers arrive in phase 5; the label spans are styled here already. */
+
+.rot-spaced {
+  letter-spacing: 0.18em;
+}
+
+.rot-sub {
+  color: var(--mist-muted);
+}
+
+.rot-attract {
+  letter-spacing: 0.2em;
+  opacity: 0.7;
+}

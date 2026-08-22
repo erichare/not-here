@@ -1,1 +1,166 @@
-/* The day strip and the ledger frame — drawn in phase 2. */
+/* The frame — the day strip along the top: DAY N · the hour's glyph · the
+   hill with its snowline coming down · NOV 28 in Dianne's ring · the
+   margins' affordances. Barb's book's hairline is the frame's only amber.
+   On a phone the affordances move to a bottom bar the thumb can reach. */
+
+.frame-top {
+  height: calc(var(--frame-h) + var(--safe-top));
+  padding: var(--safe-top) 22px 0;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--mist-muted);
+  background: linear-gradient(180deg, rgba(5, 8, 12, 0.9), rgba(5, 8, 12, 0.55) 70%, transparent);
+  pointer-events: auto;
+}
+
+.frame-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  white-space: nowrap;
+}
+
+.frame-glyph {
+  font-size: 0.75rem;
+  letter-spacing: 0;
+  color: var(--mist-dim);
+}
+
+.frame-slot {
+  letter-spacing: 0.22em;
+  color: var(--mist-dim);
+}
+
+.hill {
+  flex: none;
+  margin: 0 auto;
+  width: 220px;
+  height: 24px;
+  display: block;
+  overflow: visible;
+}
+
+.hill .land {
+  fill: #0a0e13;
+  stroke: rgba(163, 180, 195, 0.28);
+  stroke-width: 1;
+}
+
+.hill .snow {
+  fill: var(--mist-bright);
+  opacity: 0.3;
+}
+
+.hill .line {
+  stroke: var(--mist-bright);
+  stroke-width: 1;
+  opacity: 0.5;
+}
+
+/* NOV 28, ringed twice in blue pen — in the frame's cold ink, not amber */
+.frame-date {
+  position: relative;
+  padding: 2px 8px;
+  letter-spacing: 0.22em;
+  white-space: nowrap;
+}
+
+.frame-date::before,
+.frame-date::after {
+  content: '';
+  position: absolute;
+  inset: -4px -5px;
+  border: 1px solid var(--mist-muted);
+  border-radius: 50%;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.frame-date::after {
+  inset: -5px -7px -3px -4px;
+  transform: rotate(-6deg);
+  opacity: 0.45;
+}
+
+/* Day 23: the ring has been gone over so many times it pressed through */
+.frame-date.pressed::before {
+  border-width: 1.6px;
+  opacity: 0.9;
+}
+
+.frame-date.pressed::after {
+  opacity: 0.7;
+}
+
+.frame-nav {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.8rem;
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+/* the affordances are text, lit from the left by a hairline */
+.frame-nav button,
+.frame-bar button {
+  background: none;
+  border: none;
+  font: inherit;
+  color: var(--mist-muted);
+  cursor: pointer;
+  padding: 0.2rem 0 0.2rem 8px;
+  border-left: 1px solid var(--cold-line-strong);
+  line-height: 1.2;
+}
+
+.frame-nav button.book-consult,
+.frame-bar button.book-consult {
+  color: var(--mist);
+  border-left-color: rgba(232, 180, 90, 0.55);
+}
+
+.frame-nav button:hover,
+.frame-nav button:focus-visible,
+.frame-bar button:hover,
+.frame-bar button:focus-visible {
+  color: var(--lamp-bright);
+  outline: none;
+}
+
+.frame-nav button:focus-visible,
+.frame-bar button:focus-visible {
+  outline: 1px dashed rgba(232, 180, 90, 0.4);
+  outline-offset: 4px;
+}
+
+/* One pulse on unlock — never again. Killed under motion-off. */
+.frame-nav button.pulse,
+.frame-bar button.pulse {
+  animation: book-pulse 1.8s ease-in-out 1;
+}
+
+@keyframes book-pulse {
+  0%,
+  100% {
+    color: var(--mist);
+    text-shadow: none;
+  }
+  40% {
+    color: var(--lamp-bright);
+    text-shadow: 0 0 14px rgba(255, 217, 143, 0.55);
+  }
+}
+
+/* the phone's bar — hidden until mobile.css shows it */
+.frame-bar {
+  display: none;
+}

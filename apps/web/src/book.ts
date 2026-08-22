@@ -73,6 +73,10 @@ export interface BookLayerHooks {
   readonly onExitBeat: (text: string) => void;
   /** The regions an open book makes inert. */
   readonly inertTargets: readonly HTMLElement[];
+  /** Where the consult button lives (the frame's nav); defaults to the host. */
+  readonly buttonHost?: HTMLElement;
+  /** The phone's bottom bar — a second button, same book. */
+  readonly barHost?: HTMLElement;
 }
 
 const sectionLabel = (text: string): HTMLElement => el('p', 'book-section-label', text);
@@ -113,12 +117,25 @@ export const createBookLayer = (host: HTMLElement, hooks: BookLayerHooks): BookL
   let unlocked = false;
   let unlockSeen: boolean | null = null;
 
-  const button = el('button', 'book-consult', BOOK.consult);
-  button.type = 'button';
-  button.hidden = true;
-  button.setAttribute('aria-haspopup', 'dialog');
-  button.setAttribute('aria-expanded', 'false');
-  host.append(button);
+  const makeButton = (): HTMLButtonElement => {
+    const b = el('button', 'book-consult', BOOK.consult);
+    b.type = 'button';
+    b.hidden = true;
+    b.setAttribute('aria-haspopup', 'dialog');
+    b.setAttribute('aria-expanded', 'false');
+    return b;
+  };
+  const button = makeButton();
+  (hooks.buttonHost ?? host).append(button);
+  const barButton = hooks.barHost === undefined ? null : makeButton();
+  if (barButton !== null && hooks.barHost !== undefined) hooks.barHost.append(barButton);
+  const buttons = barButton === null ? [button] : [button, barButton];
+  const setExpanded = (value: boolean): void => {
+    for (const b of buttons) {
+      b.setAttribute('aria-expanded', value ? 'true' : 'false');
+      b.inert = value;
+    }
+  };
 
   const overlay = createOverlay({
     host,
@@ -127,8 +144,7 @@ export const createBookLayer = (host: HTMLElement, hooks: BookLayerHooks): BookL
     hotkey: 'l',
     inertTargets: hooks.inertTargets,
     onExitBeat: () => {
-      button.setAttribute('aria-expanded', 'false');
-      button.inert = false;
+      setExpanded(false);
       hooks.onExitBeat(BOOK.exitBeat);
     },
     canOpen: () => unlocked && world !== null,
@@ -141,8 +157,7 @@ export const createBookLayer = (host: HTMLElement, hooks: BookLayerHooks): BookL
     const close = el('button', 'book-close', BOOK.close);
     close.type = 'button';
     panel.prepend(close);
-    button.setAttribute('aria-expanded', 'true');
-    button.inert = true;
+    setExpanded(true);
     return { panel, close };
   };
 
@@ -151,16 +166,17 @@ export const createBookLayer = (host: HTMLElement, hooks: BookLayerHooks): BookL
     overlay.open(build);
   };
 
-  button.addEventListener('click', (event) => {
-    event.stopPropagation();
-    openBook();
-  });
+  for (const b of buttons) {
+    b.addEventListener('click', (event) => {
+      event.stopPropagation();
+      openBook();
+    });
+  }
 
   const closeQuiet = (): void => {
     if (!overlay.isOpen()) return;
     overlay.close(false);
-    button.setAttribute('aria-expanded', 'false');
-    button.inert = false;
+    setExpanded(false);
   };
 
   const update = (next: WorldState | null): void => {
@@ -168,17 +184,19 @@ export const createBookLayer = (host: HTMLElement, hooks: BookLayerHooks): BookL
     unlocked = next !== null && isBookUnlocked(next);
     const wasUnlocked = unlockSeen;
     unlockSeen = unlocked;
-    button.hidden = !unlocked;
+    for (const b of buttons) b.hidden = !unlocked;
     // One pulse, exactly at the unlock moment — never on resume, never again.
     if (unlocked && wasUnlocked === false) {
-      button.classList.add('pulse');
-      button.addEventListener(
-        'animationend',
-        () => {
-          button.classList.remove('pulse');
-        },
-        { once: true },
-      );
+      for (const b of buttons) {
+        b.classList.add('pulse');
+        b.addEventListener(
+          'animationend',
+          () => {
+            b.classList.remove('pulse');
+          },
+          { once: true },
+        );
+      }
     }
     if (!unlocked) closeQuiet();
   };
@@ -188,8 +206,10 @@ export const createBookLayer = (host: HTMLElement, hooks: BookLayerHooks): BookL
     world = null;
     unlocked = false;
     unlockSeen = null;
-    button.hidden = true;
-    button.classList.remove('pulse');
+    for (const b of buttons) {
+      b.hidden = true;
+      b.classList.remove('pulse');
+    }
   };
 
   return { update, retire, isOpen: overlay.isOpen };

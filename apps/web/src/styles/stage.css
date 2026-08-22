@@ -1,98 +1,482 @@
-/* The weather and the hour: far and near fog banks, the slot grades, the
-   vignette and grain. Phase 2 moves these onto the persistent #stage. */
+/* The stage — the place behind the ledger. Two slots crossfade on a place
+   change; a set is sky, a far fog bank, the art (one inline SVG silhouette
+   plus a few composited light layers), a near fog bank. Grain and vignette
+   sit above both slots, static. Everything that moves is a CSS keyframe on
+   transform/opacity; the beam and the fog are the only full-viewport layers
+   that animate. Paused while the tab is hidden; dead under motion-off. */
 
-/* A far fog bank behind the near one — same weather, slower clock. The two
-   layers drift at different speeds, which is what makes the fog have depth. */
-html::before {
-  content: '';
-  position: fixed;
-  inset: -50%;
-  z-index: 39;
-  pointer-events: none;
+.stage-slot {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+.stage-slot.active {
+  opacity: 1;
+}
+
+.set {
+  position: absolute;
+  inset: 0;
+}
+
+.set > * {
+  position: absolute;
+}
+
+/* ---- the sky: the slot grade ---- */
+
+.sky {
+  inset: 0;
   background:
-    radial-gradient(ellipse 40% 26% at 68% 22%, rgba(146, 168, 188, 0.055), transparent 70%),
-    radial-gradient(ellipse 48% 30% at 22% 66%, rgba(128, 150, 170, 0.045), transparent 70%);
-  animation: fog-drift-far 150s ease-in-out infinite alternate;
+    radial-gradient(ellipse 120% 90% at 50% -10%, rgba(88, 106, 128, 0.08), transparent 58%),
+    linear-gradient(180deg, #070b11 0%, #05080d 50%, #04060a 100%);
 }
 
-@keyframes fog-drift-far {
-  0% {
-    transform: translate3d(2%, 1%, 0) scale(1.04);
-  }
-  100% {
-    transform: translate3d(-2.5%, -1%, 0) scale(1);
-  }
-}
-
-/* The ambient grade follows the scene's slot (ui.ts sets body[data-slot]).
-   Morning is the lifted grey of the Bay's short days; evening carries the
-   last ember of the sun low under the fog; night is the horn's hour. */
-body[data-slot='morning'] {
+#stage[data-slot='morning'] .sky {
   background:
     radial-gradient(ellipse 120% 90% at 50% -10%, rgba(148, 166, 182, 0.16), transparent 62%),
     linear-gradient(180deg, #121a23 0%, #0d131b 45%, #0a0e13 100%);
 }
 
-body[data-slot='afternoon'] {
+#stage[data-slot='afternoon'] .sky {
   background:
     radial-gradient(ellipse 120% 90% at 50% -10%, rgba(128, 148, 166, 0.13), transparent 60%),
     linear-gradient(180deg, #0f151d 0%, #0c1118 45%, #090d12 100%);
 }
 
-body[data-slot='evening'] {
+#stage[data-slot='evening'] .sky {
   background:
     radial-gradient(ellipse 110% 42% at 50% 112%, rgba(232, 180, 90, 0.055), transparent 62%),
     radial-gradient(ellipse 120% 90% at 50% -10%, rgba(110, 128, 148, 0.1), transparent 60%),
     linear-gradient(180deg, #0c1119 0%, #0a0f15 45%, #080b0f 100%);
 }
 
-body[data-slot='night'] {
+/* The rooms are their own weather: the Kettle is a hair less blue. */
+.set--kettle .sky {
   background:
-    radial-gradient(ellipse 120% 90% at 50% -10%, rgba(88, 106, 128, 0.08), transparent 58%),
-    linear-gradient(180deg, #070b11 0%, #05080d 50%, #04060a 100%);
+    radial-gradient(ellipse 60% 50% at 30% 40%, rgba(40, 32, 22, 0.18), transparent 70%),
+    linear-gradient(180deg, #0b0d10, #07090c);
 }
 
-/* Fog — three slow banks drifting over the page. Oversized fixed layer
-   animated by transform only, so it stays off the layout and on the GPU. */
-body::before {
-  content: '';
-  position: fixed;
-  inset: -35%;
-  z-index: 40;
-  pointer-events: none;
+.set--card .sky {
+  background: linear-gradient(180deg, #05080c, #04060a);
+}
+
+/* ---- fog: two banks on different clocks, which is what gives it depth ---- */
+
+.fog {
+  inset: -18%;
   background:
     radial-gradient(ellipse 44% 30% at 24% 32%, rgba(146, 168, 188, 0.09), transparent 70%),
     radial-gradient(ellipse 52% 34% at 78% 58%, rgba(128, 150, 170, 0.07), transparent 70%),
     radial-gradient(ellipse 38% 26% at 46% 82%, rgba(158, 178, 196, 0.06), transparent 70%);
   animation: fog-drift 90s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.fog--far {
+  inset: -24%;
+  background:
+    radial-gradient(ellipse 40% 26% at 68% 22%, rgba(146, 168, 188, 0.055), transparent 70%),
+    radial-gradient(ellipse 48% 30% at 22% 66%, rgba(128, 150, 170, 0.045), transparent 70%);
+  animation: fog-drift-far 150s ease-in-out infinite alternate;
+}
+
+.set--kettle .fog,
+.set--general .fog,
+.set--house .fog,
+.set--clinic .fog,
+.set--shed .fog,
+.set--hall .fog,
+.set--room .fog {
+  opacity: 0.35;
 }
 
 @keyframes fog-drift {
   0% {
-    transform: translate3d(-2.5%, -1.5%, 0) scale(1);
+    transform: translate3d(-1.5%, -1%, 0) scale(1);
   }
   50% {
-    transform: translate3d(1.5%, 1%, 0) scale(1.06);
+    transform: translate3d(1%, 0.6%, 0) scale(1.04);
   }
   100% {
-    transform: translate3d(3%, -0.5%, 0) scale(1.02);
+    transform: translate3d(1.8%, -0.3%, 0) scale(1.02);
   }
 }
 
-/* Vignette + grain — the fog holds the edges of the page, and the night
-   has a tooth to it. The noise carries its own low alpha in the SVG. */
-body::after {
-  content: '';
-  position: fixed;
+@keyframes fog-drift-far {
+  0% {
+    transform: translate3d(1.2%, 0.6%, 0) scale(1.03);
+  }
+  100% {
+    transform: translate3d(-1.5%, -0.6%, 0) scale(1);
+  }
+}
+
+/* ---- the art ---- */
+
+.art {
   inset: 0;
-  z-index: 30;
+}
+
+.set-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* the beach is the wharf from low down: taller pilings, the gravel near */
+.set--beach .art {
+  transform: scale(1.18);
+  transform-origin: 60% 100%;
+}
+
+/* ---- the wharf ---- */
+
+/* The breakwater light, trawling the fog: a wedge anchored at the lamp head
+   (1540,411 in the set's 1600×1000 box, placed with xMidYMax slice), swept
+   on a long clock. A div, so the sweep stays on the compositor. */
+.beam {
+  position: absolute;
+  right: calc(50% - 740 * var(--su));
+  top: calc(100% - 589 * var(--su));
+  width: calc(2200 * var(--su));
+  height: calc(460 * var(--su));
+  transform-origin: 100% 50%;
+  transform: translateY(-50%) rotate(-8deg);
+  clip-path: polygon(100% 50%, 0 0, 0 100%);
+  background: linear-gradient(
+    270deg,
+    rgba(190, 210, 226, 0.16),
+    rgba(190, 210, 226, 0.07) 45%,
+    transparent 100%
+  );
+  animation: beam-sweep 16s ease-in-out infinite alternate;
+  will-change: transform, opacity;
   pointer-events: none;
+}
+
+@keyframes beam-sweep {
+  0% {
+    transform: translateY(-50%) rotate(-8deg);
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-50%) rotate(10deg);
+    opacity: 0.5;
+  }
+}
+
+/* the water's sheen drifts; three thin bands on three clocks */
+.sheen g {
+  animation: sheen 24s ease-in-out infinite alternate;
+}
+
+.sheen g:nth-child(2) {
+  animation-duration: 30s;
+  animation-direction: alternate-reverse;
+}
+
+.sheen g:nth-child(3) {
+  animation-duration: 18s;
+}
+
+@keyframes sheen {
+  from {
+    transform: translateX(-12px);
+  }
+  to {
+    transform: translateX(12px);
+  }
+}
+
+/* the horn room's one pane: lit only when Wade is at the valves */
+.pane {
+  opacity: 0;
+}
+
+.set--hornroom .pane,
+#stage[data-horn='on'][data-slot='night'] .set--wharf .pane,
+#stage[data-horn='on'][data-slot='night'] .set--unit .pane {
+  opacity: 1;
+  animation: lamp-breathe 5s ease-in-out infinite;
+}
+
+/* the unit: the wharf through your window — muntins, a sill, the glass */
+.unit-frame {
+  inset: 0;
   background:
-    radial-gradient(
-      ellipse 92% 78% at 50% 42%,
-      transparent 34%,
-      rgba(5, 8, 12, 0.5) 76%,
-      rgba(5, 8, 12, 0.88) 100%
-    ),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.72 0 0 0 0 0.78 0 0 0 0 0.85 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    linear-gradient(to right, transparent calc(50% - 4px), rgba(5, 7, 10, 0.8) calc(50% - 4px), rgba(5, 7, 10, 0.8) calc(50% + 4px), transparent calc(50% + 4px)),
+    linear-gradient(to bottom, transparent calc(38% - 4px), rgba(5, 7, 10, 0.8) calc(38% - 4px), rgba(5, 7, 10, 0.8) calc(38% + 4px), transparent calc(38% + 4px));
+  box-shadow: inset 0 0 0 10px rgba(5, 7, 10, 0.85), inset 0 0 120px rgba(5, 7, 10, 0.7);
+  opacity: 0.5;
+}
+
+/* ---- the Kettle ---- */
+
+.lamp-pool {
+  left: 0%;
+  top: 42%;
+  width: 34%;
+  height: 44%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(232, 180, 90, 0.2),
+    rgba(232, 180, 90, 0.06) 55%,
+    transparent 78%
+  );
+  animation: pool-breathe 5s ease-in-out infinite;
+}
+
+.heater-glow {
+  left: 70%;
+  top: 48%;
+  width: 18%;
+  height: 26%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(232, 130, 60, 0.1), transparent 70%);
+  animation: pool-breathe 3s ease-in-out infinite;
+}
+
+@keyframes pool-breathe {
+  0%,
+  100% {
+    opacity: 0.82;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.steam path {
+  animation: steam 6s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+
+.steam path:nth-child(2) {
+  animation-delay: 2s;
+}
+
+.steam path:nth-child(3) {
+  animation-delay: 4s;
+}
+
+@keyframes steam {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-14px);
+    opacity: 0;
+  }
+}
+
+.moose {
+  animation: breathe 4s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(1.02);
+  }
+}
+
+/* ---- the other places: a tint and one signature light ---- */
+
+.tint {
+  inset: 0;
+  background: var(--tint, transparent);
+}
+
+.sig {
+  inset: 0;
+  background: radial-gradient(
+    ellipse var(--sig-w, 0%) var(--sig-h, 0%) at var(--sig-x, 50%) var(--sig-y, 50%),
+    var(--sig-color, transparent),
+    transparent 70%
+  );
+}
+
+#stage[data-place='general'] {
+  --tint: rgba(30, 40, 38, 0.16);
+  --sig-color: rgba(205, 222, 215, 0.1);
+  --sig-x: 50%;
+  --sig-y: 0%;
+  --sig-w: 140%;
+  --sig-h: 16%;
+}
+
+#stage[data-place='house'] {
+  --tint: rgba(36, 26, 20, 0.16);
+  --sig-color: rgba(214, 120, 54, 0.14);
+  --sig-x: 12%;
+  --sig-y: 64%;
+  --sig-w: 28%;
+  --sig-h: 22%;
+}
+
+#stage[data-place='clinic'] {
+  --tint: rgba(34, 40, 46, 0.18);
+  --sig-color: rgba(225, 235, 240, 0.12);
+  --sig-x: 50%;
+  --sig-y: 0%;
+  --sig-w: 140%;
+  --sig-h: 14%;
+}
+
+#stage[data-place='shed'] {
+  --tint: rgba(22, 28, 36, 0.14);
+  --sig-color: rgba(150, 190, 230, 0.08);
+  --sig-x: 50%;
+  --sig-y: 70%;
+  --sig-w: 70%;
+  --sig-h: 50%;
+}
+
+#stage[data-place='hall'] {
+  --tint: rgba(24, 22, 20, 0.2);
+  --sig-color: rgba(232, 200, 140, 0.08);
+  --sig-x: 50%;
+  --sig-y: 15%;
+  --sig-w: 60%;
+  --sig-h: 50%;
+}
+
+#stage[data-place='room'] {
+  --tint: rgba(28, 30, 34, 0.14);
+  --sig-color: rgba(217, 211, 196, 0.1);
+  --sig-x: 80%;
+  --sig-y: 48%;
+  --sig-w: 28%;
+  --sig-h: 40%;
+}
+
+#stage[data-place='depot'] {
+  --tint: rgba(14, 18, 24, 0.12);
+  --sig-color: rgba(230, 240, 250, 0.14);
+  --sig-x: 86%;
+  --sig-y: 60%;
+  --sig-w: 60%;
+  --sig-h: 30%;
+}
+
+#stage[data-place='shelter'] {
+  --tint: rgba(20, 20, 18, 0.16);
+  --sig-color: rgba(225, 235, 240, 0.1);
+  --sig-x: 86%;
+  --sig-y: 12%;
+  --sig-w: 36%;
+  --sig-h: 50%;
+}
+
+#stage[data-place='road'] {
+  --sig-color: rgba(150, 170, 190, 0.06);
+  --sig-x: 50%;
+  --sig-y: 60%;
+  --sig-w: 120%;
+  --sig-h: 40%;
+}
+
+.hall-bulb {
+  animation: lamp-breathe 7s ease-in-out infinite;
+}
+
+.stove-slot {
+  animation: pool-breathe 3s ease-in-out infinite;
+}
+
+/* ---- grain and vignette: the night has a tooth, the fog holds the edges ---- */
+
+.stage-grain {
+  position: absolute;
+  inset: 0;
+  background: var(--noise);
+  opacity: var(--grain);
+}
+
+.stage-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 92% 78% at 50% 42%,
+    transparent 34%,
+    rgba(5, 8, 12, 0.5) 76%,
+    rgba(5, 8, 12, 0.88) 100%
+  );
+}
+
+/* A lamp breathes; a lived-in lamp also stutters, once in a long while. */
+@keyframes lamp-breathe {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  38% {
+    filter: brightness(1.12);
+  }
+  61% {
+    filter: brightness(1.1);
+  }
+  62% {
+    filter: brightness(0.86);
+  }
+  63.5% {
+    filter: brightness(1.08);
+  }
+  65% {
+    filter: brightness(0.94);
+  }
+  67% {
+    filter: brightness(1.06);
+  }
+}
+
+/* The weather keeps still while nobody is looking. */
+#stage[data-paused] *,
+#stage[data-paused] *::before,
+#stage[data-paused] *::after {
+  animation-play-state: paused !important;
+}
+
+@media (max-width: 720px) {
+  /* the phone crops the set to its right-hand end (xMaxYMax) */
+  .beam {
+    right: calc(60 * var(--su));
+  }
+
+  .lamp-pool {
+    left: -30%;
+    width: 90%;
+    top: 48%;
+    height: 30%;
+  }
+
+  .heater-glow {
+    left: 40%;
+    width: 50%;
+    top: 56%;
+  }
+
+  .fog--far {
+    display: none;
+  }
 }

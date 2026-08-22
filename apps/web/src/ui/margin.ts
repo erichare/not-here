@@ -1,24 +1,62 @@
 /**
- * The margin sketch — an ink portrait in the margin of Barb's book. Phase 1
- * keeps the shipped behaviour verbatim: one card, on the scene where the
- * player first meets someone, inlined as a faded aside inside the page.
- * (Phase 3 moves it to the persistent rail and makes it speaker-aware.)
+ * The margin rail — the ink sketch of whoever is in the room, drawn in the
+ * margin of Barb's book. Speaker-aware (model/cast.ts decides who, and the
+ * first-meeting gate decides whether), trust-faded, and it wavers once on a
+ * lie (the silent twin of the detune). Wren's frame never fades, never
+ * wavers. On a phone the rail sits above the entry, small and right-aligned.
  */
 
-import { firstMeetingSketch } from '../sketches.ts';
+import type { VisibleSketch } from '../model/cast.ts';
+import { sketchSvg } from '../sketches.ts';
+import { el } from './dom.ts';
 
-/**
- * Build the margin aside for a scene, or null when the scene introduces
- * nobody. The markup is a build-time constant (bundled SVG), so innerHTML
- * carries no untrusted input.
- */
-export const renderMarginSketch = (sceneId: string | undefined): HTMLElement | null => {
-  if (sceneId === undefined) return null;
-  const svg = firstMeetingSketch(sceneId);
-  if (svg === null) return null;
-  const aside = document.createElement('aside');
-  aside.className = 'margin-sketch';
-  aside.setAttribute('aria-hidden', 'true');
-  aside.innerHTML = svg;
-  return aside;
+export interface Margin {
+  readonly update: (sketches: readonly VisibleSketch[]) => void;
+  /** The detune twin: the named character's sketch wavers once. */
+  readonly waver: (who: string) => void;
+  readonly clear: () => void;
+}
+
+export const WAVER_MS = 2400;
+
+export const createMargin = (host: HTMLElement): Margin => {
+  let shown: string[] = [];
+
+  const render = (sketches: readonly VisibleSketch[]): void => {
+    const next = sketches.map((s) => s.who);
+    const same = next.length === shown.length && next.every((w, i) => w === shown[i]);
+    if (same) {
+      // Only the fade changes — no node churn, no re-settle.
+      sketches.forEach((s, i) => {
+        const card = host.children[i];
+        if (card instanceof HTMLElement) card.style.setProperty('--sketch-opacity', String(s.opacity));
+      });
+      return;
+    }
+    host.replaceChildren();
+    for (const sketch of sketches) {
+      const card = el('figure', `sketch sketch--${sketch.who}`);
+      card.style.setProperty('--sketch-opacity', String(sketch.opacity));
+      card.innerHTML = sketchSvg(sketch.who);
+      host.append(card);
+    }
+    shown = next;
+    host.hidden = sketches.length === 0;
+  };
+
+  return {
+    update: render,
+    waver: (who) => {
+      const card = host.querySelector<HTMLElement>(`.sketch--${CSS.escape(who)}`);
+      if (card === null) return;
+      card.classList.add('waver');
+      card.classList.add('detuned');
+      window.setTimeout(() => card.classList.remove('waver'), WAVER_MS);
+    },
+    clear: () => {
+      host.replaceChildren();
+      shown = [];
+      host.hidden = true;
+    },
+  };
 };

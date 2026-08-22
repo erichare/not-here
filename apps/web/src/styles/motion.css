@@ -1,9 +1,7 @@
 /* Stillness on request — the OS preference and the lamp's 'hold still' are
    one switch. Imported LAST so the kill wins every cascade. Static state
-   that must survive it (captions shown, choices shown, sketches settled)
-   is restated inside. */
-
-/* ---- accessibility: stillness on request ---- */
+   that must survive it (captions shown, choices shown, sketches settled,
+   paper on the table) is restated inside. */
 
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -23,8 +21,12 @@
     transform: none;
   }
 
-  .margin-sketch.on {
-    opacity: 0.4;
+  .sketch {
+    opacity: var(--sketch-opacity, 0.45);
+  }
+
+  .stage-slot.active {
+    opacity: 1;
   }
 }
 
@@ -46,6 +48,10 @@ html[data-motion='off'] .choices.shown {
   transform: none;
 }
 
-html[data-motion='off'] .margin-sketch.on {
-  opacity: 0.4;
+html[data-motion='off'] .sketch {
+  opacity: var(--sketch-opacity, 0.45);
+}
+
+html[data-motion='off'] .stage-slot.active {
+  opacity: 1;
 }

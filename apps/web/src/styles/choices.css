@@ -1,10 +1,13 @@
-/* ---- choices: ledger lines ---- */
+/* Choices: ledger lines under a hand-ruled rule. A pen-stroke dash, the
+   label, an underline the hover draws left to right, and the press that
+   inks the line a second time before the scene turns. Major choices are
+   lamplit — the one warmth on the page. Locked lines sit behind a dot. */
 
 .choices {
   list-style: none;
-  margin-top: 3rem;
-  border-top: 1px solid var(--cold-line);
-  padding-top: 1.4rem;
+  margin-top: 2.3em;
+  padding-top: 1.3em;
+  position: relative;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -13,6 +16,17 @@
     opacity 0.45s ease-in,
     transform 0.45s ease-out,
     visibility 0s linear 0.45s;
+}
+
+.choices::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 6px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 6' preserveAspectRatio='none'%3E%3Cpath d='M0 3 C 120 2.2, 240 3.8, 360 2.8 C 460 2, 540 3.6, 600 3' fill='none' stroke='rgba(163,180,195,.32)' stroke-width='1'/%3E%3C/svg%3E") no-repeat;
+  background-size: 100% 100%;
 }
 
 .choices.shown {
@@ -24,11 +38,14 @@
 }
 
 .choice-line {
-  margin: 0.4rem 0;
+  margin: 0;
 }
 
-button.choice {
-  display: block;
+button.choice,
+.choice.locked {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
   width: 100%;
   text-align: left;
   background: none;
@@ -36,23 +53,62 @@ button.choice {
   font: inherit;
   line-height: inherit;
   color: var(--mist);
+  padding: 0.5em 0.65em 0.5em 2px;
+  min-height: 44px;
+  position: relative;
+}
+
+button.choice {
   cursor: pointer;
-  padding: 0.45rem 0.65rem 0.45rem 0.15rem;
   transition:
     color 0.16s ease-out,
     text-shadow 0.16s ease-out,
-    transform 0.12s ease-out;
+    transform 0.12s ease-out,
+    opacity 0.3s ease-out;
 }
 
-/* Major choices are lamplit — the one warmth on the page. */
-button.choice.major,
-.choice.major.locked {
-  border-left: 1px solid rgba(232, 180, 90, 0.5);
-  margin: 0.75rem 0;
-  padding: 0.45rem 0.75rem;
-  color: var(--lamp-bright);
-  background: linear-gradient(90deg, rgba(232, 180, 90, 0.08), transparent 72%);
-  text-shadow: var(--lamp-glow);
+.choice .stroke {
+  flex: none;
+  width: 24px;
+  height: 12px;
+  overflow: visible;
+  align-self: center;
+}
+
+.choice .stroke path {
+  fill: none;
+  stroke: var(--mist-muted);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  transition: stroke 0.16s ease-out, stroke-width 0.16s ease-out;
+}
+
+.choice .stroke--dot {
+  width: 12px;
+}
+
+.choice .stroke--dot circle {
+  fill: none;
+  stroke: var(--mist-dim);
+  stroke-width: 1.4;
+}
+
+.choice .label {
+  position: relative;
+}
+
+.choice .label::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: var(--mist-bright);
+  opacity: 0.6;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 0.22s ease-out;
 }
 
 button.choice:hover,
@@ -60,12 +116,12 @@ button.choice:focus-visible {
   color: var(--mist-bright);
   text-shadow: 0 0 12px rgba(200, 218, 232, 0.25);
   outline: none;
+  transform: translateX(0.12rem);
 }
 
-button.choice.major:hover,
-button.choice.major:focus-visible {
-  color: var(--lamp-bright);
-  text-shadow: 0 0 14px rgba(255, 217, 143, 0.5);
+button.choice:hover .label::after,
+button.choice:focus-visible .label::after {
+  transform: scaleX(1);
 }
 
 button.choice:active {
@@ -77,9 +133,53 @@ button.choice:focus-visible {
   outline-offset: 4px;
 }
 
+/* the press: the pen goes over the line a second time */
+button.choice.inked {
+  color: var(--mist-bright);
+  text-shadow: 0.6px 0 0 rgba(237, 243, 248, 0.55);
+}
+
+button.choice.inked .stroke path {
+  stroke: var(--mist-bright);
+  stroke-width: 2.2;
+}
+
+button.choice.inked .label::after {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+.choices.committed button.choice:not(.inked) {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* Major choices are lamplit — the one warmth on the page. */
+button.choice.major,
+.choice.major.locked {
+  border-left: 2px solid rgba(232, 180, 90, 0.5);
+  margin-left: -16px;
+  padding-left: 14px;
+  color: var(--lamp-bright);
+  background: linear-gradient(90deg, rgba(232, 180, 90, 0.08), transparent 70%);
+  text-shadow: var(--lamp-glow);
+}
+
+button.choice.major .stroke path {
+  stroke: var(--lamp);
+}
+
+button.choice.major:hover,
+button.choice.major:focus-visible {
+  color: #fff0cf;
+  text-shadow: 0 0 14px rgba(255, 217, 143, 0.5);
+}
+
+button.choice.major .label::after {
+  background: var(--lamp-bright);
+}
+
 .choice.locked {
-  display: block;
-  padding: 0.45rem 0.65rem 0.45rem 0.15rem;
   color: var(--mist-dim);
   opacity: 0.6;
   cursor: default;
@@ -90,6 +190,29 @@ button.choice:focus-visible {
   text-shadow: none;
   background: linear-gradient(90deg, rgba(232, 180, 90, 0.04), transparent 72%);
   border-left-color: rgba(232, 180, 90, 0.22);
+}
+
+/* the number hint appears only once the keyboard has been used */
+.choice .num {
+  position: absolute;
+  left: -26px;
+  top: 0.75em;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0;
+  color: var(--mist-dim);
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+body[data-input='keyboard'] .choice .num {
+  opacity: 0.6;
+}
+
+@media (pointer: coarse) {
+  .choice .num {
+    display: none;
+  }
 }
 
 .ending-mark {
@@ -103,11 +226,4 @@ button.choice:focus-visible {
   margin: 0 0 1rem;
   font-style: italic;
   color: var(--mist-muted);
-}
-
-/* ---- choices: the ledger line leans toward you ---- */
-
-button.choice:hover,
-button.choice:focus-visible {
-  transform: translateX(0.12rem);
 }
