@@ -1,13 +1,17 @@
+import type { EngineEvent } from '@not-here/engine';
 import { describe, expect, it } from 'vitest';
 import {
   degradeMargin,
+  frameDoc,
   italic,
   renderChoices,
   renderEnding,
   renderHeader,
   renderParagraphs,
+  renderThreeTwelve,
   rotRateFor,
   stripAnsi,
+  threeTwelveKind,
   wrap,
 } from './render.ts';
 
@@ -34,10 +38,42 @@ describe('wrap', () => {
 });
 
 describe('renderHeader', () => {
-  it('right-aligns DAY N — SLOT at the wrap width', () => {
+  it('right-aligns the slot glyph and DAY N — SLOT at the wrap width', () => {
     const plain = stripAnsi(renderHeader(2, 'morning', 40));
     expect(plain).toHaveLength(40);
-    expect(plain.trimStart()).toBe('DAY 2 — MORNING');
+    expect(plain.trimStart()).toBe('○  DAY 2 — MORNING');
+  });
+
+  it('tones the line by slot — evening is the one warm header', () => {
+    expect(renderHeader(3, 'evening')).toContain('38;5;180');
+    expect(renderHeader(3, 'night')).toContain('38;5;67');
+    expect(renderHeader(3, 'morning')).not.toContain('38;5;180');
+  });
+
+  it('keeps an unknown slot plain and faint, without a glyph', () => {
+    expect(stripAnsi(renderHeader(3, 'dusk', 40)).trimStart()).toBe('DAY 3 — DUSK');
+  });
+});
+
+describe('the 3:12 line', () => {
+  const horn: EngineEvent = { kind: 'music.cue', cue: 'foghorn-312' };
+
+  it('is the horn when the step carries its cue', () => {
+    expect(threeTwelveKind('n1-312', 'night', {}, [horn])).toBe('horn');
+  });
+
+  it('is the silence on a night under the stop, and nothing otherwise', () => {
+    expect(threeTwelveKind('d9-night', 'night', { 'horn-stopped': true }, [])).toBe('silence');
+    expect(threeTwelveKind('d9-night-2', 'night', { 'horn-stopped': true }, [])).toBe('silence');
+    expect(threeTwelveKind('d9-night', 'night', {}, [])).toBeUndefined();
+    expect(threeTwelveKind('d9-morning', 'morning', { 'horn-stopped': true }, [])).toBeUndefined();
+  });
+
+  it('renders centred and faint, never naming a scene', () => {
+    const plain = stripAnsi(renderThreeTwelve('horn', 40));
+    expect(plain.trim()).toBe('— 3:12 —');
+    expect(plain.length - plain.trimStart().length).toBe(16);
+    expect(stripAnsi(renderThreeTwelve('silence')).trim()).toBe('— 3:12 — no horn —');
   });
 });
 
@@ -45,6 +81,36 @@ describe('renderParagraphs', () => {
   it('separates paragraphs with one blank line', () => {
     const out = stripAnsi(renderParagraphs(['one', 'two'], 40));
     expect(out).toBe('one\n\ntwo');
+  });
+
+  it('frames a plain document and indents it, verbatim inside', () => {
+    const out = stripAnsi(renderParagraphs(['@doc:\nMom —\n— W.'], 40));
+    expect(out.split('\n')).toEqual(['    ┌───────┐', '    │ Mom — │', '    │ — W.  │', '    └───────┘']);
+  });
+});
+
+describe('frameDoc', () => {
+  it('rules a plain document into a single box', () => {
+    const lines = frameDoc(['Mom —', '', 'I took the bus.', '— W.']);
+    const bar = '─'.repeat(17);
+    expect(lines[0]).toBe(`┌${bar}┐`);
+    expect(lines).toContain('│ I took the bus. │');
+    expect(lines).toContain('│                 │');
+    expect(lines.at(-1)).toBe(`└${bar}┘`);
+    expect(lines).toHaveLength(6);
+  });
+
+  it('leaves a drawn document exactly as authored', () => {
+    const drawn = ['┌──┐', '│ x│', '└──┘'];
+    expect(frameDoc(drawn)).toBe(drawn);
+    const double = ['  ╔══╗', '  ║ x║', '  ╚══╝'];
+    expect(frameDoc(double)).toBe(double);
+  });
+
+  it('never re-wraps: a document wider than the frame passes through', () => {
+    const wide = ['x'.repeat(66)];
+    expect(frameDoc(wide, 72)).toBe(wide);
+    expect(frameDoc(['x'.repeat(64)], 72)).toHaveLength(3);
   });
 });
 
@@ -74,6 +140,23 @@ describe('renderChoices', () => {
     const plain = stripAnsi(renderChoices(doubled).text);
     expect(plain).toContain('· Take one end of the tables.');
     expect(plain).not.toContain('· ·');
+  });
+
+  it('rots only the labels under STATIC — numbers and marks stay legible', () => {
+    const rot = { staticMeter: 60, seed: 7 };
+    const rotted = stripAnsi(renderChoices(choices, rot).text);
+    const clean = stripAnsi(renderChoices(choices).text);
+    expect(rotted).not.toBe(clean);
+    expect(rotted.split('\n').map((line) => line.slice(0, 6))).toEqual(
+      clean.split('\n').map((line) => line.slice(0, 6)),
+    );
+    expect(renderChoices(choices, rot).text).toBe(renderChoices(choices, rot).text);
+  });
+
+  it('leaves the labels alone below the hissing tier', () => {
+    expect(renderChoices(choices, { staticMeter: 29, seed: 7 }).text).toBe(
+      renderChoices(choices).text,
+    );
   });
 
   it('marks major-stakes choices more prominently', () => {
