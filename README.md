@@ -55,6 +55,22 @@ Audio is generated locally from authored score data, without an API key. When `f
 | apps/web | Illustrated reader, documents, independent sound buses, original UI compatibility |
 | apps/cli | Shared story, prose artifacts and terminal save/rewind |
 
+## Publish on Vercel
+
+Play the published game at [not-here-omega.vercel.app](https://not-here-omega.vercel.app).
+
+The `not-here` Vercel project builds from the repository root. `vercel.json` runs `pnpm build` and publishes `apps/web/dist`, including the artwork, review room and generated soundtrack. No application environment variables or backend services are required.
+
+For a production deployment with compact AAC audio, install `ffmpeg` locally, then run these commands from the repository root:
+
+```sh
+vercel pull --yes --environment=production
+vercel build --prod
+vercel deploy --prebuilt --prod
+```
+
+GitHub builds regenerate the soundtrack too; environments without `ffmpeg` serve the WAV fallbacks.
+
 Design spoilers: [canon](design/game-bible.md), [clue table](design/twist-recontext-table.md), [asset provenance and final prompts](design/asset-provenance.md). Earlier design decisions are retained as original-edition history.
 
 Content: grief, memory loss, family estrangement and voluntary self-dissolution.

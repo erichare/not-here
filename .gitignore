@@ -9,3 +9,4 @@ auditions/*.m4a
 .saves/
 .env
 .env.local
+.vercel
