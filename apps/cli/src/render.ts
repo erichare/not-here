@@ -228,10 +228,11 @@ const ENDING_LABELS: Readonly<Record<string, string>> = {
 };
 
 const DEFAULT_ENDING_LABEL = 'the ledger closes here';
+const REVISED_ENDING_LABELS: Readonly<Record<string, string>> = { 'two-wrens': 'Two Wrens', 'sixth-bar': 'The Sixth Bar', stranger: 'The Stranger', 'long-winter': 'The Long Winter', 'wren-again': 'Wren, Again', unwitnessed: 'Unwitnessed' };
 
 /** Centered, emphasized ending card. */
 export const renderEnding = (endingId: string, width: number = WRAP_WIDTH): string => {
-  const label = `— ${ENDING_LABELS[endingId] ?? DEFAULT_ENDING_LABEL} —`;
+  const label = `— ${REVISED_ENDING_LABELS[endingId] ?? ENDING_LABELS[endingId] ?? DEFAULT_ENDING_LABEL} —`;
   const pad = Math.max(0, Math.floor((width - label.length) / 2));
   return `\n${' '.repeat(pad)}${emphasis(label)}\n`;
 };

@@ -32,6 +32,7 @@ import {
 import { dim, italic } from './render.ts';
 
 export interface AudioSinkOptions {
+  readonly edition?: 'original' | 'revised';
   /** Never spawn a player; the '♪ <caption>' line still prints. */
   readonly silent?: boolean;
 }
@@ -110,7 +111,7 @@ export const createAudioSink = (
   const startLayer = (id: Act3LayerId): void => {
     if (layers.has(id)) return;
     if (options.silent === true) return;
-    const file = join(auditionsDir, `act3-ensemble-${id}.wav`);
+    const file = join(auditionsDir, `${options.edition === 'revised' ? 'v2-ensemble' : 'act3-ensemble'}-${id}.wav`);
     if (!existsSync(file)) return;
     const gain = ACT3_ENSEMBLE_LAYER_GAINS[id];
     try {
@@ -183,6 +184,13 @@ export const createAudioSink = (
       }
       if (event.kind === 'music.chord') {
         applyChord(event.fragments);
+        return [];
+      }
+      if (event.kind === 'music.fragments') {
+        const wanted = new Set<Act3LayerId>(ACT3_FRAGMENT_ORDER.filter(id => event.characters.includes(id)));
+        if (wanted.size) { stop(); wanted.add('sea'); }
+        for (const id of wanted) startLayer(id);
+        for (const id of [...layers.keys()]) if (!wanted.has(id)) killLayer(id);
         return [];
       }
       if (event.kind === 'tell.visual') return [italic(event.text)];

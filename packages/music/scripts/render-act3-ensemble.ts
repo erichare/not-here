@@ -76,6 +76,10 @@ const write = (song: Song, buffer: StereoBuffer): void => {
 // 1. Per-layer loops.
 for (const layer of ACT3_ENSEMBLE_LAYERS) {
   write(layer, toLoop(renderSong(layer, SAMPLE_RATE)));
+  if (!layer.id.endsWith('-sea')) {
+    const lowered: Song = { ...layer, id: `${layer.id}-lowered`, patterns: layer.patterns.map(p => ({ ...p, notes: p.notes.map(n => ({ ...n, detune: (n.detune ?? 0) - 50 })) })) };
+    write(lowered, toLoop(renderSong(lowered, SAMPLE_RATE)));
+  }
 }
 
 // 2. The full chord-6 mix as a loop.

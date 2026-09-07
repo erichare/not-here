@@ -1,0 +1,45 @@
+{
+  "mode": "built-in image_gen",
+  "assets": [
+    {
+      "id": "memory-loss",
+      "folder": "scenes",
+      "references": [
+        "/Users/erichare/GitHub/not-here/assets/locations/general.png"
+      ],
+      "prompt": "Use case: illustration-story. Asset type: reusable location painting for the intimate browser mystery NOT HERE. Input images are STYLE and WORLD references only, not edit targets. Match the approved paintings’ hand-painted oil and gouache texture, weathered surfaces, cold blue-grey Okanagan Lake and orchard geometry against inhabited amber interiors. Landscape 16:9, a complete uninterrupted painting, no borders, no lettering, no UI, no watermark. Keep important scene information in the middle 60% so it survives a narrow crop. Quiet, specific and lived in; tenderness with unease. Late November in a small inland British Columbia town. Avoid glossy concept art, fantasy architecture, generic horror, heavy bloom, and legible invented evidence.\nPrimary request: A new intimate detail composition inside the referenced General bedroom at the first memory theft. In the foreground the faded patchwork quilt with one unmistakable blue dress-fabric square; an older woman’s single hand with a plain grey cardigan cuff rests beside that square, no longer tracing its stitching. Soft window light, bed and empty corkboard dissolve into brushed background. Keep the actual blue square intact: the person has lost a lived memory, not the cloth. No second hand, no protagonist, no supernatural glow or disappearing objects, no blood or distress spectacle. Show the loss through stillness and abandoned attention. Central quilt and single hand for a narrow crop."
+    },
+    {
+      "id": "letter",
+      "folder": "scenes",
+      "references": [
+        "/Users/erichare/GitHub/not-here/assets/locations/kettle.png"
+      ],
+      "prompt": "Use case: illustration-story. Asset type: reusable location painting for the intimate browser mystery NOT HERE. Input images are STYLE and WORLD references only, not edit targets. Match the approved paintings’ hand-painted oil and gouache texture, weathered surfaces, cold blue-grey Okanagan Lake and orchard geometry against inhabited amber interiors. Landscape 16:9, a complete uninterrupted painting, no borders, no lettering, no UI, no watermark. Keep important scene information in the middle 60% so it survives a narrow crop. Quiet, specific and lived in; tenderness with unease. Late November in a small inland British Columbia town. Avoid glossy concept art, fantasy architecture, generic horror, heavy bloom, and legible invented evidence.\nPrimary request: A close painting of an open till drawer behind the General store’s worn wooden counter. Two separate cream handwritten letters, one older folded page with its envelope, one recent unfinished unsent reply, visible in the drawer beside a pencil and ordinary till supplies. Ink is painterly and indistinct; all exact words and dates will be provided as accessible HTML outside the painting. Warm morning side light and cool street light; milk bottles softly visible in background. The emotional clue is two pages with different histories, not a magical object. No people, no readable generated sentences, no letterhead logos. Detailed worn paper folds and ordinary domestic tenderness. Keep both pages in the central half."
+    },
+    {
+      "id": "potluck",
+      "folder": "scenes",
+      "references": [
+        "/Users/erichare/GitHub/not-here/assets/locations/hall.png"
+      ],
+      "prompt": "Use case: illustration-story. Asset type: reusable location painting for the intimate browser mystery NOT HERE. Input images are STYLE and WORLD references only, not edit targets. Match the approved paintings’ hand-painted oil and gouache texture, weathered surfaces, cold blue-grey Okanagan Lake and orchard geometry against inhabited amber interiors. Landscape 16:9, a complete uninterrupted painting, no borders, no lettering, no UI, no watermark. Keep important scene information in the middle 60% so it survives a narrow crop. Quiet, specific and lived in; tenderness with unease. Late November in a small inland British Columbia town. Avoid glossy concept art, fantasy architecture, generic horror, heavy bloom, and legible invented evidence.\nPrimary request: The exact referenced community hall now in use for a memorial potluck. Keep its low ceiling, tall orchard-facing windows on the left, upright piano on the far wall and amber serving hatch. Trestle tables now hold mismatched covered casseroles, serving spoons, folded dishcloths, mugs; about eight ordinary adults sit farther back in soft paint, seen chiefly in profile or from behind, with varied age and clothing. A foreground chair and place setting wait without identifying the protagonist. No one touching anyone. Ordinary conversation has briefly paused; warmth with social unease, not a funeral spectacle. No memorial portrait or readable signs, no candles as the main subject. Clear central table with dishes; preserve the room’s architecture."
+    },
+    {
+      "id": "arrival",
+      "folder": "scenes",
+      "references": [
+        "/Users/erichare/GitHub/not-here/assets/locations/shelter.png"
+      ],
+      "prompt": "Use case: illustration-story. Asset type: reusable location painting for the intimate browser mystery NOT HERE. Input images are STYLE and WORLD references only, not edit targets. Match the approved paintings’ hand-painted oil and gouache texture, weathered surfaces, cold blue-grey Okanagan Lake and orchard geometry against inhabited amber interiors. Landscape 16:9, a complete uninterrupted painting, no borders, no lettering, no UI, no watermark. Keep important scene information in the middle 60% so it survives a narrow crop. Quiet, specific and lived in; tenderness with unease. Late November in a small inland British Columbia town. Avoid glossy concept art, fantasy architecture, generic horror, heavy bloom, and legible invented evidence.\nPrimary request: The referenced Lorn Bay bus shelter on the morning of November 28. Preserve its timber/glass shelter, orchard slope and inland lake, but a modest intercity bus has now pulled in, front door open at the right, warm light down its steps. In the center foreground stand a weathered canvas holdall and an acoustic guitar hard case with one catch visibly fastened with tape. A traveller’s boot and lower trouser hem may be visible by the bags; do not show her face or body above the knee. No protagonist, no touching or hugging, no crowd, no readable bus destination. Cold morning mist with the warm step light. Arrival made concrete through luggage and a bus that will leave again."
+    },
+    {
+      "id": "wren",
+      "folder": "portraits",
+      "references": [
+        "/Users/erichare/GitHub/not-here/assets/locations/kettle.png"
+      ],
+      "prompt": "Use case: illustration-story. Asset type: definitive recurring character portrait for NOT HERE, first revealed at her physical arrival. New portrait, not an edit. The input is a palette and world reference only. Portray Wren Cole as a specific ordinary adult woman in her late twenties, short dark brown hair tucked behind one ear, level direct gaze, tired from travel but alert and self-possessed, faintly asymmetrical mouth, practical dark olive raincoat over a faded rust sweater, canvas bag strap over one shoulder. Three-quarter bust, no hands in frame. Fine irregular charcoal-grey pen lines with restrained grey/umber ink wash on plain warm ivory paper, visible paper grain and soft unfinished edges, elegant readable face at small size, no ornate frame. Portrait 4:5. She is a working instrument repairer with a life elsewhere, no glamorous styling, no supernatural aura, no weeping victim pose, no smile promising forgiveness. No lettering, no logos, no likeness to a real person. Do not portray the protagonist. One character, one portrait only."
+    }
+  ]
+}

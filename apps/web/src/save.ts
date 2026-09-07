@@ -16,10 +16,10 @@ import {
   type StoryContent,
   type WorldState,
 } from '@not-here/engine';
-import { TRANSCRIPT_KEY } from './model/transcript.ts';
 
-export const SAVE_KEY = 'not-here:slot1';
-export const MARGIN_KEY = 'not-here:slot1:margin';
+export const LEGACY_SAVE_KEY = 'not-here:slot1';
+export const SAVE_KEY = 'not-here:story2:slot1';
+export const MARGIN_KEY = 'not-here:story2:slot1:margin';
 
 /** The subset of the DOM Storage interface we rely on. */
 export interface SaveStorage {
@@ -32,7 +32,7 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
 
 /** Structural check on the untrusted parse — enough to render and advance. */
-const isWorldState = (value: unknown): value is WorldState => {
+export const isWorldState = (value: unknown): value is WorldState => {
   if (!isRecord(value)) return false;
   return (
     value['v'] === SAVE_SCHEMA_VERSION &&
@@ -80,8 +80,7 @@ export const clearSave = (storage: SaveStorage): void => {
   try {
     storage.removeItem(SAVE_KEY);
     storage.removeItem(MARGIN_KEY);
-    // The ledger-so-far belongs to the run; the lamp's settings do not.
-    storage.removeItem(TRANSCRIPT_KEY);
+    // Original-edition transcript and settings belong to its preserved run.
   } catch {
     // Nothing to clear if storage itself is gone.
   }

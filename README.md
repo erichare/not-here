@@ -1,127 +1,60 @@
-<div align="center">
-
 # NOT HERE
 
-*Seven years after you drowned, you walk back into the town that never stopped grieving you.*
+*A town has kept a place for someone. You arrive before she does.*
 
-<img src="docs/screenshots/title.jpg" alt="The title screen: the lit window standing on the shore below the old wharf, the breakwater light's beam crossing the fog, beneath the words NOT HERE" width="820">
+An intimate illustrated mystery about being loved as someone you are not. Lorn Bay, Okanagan Lake, November 6–28. A deterministic TypeScript story shared by browser and terminal.
 
-**A branching narrative mystery.** Lorn Bay, Okanagan Valley, British Columbia — present day, early November.
-Playable in the browser and in the terminal, from one shared engine.
+![The Kettle, the approved visual direction](assets/locations/kettle.png)
 
-</div>
+## The revised edition
 
----
+The revised story is playable from the beach through all seven endings. It includes an earlier letter discovery, a present-day exchange with Wren through Sam, a chosen name, optional preparations for arrival, and explicit ending decisions. An honest route can reach hope without any confession. Memory theft retains its cost.
 
-## The premise
+All nine locations have painted compositions. The quilt loss, potluck, letters and bus arrival receive distinct staging; Wren’s ink portrait is withheld until arrival. A changed Kettle reflects work arranged under your own name. The reader includes inspectable evidence, a notebook, town map, recent pages and separate sound controls. Prose appears immediately by default. Acoustic arrangements now span the later story and endings, with exact confession identities and designed environmental sounds. Silent play includes every clue.
 
-You wake on the gravel beach below the old ferry wharf, soaked through — except there is no lake smell on you, no milfoil in your cuffs, and your hair is dry at the roots. The town takes you in like a miracle: a meal, a room, a name. Nobody asks who you are. Nobody ever touches you first.
+**Production status:** the creator approved the sample on September 7, and its art and music have been expanded. Open `/art-review.html` for the paintings and listening room; major scenes and endings sit behind spoiler disclosures. The music and environmental Foley are synthesized, not recorded performances. Voice recording, further character pose design, human listening, blind story playtests and actual screen-reader testing remain acceptance work. See [delivery and review](design/immersion-delivery.md).
 
-Every night at 3:12 AM, the horn on the old wharf plays five bars of a song you know in your bones — and stops where a sixth bar should begin. You could hum every note of the five. The sixth is a smooth blank, like the face of a worn coin.
-
-You have twenty-three days. There is a date on the corkboard, ringed twice in blue pen, pressed through to the cork.
-
-<div align="center">
-<img src="docs/screenshots/arrival.jpg" alt="The arrival on the gravel beach, second-person prose with choices as ledger lines" width="820">
-</div>
-
-## The score is the mystery
-
-The entire soundtrack derives from one broken six-bar melody — **"The Foghorn Song"** — whose sixth bar is a rest. Each of the six townspeople owns a fragment of it: a music-box lullaby, the horn's falling third, a turn figure remembered deliberately wrong, a run whistled too fast, chords with no melody at all, a rhythm with no pitch. The game is, musically, the act of reassembling the song — and the music is mechanical: characters' instruments sour a quarter-tone when they lie, scenes you missed leave their motifs faint and detuned under the evening, and one scene has no music at all, on purpose.
-
-Music is text here: every cue is note-data (`packages/music/scores/`) rendered by one synth engine — in the browser, in the terminal, and offline to WAV for auditioning. Every audio tell has a first-class visual twin, so the game is fully playable in silence.
-
-## The town remembers
-
-There is no reputation bar. There is a fact ledger: what happened, who saw it, who has been told since. Gossip moves along real edges overnight — say something to Tam on the morning run and Barb may know it by supper, and she will tell you who told her. Characters quote your own words back to you days later. Some things you can take from people are not returned.
-
-Where you *aren't* matters as much as where you are. Each morning offers more scenes than you can attend; the ones you miss still happen, and come back that evening as secondhand retellings — warm, biased, and occasionally wrong in ways worth noticing.
-
-## The town, staged
-
-Every scene plays on a stage drawn in light — CSS and inline SVG, no images anywhere: the wharf and its horn, the Kettle's one lamp over the counter, the fog that never quite lifts. Whoever is in the room is sketched in the margin and fades as their trust does; the strip above keeps the day, the hill, and a snowline falling toward November 28. The page is the same page on a phone.
-
-<div align="center">
-<img src="docs/screenshots/wharf.jpg" alt="Day 4 on the old ferry wharf: Wade Pike sketched in the margin, the breakwater light's beam crossing the fog behind the reading column" width="820">
-<img src="docs/screenshots/kettle.jpg" alt="The Kettle at evening: Barb sketched in the margin, the window and the counter, her confession in the prose" width="820">
-</div>
-
-<div align="center">
-<img src="docs/screenshots/title-phone.jpg" alt="The title on a phone: the lit window on the shore, the wharf behind" width="300"> <img src="docs/screenshots/wharf-phone.jpg" alt="Day 4 on the wharf on a phone: the day strip, the sketch above the entry, the three ledger affordances in a bar at the thumb" width="300">
-</div>
-
-## Barb's book
-
-Your character sheet is a book a woman keeps by the till, and consulting it is asking to see what she's written about you. Her observations move as you change — no numbers, anywhere, ever. The NAME column of your register line stays blank. She's waiting to see what she'll get to write.
-
-<div align="center">
-<img src="docs/screenshots/barbs-book.jpg" alt="Barb's Book: a paper page under the lamp, over the dimmed scene — the register with a blank NAME column, observations in her hand, your interview answers verbatim" width="820">
-</div>
-
-## Documents render as documents
-
-Letters, schedules, chord sheets, and register pages appear as artifacts, not descriptions. Some of them are clues. All of them are on screen longer than you think.
-
-<div align="center">
-<img src="docs/screenshots/timetable.jpg" alt="The EBUS winter schedule card as a paper object pinned in the prose, one Friday ringed twice in blue pen" width="820">
-</div>
-
-## The cast
-
-Six people, drawn in the margins of the book. One page is an empty frame.
-
-<div align="center">
-<img src="assets/sketches/dianne.svg" alt="Dianne Cole" width="130"> <img src="assets/sketches/barb.svg" alt="Barb Kettle" width="130"> <img src="assets/sketches/wade.svg" alt="Wade Pike" width="130"> <img src="assets/sketches/sam.svg" alt="Sam Cole" width="130"> <img src="assets/sketches/priya.svg" alt="Dr. Priya Anand" width="130"> <img src="assets/sketches/tam.svg" alt="Tam Osei" width="130"> <img src="assets/sketches/wren.svg" alt="Wren Cole — where a face would begin" width="130">
-</div>
-
-## Playing
+## Play
 
 ```sh
 pnpm install
-
-# Browser — the full experience: adaptive score, the lit window, Barb's book
+pnpm render:audio
 pnpm --filter @not-here/app-web dev
-# then open http://localhost:5173 and click the window
+# Open http://localhost:5173
 
-# Terminal — the same town heard through a thinner wall
 node apps/cli/src/main.ts
-#   a number chooses · l consults the ledger · q quits
+# Number chooses; o# observes; n notebook; h recent pages;
+# m opportunities; l Barb's book; q quits. NH_SILENT=1 disables audio.
 ```
 
-Both builds run the same engine and read the same story. **Act 1 is playable now** — Night 1 through the Foghorn Choice, seven days, two hard branches out. Acts 2 and 3 (the memorial potluck, the letter, six confessions, and seven endings) are in active development.
+The opening review route follows the beach, the Kettle, Barb’s questions and the General’s upstairs room on Day 3. Try both sides of the quilt decision. Inspecting a cup or a timetable does not consume a visit. Choosing an activity does.
 
-## Under the hood
+## Preserved original edition and saves
 
-```
-packages/engine   pure deterministic core — advance(state, input) → {state', view, events}
-packages/memory   witnessed-facts ledger, derived relationship axes, salience dialogue, gossip
-packages/music    score-as-data: note-event JSON → one chiptune-folk synth, three render targets
-packages/story    the authored scenes, dialogue rules, and Barb's book model
-packages/ai       (in progress) limited LLM touchpoints — classification only, never authorship,
-                  with complete deterministic fallbacks: the no-key game is the whole game
-apps/web          Vite, vanilla TS, zero frameworks — a procedural stage behind a reading column, the
-                  day strip, paper documents, margin sketches, typewriter prose; the lamp (settings) and
-                  the ledger so far (history) as sheets
-apps/cli          zero-dependency ANSI terminal build — slot-toned header, ruled documents, the 3:12 line
-```
+Open `?edition=original` in the browser, or run `NH_EDITION=original node apps/cli/src/main.ts`. The original story and UI are preserved.
 
-Every ending, clue, and consequence is authored and deterministic. The story graph is tested mechanically: reachability of every ending, scripted golden-path walkthroughs, and a lint that enforces the game's own rules of prose — including some this README is careful not to explain.
+The original browser key `not-here:slot1` and original CLI `.saves/slot1.json` are untouched by revised runs. The revised browser uses `not-here:story2:*`; the CLI uses `.saves/story2/`. The revised title offers export of an existing original browser save. Original paths cannot be migrated into the revised story; begin a clearly separate run. Reading and volume preferences persist independently.
+
+## Develop and verify
 
 ```sh
-pnpm typecheck && pnpm exec vitest run   # 1077 tests
-node packages/music/scripts/render-audition.ts   # render the score to auditions/*.wav
-node apps/web/scripts/capture.mjs                # refresh docs/screenshots from a running dev server
+pnpm typecheck
+pnpm exec vitest run
+pnpm story:metrics
+pnpm build                 # reproduces audio, then builds the browser
 ```
 
-Design documents live in [`design/`](design/) — start with the [game bible](design/game-bible.md). *(Spoilers, obviously.)*
+Audio is generated locally from authored score data, without an API key. When `ffmpeg` is installed, rendering also writes compact AAC copies of revised cues; WAV fallback remains available and synchronized ensemble stems remain lossless. Development still works without rendered audio and supplies captions for missing cues. Builds include audio on demand; the browser does not preload the entire soundtrack.
 
----
+| Package | Responsibility |
+| --- | --- |
+| packages/engine | Pure scene interpreter, facts, observations, names and presentation types |
+| packages/story | Original content plus explicit edition-2 revisions and ending routes |
+| packages/memory | Witness, salience, gossip and relationships |
+| packages/music | Score data, synthesis, captions and reproducible WAV rendering |
+| apps/web | Illustrated reader, documents, independent sound buses, original UI compatibility |
+| apps/cli | Shared story, prose artifacts and terminal save/rewind |
 
-<div align="center">
+Design spoilers: [canon](design/game-bible.md), [clue table](design/twist-recontext-table.md), [asset provenance and final prompts](design/asset-provenance.md). Earlier design decisions are retained as original-edition history.
 
-**Content note:** grief, memory loss, death of a sibling, ambiguous self-dissolution.
-
-*The horn will play again tomorrow at 3:12. Five bars, then the stop.*
-*Somebody, somewhere, knows the sixth.*
-
-</div>
+Content: grief, memory loss, family estrangement and voluntary self-dissolution.

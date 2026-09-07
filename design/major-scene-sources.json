@@ -1,0 +1,27 @@
+[
+  {
+    "id": "memory-loss",
+    "source": "/Users/erichare/.codex/generated_images/01a07a15-429c-7a11-8f1e-8c0299b9b057/exec-2d0dce73-aba7-4e2e-9cc6-809723043423.png",
+    "workspace": "assets/scenes/memory-loss.png"
+  },
+  {
+    "id": "letter",
+    "source": "/Users/erichare/.codex/generated_images/01a07a15-429c-7a11-8f1e-8c0299b9b057/exec-6666c416-4e1a-4c92-bb3d-c88d9cb839d2.png",
+    "workspace": "assets/scenes/letter.png"
+  },
+  {
+    "id": "potluck",
+    "source": "/Users/erichare/.codex/generated_images/01a07a15-429c-7a11-8f1e-8c0299b9b057/exec-1e7c58c7-2bdf-4b52-9166-5bd289996374.png",
+    "workspace": "assets/scenes/potluck.png"
+  },
+  {
+    "id": "arrival",
+    "source": "/Users/erichare/.codex/generated_images/01a07a15-429c-7a11-8f1e-8c0299b9b057/exec-2184ea51-1bd3-4c15-96ef-b4dfbef70897.png",
+    "workspace": "assets/scenes/arrival.png"
+  },
+  {
+    "id": "wren",
+    "source": "/Users/erichare/.codex/generated_images/01a07a15-429c-7a11-8f1e-8c0299b9b057/exec-d1888d31-2f6e-4161-88f2-6a6aeccaa4a9.png",
+    "workspace": "assets/portraits/wren.png"
+  }
+]

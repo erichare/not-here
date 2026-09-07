@@ -1,5 +1,5 @@
 /**
- * End-to-end run of the terminal build with piped input (NH_SILENT). These
+ * Legacy-edition end-to-end run of the terminal build with piped input (NH_SILENT). These
  * assert presentation invariants that only exist at the main-loop level:
  * the ledger hint prints exactly once (fix-04), no internal identifier
  * ever reaches the screen (fix-07), act boundaries hold the save
@@ -34,7 +34,7 @@ const play = (inputs: readonly string[]): string => {
   const out = execFileSync('node', [MAIN], {
     input: `${inputs.join('\n')}\n`,
     cwd,
-    env: { ...process.env, NH_SILENT: '1', NH_SEED: '1971' },
+    env: { ...process.env, NH_SILENT: '1', NH_SEED: '1971', NH_EDITION: 'original' },
     encoding: 'utf8',
   });
   return stripAnsi(out);

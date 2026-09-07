@@ -5,8 +5,8 @@
  * same engine in the browser (AudioContext), the terminal (node-web-audio-api
  * or offline WAV), and the audition loop (offline WAV).
  *
- * Instrument spec is FROZEN per design/decisions.md:
- * pulse, triangle, noise, 2-op FM — plus envelopes, vibrato, echo send.
+ * Original arrangements retain pulse, triangle, noise and 2-op FM. The revised
+ * edition adds damped acoustic modes alongside envelopes, vibrato and echo.
  */
 
 /** ADSR envelope, times in seconds, sustain as 0..1 level. */
@@ -57,7 +57,16 @@ export interface FmInstrument {
   readonly vibrato?: Vibrato;
 }
 
+/** Damped modal instruments for the acoustic audition; generated, not sampled performances. */
+export interface AcousticInstrument {
+  readonly kind: 'acoustic';
+  readonly voice: 'guitar' | 'piano';
+  readonly env: Envelope;
+  readonly vibrato?: Vibrato;
+}
+
 export type Instrument =
+  | AcousticInstrument
   | PulseInstrument
   | TriangleInstrument
   | NoiseInstrument

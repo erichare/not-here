@@ -1,0 +1,114 @@
+/* Story edition 2: paintings are places; the reading surface remains quiet. */
+body { background: #111819; color: #deded2; }
+body::before, body::after, html::before { display: none; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+button, input { font: inherit; }
+button { cursor: pointer; }
+button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid #e5c080; outline-offset: 5px; }
+[hidden] { display: none !important; }
+.experience-header { height: 72px; padding: 0 4vw; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #b8b8a126; gap: 24px; background: #101718; }
+.experience-brand { font-size: 13px; letter-spacing: .4em; white-space: nowrap; }
+.experience-tools { display: flex; gap: 24px; }
+.experience-tools button, .quiet-button { border: 0; background: transparent; color: #b4b8ac; font-size: 14px; padding: 10px 0; }
+.experience-tools button:hover, .quiet-button:hover { color: #f4d4a0; }
+.experience-page.page { max-width: none; padding: 0; display: grid; grid-template-columns: minmax(320px, 46%) 1fr; align-items: start; }
+.scene-visual { position: sticky; top: 0; height: calc(100vh - 72px); min-height: 540px; overflow: hidden; background: #263135; }
+.location-painting { width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
+.scene-visual::after { content: ''; position: absolute; inset: 0; background: linear-gradient(transparent 40%, #091314ed 100%); pointer-events: none; }
+.place-caption { position: absolute; z-index: 1; bottom: 46px; left: 9%; right: 10%; }
+.eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; color: #a9b5af; text-transform: uppercase; }
+.place-caption h1 { font-size: clamp(30px, 3.2vw, 48px); font-weight: 400; line-height: 1.1; margin: 16px 0; color: #f0eadb; }
+.place-caption p:last-child { font-size: 15px; line-height: 1.6; color: #c5cabb; max-width: 36ch; }
+.scene-reading { padding: 52px clamp(28px, 5vw, 90px) 100px; font-size: var(--reading-size, 18px); line-height: 1.85; }
+.reading-header { font-family: var(--mono); text-transform: uppercase; font-size: 10px; letter-spacing: .18em; color: #aaa992; margin-bottom: 30px; }
+.scene-prose p { margin: 0 0 1.25em; }
+.resident-portrait { float: right; width: 94px; height: 118px; margin: -12px -16px 14px 22px; color: #b5b4a2; }
+.resident-portrait svg { width: 100%; height: 100%; }
+.wren-portrait { object-fit: cover; border-radius: 2px; }
+.art-description { margin: 40px; max-width: 34ch; color: #c7d0c6; }
+.scene-visual[data-light=night] .location-painting { filter: brightness(.82) saturate(.82); }
+.scene-visual[data-light=morning] .location-painting { filter: brightness(1.08); }
+.scene-visual[data-light=evening] .location-painting { filter: sepia(.09) brightness(.93); }
+.story-choices { clear: both; border-top: 1px solid #b8b8a133; margin-top: 30px; padding-top: 18px; }
+.story-choice { display: block; text-align: left; border: 1px solid transparent; width: 100%; background: none; color: #dadbcf; padding: 14px 14px 14px 0; line-height: 1.6; font-size: .92em; }
+.story-choice::before { content: '— '; color: #bdab87; }
+.story-choice:hover { color: #f4d4a0; background: #d4be8f09; }
+.story-choice.major { color: #e8c99c; }
+.story-choice:disabled { opacity: .48; cursor: default; }
+.observations { padding: 22px 0 8px; clear: both; }
+.observe-button { display: inline-block; color: #c4cbbd; border: 1px solid #8b9d8f55; border-radius: 3px; padding: 7px 11px; margin: 8px 8px 0 0; font-size: 13px; background: #98a98e08; }
+.evidence-paper { background: #dfd4b5; color: #34382f; padding: 24px; margin: 28px 0; border: 1px solid #c4b897; box-shadow: 0 10px 28px #0004; transform: rotate(-.25deg); }
+.evidence-paper figcaption { text-transform: uppercase; font-family: var(--mono); font-size: 10px; letter-spacing: .2em; padding-bottom: 14px; border-bottom: 1px solid #7775; margin-bottom: 20px; }
+.evidence-paper pre { font-family: var(--mono); font-size: 12px; line-height: 1.8; white-space: pre-wrap; overflow-wrap: anywhere; }
+.evidence-paper summary { font-size: 12px; margin-top: 16px; cursor: pointer; }
+.document-transcript { white-space: pre-wrap; font-size: 15px; }
+.name-form { display: grid; gap: 12px; padding: 24px 0; }
+.name-form input { background: #d5d1b80d; color: #f0e8d6; border: 1px solid #b8b8a166; border-radius: 2px; padding: 12px; }
+.name-form button, .begin-button { color: #161d1c; background: #dfc795; border: 0; padding: 14px 24px; }
+.reading-dialog { margin: auto; background: #e5dfcc; color: #2b3833; border: 1px solid #ada88d; padding: 34px; width: min(660px, calc(100% - 32px)); max-height: 85vh; overflow: auto; font-size: 17px; }
+.reading-dialog::backdrop { background: #020a0bc9; backdrop-filter: blur(4px); }
+.reading-dialog h2 { font-size: 30px; font-weight: 400; margin: 16px 0 30px; }
+.reading-dialog h3 { margin: 28px 0 12px; font-size: 18px; }
+.reading-dialog h4 { margin: 20px 0 6px; }
+.reading-dialog p { margin-bottom: 16px; }
+.dialog-close { float: right; }
+.reading-dialog button { background: none; border: 1px solid #65796e88; color: #283c32; padding: 8px 12px; border-radius: 2px; }
+.muted { color: #5a695e; font-size: 14px; }
+.setting { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin: 22px 0; }
+.setting input[type=range] { width: 55%; accent-color: #4f7060; }
+.history-page { border-bottom: 1px solid #69735a44; padding: 14px 0; }
+.history-page summary { cursor: pointer; margin-bottom: 12px; }
+.town-map { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 20px 0; border-bottom: 18px solid #6b8b95; }
+.map-place { min-height: 90px; display: flex; flex-direction: column; justify-content: center; text-align: center; padding: 8px; font-size: 13px; border: 1px solid #70846e55; background: #9bad8e22; }
+.map-place.current { border: 2px solid #607659; background: #b7c3a688; }
+.map-place span { font-size: 11px; }
+.map-opportunity { display: block; width: 100%; margin: 8px 0; text-align: left; }
+.experience-title.page { max-width: none; padding: 0; min-height: calc(100vh - 72px); display: grid; place-items: center; background: linear-gradient(90deg, #081113d9, #0915186b), url('/art/shore.jpg') center/cover; }
+.title-invitation { width: min(580px, 85vw); padding: 60px 0; }
+.title-invitation h1 { font-size: clamp(50px, 7vw, 90px); font-weight: 400; letter-spacing: .12em; line-height: 1.15; margin: 22px 0; color: #eee9da; }
+.title-description { white-space: pre-line; font-size: 22px; line-height: 1.5; color: #ced6cc; margin-bottom: 34px; }
+.title-invitation .quiet-button { display: block; margin-top: 10px; }
+.content-note, .legacy-note { max-width: 48ch; color: #b8c3b9; font-size: 12px; margin-top: 34px; line-height: 1.7; }
+.book-consult { bottom: 18px; right: 22px; background: #1a2524ef; padding: 10px 14px; border: 1px solid #d8bd8155; }
+.location-window { position: absolute; width: 30%; height: 38%; top: 22%; left: 35%; border: 12px solid #26302b; background: linear-gradient(#3d5963, #aebbae55); box-shadow: 0 0 100px #aeb9a333; }
+.location-window::after { content: ''; position: absolute; width: 8px; left: 50%; height: 100%; background: #26302b; }
+.scene-visual[data-location=wharf], .scene-visual[data-location=shelter], .scene-visual[data-location=boathouse] { background: linear-gradient(#46585d, #142a31 60%, #112026); }
+.scene-visual[data-location=wharf] .location-window, .scene-visual[data-location=shelter] .location-window { top: 60%; height: 5%; width: 65%; left: 20%; transform: rotate(-12deg); background: #423e33; border: 0; }
+.reveal-button { border: 0; background: none; color: #c8b38e; font-size: 13px; padding: 8px 0 18px; }
+.ending-caption { font-style: italic; color: #b5b7aa; }
+.reduce-motion *, .reduce-motion *::before, .reduce-motion *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+@media (max-width: 800px) {
+  .experience-header { height: auto; min-height: 66px; padding: 16px 22px; align-items: flex-start; flex-direction: column; gap: 8px; }
+  .experience-tools { gap: 18px; width: 100%; flex-wrap: wrap; }
+  .experience-tools button { font-size: 12px; padding: 4px 0; }
+  .experience-page.page { display: block; }
+  .scene-visual { position: relative; height: 280px; min-height: 0; }
+  .place-caption { bottom: 24px; left: 26px; }
+  .place-caption h1 { font-size: 32px; margin: 10px 0; }
+  .place-caption p:last-child { font-size: 13px; max-width: 48ch; }
+  .scene-reading { padding: 28px 26px 100px; }
+  .reading-header { margin-bottom: 24px; }
+  .evidence-paper { padding: 18px 12px; }
+  .evidence-paper pre { font-size: 11px; }
+  .resident-portrait { width: 75px; height: 95px; margin-right: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .resident-portrait, .location-painting { display: block !important; } }
+
+/* Major scenes retain their compositions even when motion is disabled. */
+.experience-page[data-staging="memory-loss"] .location-painting { filter: saturate(.75) brightness(.9); }
+.experience-page[data-staging="letter"] .evidence-paper { border-top: 7px solid #b99361; transform: rotate(-.3deg); }
+.experience-page[data-staging="arrival"] .scene-visual { background: linear-gradient(140deg, #647a83, #172d37); }
+.experience-page[data-staging="potluck"] .scene-reading { border-left: 4px solid #b48a4d; }
+.scene-object { font-style: italic; opacity: .85; }
+.reading-header:focus { outline: none; }
+.town-map { position: relative; gap: 12px 8px; padding: 42px 8px 30px; grid-template-areas: '. shelter .' 'clinic hall general' 'motel kettle boathouse' '. shore wharf'; background: linear-gradient(to top, #7293a17a 0 22%, transparent 23%), repeating-linear-gradient(105deg, transparent 0 24px, #74806a13 25px 27px, transparent 28px 46px); border-bottom: 0; border-top: 5px double #837e62; }
+.town-map::before { content: 'HIGHWAY'; position: absolute; top: 7px; left: 8px; font: 9px var(--mono); letter-spacing: .18em; color: #625f4b; }
+.town-map::after { content: 'OKANAGAN LAKE'; position: absolute; bottom: 8px; left: 8px; font: 9px var(--mono); letter-spacing: .18em; color: #304f5b; }
+.map-place { min-height: 70px; background: #e5dfccd9; border-radius: 2px; box-shadow: 2px 3px 0 #6e765c22; }
+@media (max-width: 800px) {
+  .experience-page[data-staging] .scene-visual { height: auto; }
+  .experience-page[data-staging] .location-painting { height: 270px; object-position: 50% 65%; }
+  .experience-page[data-staging] .scene-visual::after { display: none; }
+  .experience-page[data-staging] .place-caption { position: static; padding: 22px 26px; background: #122022; }
+  .experience-page[data-staging] .place-caption p { margin-bottom: 8px; }
+}

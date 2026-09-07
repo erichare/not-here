@@ -94,7 +94,15 @@ const renderNoteInto = (
       const hz = midiToHz(note.pitch, (note.detune ?? 0) + vibratoOffset(vib, t));
       phase += hz / sampleRate;
       const p = phase - Math.floor(phase);
-      if (inst.kind === 'pulse') {
+      if (inst.kind === 'acoustic') {
+        const decay = inst.voice === 'guitar' ? 1.45 : 2.6;
+        for (let harmonic = 1; harmonic <= 10; harmonic++) {
+          const stretch = inst.voice === 'piano' ? Math.sqrt(1 + .00016 * harmonic * harmonic) : 1;
+          const brightness = inst.voice === 'guitar' ? Math.sin(harmonic * .72) : 1;
+          sample += Math.sin(2 * Math.PI * phase * harmonic * stretch) * brightness * Math.exp(-t * harmonic / decay) / Math.pow(harmonic, 1.35);
+        }
+        sample *= .65;
+      } else if (inst.kind === 'pulse') {
         sample = p < inst.duty ? 1 : -1;
       } else if (inst.kind === 'triangle') {
         sample = 2 * Math.abs(2 * p - 1) - 1;

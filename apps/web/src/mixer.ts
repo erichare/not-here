@@ -27,6 +27,7 @@ export interface EnsembleSnapshot {
 }
 
 export interface EnsembleMixer {
+  readonly fragments: (characters: readonly string[]) => void;
   readonly layer: (pattern: string, gain: number) => void;
   readonly chord: (fragments: number) => void;
   readonly snapshot: () => EnsembleSnapshot;
@@ -53,6 +54,10 @@ export const createEnsembleMixer = (): EnsembleMixer => {
   };
 
   return {
+    fragments: (characters) => {
+      const acquired = new Set(characters);
+      targets = Object.fromEntries(ACT3_FRAGMENT_ORDER.map(id => [id, acquired.has(id) ? 1 : 0]));
+    },
     layer: (pattern, gain) => {
       if (!isEnsemblePattern(pattern) || pattern === 'sea') return;
       targets[pattern] = clamp01(gain);

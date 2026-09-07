@@ -1,0 +1,126 @@
+{
+  "method": "built-in image_gen; JPEG delivery conversion with sips, quality 84",
+  "approval": "Sample direction approved 2026-09-07. Expansion implements that direction. No human playtest or new portrait approval claimed.",
+  "assets": [
+    {
+      "id": "boathouse",
+      "source": "assets/locations/boathouse.png",
+      "sha256": "9e88ebb64d3c10bc6eae316a549cf152f159d1f2f45a980b14d09d8456e2dde0",
+      "bytes": 2130255,
+      "web": "apps/web/public/art/boathouse.jpg",
+      "web_bytes": 447281
+    },
+    {
+      "id": "clinic",
+      "source": "assets/locations/clinic.png",
+      "sha256": "ea9f6a2619037752d033167dbd46e37083e0bd1aad516ad181ce6cdf4b83f8b2",
+      "bytes": 2150548,
+      "web": "apps/web/public/art/clinic.jpg",
+      "web_bytes": 425186
+    },
+    {
+      "id": "general",
+      "source": "assets/locations/general.png",
+      "sha256": "d0afa6ae13b246dceb9ec62d0be7babf3eeaa9cc31f6b53ccb0d6bce148c9514",
+      "bytes": 2186905,
+      "web": "apps/web/public/art/general.jpg",
+      "web_bytes": 429308
+    },
+    {
+      "id": "hall",
+      "source": "assets/locations/hall.png",
+      "sha256": "eb3b4e9b636ad35dd79bcc7d482eb4092d194442d6ff7a376857f2e896e8cba4",
+      "bytes": 2077350,
+      "web": "apps/web/public/art/hall.jpg",
+      "web_bytes": 403072
+    },
+    {
+      "id": "kettle-work",
+      "source": "assets/locations/kettle-work.png",
+      "sha256": "1cc74062d31e80c3ee4abd14d73bb20f95e4fbe57214b63568620394ca1485c1",
+      "bytes": 2260201,
+      "web": "apps/web/public/art/kettle-work.jpg",
+      "web_bytes": 499772
+    },
+    {
+      "id": "kettle",
+      "source": "assets/locations/kettle.png",
+      "sha256": "7da4ae10584a6302c7b8a181123eea311cae1bfda6bf5fd7ff641c3dccfe8bc7",
+      "bytes": 2315396,
+      "web": "apps/web/public/art/kettle.jpg",
+      "web_bytes": 507306
+    },
+    {
+      "id": "motel",
+      "source": "assets/locations/motel.png",
+      "sha256": "1f5928b627a86e6c179ce7a61897f59c5cc8f432ab4aec19ed2faf2831972293",
+      "bytes": 1934381,
+      "web": "apps/web/public/art/motel.jpg",
+      "web_bytes": 361001
+    },
+    {
+      "id": "shelter",
+      "source": "assets/locations/shelter.png",
+      "sha256": "032d6c064fa5331b55173f165ff232eb896713f41f46e88bcded758476356d5b",
+      "bytes": 2524714,
+      "web": "apps/web/public/art/shelter.jpg",
+      "web_bytes": 558256
+    },
+    {
+      "id": "shore",
+      "source": "assets/locations/shore.png",
+      "sha256": "b49effdf6d096d6b059d89dbb0dfcc1a21822bf639c556747a62117bd958f6ea",
+      "bytes": 2339366,
+      "web": "apps/web/public/art/shore.jpg",
+      "web_bytes": 483492
+    },
+    {
+      "id": "wharf",
+      "source": "assets/locations/wharf.png",
+      "sha256": "0d340557e0bc84e5702022ff6cf9aedda874eca86d44ce4104f119529a2f2363",
+      "bytes": 2240767,
+      "web": "apps/web/public/art/wharf.jpg",
+      "web_bytes": 476339
+    },
+    {
+      "id": "arrival",
+      "source": "assets/scenes/arrival.png",
+      "sha256": "df13655a9e653854cb3bca34bea0c168182bf2f28b6d405d0aa21c2f8f300821",
+      "bytes": 2596375,
+      "web": "apps/web/public/art/arrival.jpg",
+      "web_bytes": 592884
+    },
+    {
+      "id": "letter",
+      "source": "assets/scenes/letter.png",
+      "sha256": "6ced35e63891ae624d6640eac535c1ab8c5dd266d6a97af27fda5b63b3f67fa4",
+      "bytes": 2313793,
+      "web": "apps/web/public/art/letter.jpg",
+      "web_bytes": 477703
+    },
+    {
+      "id": "memory-loss",
+      "source": "assets/scenes/memory-loss.png",
+      "sha256": "2f979bcbdd94c31d635624b105bb2c40daf8902177c01574500525d5613c2541",
+      "bytes": 2250990,
+      "web": "apps/web/public/art/memory-loss.jpg",
+      "web_bytes": 453648
+    },
+    {
+      "id": "potluck",
+      "source": "assets/scenes/potluck.png",
+      "sha256": "3d9db0defbd643df5c2d7430004b89b2f5ef918c91569135f7ffa5dceee443db",
+      "bytes": 2138496,
+      "web": "apps/web/public/art/potluck.jpg",
+      "web_bytes": 429412
+    },
+    {
+      "id": "wren",
+      "source": "assets/portraits/wren.png",
+      "sha256": "b66eea98679995b0db97a44838219570a0282af774e1bdd1d6c149be52c5e38b",
+      "bytes": 2946416,
+      "web": "apps/web/public/art/wren.jpg",
+      "web_bytes": 644657
+    }
+  ]
+}

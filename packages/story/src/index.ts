@@ -4,6 +4,9 @@
  */
 
 export { ACT1_SCENES, ALL_SCENES, buildContent, OPENING_SCENE } from './content.ts';
+export { buildRevisedContent, REVISED_SCENES, REVISED_OPENING_SCENE, STORY_EDITION } from './revised.ts';
+export { LOCATIONS, presentationFor, acquiredFragments, notebookEntries } from './presentation.ts';
+export type { NotebookEntry } from './presentation.ts';
 export { DIALOGUE_RULES } from './dialogue.ts';
 export { NIGHT1_SCENES } from './scenes/night1.ts';
 export { DAY2_SCENES } from './scenes/day2.ts';

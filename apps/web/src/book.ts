@@ -77,6 +77,8 @@ export interface BookLayerHooks {
   readonly buttonHost?: HTMLElement;
   /** The phone's bottom bar — a second button, same book. */
   readonly barHost?: HTMLElement;
+  /** A reader may have another modal open; do not stack the book behind it. */
+  readonly canOpen?: () => boolean;
 }
 
 const sectionLabel = (text: string): HTMLElement => el('p', 'book-section-label', text);
@@ -147,7 +149,7 @@ export const createBookLayer = (host: HTMLElement, hooks: BookLayerHooks): BookL
       setExpanded(false);
       hooks.onExitBeat(BOOK.exitBeat);
     },
-    canOpen: () => unlocked && world !== null,
+    canOpen: () => unlocked && world !== null && (hooks.canOpen?.() ?? true),
     build: () => build(),
   });
 
@@ -162,7 +164,7 @@ export const createBookLayer = (host: HTMLElement, hooks: BookLayerHooks): BookL
   };
 
   const openBook = (): void => {
-    if (overlay.isOpen() || !unlocked || world === null) return;
+    if (overlay.isOpen() || !unlocked || world === null || !(hooks.canOpen?.() ?? true)) return;
     overlay.open(build);
   };
 

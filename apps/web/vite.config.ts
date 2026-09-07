@@ -15,7 +15,7 @@ const APP_DIR = dirname(fileURLToPath(import.meta.url));
 const AUDITIONS_DIR = resolve(APP_DIR, '../../auditions');
 
 /** Only plain kebab-case wav names — no traversal, no dotfiles. */
-const WAV_NAME = /^[a-z0-9][a-z0-9-]*\.wav$/;
+const AUDIO_NAME = /^[a-z0-9][a-z0-9-]*\.(wav|m4a)$/;
 
 const auditionsPlugin = (): Plugin => ({
   name: 'not-here:auditions',
@@ -24,7 +24,7 @@ const auditionsPlugin = (): Plugin => ({
     server.middlewares.use('/auditions', (req, res, next) => {
       const raw = (req.url ?? '').split('?')[0] ?? '';
       const name = raw.replace(/^\//, '');
-      if ((req.method !== 'GET' && req.method !== 'HEAD') || !WAV_NAME.test(name)) {
+      if ((req.method !== 'GET' && req.method !== 'HEAD') || !AUDIO_NAME.test(name)) {
         next();
         return;
       }
@@ -35,7 +35,7 @@ const auditionsPlugin = (): Plugin => ({
         return;
       }
       res.statusCode = 200;
-      res.setHeader('Content-Type', 'audio/wav');
+      res.setHeader('Content-Type', name.endsWith('.m4a') ? 'audio/mp4' : 'audio/wav');
       if (req.method === 'HEAD') {
         res.end();
         return;
@@ -53,7 +53,7 @@ const auditionsPlugin = (): Plugin => ({
       return;
     }
     for (const entry of entries) {
-      if (!entry.isFile() || !WAV_NAME.test(entry.name)) continue;
+      if (!entry.isFile() || !AUDIO_NAME.test(entry.name)) continue;
       this.emitFile({
         type: 'asset',
         fileName: `auditions/${entry.name}`,

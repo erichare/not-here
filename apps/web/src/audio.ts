@@ -29,6 +29,8 @@
 import { ACT3_FRAGMENT_ORDER } from '@not-here/music';
 import { cueLoops } from './cues.ts';
 import { createEnsembleMixer, type EnsembleSnapshot } from './mixer.ts';
+import { DEFAULT_PREFERENCES, type Preferences } from './preferences.ts';
+import { createSoundscape } from './soundscape.ts';
 
 const CROSSFADE_SECONDS = 1;
 const STOP_FADE_SECONDS = 1.5;
@@ -49,6 +51,13 @@ interface EnsembleNode {
 }
 
 export interface AudioPlayer {
+  readonly fragments: (characters: readonly string[]) => void;
+  readonly preferences: (preferences: Preferences) => void;
+  readonly ambience: (location: string | null) => void;
+  readonly fingerprint: (flags: Readonly<Record<string, boolean | number | string>>) => void;
+  readonly static: (amount: number) => void;
+  readonly stinger: (cue: string) => void;
+  readonly voice: (cue: string) => void;
   /** Create/resume the AudioContext. Call from a user gesture. */
   readonly start: () => Promise<void>;
   /** The lamp's volume, 0..1 — applied to the master gain (not the cues). */
@@ -71,22 +80,42 @@ export interface AudioPlayer {
 
 export const createAudioPlayer = (
   onFallback: (cue: string) => void,
+  options: { readonly edition?: 'original' | 'revised' } = {},
 ): AudioPlayer => {
+  const ensemblePrefix = options.edition === 'revised' ? 'v2-ensemble' : 'act3-ensemble';
   let ctx: AudioContext | null = null;
   /** Every cue and ensemble layer runs through this; the lamp sets it. */
   let master: GainNode | null = null;
   let volume = 1;
   let muted = false;
+  let preferences: Preferences = { ...DEFAULT_PREFERENCES, music: 1 };
+  const buses = new Map<string, GainNode>();
+  let soundscape: ReturnType<typeof createSoundscape> | null = null;
+  let pendingAmbience: string | null = null;
+  let fingerprint = '';
+  let accentGeneration = 0;
+  const accents = new Set<AudioBufferSourceNode>();
+  let cueGeneration = 0;
+  let deferredCue: string | null = null;
+  let musicFilter: BiquadFilterNode | null = null;
+  let staticAmount = 0;
   let current: PlayingCue | null = null;
   /** Latest requested cue — stale fetches resolve and bow out. */
   let wanted: string | null = null;
   /** Decoded buffers; null marks a cue known to be missing/broken. */
   const buffers = new Map<string, AudioBuffer | null>();
+  const rememberBuffer = (name: string, buffer: AudioBuffer | null): void => {
+    buffers.delete(name); buffers.set(name, buffer);
+    const bytes = () => [...buffers.values()].reduce((total, item) => total + (item ? (item.length ?? 0) * (item.numberOfChannels ?? 2) * 4 : 0), 0);
+    while (buffers.size > 12 || bytes() > 48 * 1024 * 1024) buffers.delete(buffers.keys().next().value!);
+  };
 
   const mixer = createEnsembleMixer();
   let ensemble: { readonly nodes: Map<string, EnsembleNode> } | null = null;
   /** Supersession counter for async ensemble starts. */
   let ensembleGeneration = 0;
+  let ensembleStartedAt = 0;
+  const detuneRequests = new Map<string, number>();
 
   const applyMaster = (): void => {
     if (!ctx || !master) return;
@@ -103,20 +132,36 @@ export const createAudioPlayer = (
     return master;
   };
 
+  const bus = (context: AudioContext, name: 'music' | 'ambience' | 'effects' | 'voice'): GainNode => {
+    let node = buses.get(name);
+    if (!node) {
+      node = context.createGain(); node.gain.value = preferences[name];
+      if (name === 'music') {
+        musicFilter = context.createBiquadFilter(); musicFilter.type = 'lowpass';
+        musicFilter.frequency.value = 18000 / (1 + staticAmount / 10);
+        node.connect(musicFilter); musicFilter.connect(masterOf(context));
+      } else node.connect(masterOf(context));
+      buses.set(name, node);
+    }
+    return node;
+  };
+
   const load = async (context: AudioContext, name: string): Promise<AudioBuffer | null> => {
     const cached = buffers.get(name);
     if (cached !== undefined) return cached;
-    try {
-      const response = await fetch(`/auditions/${encodeURIComponent(name)}.wav`);
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const bytes = await response.arrayBuffer();
-      const buffer = await context.decodeAudioData(bytes);
-      buffers.set(name, buffer);
-      return buffer;
-    } catch {
-      buffers.set(name, null);
-      return null;
+    const formats = options.edition === 'revised' && name.startsWith('v2-') && !name.startsWith('v2-ensemble-') ? ['m4a', 'wav'] : ['wav'];
+    for (const format of formats) {
+      try {
+        const response = await fetch(`/auditions/${encodeURIComponent(name)}.${format}`);
+        if (!response.ok) continue;
+        const buffer = await context.decodeAudioData(await response.arrayBuffer());
+        // Bound decoded memory; playing sources retain their own buffer references.
+        rememberBuffer(name, buffer);
+        return buffer;
+      } catch { /* Try the WAV master when encoding or codec support is absent. */ }
     }
+    rememberBuffer(name, null);
+    return null;
   };
 
   const fadeOutCurrent = (context: AudioContext, seconds: number): void => {
@@ -143,12 +188,17 @@ export const createAudioPlayer = (
     gain.gain.setValueAtTime(0, now);
     gain.gain.linearRampToValueAtTime(1, now + CROSSFADE_SECONDS);
     source.connect(gain);
-    gain.connect(masterOf(context));
+    gain.connect(bus(context, 'music'));
     const started: PlayingCue = { cue: name, source, gain };
+    source.onended = (): void => { source.disconnect(); gain.disconnect(); };
     if (!source.loop) {
       // One-shot beat: when it ends on its own, it leaves real silence.
       source.onended = (): void => {
-        if (current === started) current = null;
+        source.disconnect(); gain.disconnect();
+        if (current === started) {
+          current = null;
+          if (deferredCue !== null) { const next = deferredCue; deferredCue = null; wanted = next; void transition(next); }
+        }
       };
     }
     source.start(now);
@@ -157,8 +207,9 @@ export const createAudioPlayer = (
 
   const transition = async (name: string): Promise<void> => {
     if (!ctx) return;
+    const generation = ++cueGeneration;
     const buffer = await load(ctx, name);
-    if (wanted !== name) return; // superseded (or stopped) while fetching
+    if (wanted !== name || generation !== cueGeneration) return;
     fadeOutCurrent(ctx, CROSSFADE_SECONDS);
     if (buffer === null) {
       onFallback(name);
@@ -201,7 +252,7 @@ export const createAudioPlayer = (
     if (ensemble) return;
     const entries: [string, AudioBuffer][] = [];
     for (const id of ENSEMBLE_LAYER_IDS) {
-      const buffer = await load(context, `act3-ensemble-${id}`);
+      const buffer = await load(context, `${ensemblePrefix}-${id}`);
       if (generation !== ensembleGeneration || ensemble) return; // superseded
       if (buffer === null) continue; // a missing layer degrades silently
       entries.push([id, buffer]);
@@ -216,11 +267,12 @@ export const createAudioPlayer = (
       const gain = context.createGain();
       gain.gain.setValueAtTime(0, now);
       source.connect(gain);
-      gain.connect(masterOf(context));
+      gain.connect(bus(context, 'music'));
       source.start(now); // all layers start together — the stack stays in sync
+      source.onended = () => { source.disconnect(); gain.disconnect(); };
       nodes.set(id, { source, gain });
     }
-    ensemble = { nodes };
+    ensemble = { nodes }; ensembleStartedAt = now;
   };
 
   const syncEnsemble = (): void => {
@@ -232,7 +284,7 @@ export const createAudioPlayer = (
     }
     // The ensemble takes the night over: any scene cue fades out.
     fadeOutCurrent(ctx, CROSSFADE_SECONDS);
-    wanted = null;
+    wanted = null; deferredCue = null; cueGeneration++;
     const generation = (ensembleGeneration += 1);
     void startEnsemble(ctx, generation).then(() => {
       if (generation !== ensembleGeneration || !ctx) return;
@@ -240,10 +292,51 @@ export const createAudioPlayer = (
     });
   };
 
+  const accent = async (name: string, cents: number, channel: 'music' | 'effects' | 'voice'): Promise<void> => {
+    if (!ctx) return;
+    const context = ctx;
+    const generation = accentGeneration;
+    const buffer = await load(context, name);
+    if (generation !== accentGeneration) return;
+    if (!buffer) { onFallback(name); return; }
+    const source = context.createBufferSource(); source.buffer = buffer; source.detune.value = cents;
+    const gain = context.createGain(); gain.gain.value = channel === 'voice' ? 1 : .13;
+    source.connect(gain); gain.connect(bus(context, channel));
+    accents.add(source);
+    source.onended = () => { accents.delete(source); source.disconnect(); gain.disconnect(); };
+    source.start();
+  };
+
   return {
+    preferences: next => {
+      preferences = next;
+      if (ctx) for (const name of ['music', 'ambience', 'effects', 'voice'] as const) bus(ctx, name).gain.setTargetAtTime(next[name], ctx.currentTime, .05);
+    },
+    ambience: location => {
+      pendingAmbience = location;
+      if (ctx) { soundscape ??= createSoundscape(ctx, bus(ctx, 'ambience')); soundscape.set(location); }
+    },
+    fingerprint: flags => {
+      const answer = flags['n1:goodbye'];
+      if (typeof answer !== 'string') { fingerprint = ''; return; }
+      if (typeof answer !== 'string' || fingerprint === answer || !ctx) return;
+      fingerprint = answer;
+      // Introduced after the interview; never invent an answer on the first title screen.
+      if (['never', 'forgot', 'door'].includes(answer)) void accent(`v2-fingerprint-${answer}`, 0, 'music');
+    },
+    fragments: characters => { mixer.fragments(characters); syncEnsemble(); },
+    static: amount => {
+      // Persistent filtering affects ordinary cues as well as the ensemble.
+      staticAmount = Math.max(0, Math.min(100, amount));
+      if (ctx && musicFilter) musicFilter.frequency.setTargetAtTime(18000 / (1 + staticAmount / 10), ctx.currentTime, 1);
+    },
+    stinger: name => { void accent(name, 0, name.startsWith('v2-fingerprint-') ? 'music' : 'effects'); },
+    voice: name => { void accent(name, 0, 'voice'); },
     start: async () => {
       ctx ??= new AudioContext();
       masterOf(ctx);
+      soundscape ??= createSoundscape(ctx, bus(ctx, 'ambience'));
+      soundscape.set(pendingAmbience);
       if (ctx.state === 'suspended') await ctx.resume();
       if (wanted !== null && current === null) void transition(wanted);
       if (mixer.snapshot().active) syncEnsemble();
@@ -251,7 +344,8 @@ export const createAudioPlayer = (
     cue: (name) => {
       // Re-requests of the playing cue are no-ops, but the same cue after a
       // one-shot ended (or a failed load) must sound again next scene.
-      if (wanted === name && current !== null) return;
+      if (wanted === name && current !== null) { deferredCue = null; return; }
+      if (current && !current.source.loop) { deferredCue = name; return; }
       wanted = name;
       if (!ctx) {
         // No gesture yet: remember the cue; start() will pick it up.
@@ -263,6 +357,10 @@ export const createAudioPlayer = (
       void transition(name);
     },
     stop: () => {
+      accentGeneration++;
+      cueGeneration++; deferredCue = null;
+      for (const source of accents) { try { source.stop(); } catch { /* ended */ } }
+      accents.clear();
       // Drop the wish first so an in-flight fetch bows out (wanted !== name).
       wanted = null;
       mixer.reset();
@@ -271,7 +369,10 @@ export const createAudioPlayer = (
       fadeOutCurrent(ctx, STOP_FADE_SECONDS);
     },
     layer: (pattern, gain) => {
-      if (!mixer.isEnsemblePattern(pattern)) return; // e.g. Act 2's 'lullaby'
+      if (!mixer.isEnsemblePattern(pattern)) {
+        if (ctx && current && pattern === 'lullaby') current.gain.gain.setTargetAtTime(Math.max(.08, gain), ctx.currentTime, 1);
+        return;
+      }
       mixer.layer(pattern, gain);
       syncEnsemble();
     },
@@ -289,12 +390,30 @@ export const createAudioPlayer = (
     },
     snapshot: () => mixer.snapshot(),
     detune: (pattern, cents) => {
-      if (!ctx || !ensemble) return;
+      if (!ctx) return;
+      if (!ensemble) {
+        if (mixer.isEnsemblePattern(pattern)) void accent(`${ensemblePrefix}-${pattern}${cents === -50 ? '-lowered' : ''}`, cents === -50 ? 0 : cents, 'music');
+        return;
+      }
       const node = ensemble.nodes.get(pattern);
       if (!node) return;
-      const now = ctx.currentTime;
-      node.source.detune.setValueAtTime(node.source.detune.value, now);
-      node.source.detune.linearRampToValueAtTime(cents, now + 0.5);
+      // Authored quarter-tone variants keep the same 15-second loop duration.
+      // Source.detune would change playback speed and drift away from the other parts.
+      const context = ctx; const playing = ensemble;
+      const request = (detuneRequests.get(pattern) ?? 0) + 1; detuneRequests.set(pattern, request);
+      if (cents !== -50 && cents !== 0) return;
+      void load(context, `${ensemblePrefix}-${pattern}${cents === -50 ? '-lowered' : ''}`).then(buffer => {
+        if (!buffer || ensemble !== playing || detuneRequests.get(pattern) !== request) return;
+        const now = context.currentTime;
+        const source = context.createBufferSource(); source.buffer = buffer; source.loop = true;
+        source.connect(node.gain);
+        source.onended = () => source.disconnect();
+        source.start(now, Math.max(0, now - ensembleStartedAt) % buffer.duration);
+        // Preserve the layer gain when replacing its source.
+        node.source.onended = () => node.source.disconnect();
+        try { node.source.stop(now); } catch { /* ended */ }
+        playing.nodes.set(pattern, { ...node, source });
+      });
     },
   };
 };

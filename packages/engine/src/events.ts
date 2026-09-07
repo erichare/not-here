@@ -6,6 +6,7 @@
 import type { CueId, StatId } from './ids.ts';
 
 export type EngineEvent =
+  | { readonly kind: 'music.fragments'; readonly characters: readonly string[] }
   /** Enter a scene → play/transition to its cue. */
   | { readonly kind: 'music.cue'; readonly cue: CueId }
   /** Vertical layering: set a pattern's target gain (0..1). */

@@ -6,13 +6,16 @@
  */
 
 import { evaluate, type DerivedResolvers } from './conditions.ts';
-import { applyEffects } from './effects.ts';
+import { applyEffects, type EffectResult } from './effects.ts';
 import type { EngineEvent } from './events.ts';
 import type { SceneId } from './ids.ts';
 import type { Scene, SceneView } from './scene.ts';
 import type { WorldState } from './state.ts';
 
 export interface StoryContent {
+  readonly realizeLabel?: (label: string, state: WorldState) => string;
+  readonly realizePresentation?: (scene: Scene, state: WorldState) => Scene['presentation'];
+  readonly realizeEvents?: (state: WorldState, events: readonly EngineEvent[]) => readonly EngineEvent[];
   readonly scenes: ReadonlyMap<SceneId, Scene>;
   readonly derived: DerivedResolvers;
   /** Realize prose for a scene given state (ink or inline). */
@@ -27,6 +30,8 @@ export interface StoryContent {
 
 export type EngineInput =
   | { readonly kind: 'enter' }
+  | { readonly kind: 'inspect'; readonly observationId: string }
+  | { readonly kind: 'name'; readonly name: string }
   | { readonly kind: 'choose'; readonly choiceId: string };
 
 export interface StepResult {
@@ -47,12 +52,18 @@ const buildView = (
   state: WorldState,
 ): SceneView => ({
   sceneId: scene.id,
+  ...(scene.presentation ? { presentation: content.realizePresentation?.(scene, state) ?? scene.presentation } : {}),
+  ...(scene.artifacts ? { artifacts: scene.artifacts.filter(a => !a.when || evaluate(a.when, state, content.derived)).map(({ when: _when, ...a }) => ({ ...a, text: content.realizeLabel?.(a.text, state) ?? a.text })) } : {}),
+  ...(scene.input ? { input: scene.input } : {}),
+  ...(scene.observations ? { observations: scene.observations
+    .filter(item => !item.when || evaluate(item.when, state, content.derived))
+    .map(({ when: _when, effects: _effects, ...item }) => item) } : {}),
   paragraphs: content.realizeProse(scene, state),
   choices: scene.choices.flatMap(
     (choice): { id: string; label: string; locked: boolean; stakes?: 'major' }[] => {
       const open = !choice.when || evaluate(choice.when, state, content.derived);
       const stakes = choice.stakes === undefined ? {} : { stakes: choice.stakes };
-      if (open) return [{ id: choice.id, label: choice.label, locked: false, ...stakes }];
+      if (open) return [{ id: choice.id, label: content.realizeLabel?.(choice.label, state) ?? choice.label, locked: false, ...stakes }];
       if (choice.lockedLabel) {
         return [{ id: choice.id, label: choice.lockedLabel, locked: true, ...stakes }];
       }
@@ -78,7 +89,7 @@ const enterScene = (
   return {
     state: result.state,
     view: buildView(content, scene, result.state),
-    events,
+    events: content.realizeEvents?.(result.state, events) ?? events,
   };
 };
 
@@ -96,7 +107,8 @@ export const resumeScene = (content: StoryContent, state: WorldState): StepResul
   return {
     state,
     view: buildView(content, scene, state),
-    events: scene.cue ? [{ kind: 'music.cue', cue: scene.cue }] : [],
+    events: content.realizeEvents?.(state, scene.cue ? [{ kind: 'music.cue', cue: scene.cue }] : [])
+      ?? (scene.cue ? [{ kind: 'music.cue', cue: scene.cue }] : []),
   };
 };
 
@@ -108,6 +120,24 @@ export const advance = (
   if (input.kind === 'enter') return enterScene(content, state, state.sceneId);
 
   const scene = sceneOrThrow(content, state.sceneId);
+  if (input.kind === 'name') {
+    if (scene.input !== 'name') throw new Error('This scene does not ask for a name');
+    const name = input.name.normalize('NFC').replace(/[\u0000-\u001f\u007f]/gu, '').trim();
+    if (!name || [...name].length > 40) throw new Error('Use a name of 1–40 characters');
+    const named = { ...state, flags: { ...state.flags, 'player:name': name } };
+    return { state: named, view: buildView(content, scene, named), events: [] };
+  }
+  if (input.kind === 'inspect') {
+    const item = scene.observations?.find(o => o.id === input.observationId);
+    if (!item || (item.when && !evaluate(item.when, state, content.derived))) throw new Error('Observation unavailable');
+    const tag = `observed:${item.id}`;
+    const result: EffectResult = state.facts.some(f => f.tag === tag) ? { state, events: [] } : applyEffects(state, [
+      { op: 'fact.add', tag, data: JSON.stringify({ title: item.label, text: item.text, kind: item.kind ?? 'observation' }) }, ...(item.effects ?? []),
+    ], content.derived);
+    // Inspection may reveal a fact or a musical clue, but never advances time or location.
+    if (result.goto || result.state.day !== state.day || result.state.slot !== state.slot) throw new Error('An observation cannot spend time or move scenes');
+    return { state: result.state, view: buildView(content, scene, result.state), events: content.realizeEvents?.(result.state, result.events) ?? result.events };
+  }
   const choice = scene.choices.find((c) => c.id === input.choiceId);
   if (!choice) throw new Error(`Unknown choice ${input.choiceId} in ${scene.id}`);
   const open = !choice.when || evaluate(choice.when, state, content.derived);
@@ -130,6 +160,6 @@ export const advance = (
   return {
     state: finalState,
     view: entered.view,
-    events: [...applied.events, ...entered.events],
+    events: content.realizeEvents?.(finalState, [...applied.events, ...entered.events]) ?? [...applied.events, ...entered.events],
   };
 };

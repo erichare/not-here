@@ -1,5 +1,15 @@
 # Decision Log
 
+## 2026-09-06 — approved immersion redesign, story edition 2
+
+The creator explicitly requested implementation of the revised plan. [The current bible](game-bible.md), [clue table](twist-recontext-table.md) and [delivery record](immersion-delivery.md) supersede conflicting decisions below for edition 2. The older material remains a historical record for the preserved original edition.
+
+Confirmed: intimate illustrated mystery; tenderness and unease; canon open to revision; painted environments and ink artifacts; curated AI-assisted assets; acoustic-led score with selective uncanny electronics; sparse voice; browser first and shared playable CLI. A 25–35-minute opening sample must receive visual and listening approval before expanding production assets. Seven explicit ending decisions replace hidden completion rankings. All six confessions are optional. Wren has a present life, boundaries and a late exchange through Sam. November 6–28 remains, with curated elapsed time. The original save slot and export remain available; revised paths begin separately.
+
+Implementation preserves the newer UI-overhaul commit already present at the start of work. Original scenes, UI and storage remain runnable through the original-edition entry points; new presentation and revised story use separate modules.
+
+## Original edition history
+
 All decisions below were made by the creator (Eric) on 2026-07-04 via 24 scoping
 questions, after reviewing 4 judged pitches and 6 research tracks. Do not relitigate
 without asking.

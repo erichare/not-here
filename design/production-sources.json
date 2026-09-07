@@ -1,0 +1,32 @@
+[
+  {
+    "id": "motel",
+    "source": "/Users/erichare/.codex/generated_images/01a07a15-429c-7a11-8f1e-8c0299b9b057/exec-5d6f412a-1a54-475c-8b53-258eb57877c0.png",
+    "workspace": "assets/locations/motel.png"
+  },
+  {
+    "id": "wharf",
+    "source": "/Users/erichare/.codex/generated_images/01a07a15-429c-7a11-8f1e-8c0299b9b057/exec-8385b408-9aaf-49c6-9f39-ad9916feb89a.png",
+    "workspace": "assets/locations/wharf.png"
+  },
+  {
+    "id": "clinic",
+    "source": "/Users/erichare/.codex/generated_images/01a07a15-429c-7a11-8f1e-8c0299b9b057/exec-ecf6f806-11f5-474f-b000-2941748368e6.png",
+    "workspace": "assets/locations/clinic.png"
+  },
+  {
+    "id": "boathouse",
+    "source": "/Users/erichare/.codex/generated_images/01a07a15-429c-7a11-8f1e-8c0299b9b057/exec-4dc55154-cbe1-4dfe-ada1-585e6d7cf71b.png",
+    "workspace": "assets/locations/boathouse.png"
+  },
+  {
+    "id": "hall",
+    "source": "/Users/erichare/.codex/generated_images/01a07a15-429c-7a11-8f1e-8c0299b9b057/exec-65173405-8d30-4fa9-8109-cb0bb90ff443.png",
+    "workspace": "assets/locations/hall.png"
+  },
+  {
+    "id": "shelter",
+    "source": "/Users/erichare/.codex/generated_images/01a07a15-429c-7a11-8f1e-8c0299b9b057/exec-b5457ae0-f079-4c1e-9b85-00162a911e70.png",
+    "workspace": "assets/locations/shelter.png"
+  }
+]
