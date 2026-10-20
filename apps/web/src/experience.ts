@@ -1,11 +1,12 @@
 import type { SceneView, WorldState } from '@not-here/engine';
-import { buildRevisedContent, LOCATIONS, notebookEntries } from '@not-here/story';
+import { buildRevisedContent, notebookEntries } from '@not-here/story';
 import { createBookLayer } from './book.ts';
-import { firstMeetingSketch } from './sketches.ts';
+import { portraitFor } from './portraits.ts';
 import { DEFAULT_PREFERENCES, PREFERENCES_KEY, readPreferences, type Preferences } from './preferences.ts';
 import { LEGACY_SAVE_KEY, SAVE_KEY } from './save.ts';
 import './experience.css';
 import { sceneArt } from './scene-art.ts';
+import { createTownMap } from './town-map.ts';
 
 export interface ExperienceModel extends SceneView { readonly world: WorldState; readonly header: string; readonly slot: string }
 interface Hooks {
@@ -17,12 +18,32 @@ interface Hooks {
 interface HistoryEntry { scene: string; title: string; paragraphs: readonly string[]; day: number }
 const HISTORY_KEY = 'not-here:story2:history';
 const SOUNDS_KEY = 'not-here:story2:sounds';
-const INTRO: Record<string, string> = { barb: 'n1-diner', dianne: 'd2-dianne', sam: 'd3-shed', priya: 'd3-clinic', tam: 'd2-evening', wade: 'd4-wharf' };
 const button = (label: string, action: () => void, className = ''): HTMLButtonElement => {
   const node = document.createElement('button'); node.type = 'button'; node.textContent = label; node.className = className; node.addEventListener('click', action); return node;
 };
 const element = <K extends keyof HTMLElementTagNameMap>(tag: K, className = '', value?: string): HTMLElementTagNameMap[K] => {
   const node = document.createElement(tag); node.className = className; if (value !== undefined) node.textContent = value; return node;
+};
+const ICONS = {
+  notebook: '<path d="M5 3h13v18H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm0 0v18M9 7h5M9 11h5"/>',
+  map: '<path d="m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2V5Zm6-2v16M15 5v16"/>',
+  history: '<path d="M4 10a8 8 0 1 1 1 7M4 4v6h6M12 7v5l3 2"/>',
+  sound: '<path d="M4 10v4m4-8v12m4-15v18m4-15v12m4-8v4"/>',
+  settings: '<path d="M4 7h9m4 0h3M4 17h3m4 0h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/>',
+  arrow: '<path d="M4 12h16m-6-6 6 6-6 6"/>',
+  expand: '<path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7"/>',
+  star: '<path d="M12 2c0 7-3 10-10 10 7 0 10 3 10 10 0-7 3-10 10-10-7 0-10-3-10-10Z"/>',
+} as const;
+const icon = (name: keyof typeof ICONS): SVGSVGElement => {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('fill', 'none'); svg.setAttribute('stroke', 'currentColor');
+  svg.setAttribute('stroke-width', '1.25'); svg.setAttribute('stroke-linecap', 'round'); svg.setAttribute('stroke-linejoin', 'round');
+  svg.setAttribute('aria-hidden', 'true'); svg.classList.add('experience-icon');
+  svg.innerHTML = ICONS[name]; // Static, bundled artwork.
+  return svg;
+};
+const ornament = (): HTMLElement => {
+  const node = element('div', 'story-ornament'); node.setAttribute('aria-hidden', 'true'); node.append(icon('star')); return node;
 };
 const safeRead = (key: string): string | null => { try { return localStorage.getItem(key); } catch { return null; } };
 const safeWrite = (key: string, value: string): void => { try { localStorage.setItem(key, value); } catch { /* Saving the game reports its own failure. */ } };
@@ -33,6 +54,7 @@ const readHistory = (): HistoryEntry[] => {
 };
 
 export const createExperience = (root: HTMLElement, hooks: Hooks) => {
+  root.classList.add('experience-root');
   let model: ExperienceModel | null = null;
   let preferences = readPreferences({ getItem: safeRead });
   let history = readHistory();
@@ -42,14 +64,17 @@ export const createExperience = (root: HTMLElement, hooks: Hooks) => {
   const content = buildRevisedContent();
   const header = element('header', 'experience-header');
   const brand = element('span', 'experience-brand', 'NOT HERE');
+  brand.prepend(icon('star'));
+  const edition = element('span', 'experience-edition', 'An illustrated mystery');
   const toolbar = element('nav', 'experience-tools'); toolbar.setAttribute('aria-label', 'Reading tools');
   const page = element('main', 'experience-page page');
   const live = element('div', 'sr-only'); live.setAttribute('aria-live', 'polite');
   const dialog = element('dialog', 'reading-dialog');
   const book = (() => { root.append(header, page, live, dialog); return createBookLayer(root, { onExitBeat: () => {}, inertTargets: [header, page], buttonHost: toolbar, canOpen: () => !dialog.open }); })();
   const closeDialog = () => dialog.close();
-  const openPanel = (title: string, build: (body: HTMLElement) => void) => {
+  const openPanel = (title: string, build: (body: HTMLElement) => void, variant = '') => {
     if (dialog.open) dialog.close();
+    dialog.className = `reading-dialog${variant ? ` ${variant}` : ''}`;
     const heading = element('h2', '', title); heading.id = 'reading-dialog-title';
     dialog.setAttribute('aria-labelledby', heading.id);
     const body = element('div', 'dialog-body');
@@ -77,16 +102,8 @@ export const createExperience = (root: HTMLElement, hooks: Hooks) => {
     if (documents.length) { body.append(element('h3', '', 'Pages you have read')); for (const doc of [...new Set(documents)]) body.append(documentBlock(doc)); }
   });
   const map = () => openPanel('Lorn Bay', body => {
-    body.append(element('p', 'muted', 'The lake below. The highway above. Reading the map costs no time. Choosing a visit below commits to it.'));
-    const grid = element('div', 'town-map');
-    for (const [id, location] of Object.entries(LOCATIONS)) {
-      const place = element('div', `map-place${model?.presentation?.location === id ? ' current' : ''}`);
-      place.style.gridArea = id;
-      place.append(element('strong', '', location.title));
-      if (model?.presentation?.location === id) place.append(element('span', '', 'You are here'));
-      grid.append(place);
-    }
-    body.append(grid, element('h3', '', 'What you can do now'));
+    body.append(element('p', 'muted', 'A small town on Okanagan Lake. Reading the map costs no time. Choose a visit below when you are ready to go.'));
+    body.append(createTownMap(model?.presentation?.location), element('h3', '', 'What you can do now'));
     if (!model) return;
     let opportunities = 0;
     for (const c of model.choices.filter(c => !c.locked)) {
@@ -97,7 +114,7 @@ export const createExperience = (root: HTMLElement, hooks: Hooks) => {
       body.append(button(`${label ? `${label} · ` : ''}${c.label}`, () => { closeDialog(); hooks.onChoose(c.id); }, 'map-opportunity'));
     }
     if (!opportunities) body.append(element('p', 'muted', 'You are in the middle of something here. Finish the passage to see where the day can go.'));
-  });
+  }, 'map-dialog');
   const recall = () => openPanel('Recent pages', body => {
     for (const entry of [...history].reverse()) {
       const details = element('details', 'history-page'); details.append(element('summary', '', `Day ${entry.day} · ${entry.title}`));
@@ -131,11 +148,18 @@ export const createExperience = (root: HTMLElement, hooks: Hooks) => {
     body.append(button('Restore defaults', () => { preferences = { ...DEFAULT_PREFERENCES }; applyPreferences(); closeDialog(); settings(); }));
     body.append(element('p', 'muted', 'Keyboard: Tab to move, Enter to choose, 1–9 for choices, L for Barb’s book. Escape closes a panel. All story clues work with sound off.'));
   });
-  toolbar.append(button('Notebook', notebook), button('Map', map), button('Recent pages', recall), button('Sound', soundPanel), button('Settings', settings));
-  header.append(brand, toolbar);
+  for (const [label, action, glyph] of [
+    ['Notebook', notebook, 'notebook'], ['Map', map, 'map'], ['Recent pages', recall, 'history'],
+    ['Sound', soundPanel, 'sound'], ['Settings', settings, 'settings'],
+  ] as const) {
+    const tool = button(label, action); tool.prepend(icon(glyph)); toolbar.append(tool);
+  }
+  header.append(brand, edition, toolbar);
   const addCaption = (value: string) => { if (!value) return; sounds = [...sounds.filter(s => s !== value), value].slice(-80); safeWrite(SOUNDS_KEY, JSON.stringify(sounds)); live.textContent = value; };
   const renderScene = (next: ExperienceModel) => {
     cancelReveal(); model = next; toolbar.hidden = false; page.className = 'experience-page page';
+    root.dataset.view = 'reading'; edition.hidden = true;
+    page.dataset.scene = next.sceneId;
     document.body.dataset.slot = next.slot;
     const previous = history.at(-1);
     const entry = { scene: next.sceneId, title: next.presentation?.title ?? next.header, paragraphs: next.paragraphs, day: next.world.day };
@@ -152,20 +176,34 @@ export const createExperience = (root: HTMLElement, hooks: Hooks) => {
     if (artwork.focus) img.style.objectPosition = artwork.focus;
     img.addEventListener('error', () => { img.remove(); visual.classList.add('art-unavailable'); visual.append(element('p', 'art-description', artwork.alt)); }, { once: true });
     visual.append(img);
-    const place = element('div', 'place-caption'); place.append(element('span', 'eyebrow', `LORN BAY · NOVEMBER ${next.world.day + 5}`), element('h1', '', next.presentation?.title ?? 'Lorn Bay'), element('p', '', next.presentation?.sound ?? ''));
-    visual.append(place);
+    const atmosphere = element('div', 'scene-atmosphere'); atmosphere.setAttribute('aria-hidden', 'true'); visual.append(atmosphere);
+    const place = element('div', 'place-caption');
+    const placeIndex = element('span', 'place-index', String(next.world.day).padStart(2, '0')); placeIndex.setAttribute('aria-hidden', 'true');
+    place.append(element('span', 'eyebrow', `LORN BAY · NOVEMBER ${next.world.day + 5}`), element('h1', '', next.presentation?.title ?? 'Lorn Bay'), element('p', 'place-sound', next.presentation?.sound ?? ''), placeIndex);
+    const sceneDetails = element('div', 'scene-details');
+    const character = portraitFor(next.presentation?.character);
+    if (character) {
+      const figure = element('figure', 'character-portrait');
+      const portrait = element('img', 'resident-portrait');
+      portrait.src = character.src; portrait.alt = character.alt;
+      portrait.width = 768; portrait.height = 960; portrait.decoding = 'async';
+      const inspect = button('', () => openPanel(character.name, body => {
+        const detail = element('img', 'portrait-detail');
+        detail.src = character.src; detail.alt = character.alt; detail.width = 768; detail.height = 960;
+        body.append(detail);
+      }, 'portrait-dialog'), 'portrait-button');
+      inspect.setAttribute('aria-label', `View ${character.name}’s portrait`);
+      inspect.setAttribute('aria-haspopup', 'dialog');
+      inspect.append(portrait, element('span', 'portrait-caption', character.name));
+      const affordance = icon('expand'); affordance.classList.add('portrait-expand'); inspect.append(affordance);
+      portrait.addEventListener('error', () => figure.remove(), { once: true });
+      figure.append(inspect); sceneDetails.append(figure);
+    }
+    sceneDetails.append(place); visual.append(sceneDetails);
     for (const object of next.presentation?.objects ?? []) place.append(element('p', 'scene-object', object));
     const reading = element('article', 'scene-reading');
-    const day = element('p', 'reading-header', next.ending ? next.ending.replaceAll('-', ' ') : `${next.header}`); reading.append(day);
-    const who = next.presentation?.character;
-    if (who === 'wren') {
-      const portrait = element('img', 'resident-portrait wren-portrait'); portrait.src = '/art/wren.jpg'; portrait.alt = 'Wren, travel-worn and direct, in a practical coat with a canvas bag strap over her shoulder.';
-      portrait.width = 240; portrait.height = 300; portrait.decoding = 'async'; reading.append(portrait);
-    } else if (who && INTRO[who]) {
-      const portrait = element('div', 'resident-portrait'); portrait.setAttribute('role', 'img'); portrait.setAttribute('aria-label', who[0]!.toUpperCase() + who.slice(1));
-      portrait.innerHTML = firstMeetingSketch(INTRO[who]) ?? ''; // trusted bundled SVG, never user input
-      reading.append(portrait);
-    }
+    const day = element('p', 'reading-header', next.ending ? next.ending.replaceAll('-', ' ') : `${next.header}`);
+    const readingTop = element('div', 'reading-top'); readingTop.append(day, icon('star')); reading.append(readingTop);
     const prose = element('section', 'scene-prose'); paragraphs(prose, next.paragraphs); reading.append(prose);
     if (next.observations?.length) {
       const observations = element('div', 'observations'); observations.append(element('p', 'eyebrow', 'Take a closer look · no time passes'));
@@ -183,8 +221,12 @@ export const createExperience = (root: HTMLElement, hooks: Hooks) => {
       form.append(label, input, submit, error); form.addEventListener('submit', event => { event.preventDefault(); try { hooks.onName(input.value); } catch { error.textContent = 'Choose a name of 1–40 characters.'; } }); reading.append(form);
     }
     const choices = element('div', 'story-choices');
+    if (next.choices.length) choices.append(element('p', 'choice-heading eyebrow', 'What will you do?'));
     for (const [i, c] of next.choices.entries()) {
       const node = button(c.label, () => hooks.onChoose(c.id), `story-choice${c.stakes === 'major' ? ' major' : ''}`);
+      const label = element('span', 'choice-label', c.label);
+      const number = element('span', 'choice-number', String(i + 1).padStart(2, '0')); number.setAttribute('aria-hidden', 'true');
+      node.replaceChildren(number, label, icon('arrow'));
       node.disabled = c.locked; node.dataset.index = String(i + 1); choices.append(node);
     }
     if (next.ending) {
@@ -192,7 +234,9 @@ export const createExperience = (root: HTMLElement, hooks: Hooks) => {
       if (next.ending === 'unwitnessed' && hooks.canRewind()) choices.append(button('Return to the last night you were seen', hooks.onRewind, 'story-choice'));
       choices.append(button('Begin another November', hooks.onNewGame, 'story-choice'));
     }
-    reading.append(choices); page.replaceChildren(visual, reading); book.update(next.world);
+    const readingFoot = element('footer', 'reading-footer');
+    readingFoot.append(ornament(), element('span', '', 'A November in Lorn Bay'));
+    reading.append(choices, readingFoot); page.replaceChildren(visual, reading); book.update(next.world);
     if (next.presentation?.sound) addCaption(next.presentation.sound);
     if (preferences.paced && !preferences.reducedMotion && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
       const nodes = [...prose.children] as HTMLElement[];
@@ -210,17 +254,30 @@ export const createExperience = (root: HTMLElement, hooks: Hooks) => {
   };
   document.addEventListener('keydown', onKey);
   return { renderScene, addCaption,
-    dispose: () => { cancelReveal(); document.removeEventListener('keydown', onKey); book.retire(); root.replaceChildren(); },
+    dispose: () => { cancelReveal(); document.removeEventListener('keydown', onKey); book.retire(); root.replaceChildren(); root.classList.remove('experience-root'); delete root.dataset.view; },
     resetHistory: () => { history = []; sounds = []; safeWrite(HISTORY_KEY, '[]'); safeWrite(SOUNDS_KEY, '[]'); },
     rewindHistory: (sceneId: string) => { let index = history.length - 1; while (index >= 0 && history[index]?.scene !== sceneId) index--; history = index >= 0 ? history.slice(0, index + 1) : []; sounds = []; safeWrite(SOUNDS_KEY, '[]'); safeWrite(HISTORY_KEY, JSON.stringify(history)); },
     showTitle: (mode: 'fresh' | 'resume' | 'held', begin: (fresh: boolean) => void) => {
       cancelReveal(); model = null; book.retire(); toolbar.hidden = true; delete document.body.dataset.slot;
+      root.dataset.view = 'title'; edition.hidden = false; delete page.dataset.staging; delete page.dataset.scene;
       page.className = 'experience-title page';
+      const art = element('div', 'title-art'); art.setAttribute('aria-hidden', 'true');
+      const titleImage = element('img', 'title-painting'); titleImage.src = '/art/shore.jpg'; titleImage.alt = ''; titleImage.width = 1672; titleImage.height = 941; titleImage.fetchPriority = 'high';
+      art.append(titleImage, element('div', 'title-mist'));
       const panel = element('section', 'title-invitation');
-      panel.append(element('p', 'eyebrow', 'A NOVEMBER IN LORN BAY'), element('h1', '', 'NOT HERE'), element('p', 'title-description', 'A town has kept a place for someone.\nYou arrive before she does.'), button(mode === 'fresh' ? 'Walk toward the light' : 'Return to your November', () => begin(mode === 'fresh'), 'begin-button'));
+      const title = element('h1'); title.append(element('span', '', 'Not'), document.createTextNode(' '), element('em', '', 'Here'));
+      const beginButton = button(mode === 'fresh' ? 'Walk toward the light' : 'Return to your November', () => begin(mode === 'fresh'), 'begin-button');
+      beginButton.append(icon('arrow'));
+      panel.append(element('p', 'eyebrow title-eyebrow', 'A NOVEMBER IN LORN BAY'), title, ornament(), element('p', 'title-description', 'A town has kept a place for someone.\nYou arrive before she does.'), beginButton);
       if (mode !== 'fresh') panel.append(button('Begin another November', () => begin(true), 'quiet-button'));
       if (hooks.onTitleSound) panel.append(button('Hear your remembered phrase', hooks.onTitleSound, 'quiet-button'));
-      panel.append(button('Reading & sound settings', settings, 'quiet-button'), element('p', 'content-note', 'Grief, memory loss, family estrangement, and voluntary self-dissolution. Play at your pace. Sound is optional.'));
+      const settingsButton = button('Reading & sound settings', settings, 'quiet-button title-settings'); settingsButton.prepend(icon('settings'));
+      panel.append(settingsButton);
+      const footer = element('footer', 'title-footer');
+      const note = element('details', 'content-note');
+      note.append(element('summary', '', 'Before you begin'), element('p', '', 'Grief, memory loss, family estrangement, and voluntary self-dissolution. Play at your pace. Sound is optional.'));
+      const soundNote = element('span', 'title-sound-note', 'Best enjoyed slowly. Sound is optional.'); soundNote.prepend(icon('sound'));
+      footer.append(note, soundNote);
       const incompatible = mode === 'fresh' ? safeRead(SAVE_KEY) : null;
       if (incompatible) {
         panel.append(element('p', 'legacy-note', 'This saved revised path cannot be resumed by this edition. Export it before beginning a fresh November.'));
@@ -232,7 +289,7 @@ export const createExperience = (root: HTMLElement, hooks: Hooks) => {
         panel.append(button('Play the original edition', () => { window.location.search = '?edition=original'; }, 'quiet-button'));
         panel.append(button('Export original save', () => { const blob = new Blob([legacy], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = element('a'); a.href = url; a.download = 'not-here-original-save.json'; a.click(); window.setTimeout(() => URL.revokeObjectURL(url), 1000); }, 'quiet-button'));
       }
-      page.replaceChildren(panel); applyPreferences();
+      page.replaceChildren(art, panel, footer); applyPreferences();
     },
   };
 };

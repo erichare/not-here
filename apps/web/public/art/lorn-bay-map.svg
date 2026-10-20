@@ -1,0 +1,222 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 720" fill="none">
+  <title>Lorn Bay — a west-shore village on Okanagan Lake</title>
+  <desc>North is up. The lake lies east of the village, with orchard benches and Highway 97 uphill to the west. A winding village road connects the Kettle, General, hall, and old wharf. A regional inset locates the fictional village between Peachland and Summerland.</desc>
+  <defs>
+    <pattern id="paper" width="7" height="9" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="3" r=".5" fill="#817c60" opacity=".12"/>
+      <circle cx="5" cy="7" r=".4" fill="#fff" opacity=".6"/>
+    </pattern>
+    <pattern id="orchards" width="15" height="17" patternUnits="userSpaceOnUse" patternTransform="rotate(-18)">
+      <path d="M4 0V17" stroke="#879274" stroke-width=".7" opacity=".6"/>
+      <circle cx="4" cy="5" r="2.3" fill="#879274" opacity=".5"/>
+      <circle cx="4" cy="13" r="2.3" fill="#879274" opacity=".5"/>
+    </pattern>
+    <pattern id="water-lines" width="30" height="22" patternUnits="userSpaceOnUse">
+      <path d="M3 10h9m10 11h4" stroke="#5f8790" stroke-width=".5" opacity=".23"/>
+    </pattern>
+    <linearGradient id="water" x1="510" y1="360" x2="1000" y2="360" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#b9d0cd"/><stop offset=".18" stop-color="#a7c3c3"/><stop offset="1" stop-color="#9ebbc0"/>
+    </linearGradient>
+    <linearGradient id="hills" x1="0" y1="0" x2="420" y2="200" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#b9bf9e"/><stop offset="1" stop-color="#dbdac3"/>
+    </linearGradient>
+    <path id="shoreline" d="M600-10C590 38 579 63 598 104S607 153 587 188 559 222 571 256 590 288 574 321 551 353 555 389 579 442 570 478 552 514 570 550 546 580 552 620 542 677 518 730"/>
+    <path id="highway" d="M253-20C236 43 184 84 190 141S246 232 232 286 185 362 193 425 233 496 211 559 162 666 176 740"/>
+    <path id="village-road" d="M222 194C282 207 279 253 346 271S447 291 470 318 500 363 459 397 418 451 448 489 488 542 500 590 504 667 479 730"/>
+    <path id="shore-road" d="M479-20C470 28 506 59 522 102S545 165 537 196 506 245 519 289 549 330 525 368 536 438 528 475 545 526 533 559 510 593 519 624 502 688 478 735"/>
+    <path id="pine" d="m0-7-4 7h3l-4 6h4v3h2V6h4L1 0h3Z"/>
+    <style>
+      text{font-family:Georgia,'Times New Roman',serif;fill:#35483e}
+      .small{font-family:ui-monospace,'Courier New',monospace;font-size:10px;letter-spacing:1.7px}
+      .contour{stroke:#8e967a;stroke-width:.85;opacity:.52}
+      .contour-major{stroke:#899173;stroke-width:1.2;opacity:.6}
+      .place{font-size:17px;paint-order:stroke;stroke:#e8e4d1;stroke-width:5px;stroke-linejoin:round}
+      .note{font-size:12px;font-style:italic;fill:#66745e;paint-order:stroke;stroke:#e6e2cf;stroke-width:3px;stroke-linejoin:round}
+      .pin circle{fill:#f3efde;stroke:#455d55;stroke-width:1.7}
+      .pin text{font-family:ui-monospace,'Courier New',monospace;font-size:10px;font-weight:bold;fill:#354e48;text-anchor:middle;dominant-baseline:central}
+      .building{fill:#978d78;stroke:#f2edda;stroke-width:1.4}
+      .lane{stroke:#a2947a;stroke-width:5;stroke-linejoin:round}
+      .lane-center{stroke:#f5f0dd;stroke-width:3;stroke-linejoin:round}
+      .water-note{fill:#52767d;letter-spacing:4px;font-style:italic}
+    </style>
+  </defs>
+
+  <!-- A fictional village plan, oriented to the real valley's west shore. -->
+  <path fill="#e7e3cf" d="M0 0h1000v720H0z"/>
+  <path fill="url(#hills)" d="M0 0h391c-41 72-93 102-72 168s67 81 26 147-76 105-56 173S235 637 277 720H0Z"/>
+  <path fill="#ced0b1" opacity=".7" d="M0 0h173c22 63-49 84-29 154s27 72-2 137-14 118 9 171-10 181-33 258H0Z"/>
+  <g class="contour">
+    <path d="M64-20C115 47 48 98 71 157s69 91 40 152S61 402 85 467 58 574 92 638 107 686 98 740"/>
+    <path d="M93-20C140 43 74 102 98 160s72 94 39 155-52 91-28 158-25 109 11 169 35 69 23 98"/>
+    <path d="M123-20C170 42 100 106 123 164s80 96 43 156-55 97-30 163-28 111 13 168 36 64 29 89"/>
+    <path d="M154-20C196 47 127 110 149 168s82 97 43 160-55 102-31 163-21 112 21 166 30 56 28 83"/>
+    <path d="M184-20C224 50 156 113 176 174s85 95 46 164-59 101-35 167-20 105 18 162 29 54 30 73"/>
+    <path d="M215-20C253 59 186 122 204 179s82 99 47 167-61 106-35 171-20 102 19 163 20 42 26 60"/>
+    <path d="M247-20C282 60 218 130 233 186s84 97 50 172-58 104-36 166-17 107 21 155 22 42 30 61"/>
+    <path d="M280-20C309 69 246 132 262 197s82 96 50 176-56 94-33 157-19 105 19 157 21 38 31 53"/>
+    <path d="M313-20C341 76 278 139 291 206s87 103 52 178-60 97-34 159-19 108 22 157l26 40"/>
+    <path d="M346-20C372 77 310 148 322 217s91 104 53 184-64 95-31 159-18 105 18 153l22 27"/>
+    <path d="M380-20C406 82 340 162 354 228s89 114 54 188-65 98-28 163-12 108 25 161"/>
+    <path d="M411-20C436 98 374 174 389 240s83 106 51 184-62 101-27 163-9 103 23 153"/>
+    <path d="M442-20C468 108 405 178 423 250s76 106 49 181-60 104-25 165-10 98 22 144"/>
+  </g>
+  <g class="contour-major">
+    <path d="M33-20C83 46 21 91 45 155s68 91 39 151S33 402 58 468 29 576 63 640 75 696 68 740"/>
+    <path d="M169-20C212 49 142 111 163 172s83 95 45 161-57 100-33 164-23 110 19 166 29 55 29 77"/>
+    <path d="M329-20C356 78 294 143 306 211s89 106 52 181-60 96-31 158-20 105 22 155l22 35"/>
+  </g>
+  <g opacity=".82">
+    <path d="m291 82 114-7-17 88-92 13Z" fill="url(#orchards)" stroke="#adb28f"/>
+    <path d="m272 376 77-35 32 59-67 45Z" fill="url(#orchards)" stroke="#adb28f"/>
+    <path d="m262 573 101-21 36 78-93 35Z" fill="url(#orchards)" stroke="#adb28f"/>
+    <path d="m372 609 58-14 38 71-71 34Z" fill="url(#orchards)" stroke="#adb28f"/>
+  </g>
+  <g fill="#6d8066" opacity=".6">
+    <use href="#pine" x="36" y="142"/><use href="#pine" x="57" y="158"/><use href="#pine" x="37" y="179"/>
+    <use href="#pine" x="78" y="183"/><use href="#pine" x="58" y="204"/><use href="#pine" x="32" y="222"/>
+    <use href="#pine" x="106" y="222"/><use href="#pine" x="82" y="244"/><use href="#pine" x="55" y="257"/>
+    <use href="#pine" x="122" y="259"/><use href="#pine" x="104" y="279"/><use href="#pine" x="65" y="296"/>
+    <use href="#pine" x="40" y="326"/><use href="#pine" x="70" y="342"/><use href="#pine" x="94" y="363"/>
+    <use href="#pine" x="48" y="380"/><use href="#pine" x="29" y="405"/><use href="#pine" x="78" y="416"/>
+    <use href="#pine" x="44" y="462"/><use href="#pine" x="66" y="482"/><use href="#pine" x="30" y="498"/>
+    <use href="#pine" x="96" y="508"/><use href="#pine" x="74" y="539"/><use href="#pine" x="41" y="551"/>
+    <use href="#pine" x="108" y="571"/><use href="#pine" x="63" y="599"/><use href="#pine" x="32" y="618"/>
+    <use href="#pine" x="134" y="625"/><use href="#pine" x="107" y="648"/><use href="#pine" x="49" y="668"/>
+  </g>
+
+  <!-- The continuous lake shoreline; water stays east of the town. -->
+  <path fill="url(#water)" d="M600-10C590 38 579 63 598 104S607 153 587 188 559 222 571 256 590 288 574 321 551 353 555 389 579 442 570 478 552 514 570 550 546 580 552 620 542 677 518 730H1010V-10Z"/>
+  <path fill="url(#water-lines)" d="M600-10C590 38 579 63 598 104S607 153 587 188 559 222 571 256 590 288 574 321 551 353 555 389 579 442 570 478 552 514 570 550 546 580 552 620 542 677 518 730H1010V-10Z"/>
+  <use href="#shoreline" stroke="#ede8cc" stroke-width="10"/>
+  <use href="#shoreline" stroke="#78928b" stroke-width="1.2"/>
+  <use href="#shoreline" transform="translate(15 0)" stroke="#72979a" stroke-width=".8" opacity=".5"/>
+  <use href="#shoreline" transform="translate(35 0)" stroke="#72979a" stroke-width=".6" opacity=".35"/>
+  <path d="M634 490c31 10 45 7 71-2m-69 13c23 6 39 5 55-1M675 561c20 5 42 4 59-3m-47 12c10 2 17 2 26 0" stroke="#638b91" stroke-width=".8" opacity=".55"/>
+
+  <!-- Roads use casing, a pale roadbed, and a distinct highway centerline. -->
+  <use href="#highway" stroke="#a8997c" stroke-width="10"/>
+  <use href="#highway" stroke="#f4edda" stroke-width="7"/>
+  <use href="#highway" stroke="#bb9363" stroke-width="1.3" stroke-dasharray="10 6"/>
+  <use href="#village-road" class="lane"/><use href="#village-road" class="lane-center"/>
+  <use href="#shore-road" class="lane"/><use href="#shore-road" class="lane-center"/>
+  <path d="M470 318 509 329 552 349M346 271 338 296M448 489 374 492 340 509M441 518 428 534M540 153 587 164" class="lane"/>
+  <path d="M470 318 509 329 552 349M346 271 338 296M448 489 374 492 340 509M441 518 428 534M540 153 587 164" class="lane-center"/>
+  <path d="M234 244C268 254 280 288 319 308M195 429c37 28 54 50 86 59l59 21M447 552c32 12 54 29 83 54" stroke="#8b8871" stroke-width="1.3" stroke-dasharray="3 5"/>
+  <path d="M411 167c-14 28 5 50 30 64s42 26 70 24 42-14 62-11" stroke="#849fa0" stroke-width="1.5"/>
+  <path d="M411 167c-14 28 5 50 30 64s42 26 70 24 42-14 62-11" stroke="#dde5d2" stroke-width=".5"/>
+
+  <!-- Domestic building footprints keep the village modest in scale. -->
+  <g class="building">
+    <path d="m196 176 15-4 6 18-15 5Z"/>
+    <path d="m330 285 17 3-4 18-17-3Z"/>
+    <path d="m418 299 28 6-5 23-28-6Z"/>
+    <path d="m397 409 22 7-8 24-22-7Z"/>
+    <path d="m422 515 26-5 5 21-26 5Z"/>
+    <path d="m319 495 14-3 4 15-14 3Zm19-4 14-3 4 15-14 3Zm19-4 14-3 4 15-14 3Z"/>
+    <path d="m320 516 14-3 4 15-14 3Zm19-4 14-3 4 15-14 3Zm19-4 14-3 4 15-14 3Z"/>
+    <path d="m521 127 23 7-7 24-23-7Z"/>
+    <path d="m530 335 12-2 3 16-12 2Z"/>
+    <path d="m368 244 12-3 4 15-12 3Zm-64-29 12-5 5 13-12 5Zm-17 78 12 2-3 14-12-2Z"/>
+    <path d="m383 369 13 4-4 14-13-4Zm-22 76 12 2-3 14-12-2Zm66 132 13-4 4 15-13 4Z"/>
+    <path d="m490 72 12-4 4 14-12 4Zm-4 138 11-3 4 14-11 3Zm20 448 12-3 3 13-12 3Z"/>
+  </g>
+  <g stroke="#817d6b">
+    <path d="m555 344 65 11-2 10-65-11Z" fill="#b7ab8b" stroke-width="1.3"/>
+    <path d="m560 346-1 9m8-8-1 10m8-9-1 10m8-8-1 9m8-8-1 9m8-8-1 10m8-9-1 10m8-8-1 9" stroke-width=".6"/>
+    <path d="m613 341 25 5-2 7-25-5Z" fill="#b7ab8b"/>
+    <path d="m584 156 16 7-3 8-16-7Z" fill="#c3b99b"/>
+  </g>
+  <circle cx="632" cy="347" r="3" fill="#f4e7b6" stroke="#6f7561"/>
+  <path d="m635 342 3-4m-8 3-1-5m10 12 5 1" stroke="#8b8262" stroke-width=".8"/>
+
+  <!-- Labels and numbered landmarks. -->
+  <g>
+    <text x="38" y="55" font-size="36" letter-spacing="-1">Lorn Bay</text>
+    <text x="40" y="78" class="small">OKANAGAN VALLEY · BRITISH COLUMBIA</text>
+    <path d="M40 91h207" stroke="#778369" stroke-width=".8"/>
+    <text x="94" y="305" class="small" transform="rotate(-79 94 305)" fill="#647157">PONDEROSA SLOPES</text>
+    <text x="298" y="198" class="note" transform="rotate(-8 298 198)">orchard benches</text>
+    <text x="280" y="688" class="note" transform="rotate(-17 280 688)">bare rows, November</text>
+    <text x="479" y="469" class="small" transform="rotate(82 479 469)" fill="#776d57">SHORE ROAD</text>
+    <text x="150" y="555" class="small" transform="rotate(-75 150 555)" fill="#796c56">HIGHWAY 97</text>
+    <text x="249" y="118" class="note">north to Peachland</text>
+    <text x="45" y="702" class="note">south to Summerland &amp; Penticton</text>
+    <path d="m223 109 6-10 1 11m-49 576-3 11-7-8" stroke="#716f58" stroke-width="1.1"/>
+    <text x="706" y="450" class="water-note" font-size="25" transform="rotate(-86 706 450)">Okanagan Lake</text>
+    <text x="615" y="467" class="small" fill="#5f7d80">LORN BAY</text>
+    <text x="575" y="589" class="note" fill="#5f7d80">gravel beach</text>
+    <text x="566" y="191" class="note">boat launch</text>
+
+    <text x="240" y="177" class="place">Highway pull-in</text>
+    <text x="307" y="274" class="place">Clinic</text>
+    <text x="421" y="359" class="place" text-anchor="middle">Community hall</text>
+    <text x="622" y="327" class="place">Old wharf</text>
+    <text x="364" y="404" class="place" text-anchor="middle">The General</text>
+    <text x="300" y="549" class="place">Unit One</text>
+    <text x="463" y="563" class="place">The Kettle</text>
+    <text x="548" y="638" class="place">Shore road</text>
+    <text x="496" y="113" class="place" text-anchor="middle">Sam’s boathouse</text>
+  </g>
+  <g class="pin">
+    <g transform="translate(215 190)"><circle r="11"/><text>1</text></g>
+    <g transform="translate(345 300)"><circle r="11"/><text>2</text></g>
+    <g transform="translate(440 320)"><circle r="11"/><text>3</text></g>
+    <g transform="translate(597 350)"><circle r="11"/><text>4</text></g>
+    <g transform="translate(410 427)"><circle r="11"/><text>5</text></g>
+    <g transform="translate(340 510)"><circle r="11"/><text>6</text></g>
+    <g transform="translate(447 536)"><circle r="11"/><text>7</text></g>
+    <g transform="translate(530 606)"><circle r="11"/><text>8</text></g>
+    <g transform="translate(535 142)"><circle r="11"/><text>9</text></g>
+  </g>
+
+  <!-- Compass and cartographic key. No invented survey measurements. -->
+  <g transform="translate(683 90)">
+    <text y="-38" text-anchor="middle" class="small">N</text>
+    <path d="M0-28 7 16 0 10-7 16Z" fill="#50665e" stroke="#50665e"/>
+    <path d="M0-28V10l-7 6Z" fill="#eee8d2"/>
+    <circle r="22" stroke="#6f8780" stroke-width=".6"/>
+    <path d="M-29 0h13M16 0h13M0 22v8" stroke="#6f8780" stroke-width=".8"/>
+  </g>
+  <g transform="translate(767 495)">
+    <text class="small" y="0">READING THE MAP</text>
+    <path d="M0 22h31" stroke="#a8997c" stroke-width="7"/><path d="M0 22h31" stroke="#f4edda" stroke-width="4"/>
+    <text x="44" y="26" font-size="12">Highway</text>
+    <path d="M0 46h31" class="lane"/><path d="M0 46h31" class="lane-center"/>
+    <text x="44" y="50" font-size="12">Village road</text>
+    <path d="M0 70h31" stroke="#8b8871" stroke-width="1.3" stroke-dasharray="3 5"/>
+    <text x="44" y="74" font-size="12">Footpath</text>
+    <path d="M0 92q15-8 31 0m-31 5q15-8 31 0" class="contour"/>
+    <text x="44" y="99" font-size="12">Rising ground</text>
+    <text y="133" font-size="11" font-style="italic">A fictional village, a real valley.</text>
+    <text y="151" font-size="10" fill="#66746b">Village plan not to scale.</text>
+  </g>
+  <g aria-label="Regional inset of Okanagan Lake">
+    <rect x="758" y="35" width="212" height="414" fill="#e8e5d3" stroke="#7e8e7b" stroke-width=".8"/>
+    <text x="775" y="59" class="small">THE OKANAGAN</text>
+    <text x="775" y="79" font-size="10" font-style="italic">A place along the west shore</text>
+    <g transform="translate(783 101)">
+      <path d="M104.6 14.6 L112.5 3.9 L115.9 1.3 L120.0 0.0 L118.6 4.6 L99.2 28.6 L97.1 32.0 L96.8 35.9 L98.5 39.1 L101.1 41.7 L100.8 46.7 L93.5 55.5 L90.5 60.6 L88.0 75.8 L86.5 80.1 L89.8 96.8 L89.3 106.1 L90.9 113.4 L90.8 118.0 L84.4 145.4 L79.1 154.7 L77.7 159.4 L80.6 176.1 L79.7 180.2 L78.2 184.1 L75.2 188.5 L71.3 192.1 L62.8 196.1 L40.1 202.9 L36.2 204.8 L32.6 207.2 L28.7 213.9 L29.1 219.5 L31.9 224.6 L40.7 237.6 L47.5 244.6 L50.2 248.9 L53.9 258.3 L55.4 267.1 L58.5 274.8 L60.6 283.2 L60.9 288.6 L60.4 294.0 L58.8 296.9 L56.0 298.8 L53.2 297.5 L49.4 285.1 L48.4 281.0 L49.2 273.6 L42.7 260.9 L20.0 220.9 L19.3 216.5 L19.9 212.2 L21.4 208.0 L23.9 204.1 L30.3 197.2 L38.2 192.8 L46.6 189.6 L52.9 184.6 L63.2 179.1 L66.2 176.5 L70.7 169.5 L72.3 162.1 L70.8 154.3 L71.9 151.0 L78.1 142.5 L80.9 132.3 L81.2 126.4 L79.1 105.7 L79.3 96.3 L76.5 81.1 L78.0 75.1 L78.4 70.7 L76.9 63.0 L77.2 58.5 L78.5 54.3 L87.8 45.1 L90.1 41.0 L90.8 28.8 L93.2 25.4 L101.2 19.2 Z" fill="#a5c2c4" stroke="#62858a" stroke-width=".8"/>
+      <path d="M122 12 119 2 116 12" stroke="#6b7c70" stroke-width=".6" transform="translate(-111 0)"/>
+      <text x="8" y="26" font-size="8">N</text>
+      <g fill="#465c51">
+        <circle cx="130.68" cy="25.76" r="2"/><circle cx="79" cy="161.13" r="2"/>
+        <circle cx="23.49" cy="202.08" r="2"/><circle cx="36.1" cy="263.74" r="2"/>
+        <circle cx="56.33" cy="300" r="2"/>
+      </g>
+      <g font-size="11">
+        <text x="139" y="29">Vernon</text><text x="87" y="165">Kelowna</text>
+        <text x="35" y="205">Peachland</text><text x="46" y="268">Summerland</text>
+        <text x="66" y="304">Penticton</text>
+      </g>
+      <ellipse cx="24" cy="234" rx="12" ry="17" fill="#b46b4b" fill-opacity=".12" stroke="#a3654c" stroke-dasharray="3 3"/>
+      <path d="M35 234h47" stroke="#a3654c" stroke-width=".8"/>
+      <text x="87" y="231" font-size="13" fill="#965d45">Lorn Bay</text>
+      <text x="87" y="245" font-size="9" font-style="italic" fill="#965d45">fictional area</text>
+      <text x="97" y="96" font-size="11" font-style="italic" fill="#5c7e85" transform="rotate(-79 97 96)">Okanagan Lake</text>
+    </g>
+    <text x="775" y="431" font-size="9" fill="#6e7b6d">Made with Natural Earth</text>
+  </g>
+  <path fill="url(#paper)" pointer-events="none" d="M0 0h1000v720H0z"/>
+  <path stroke="#697c6c" stroke-opacity=".55" d="M12 12h976v696H12z"/>
+  <path stroke="#697c6c" stroke-opacity=".25" d="M17 17h966v686H17z"/>
+</svg>

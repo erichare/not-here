@@ -10,7 +10,7 @@ An intimate illustrated mystery about being loved as someone you are not. Lorn B
 
 The revised story is playable from the beach through all seven endings. It includes an earlier letter discovery, a present-day exchange with Wren through Sam, a chosen name, optional preparations for arrival, and explicit ending decisions. An honest route can reach hope without any confession. Memory theft retains its cost.
 
-All nine locations have painted compositions. The quilt loss, potluck, letters and bus arrival receive distinct staging; Wren’s ink portrait is withheld until arrival. A changed Kettle reflects work arranged under your own name. The reader includes inspectable evidence, a notebook, town map, recent pages and separate sound controls. Prose appears immediately by default. Acoustic arrangements now span the later story and endings, with exact confession identities and designed environmental sounds. Silent play includes every clue.
+All nine locations have painted compositions. The quilt loss, potluck, letters and bus arrival receive distinct staging. Seven painted character portraits open for a closer look; Wren’s portrait is withheld until arrival. A changed Kettle reflects work arranged under your own name. The reader includes inspectable evidence, a notebook, recent pages and separate sound controls. The illustrated town map includes roads, terrain, numbered landmarks, zoom controls, and an Okanagan Lake inset based on real geographic data. Prose appears immediately by default. Acoustic arrangements now span the later story and endings, with exact confession identities and designed environmental sounds. Silent play includes every clue.
 
 **Production status:** the creator approved the sample on September 7, and its art and music have been expanded. Open `/art-review.html` for the paintings and listening room; major scenes and endings sit behind spoiler disclosures. The music and environmental Foley are synthesized, not recorded performances. Voice recording, further character pose design, human listening, blind story playtests and actual screen-reader testing remain acceptance work. See [delivery and review](design/immersion-delivery.md).
 
@@ -71,6 +71,6 @@ vercel deploy --prebuilt --prod
 
 GitHub builds regenerate the soundtrack too; environments without `ffmpeg` serve the WAV fallbacks.
 
-Design spoilers: [canon](design/game-bible.md), [clue table](design/twist-recontext-table.md), [asset provenance and final prompts](design/asset-provenance.md). Earlier design decisions are retained as original-edition history.
+Design spoilers: [canon](design/game-bible.md), [clue table](design/twist-recontext-table.md), [asset provenance and final prompts](design/asset-provenance.md), [painted portraits](design/painted-portraits.json), [map geography and sources](design/map-geography.md). Earlier design decisions are retained as original-edition history.
 
 Content: grief, memory loss, family estrangement and voluntary self-dissolution.

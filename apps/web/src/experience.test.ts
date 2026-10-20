@@ -3,7 +3,7 @@ import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { advance, initialState, type StepResult } from '@not-here/engine';
 import { buildRevisedContent, REVISED_OPENING_SCENE } from '@not-here/story';
 import { createExperience } from './experience.ts';
-import { clearSave, LEGACY_SAVE_KEY } from './save.ts';
+import { clearSave, LEGACY_SAVE_KEY, SAVE_KEY } from './save.ts';
 import { PREFERENCES_KEY } from './preferences.ts';
 import { TRANSCRIPT_KEY } from './model/transcript.ts';
 
@@ -72,4 +72,183 @@ it('clearing a revised run preserves the original save and transcript', () => {
   localStorage.setItem(LEGACY_SAVE_KEY, 'original-save'); localStorage.setItem(TRANSCRIPT_KEY, 'original-pages');
   clearSave(localStorage);
   expect(localStorage.getItem(LEGACY_SAVE_KEY)).toBe('original-save'); expect(localStorage.getItem(TRANSCRIPT_KEY)).toBe('original-pages');
+});
+
+it('lets a new reader adjust settings before beginning a fresh story', () => {
+  const begin = vi.fn();
+  ui.showTitle('fresh', begin);
+
+  expect(root.querySelector<HTMLElement>('.experience-tools')!.hidden).toBe(true);
+  expect(root.querySelector('.scene-prose')).toBeNull();
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: '1', bubbles: true }));
+  expect(choose).not.toHaveBeenCalled();
+  click('Reading & sound settings');
+  expect(root.querySelector('dialog')!.open).toBe(true);
+  expect(begin).not.toHaveBeenCalled();
+  click('Close');
+  click('Walk toward the light');
+  expect(begin).toHaveBeenCalledExactlyOnceWith(true);
+});
+
+it.each(['resume', 'held'] as const)('keeps returning and starting over distinct on a %s title', mode => {
+  const begin = vi.fn();
+  ui.showTitle(mode, begin);
+
+  click('Return to your November');
+  expect(begin).toHaveBeenLastCalledWith(false);
+  click('Begin another November');
+  expect(begin).toHaveBeenLastCalledWith(true);
+  expect(begin).toHaveBeenCalledTimes(2);
+});
+
+it('keeps both saved editions available for export on a fresh title', () => {
+  localStorage.setItem(SAVE_KEY, 'incompatible-revised-save');
+  localStorage.setItem(LEGACY_SAVE_KEY, 'original-save');
+  const begin = vi.fn();
+  const createObjectURL = vi.fn(() => 'blob:save-export');
+  const revokeObjectURL = vi.fn();
+  vi.stubGlobal('URL', { createObjectURL, revokeObjectURL });
+  const downloads: string[] = [];
+  const clickAnchor = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function (this: HTMLAnchorElement) {
+    downloads.push(this.download);
+  });
+  vi.useFakeTimers();
+  try {
+    ui.showTitle('fresh', begin);
+    expect(root.textContent).toContain('Your original November is preserved.');
+    expect([...root.querySelectorAll('button')].some(node => node.textContent === 'Play the original edition')).toBe(true);
+    click('Export saved revised path');
+    click('Export original save');
+    expect(downloads).toEqual(['not-here-revised-save.json', 'not-here-original-save.json']);
+    expect(createObjectURL).toHaveBeenCalledTimes(2);
+    expect(localStorage.getItem(SAVE_KEY)).toBe('incompatible-revised-save');
+    expect(localStorage.getItem(LEGACY_SAVE_KEY)).toBe('original-save');
+    expect(begin).not.toHaveBeenCalled();
+    vi.runAllTimers();
+    expect(revokeObjectURL).toHaveBeenCalledTimes(2);
+  } finally {
+    clickAnchor.mockRestore();
+    vi.useRealTimers();
+  }
+});
+
+it('keeps numbered choices labeled by their story text and sends the matching choice id', () => {
+  const choices = [...root.querySelectorAll<HTMLButtonElement>('.story-choice[data-index]')];
+  expect(choices).toHaveLength(step.view.choices.length);
+  for (const [index, node] of choices.entries()) {
+    const choice = step.view.choices[index]!;
+    expect(node.querySelector('.choice-label')?.textContent).toBe(choice.label);
+    expect(node.querySelector('.choice-number')?.getAttribute('aria-hidden')).toBe('true');
+    expect(node.querySelector('svg')?.getAttribute('aria-hidden')).toBe('true');
+    expect(node.disabled).toBe(choice.locked);
+    if (!choice.locked) {
+      node.click();
+      expect(choose).toHaveBeenLastCalledWith(choice.id);
+    }
+  }
+});
+
+it('keeps the opening landscape free of a character portrait', () => {
+  expect(step.view.presentation?.character).toBeUndefined();
+  expect(root.querySelector('.character-portrait')).toBeNull();
+  expect(root.querySelector('img[src="/art/portraits/wren.jpg"]')).toBeNull();
+});
+
+it('opens Barb’s painting in a named dialog and blocks choices while it is open', () => {
+  step = advance(content, initialState(42, 'n1-diner'), { kind: 'enter' });
+  render();
+
+  const portrait = root.querySelector<HTMLImageElement>('.resident-portrait')!;
+  expect(portrait.tagName).toBe('IMG');
+  expect(portrait.getAttribute('src')).toBe('/art/portraits/barb.jpg');
+  expect(portrait.alt).toContain('Barb');
+  expect(root.querySelector('.character-portrait svg:not(.portrait-expand)')).toBeNull();
+  const inspect = root.querySelector<HTMLButtonElement>('button[aria-label="View Barb’s portrait"]')!;
+  expect(inspect.getAttribute('aria-haspopup')).toBe('dialog');
+  inspect.click();
+
+  const dialog = root.querySelector<HTMLDialogElement>('dialog')!;
+  expect(dialog.open).toBe(true);
+  expect(dialog.classList.contains('portrait-dialog')).toBe(true);
+  const title = document.getElementById(dialog.getAttribute('aria-labelledby')!);
+  expect(title?.textContent).toBe('Barb');
+  expect(dialog.querySelector<HTMLImageElement>('.portrait-detail')?.getAttribute('src')).toBe(portrait.getAttribute('src'));
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: '1', bubbles: true }));
+  expect(choose).not.toHaveBeenCalled();
+
+  click('Close');
+  click('Settings');
+  expect(dialog.open).toBe(true);
+  expect(dialog.classList.contains('portrait-dialog')).toBe(false);
+  expect(dialog.querySelector('.portrait-detail')).toBeNull();
+  expect(dialog.textContent).toContain('Reduce motion');
+});
+
+it('removes a failed character painting without removing the scene art or showing another person', () => {
+  step = advance(content, initialState(42, 'n1-diner'), { kind: 'enter' });
+  render();
+
+  root.querySelector<HTMLImageElement>('.resident-portrait')!.dispatchEvent(new Event('error'));
+
+  expect(root.querySelector('.character-portrait')).toBeNull();
+  expect(root.querySelector('img.location-painting')).not.toBeNull();
+  expect(root.querySelector('img[src="/art/portraits/wren.jpg"]')).toBeNull();
+});
+
+it('shows Wren only for her explicit presentation and clears her portrait on an unpeopled scene', () => {
+  step = advance(content, initialState(42, 'r23-arrival'), { kind: 'enter' });
+  render();
+  expect(step.view.presentation?.character).toBe('wren');
+  expect(root.querySelector<HTMLImageElement>('.resident-portrait')?.getAttribute('src')).toBe('/art/portraits/wren.jpg');
+
+  step = advance(content, initialState(42, REVISED_OPENING_SCENE), { kind: 'enter' });
+  render();
+
+  expect(step.view.presentation?.character).toBeUndefined();
+  expect(root.querySelector('.character-portrait')).toBeNull();
+  expect(root.querySelector('img[src="/art/portraits/wren.jpg"]')).toBeNull();
+});
+
+it('lets the reader open and explore the map without choosing or spending time', () => {
+  const before = JSON.stringify(step.state);
+  click('Map');
+
+  const dialog = root.querySelector<HTMLDialogElement>('dialog')!;
+  expect(dialog.classList.contains('map-dialog')).toBe(true);
+  expect(dialog.querySelector('[aria-current="location"]')?.getAttribute('data-location')).toBe('shore');
+  const mapView = dialog.querySelector<HTMLElement>('.atlas-viewport')!;
+  mapView.scrollIntoView = vi.fn();
+  dialog.querySelector<HTMLButtonElement>('[aria-label="Find The Kettle on the map"]')!.click();
+  expect(document.activeElement).toBe(mapView);
+  mapView.dispatchEvent(new KeyboardEvent('keydown', { key: '1', bubbles: true }));
+  dialog.querySelector<HTMLButtonElement>('[aria-label="Zoom in"]')!.click();
+  expect(choose).not.toHaveBeenCalled();
+  expect(JSON.stringify(step.state)).toBe(before);
+  expect(dialog.open).toBe(true);
+
+  click('Close');
+  click('Settings');
+  expect(dialog.classList.contains('map-dialog')).toBe(false);
+});
+
+it('offers only unlocked map visits and closes the map before choosing the matching story choice', () => {
+  step = advance(content, initialState(42, 'd2-morning'), { kind: 'enter' });
+  const available = step.view.choices.filter(choice => !choice.locked);
+  expect(available.length).toBeGreaterThanOrEqual(2);
+  const blocked = available[0]!;
+  const chosen = available[1]!;
+  ui.renderScene({
+    ...step.view, world: step.state, header: 'Day 2', slot: step.state.slot,
+    choices: step.view.choices.map(choice => choice.id === blocked.id ? { ...choice, locked: true } : choice),
+  });
+  click('Map');
+
+  const dialog = root.querySelector<HTMLDialogElement>('dialog')!;
+  const visits = [...dialog.querySelectorAll<HTMLButtonElement>('.map-opportunity')];
+  expect(visits.some(visit => visit.textContent?.includes(blocked.label))).toBe(false);
+  const visit = visits.find(node => node.textContent?.includes(chosen.label))!;
+  expect(visit).toBeDefined();
+  visit.click();
+  expect(choose).toHaveBeenCalledExactlyOnceWith(chosen.id);
+  expect(dialog.open).toBe(false);
 });

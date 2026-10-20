@@ -1,0 +1,107 @@
+{
+  "created": "2026-10-20",
+  "tool": "Built-in image_gen.imagegen; no external stock or CLI generation",
+  "status": "Requested replacement portraits, awaiting visual feedback. One portrait per character; no pose variants.",
+  "delivery": "JPEG quality 85, longest edge 960px, converted with sips. Generated PNG originals retained.",
+  "portraits": [
+    {
+      "character": "barb",
+      "source": "assets/portraits/painted/barb.png",
+      "delivery": "apps/web/public/art/portraits/barb.jpg",
+      "references": [
+        "apps/web/public/art/kettle.jpg"
+      ],
+      "generatedSource": "/Users/erichare/.codex/generated_images/01a15a8b-da8e-7cf3-a0a8-307bd049f7ff/exec-f41fa26a-cf71-43e1-b695-9d55ee12796a.png",
+      "prompt": "Use case: illustration-story. Create a beautiful production-quality painted character portrait for the literary visual novel NOT HERE. The attached painting is a STYLE, PALETTE, and WORLD reference only: match its rich oil-and-gouache brushwork, subtle canvas texture, slate-blue shadows and restrained warm lamplight. Create one entirely new portrait, not a UI mockup, not a sketch card. Character: Barb Kettle, an ordinary woman in her sixties who runs a small diner and six motel units in modern-day inland British Columbia. She is practical, dryly funny, observant, and kind without sentimentality. A deeply specific face: intelligent watchful eyes, softly weathered skin, real age lines, slightly uneven brows, a broad lived-in face, a mouth on the edge of a wry smile. Silver-streaked brown hair loosely pinned back, an unassuming dark slate work shirt with sleeves pushed up, a simple faded charcoal apron. Head and upper torso, three-quarter view turning slightly toward the viewer, natural relaxed shoulders, no hands. Portrait aspect ratio 4:5, one person only, head fully inside frame with breathing room. Let the face occupy about half the height, clearly readable and exquisitely painted. Warm diner light skims one cheek and catches individual wisps of hair; cool soft lake light fills the other side. Background: a very subdued, painterly blue-black interior with just a blurred warm practical light, without detailed scenery. Lost and found painted edges around shoulders; face sharper, warm humanity and an undertone of reserve. High artistic craft, nuanced anatomy, confident visible brushstrokes rather than a filtered photograph. Contemporary clothing. No glamour retouching, no perfect symmetrical face, no anime, no 3D render, no horror effects, no border, no text, no logos. This is a fictional woman, not a real person's likeness.",
+      "source_sha256": "5986ff6e747c5776eb4ea34331bc2a0706fc72fc8ed4be66e2a4d60133110414",
+      "source_bytes": 2539815,
+      "delivery_sha256": "a13476b5d9fc72e07ab08e21cb57ffddb945a07ef594b99ef5c6f0d1efb4fc57",
+      "delivery_bytes": 252741
+    },
+    {
+      "character": "dianne",
+      "source": "assets/portraits/painted/dianne.png",
+      "delivery": "apps/web/public/art/portraits/dianne.jpg",
+      "references": [
+        "apps/web/public/art/general.jpg"
+      ],
+      "generatedSource": "/Users/erichare/.codex/generated_images/01a15a8b-da8e-7cf3-a0a8-307bd049f7ff/exec-c2ffd298-9ea1-4dd1-8cba-3d978cb9c1a1.png",
+      "prompt": "Use case: illustration-story. One beautiful production character portrait for the literary visual novel NOT HERE, a contemporary mystery set by Okanagan Lake, British Columbia. Attached location painting is only a style and palette reference, not an edit target. Rich oil-and-gouache painting, nuanced naturalistic anatomy, confident visible brushwork, subtle canvas tooth, soft lost-and-found edges, exquisitely observed eyes and real skin. Head and upper torso, portrait aspect ratio 4:5, no hands, one fictional person only, complete head with breathing room. Face occupies about half the height. Contemporary everyday clothing, no glamour, no photofilter, no anime, no 3D render, no border, no typography or logos. Background is soft and subdued, the face is the focus. Subject: Dianne Cole, a small, quick sixty-year-old woman who runs the General store and postal counter. Her face is LONG and NARROW, high cheekbones, fine straight nose, thin firmly composed lips, dark level eyebrows, alert gray-brown eyes set a little wide apart, subtly hollow cheeks. Dark gray hair in a neat short ear-length swept-back bob with silver temples, NO loose updo and NO long waves. Slim compact shoulders and a tidy gray cardigan over a faded blue blouse, reading glasses resting on top of her head. Frontal bust with a slight turn toward the LEFT, direct gaze. Expression: care, anxious vigilance and control, NOT smiling. Real sixty-year-old skin with natural fine lines, a specific individual face. Soft cool diffuse November daylight on the face, understated warm reflected wood tones, quiet shadowy general-store backdrop. Clear silhouette and beautiful restrained realism. No amber hanging diner lamps, no apron. This is Dianne, a distinct person, not another version of a broad smiling diner owner.",
+      "source_sha256": "5b7f05a7fffd01450ebb9ba4fdd627d47b32ae947299de525306661e5595385f",
+      "source_bytes": 2591056,
+      "delivery_sha256": "4bb0d674948143f81dda454c48f9a73350e7c66e18b3b62212e9e83a66928fef",
+      "delivery_bytes": 237357
+    },
+    {
+      "character": "sam",
+      "source": "assets/portraits/painted/sam.png",
+      "delivery": "apps/web/public/art/portraits/sam.jpg",
+      "references": [
+        "apps/web/public/art/boathouse.jpg"
+      ],
+      "generatedSource": "/Users/erichare/.codex/generated_images/01a15a8b-da8e-7cf3-a0a8-307bd049f7ff/exec-435ed4f0-77f3-42ad-b9f0-4711e43b47cd.png",
+      "prompt": "Use case: illustration-story. One beautiful production character portrait for the literary visual novel NOT HERE, a contemporary mystery set by Okanagan Lake, British Columbia. Attached location painting is only a style and palette reference, not an edit target. Rich oil-and-gouache painting, nuanced naturalistic anatomy, confident visible brushwork, subtle canvas tooth, soft lost-and-found edges, exquisitely observed eyes and real skin. Head and upper torso, portrait aspect ratio 4:5, no hands, one fictional person only, complete head with breathing room. Face occupies about half the height. Contemporary everyday clothing, no glamour, no photofilter, no anime, no 3D render, no border, no typography or logos. Background is soft and subdued, the face is the focus. Subject: Sam Cole, eighteen-year-old young man. Convincingly eighteen, youthful clean-shaven narrow face, untidy straight dark-brown hair falling toward his brow, pale olive complexion, fine slightly prominent nose, wide watchful brown eyes, small asymmetric mouth. A lean adolescent build, narrow shoulders, charcoal hoodie under a worn blue-gray canvas work jacket. Hood down but visible at his neck. He repairs boats, plays guitar and is quietly funny. Expression: guarded attention, intelligence, a trace of wry humor, neither brooding fashion model nor cute child. Three-quarter view facing slightly left, eyes glancing toward viewer. Cool November boathouse window light, softly warm bounce from the wooden workbench, background shadowy blue-gray and muted wood with no specific objects sharply rendered. Paint this specific young face tenderly and honestly.",
+      "source_sha256": "331ef18b0288a4ef4e21496aabc72b16fdce73ac7d8a1cc1df256e2fbe416036",
+      "source_bytes": 2680272,
+      "delivery_sha256": "998e93ea983e095c69fad6ae8f431984627df730342b7d77fad2c61a8f5b1e1d",
+      "delivery_bytes": 243052
+    },
+    {
+      "character": "priya",
+      "source": "assets/portraits/painted/priya.png",
+      "delivery": "apps/web/public/art/portraits/priya.jpg",
+      "references": [
+        "apps/web/public/art/clinic.jpg"
+      ],
+      "generatedSource": "/Users/erichare/.codex/generated_images/01a15a8b-da8e-7cf3-a0a8-307bd049f7ff/exec-36b7d848-a4d0-4327-a6a5-990dcf974101.png",
+      "prompt": "Use case: illustration-story. One beautiful production character portrait for the literary visual novel NOT HERE, a contemporary mystery set by Okanagan Lake, British Columbia. Attached location painting is only a style and palette reference, not an edit target. Rich oil-and-gouache painting, nuanced naturalistic anatomy, confident visible brushwork, subtle canvas tooth, soft lost-and-found edges, exquisitely observed eyes and real skin. Head and upper torso, portrait aspect ratio 4:5, no hands, one fictional person only, complete head with breathing room. Face occupies about half the height. Contemporary everyday clothing, no glamour, no photofilter, no anime, no 3D render, no border, no typography or logos. Background is soft and subdued, the face is the focus. Subject: Dr. Priya Anand, a woman in her mid-thirties, brown skin with warm undertones, oval face with a defined jaw and straight fine nose, thoughtful dark eyes, black hair pulled neatly back into a low practical bun. Natural fine under-eye tiredness; composed and attentive expression, lips slightly parted as though carefully choosing what to say. Simple slate-blue cardigan over an ivory collared blouse, no jewelry beyond tiny plain studs, no white lab coat or theatrical stethoscope. Contemporary small-town doctor, precise and human, not an advertising model. Three-quarter view facing a little right. Cool diffuse clinic window light with a discreet warm lamp edge. Blue-green subdued background, just abstract marks suggesting an ordinary clinic. Beautiful skin color modeling and hand-painted texture, individual face, no generic stock portrait.",
+      "source_sha256": "54372dc0e3028c29c68f0ea5214a96d0c87aa9602fd8d9d88e8e8684fde7a9d9",
+      "source_bytes": 2843681,
+      "delivery_sha256": "981a0e40103f6b8e3f440030cb2335f12956e6175cc803fa06581d7e19dc3dec",
+      "delivery_bytes": 265027
+    },
+    {
+      "character": "tam",
+      "source": "assets/portraits/painted/tam.png",
+      "delivery": "apps/web/public/art/portraits/tam.jpg",
+      "references": [
+        "apps/web/public/art/motel.jpg"
+      ],
+      "generatedSource": "/Users/erichare/.codex/generated_images/01a15a8b-da8e-7cf3-a0a8-307bd049f7ff/exec-601cd7eb-be35-4ad9-b144-d9092eaa2755.png",
+      "prompt": "Use case: illustration-story. One beautiful production character portrait for the literary visual novel NOT HERE, a contemporary mystery set by Okanagan Lake, British Columbia. Attached location painting is only a style and palette reference, not an edit target. Rich oil-and-gouache painting, nuanced naturalistic anatomy, confident visible brushwork, subtle canvas tooth, soft lost-and-found edges, exquisitely observed eyes and real skin. Head and upper torso, portrait aspect ratio 4:5, no hands, one fictional person only, complete head with breathing room. Face occupies about half the height. Contemporary everyday clothing, no glamour, no photofilter, no anime, no 3D render, no border, no typography or logos. Background is soft and subdued, the face is the focus. Subject: Tam Osei, a middle-aged Black man who drives the regional bus. Broad substantial face, full cheeks, thick neck, close-cropped hair under a plain faded navy baseball cap, closely trimmed salt-and-pepper beard. Deep brown skin rendered with rich warm and cool reflected color. Kind patient eyes, a broad softly closed mouth, calm measured presence, a little amused warmth without a broad grin. Sturdy build, practical dark insulated driver's jacket over a muted olive shirt. Contemporary ordinary clothing, no uniform emblems. Three-quarter view facing slightly left, looking at someone just beside viewer. Cold blue November light softly across one cheek, warm late-night diner lamplight along the other. Background abstract deep slate and muted ochre, no detailed objects. Give him a memorable specific face, beautifully observed, dignified and relaxed.",
+      "source_sha256": "f0b4a6163c96c8804eac8fa2295e40bb7aa17aa7c1d824fb2fd0406fd63df422",
+      "source_bytes": 2706222,
+      "delivery_sha256": "1cb015946ffbdafa4ab1bbc6f0eeb1b8999969ada6ac93b2a4dbc5732750e3ee",
+      "delivery_bytes": 243947
+    },
+    {
+      "character": "wade",
+      "source": "assets/portraits/painted/wade.png",
+      "delivery": "apps/web/public/art/portraits/wade.jpg",
+      "references": [
+        "apps/web/public/art/wharf.jpg"
+      ],
+      "generatedSource": "/Users/erichare/.codex/generated_images/01a15a8b-da8e-7cf3-a0a8-307bd049f7ff/exec-3f6efdc8-a4b6-4ce4-a1d7-5840d4747a68.png",
+      "prompt": "Use case: illustration-story. One beautiful production character portrait for the literary visual novel NOT HERE, a contemporary mystery set by Okanagan Lake, British Columbia. Attached location painting is only a style and palette reference, not an edit target. Rich oil-and-gouache painting, nuanced naturalistic anatomy, confident visible brushwork, subtle canvas tooth, soft lost-and-found edges, exquisitely observed eyes and real skin. Head and upper torso, portrait aspect ratio 4:5, no hands, one fictional person only, complete head with breathing room. Face occupies about half the height. Contemporary everyday clothing, no glamour, no photofilter, no anime, no 3D render, no border, no typography or logos. Background is soft and subdued, the face is the focus. Subject: Wade Pike, an older former ferry engineer who maintains the wharf light and horn. Long angular weather-cut face, gray stubble, heavy slightly overhanging brow, pale gray-blue eyes, an uneven sun-worn nose, thin guarded mouth; a face shaped by years outside. Gray hair mostly hidden inside the loose hood of a worn charcoal waterproof work jacket, ordinary dark work sweater, no costume or sailor uniform. Head angled slightly down, eyes looking steadily toward viewer from a three-quarter view. Terse and thoughtful rather than villainous or grimacing. Cold slate lake light washes one side, a very small amber worklamp warms the other. Background just the painterly blurred blue-black compressor shed and November lake light, minimal distraction. Specific human character, not a sea captain caricature, no pipe, no fantasy accessories.",
+      "source_sha256": "914b776248ce3576d9c9da8f853d41fd2bbfdfa18b4ff7e402da970b2caf272c",
+      "source_bytes": 2486082,
+      "delivery_sha256": "e5cda610f3c701eeda2ccccea906e88c781f6caa45729fffd5fb62aee8b023d5",
+      "delivery_bytes": 242417
+    },
+    {
+      "character": "wren",
+      "source": "assets/portraits/painted/wren.png",
+      "delivery": "apps/web/public/art/portraits/wren.jpg",
+      "references": [
+        "apps/web/public/art/wren.jpg",
+        "apps/web/public/art/kettle.jpg"
+      ],
+      "generatedSource": "/Users/erichare/.codex/generated_images/01a15a8b-da8e-7cf3-a0a8-307bd049f7ff/exec-4b2a7fe0-1203-40f7-a9c0-e2033ef698ff.png",
+      "prompt": "Use case: style-transfer. Upgrade the FIRST attached image, the established fictional character Wren Cole, into a beautiful full-color oil-and-gouache portrait for NOT HERE. Preserve her EXACT recognizable facial identity, age late twenties, short dark brown side-parted hair tucked behind one ear, face proportions, asymmetrical mouth, direct level gaze, dark olive raincoat over faded rust sweater and canvas bag strap. The SECOND image is the oil-and-gouache MEDIUM/PALETTE reference only. Replace the ivory paper and line drawing medium with rich naturalistic painted color, visible confident brushwork, soft lost-and-found edges, subtle canvas tooth and slate-blue shadows. Portrait aspect ratio 4:5, same bust pose, one person, no hands. Make her face exquisite and alive, tired from travel but alert and self-possessed, ordinary rather than glamour. Cold morning light on her skin with very restrained reflected warmth; softly brushed blue-gray background without scenery or paper. No extra expressions or poses, no change to identity or clothing, no idealization, no supernatural effect, no border, no writing, no logos. Preserve the fictional woman; change only the rendering medium and background.",
+      "source_sha256": "8cb447f114010c7cf8f1f6fbe2a3483cf995fe4abe427609cc49492a24d54f99",
+      "source_bytes": 3059929,
+      "delivery_sha256": "5f4da285306256210e628bf339a089bb04e38ffe4548cc0b373925055ce15647",
+      "delivery_bytes": 304484
+    }
+  ]
+}
