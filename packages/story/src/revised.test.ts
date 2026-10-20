@@ -5,9 +5,9 @@ import { acquiredFragments } from './presentation.ts';
 
 const content = buildRevisedContent();
 const start = () => advance(content, initialState(42, REVISED_OPENING_SCENE), { kind: 'enter' });
-const walk = (picks: Record<string, string> = {}, inspect = false): StepResult => {
+const walk = (picks: Record<string, string> = {}, inspect = false, stopAt?: string): StepResult => {
   let step = start();
-  for (let i = 0; i < 500 && !step.view.ending; i++) {
+  for (let i = 0; i < 500 && !step.view.ending && step.state.sceneId !== stopAt; i++) {
     if (step.view.input === 'name') step = advance(content, step.state, { kind: 'name', name: 'Alex' });
     if (inspect) for (const o of step.view.observations ?? []) step = advance(content, step.state, { kind: 'inspect', observationId: o.id });
     const choices = step.view.choices.filter(c => !c.locked);
@@ -20,6 +20,21 @@ const walk = (picks: Record<string, string> = {}, inspect = false): StepResult =
 };
 
 describe('story edition 2: meaningful outcomes through play', () => {
+  it.each([
+    ['r18-gate', 18, 'November 23.'],
+    ['r20-gate', 20, 'November 25.'],
+  ] as const)('%s begins the morning named in its prose', (gate, day, date) => {
+    for (const picks of [{}, { 'r14-letter': 'leave-letter' }]) {
+      const step = walk(picks, false, gate);
+      expect(step.state.sceneId).toBe(gate);
+      expect(step.view.paragraphs[0]).toContain(date);
+      expect(step.state.day).toBe(day);
+      expect(step.state.slot).toBe('morning');
+      const resumed = resumeScene(content, step.state);
+      expect(resumed.state.day).toBe(day);
+      expect(resumed.state.slot).toBe('morning');
+    }
+  });
   it.each([
     ['two-wrens', {}],
     ['stranger', { 'r22-future': 'leave-town' }],

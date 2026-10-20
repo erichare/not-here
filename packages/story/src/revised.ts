@@ -265,7 +265,7 @@ const gates: Scene[] = [
   scene('r18-gate', ['November 23. The depot has put up the winter timetable.'], [
     { ...choice('message', 'See Sam before the morning gets away.', 'r18-message'), when: flag('knows-truth') },
     { ...choice('morning', 'Go down to breakfast.', 'd18-morning'), when: { op: 'not', of: flag('knows-truth') } },
-  ]),
+  ], { onEnter: [{ op: 'time.set', day: 18, slot: 'morning' }] }),
   scene('r20-gate', ['November 25. Three days until the bus.'], [
     { ...choice('warning', 'Sit where Barb can see you.', 'r20-warning'), when: flag('horn-stopped') },
     { ...choice('morning', 'Begin the morning.', 'd20-morning'), when: { op: 'not', of: flag('horn-stopped') } },
