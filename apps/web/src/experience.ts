@@ -5,6 +5,7 @@ import { portraitFor } from './portraits.ts';
 import { DEFAULT_PREFERENCES, PREFERENCES_KEY, readPreferences, type Preferences } from './preferences.ts';
 import { LEGACY_SAVE_KEY, SAVE_KEY } from './save.ts';
 import './experience.css';
+import './title-intro.css';
 import { sceneArt } from './scene-art.ts';
 import { createTownMap } from './town-map.ts';
 
@@ -14,6 +15,7 @@ interface Hooks {
   onNewGame(): void; onRewind(): void; canRewind(): boolean;
   onPreferences(preferences: Preferences): void;
   onTitleSound?(): void;
+  onTitleIntro?(revealMenu: () => void): () => void;
 }
 interface HistoryEntry { scene: string; title: string; paragraphs: readonly string[]; day: number }
 const HISTORY_KEY = 'not-here:story2:history';
@@ -61,6 +63,8 @@ export const createExperience = (root: HTMLElement, hooks: Hooks) => {
   let sounds: string[] = [];
   try { const saved: unknown = JSON.parse(safeRead(SOUNDS_KEY) ?? '[]'); if (Array.isArray(saved)) sounds = saved.filter((s): s is string => typeof s === 'string').slice(-80); } catch { /* no saved captions */ }
   let cancelReveal = () => {};
+  let cancelTitle = () => {};
+  let titlePreferencesChanged = () => {};
   const content = buildRevisedContent();
   const header = element('header', 'experience-header');
   const brand = element('span', 'experience-brand', 'NOT HERE');
@@ -131,6 +135,7 @@ export const createExperience = (root: HTMLElement, hooks: Hooks) => {
     document.body.classList.toggle('reduce-motion', preferences.reducedMotion);
     hooks.onPreferences(preferences);
     safeWrite(PREFERENCES_KEY, JSON.stringify(preferences));
+    titlePreferencesChanged();
   };
   const settings = () => openPanel('Make yourself comfortable', body => {
     for (const key of ['music', 'ambience', 'effects', 'voice', 'textSize'] as const) {
@@ -157,7 +162,7 @@ export const createExperience = (root: HTMLElement, hooks: Hooks) => {
   header.append(brand, edition, toolbar);
   const addCaption = (value: string) => { if (!value) return; sounds = [...sounds.filter(s => s !== value), value].slice(-80); safeWrite(SOUNDS_KEY, JSON.stringify(sounds)); live.textContent = value; };
   const renderScene = (next: ExperienceModel) => {
-    cancelReveal(); model = next; toolbar.hidden = false; page.className = 'experience-page page';
+    cancelTitle(); cancelReveal(); model = next; toolbar.hidden = false; page.className = 'experience-page page';
     root.dataset.view = 'reading'; edition.hidden = true;
     page.dataset.scene = next.sceneId;
     document.body.dataset.slot = next.slot;
@@ -254,11 +259,11 @@ export const createExperience = (root: HTMLElement, hooks: Hooks) => {
   };
   document.addEventListener('keydown', onKey);
   return { renderScene, addCaption,
-    dispose: () => { cancelReveal(); document.removeEventListener('keydown', onKey); book.retire(); root.replaceChildren(); root.classList.remove('experience-root'); delete root.dataset.view; },
+    dispose: () => { cancelTitle(); cancelReveal(); document.removeEventListener('keydown', onKey); book.retire(); root.replaceChildren(); root.classList.remove('experience-root'); delete root.dataset.view; },
     resetHistory: () => { history = []; sounds = []; safeWrite(HISTORY_KEY, '[]'); safeWrite(SOUNDS_KEY, '[]'); },
     rewindHistory: (sceneId: string) => { let index = history.length - 1; while (index >= 0 && history[index]?.scene !== sceneId) index--; history = index >= 0 ? history.slice(0, index + 1) : []; sounds = []; safeWrite(SOUNDS_KEY, '[]'); safeWrite(HISTORY_KEY, JSON.stringify(history)); },
     showTitle: (mode: 'fresh' | 'resume' | 'held', begin: (fresh: boolean) => void) => {
-      cancelReveal(); model = null; book.retire(); toolbar.hidden = true; delete document.body.dataset.slot;
+      cancelTitle(); cancelReveal(); model = null; book.retire(); toolbar.hidden = true; delete document.body.dataset.slot;
       root.dataset.view = 'title'; edition.hidden = false; delete page.dataset.staging; delete page.dataset.scene;
       page.className = 'experience-title page';
       const art = element('div', 'title-art'); art.setAttribute('aria-hidden', 'true');
@@ -266,13 +271,16 @@ export const createExperience = (root: HTMLElement, hooks: Hooks) => {
       art.append(titleImage, element('div', 'title-mist'));
       const panel = element('section', 'title-invitation');
       const title = element('h1'); title.append(element('span', '', 'Not'), document.createTextNode(' '), element('em', '', 'Here'));
-      const beginButton = button(mode === 'fresh' ? 'Walk toward the light' : 'Return to your November', () => begin(mode === 'fresh'), 'begin-button');
+      const enter = (fresh: boolean) => { cancelTitle(); begin(fresh); };
+      const beginButton = button(mode === 'fresh' ? 'Walk toward the light' : 'Return to your November', () => enter(mode === 'fresh'), 'begin-button');
       beginButton.append(icon('arrow'));
-      panel.append(element('p', 'eyebrow title-eyebrow', 'A NOVEMBER IN LORN BAY'), title, ornament(), element('p', 'title-description', 'A town has kept a place for someone.\nYou arrive before she does.'), beginButton);
-      if (mode !== 'fresh') panel.append(button('Begin another November', () => begin(true), 'quiet-button'));
-      if (hooks.onTitleSound) panel.append(button('Hear your remembered phrase', hooks.onTitleSound, 'quiet-button'));
+      const menu = element('div', 'title-menu'); menu.setAttribute('aria-label', 'Main menu');
+      menu.append(element('p', 'title-description', 'A town has kept a place for someone.\nYou arrive before she does.'), beginButton);
+      panel.append(element('p', 'eyebrow title-eyebrow', 'A NOVEMBER IN LORN BAY'), title, ornament(), menu);
+      if (mode !== 'fresh') menu.append(button('Begin another November', () => enter(true), 'quiet-button'));
+      if (hooks.onTitleSound) menu.append(button('Hear your remembered phrase', hooks.onTitleSound, 'quiet-button'));
       const settingsButton = button('Reading & sound settings', settings, 'quiet-button title-settings'); settingsButton.prepend(icon('settings'));
-      panel.append(settingsButton);
+      menu.append(settingsButton);
       const footer = element('footer', 'title-footer');
       const note = element('details', 'content-note');
       note.append(element('summary', '', 'Before you begin'), element('p', '', 'Grief, memory loss, family estrangement, and voluntary self-dissolution. Play at your pace. Sound is optional.'));
@@ -280,16 +288,85 @@ export const createExperience = (root: HTMLElement, hooks: Hooks) => {
       footer.append(note, soundNote);
       const incompatible = mode === 'fresh' ? safeRead(SAVE_KEY) : null;
       if (incompatible) {
-        panel.append(element('p', 'legacy-note', 'This saved revised path cannot be resumed by this edition. Export it before beginning a fresh November.'));
-        panel.append(button('Export saved revised path', () => { const url = URL.createObjectURL(new Blob([incompatible], {type:'application/json'})); const link = element('a'); link.href = url; link.download = 'not-here-revised-save.json'; link.click(); window.setTimeout(() => URL.revokeObjectURL(url),1000); }, 'quiet-button'));
+        menu.append(element('p', 'legacy-note', 'This saved revised path cannot be resumed by this edition. Export it before beginning a fresh November.'));
+        menu.append(button('Export saved revised path', () => { const url = URL.createObjectURL(new Blob([incompatible], {type:'application/json'})); const link = element('a'); link.href = url; link.download = 'not-here-revised-save.json'; link.click(); window.setTimeout(() => URL.revokeObjectURL(url),1000); }, 'quiet-button'));
       }
       const legacy = safeRead(LEGACY_SAVE_KEY);
       if (legacy) {
-        panel.append(element('p', 'legacy-note', 'Your original November is preserved. This revised story begins separately.'));
-        panel.append(button('Play the original edition', () => { window.location.search = '?edition=original'; }, 'quiet-button'));
-        panel.append(button('Export original save', () => { const blob = new Blob([legacy], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = element('a'); a.href = url; a.download = 'not-here-original-save.json'; a.click(); window.setTimeout(() => URL.revokeObjectURL(url), 1000); }, 'quiet-button'));
+        menu.append(element('p', 'legacy-note', 'Your original November is preserved. This revised story begins separately.'));
+        menu.append(button('Play the original edition', () => { cancelTitle(); window.location.search = '?edition=original'; }, 'quiet-button'));
+        menu.append(button('Export original save', () => { const blob = new Blob([legacy], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = element('a'); a.href = url; a.download = 'not-here-original-save.json'; a.click(); window.setTimeout(() => URL.revokeObjectURL(url), 1000); }, 'quiet-button'));
       }
-      page.replaceChildren(art, panel, footer); applyPreferences();
+      const prelude = element('section', 'title-prelude');
+      prelude.setAttribute('aria-label', 'Opening');
+      const invitation = element('p', 'intro-invitation', 'A place is waiting.');
+      let active = true;
+      let started = false;
+      let shown = false;
+      let cancelAudio = () => {};
+      const revealMenu = (focus = true) => {
+        if (!active || shown) return;
+        shown = true;
+        cancelAudio(); cancelAudio = () => {};
+        root.dataset.intro = 'menu'; panel.removeAttribute('aria-hidden');
+        menu.hidden = false; menu.inert = false; footer.hidden = false;
+        prelude.hidden = true; skip.hidden = true;
+        if (focus) live.textContent = 'Main menu. Choose how to begin your November.';
+        if (focus && !dialog.open) beginButton.focus({ preventScroll: true });
+      };
+      const startMusic = (reveal: () => void) => {
+        cancelAudio(); cancelAudio = () => {};
+        try {
+          const cancel = hooks.onTitleIntro?.(reveal);
+          if (cancel) {
+            if (!active || shown) cancel();
+            else cancelAudio = cancel;
+          }
+        } catch { reveal(); }
+      };
+      const start = button('Begin with sound', () => {
+        if (!active || started || shown) return;
+        started = true; root.dataset.intro = 'playing';
+        prelude.hidden = true; panel.removeAttribute('aria-hidden');
+        skip.focus({ preventScroll: true });
+        live.textContent = 'The opening music plays. The menu will appear shortly. You can skip the intro.';
+        startMusic(() => revealMenu());
+      }, 'begin-button intro-begin');
+      start.prepend(icon('sound'));
+      prelude.append(element('p', 'eyebrow', 'LORN BAY · NOVEMBER'), invitation, start,
+        element('p', 'intro-sound-note', 'An illustrated mystery. Best enjoyed slowly.'),
+        button('Sound & motion settings', settings, 'quiet-button'));
+      const skip = button('Skip intro', () => revealMenu(), 'quiet-button intro-skip');
+      const escapeIntro = (event: KeyboardEvent) => {
+        if (event.key === 'Escape' && !dialog.open && !shown) { event.preventDefault(); revealMenu(); }
+      };
+      const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const preferStill = () => preferences.reducedMotion || media.matches;
+      titlePreferencesChanged = () => {
+        if (preferStill() || preferences.music === 0) revealMenu(false);
+      };
+      const mediaChanged = () => titlePreferencesChanged();
+      media.addEventListener?.('change', mediaChanged);
+      document.addEventListener('keydown', escapeIntro);
+      cancelTitle = () => {
+        active = false; cancelAudio(); cancelAudio = () => {};
+        titlePreferencesChanged = () => {};
+        media.removeEventListener?.('change', mediaChanged);
+        document.removeEventListener('keydown', escapeIntro);
+        delete root.dataset.intro;
+      };
+      if (hooks.onTitleIntro) {
+        menu.hidden = true; menu.inert = true; footer.hidden = true;
+        panel.setAttribute('aria-hidden', 'true'); root.dataset.intro = 'ready';
+        const hearTheme = button('Hear the main theme', () => {
+          if (preferences.music === 0) { settings(); return; }
+          // The menu stays available when a reader chose to skip the opening.
+          cancelAudio(); cancelAudio = () => {};
+          try { cancelAudio = hooks.onTitleIntro?.(() => {}) ?? (() => {}); } catch { /* The menu remains usable. */ }
+        }, 'quiet-button');
+        menu.insertBefore(hearTheme, settingsButton);
+      } else revealMenu(false);
+      page.replaceChildren(art, panel, prelude, skip, footer); applyPreferences();
     },
   };
 };

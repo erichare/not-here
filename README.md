@@ -12,7 +12,7 @@ The revised story is playable from the beach through all seven endings. It inclu
 
 All nine locations have painted compositions. The quilt loss, potluck, letters and bus arrival receive distinct staging. Seven painted character portraits open for a closer look; Wren’s portrait is withheld until arrival. A changed Kettle reflects work arranged under your own name. The reader includes inspectable evidence, a notebook, recent pages and separate sound controls. The illustrated town map includes roads, terrain, numbered landmarks, zoom controls, and an Okanagan Lake inset based on real geographic data. Prose appears immediately by default. Acoustic arrangements now span the later story and endings, with exact confession identities and designed environmental sounds. Silent play includes every clue.
 
-**Production status:** the creator approved the sample on September 7, and its art and music have been expanded. Open `/art-review.html` for the paintings and listening room; major scenes and endings sit behind spoiler disclosures. The music and environmental Foley are synthesized, not recorded performances. Voice recording, further character pose design, human listening, blind story playtests and actual screen-reader testing remain acceptance work. See [delivery and review](design/immersion-delivery.md).
+**Production status:** the creator approved the new main theme, *A Place Kept*, on October 27. The revised soundtrack now uses sampled grand piano, fingerpicked guitar, and recorded wooden percussion across 26 cues and 13 character stems. The opening menu appears on the theme's first held melody note. Open `/art-review.html` for the paintings and listening room; major scenes and endings sit behind spoiler disclosures. Environmental Foley remains synthesized, and no voice performance is included. See [soundtrack and intro](design/soundtrack-a-place-kept.md) and [delivery and review](design/immersion-delivery.md).
 
 ## Play
 
@@ -44,7 +44,7 @@ pnpm story:metrics
 pnpm build                 # reproduces audio, then builds the browser
 ```
 
-Audio is generated locally from authored score data, without an API key. When `ffmpeg` is installed, rendering also writes compact AAC copies of revised cues; WAV fallback remains available and synchronized ensemble stems remain lossless. Development still works without rendered audio and supplies captions for missing cues. Builds include audio on demand; the browser does not preload the entire soundtrack.
+The revised soundtrack ships as committed recordings; normal builds need no sample libraries or API key. `pnpm render:audio` reproduces the preserved original edition. `pnpm render:sampled` is an explicit local production command requiring the installed instrument libraries and Python dependencies documented in the [soundtrack notes](design/soundtrack-a-place-kept.md). `pnpm verify:soundtrack` checks the packaged assets, exact stem alignment, and mix headroom. Captions remain available for missing audio, and the browser does not preload the entire soundtrack.
 
 | Package | Responsibility |
 | --- | --- |
@@ -61,7 +61,7 @@ Play the published game at [not-here-omega.vercel.app](https://not-here-omega.ve
 
 The `not-here` Vercel project builds from the repository root. `vercel.json` runs `pnpm build` and publishes `apps/web/dist`, including the artwork, review room and generated soundtrack. No application environment variables or backend services are required.
 
-For a production deployment with compact AAC audio, install `ffmpeg` locally, then run these commands from the repository root:
+For a production deployment, run these commands from the repository root:
 
 ```sh
 vercel pull --yes --environment=production
@@ -69,7 +69,7 @@ vercel build --prod
 vercel deploy --prebuilt --prod
 ```
 
-GitHub builds regenerate the soundtrack too; environments without `ffmpeg` serve the WAV fallbacks.
+GitHub builds copy the committed sampled soundtrack and regenerate only the original-edition audio. The revised score needs neither `ffmpeg` nor instrument libraries during deployment.
 
 Design spoilers: [canon](design/game-bible.md), [clue table](design/twist-recontext-table.md), [asset provenance and final prompts](design/asset-provenance.md), [painted portraits](design/painted-portraits.json), [map geography and sources](design/map-geography.md). Earlier design decisions are retained as original-edition history.
 

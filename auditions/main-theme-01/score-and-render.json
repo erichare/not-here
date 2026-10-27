@@ -1,0 +1,3160 @@
+{
+  "title": "A Place Kept \u2014 main-theme audition 01",
+  "sample_rate": 48000,
+  "seconds": 90.86845833333334,
+  "channels": 2,
+  "pcm_bits": 24,
+  "peak_dbfs": -1.7999999999999994,
+  "rms_dbfs": -23.447897549914916,
+  "max_sample_transposition_semitones": 2,
+  "note_count": 261,
+  "tempos": [
+    72,
+    75,
+    74,
+    76,
+    73,
+    77,
+    75,
+    73,
+    69,
+    76,
+    75,
+    77,
+    74,
+    78,
+    76,
+    73,
+    70,
+    74,
+    73,
+    75,
+    72,
+    76,
+    72,
+    68,
+    63,
+    60
+  ],
+  "section_seconds": [
+    0.0,
+    3.3333333333333335,
+    29.30495776562044,
+    54.97403933780223,
+    81.86845079166065,
+    85.86845079166065
+  ],
+  "harmony": [
+    "Dm(add9)",
+    "Bbmaj7",
+    "Fmaj7/A",
+    "C6/G",
+    "Bbmaj7",
+    "Gm6",
+    "A7(b13)",
+    "Dm(add9)"
+  ],
+  "notes": [
+    {
+      "track": "piano_support",
+      "beat": 0,
+      "end_beat": 3.9,
+      "pitch": 38,
+      "velocity": 43,
+      "gain": 0.34,
+      "delay": 0.0,
+      "start": 0.0,
+      "hold": 3.25
+    },
+    {
+      "track": "piano_support",
+      "beat": 0.25,
+      "end_beat": 3.9,
+      "pitch": 57,
+      "velocity": 38,
+      "gain": 0.2,
+      "delay": 0.0,
+      "start": 0.20833333333333334,
+      "hold": 3.0416666666666665
+    },
+    {
+      "track": "piano_support",
+      "beat": 0.37,
+      "end_beat": 3.9,
+      "pitch": 64,
+      "velocity": 39,
+      "gain": 0.2,
+      "delay": 0.0,
+      "start": 0.30833333333333335,
+      "hold": 2.9416666666666664
+    },
+    {
+      "track": "piano_support",
+      "beat": 0.49,
+      "end_beat": 3.9,
+      "pitch": 65,
+      "velocity": 40,
+      "gain": 0.2,
+      "delay": 0.0,
+      "start": 0.4083333333333333,
+      "hold": 2.841666666666667
+    },
+    {
+      "track": "piano_lead",
+      "beat": 4.5,
+      "end_beat": 4.965,
+      "pitch": 62,
+      "velocity": 60,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 3.7373333333333334,
+      "hold": 0.3719999999999999
+    },
+    {
+      "track": "piano_lead",
+      "beat": 5.0,
+      "end_beat": 5.93,
+      "pitch": 65,
+      "velocity": 65,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 4.145333333333333,
+      "hold": 0.7439999999999998
+    },
+    {
+      "track": "piano_lead",
+      "beat": 6.0,
+      "end_beat": 7.395,
+      "pitch": 69,
+      "velocity": 69,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 4.945333333333333,
+      "hold": 1.1159999999999997
+    },
+    {
+      "track": "piano_lead",
+      "beat": 7.5,
+      "end_beat": 7.965,
+      "pitch": 67,
+      "velocity": 60,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 6.137333333333332,
+      "hold": 0.3719999999999999
+    },
+    {
+      "track": "piano_support",
+      "beat": 4,
+      "end_beat": 7.9,
+      "pitch": 38,
+      "velocity": 45,
+      "gain": 0.38,
+      "delay": 0.0,
+      "start": 3.3333333333333335,
+      "hold": 3.1200000000000006
+    },
+    {
+      "track": "piano_support",
+      "beat": 5.0600000000000005,
+      "end_beat": 7.9,
+      "pitch": 50,
+      "velocity": 38,
+      "gain": 0.23,
+      "delay": 0.0,
+      "start": 4.181333333333334,
+      "hold": 2.2720000000000002
+    },
+    {
+      "track": "piano_support",
+      "beat": 5.0600000000000005,
+      "end_beat": 7.9,
+      "pitch": 57,
+      "velocity": 39,
+      "gain": 0.23,
+      "delay": 0.021,
+      "start": 4.202333333333334,
+      "hold": 2.2720000000000002
+    },
+    {
+      "track": "piano_support",
+      "beat": 5.0600000000000005,
+      "end_beat": 7.9,
+      "pitch": 64,
+      "velocity": 40,
+      "gain": 0.23,
+      "delay": 0.042,
+      "start": 4.223333333333334,
+      "hold": 2.2720000000000002
+    },
+    {
+      "track": "piano_lead",
+      "beat": 8.0,
+      "end_beat": 8.93,
+      "pitch": 64,
+      "velocity": 62,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 6.545333333333333,
+      "hold": 0.7540540540540537
+    },
+    {
+      "track": "piano_lead",
+      "beat": 9.0,
+      "end_beat": 9.465,
+      "pitch": 65,
+      "velocity": 57,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 7.348144144144143,
+      "hold": 0.37702702702702773
+    },
+    {
+      "track": "piano_lead",
+      "beat": 9.5,
+      "end_beat": 9.965,
+      "pitch": 64,
+      "velocity": 57,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 7.753549549549549,
+      "hold": 0.37702702702702773
+    },
+    {
+      "track": "piano_lead",
+      "beat": 10.0,
+      "end_beat": 11.395,
+      "pitch": 62,
+      "velocity": 66,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 8.166954954954955,
+      "hold": 1.1310810810810814
+    },
+    {
+      "track": "piano_support",
+      "beat": 8,
+      "end_beat": 11.9,
+      "pitch": 34,
+      "velocity": 42,
+      "gain": 0.38,
+      "delay": 0.0,
+      "start": 6.533333333333333,
+      "hold": 3.162162162162163
+    },
+    {
+      "track": "piano_support",
+      "beat": 9.06,
+      "end_beat": 11.9,
+      "pitch": 50,
+      "velocity": 38,
+      "gain": 0.23,
+      "delay": 0.0,
+      "start": 7.392792792792793,
+      "hold": 2.302702702702703
+    },
+    {
+      "track": "piano_support",
+      "beat": 9.06,
+      "end_beat": 11.9,
+      "pitch": 53,
+      "velocity": 39,
+      "gain": 0.23,
+      "delay": 0.021,
+      "start": 7.413792792792793,
+      "hold": 2.302702702702703
+    },
+    {
+      "track": "piano_support",
+      "beat": 9.06,
+      "end_beat": 11.9,
+      "pitch": 57,
+      "velocity": 40,
+      "gain": 0.23,
+      "delay": 0.042,
+      "start": 7.434792792792793,
+      "hold": 2.302702702702703
+    },
+    {
+      "track": "piano_lead",
+      "beat": 12.5,
+      "end_beat": 12.965,
+      "pitch": 62,
+      "velocity": 61,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 10.17531341868184,
+      "hold": 0.36710526315789416
+    },
+    {
+      "track": "piano_lead",
+      "beat": 13.0,
+      "end_beat": 13.93,
+      "pitch": 65,
+      "velocity": 66,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 10.578050260787103,
+      "hold": 0.7342105263157901
+    },
+    {
+      "track": "piano_lead",
+      "beat": 14.0,
+      "end_beat": 15.395,
+      "pitch": 72,
+      "velocity": 70,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 11.36752394499763,
+      "hold": 1.1013157894736842
+    },
+    {
+      "track": "piano_lead",
+      "beat": 15.5,
+      "end_beat": 15.965,
+      "pitch": 69,
+      "velocity": 61,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 12.54373447131342,
+      "hold": 0.36710526315789416
+    },
+    {
+      "track": "piano_support",
+      "beat": 12,
+      "end_beat": 15.9,
+      "pitch": 33,
+      "velocity": 46,
+      "gain": 0.38,
+      "delay": 0.0,
+      "start": 9.776576576576577,
+      "hold": 3.078947368421053
+    },
+    {
+      "track": "piano_support",
+      "beat": 13.06,
+      "end_beat": 15.9,
+      "pitch": 48,
+      "velocity": 38,
+      "gain": 0.23,
+      "delay": 0.0,
+      "start": 10.613418681839736,
+      "hold": 2.242105263157894
+    },
+    {
+      "track": "piano_support",
+      "beat": 13.06,
+      "end_beat": 15.9,
+      "pitch": 53,
+      "velocity": 39,
+      "gain": 0.23,
+      "delay": 0.021,
+      "start": 10.634418681839737,
+      "hold": 2.242105263157894
+    },
+    {
+      "track": "piano_support",
+      "beat": 13.06,
+      "end_beat": 15.9,
+      "pitch": 57,
+      "velocity": 40,
+      "gain": 0.23,
+      "delay": 0.042,
+      "start": 10.655418681839736,
+      "hold": 2.242105263157894
+    },
+    {
+      "track": "piano_support",
+      "beat": 15.05,
+      "end_beat": 15.9,
+      "pitch": 53,
+      "velocity": 36,
+      "gain": 0.19,
+      "delay": 0.0,
+      "start": 12.184471313418683,
+      "hold": 0.6710526315789469
+    },
+    {
+      "track": "piano_lead",
+      "beat": 16.0,
+      "end_beat": 16.93,
+      "pitch": 67,
+      "velocity": 63,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 12.946471313418684,
+      "hold": 0.7643835616438359
+    },
+    {
+      "track": "piano_lead",
+      "beat": 17.0,
+      "end_beat": 17.465,
+      "pitch": 64,
+      "velocity": 58,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 13.76038912163786,
+      "hold": 0.38219178082191796
+    },
+    {
+      "track": "piano_lead",
+      "beat": 17.5,
+      "end_beat": 17.965,
+      "pitch": 67,
+      "velocity": 58,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 14.17134802574745,
+      "hold": 0.38219178082191796
+    },
+    {
+      "track": "piano_lead",
+      "beat": 18.0,
+      "end_beat": 19.395,
+      "pitch": 69,
+      "velocity": 67,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 14.59030692985704,
+      "hold": 1.1465753424657539
+    },
+    {
+      "track": "piano_support",
+      "beat": 16,
+      "end_beat": 19.9,
+      "pitch": 31,
+      "velocity": 43,
+      "gain": 0.38,
+      "delay": 0.0,
+      "start": 12.934471313418683,
+      "hold": 3.2054794520547922
+    },
+    {
+      "track": "piano_support",
+      "beat": 17.06,
+      "end_beat": 19.9,
+      "pitch": 48,
+      "velocity": 38,
+      "gain": 0.23,
+      "delay": 0.0,
+      "start": 13.805704190131012,
+      "hold": 2.3342465753424637
+    },
+    {
+      "track": "piano_support",
+      "beat": 17.06,
+      "end_beat": 19.9,
+      "pitch": 52,
+      "velocity": 39,
+      "gain": 0.23,
+      "delay": 0.021,
+      "start": 13.826704190131013,
+      "hold": 2.3342465753424637
+    },
+    {
+      "track": "piano_support",
+      "beat": 17.06,
+      "end_beat": 19.9,
+      "pitch": 57,
+      "velocity": 40,
+      "gain": 0.23,
+      "delay": 0.042,
+      "start": 13.847704190131012,
+      "hold": 2.3342465753424637
+    },
+    {
+      "track": "piano_lead",
+      "beat": 20.0,
+      "end_beat": 20.465,
+      "pitch": 69,
+      "velocity": 66,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 16.226142546295396,
+      "hold": 0.3623376623376622
+    },
+    {
+      "track": "piano_lead",
+      "beat": 20.5,
+      "end_beat": 20.965,
+      "pitch": 72,
+      "velocity": 66,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 16.615752935905785,
+      "hold": 0.3623376623376622
+    },
+    {
+      "track": "piano_lead",
+      "beat": 21.0,
+      "end_beat": 22.395,
+      "pitch": 74,
+      "velocity": 75,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 17.013363325516174,
+      "hold": 1.0870129870129865
+    },
+    {
+      "track": "piano_lead",
+      "beat": 22.5,
+      "end_beat": 22.965,
+      "pitch": 72,
+      "velocity": 66,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 18.174194494347343,
+      "hold": 0.3623376623376622
+    },
+    {
+      "track": "piano_lead",
+      "beat": 23.0,
+      "end_beat": 23.93,
+      "pitch": 69,
+      "velocity": 71,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 18.571804883957732,
+      "hold": 0.7246753246753244
+    },
+    {
+      "track": "piano_support",
+      "beat": 20,
+      "end_beat": 23.9,
+      "pitch": 34,
+      "velocity": 48,
+      "gain": 0.38,
+      "delay": 0.0,
+      "start": 16.222142546295395,
+      "hold": 3.0389610389610375
+    },
+    {
+      "track": "piano_support",
+      "beat": 21.06,
+      "end_beat": 23.9,
+      "pitch": 50,
+      "velocity": 38,
+      "gain": 0.23,
+      "delay": 0.0,
+      "start": 17.048116572269418,
+      "hold": 2.212987012987014
+    },
+    {
+      "track": "piano_support",
+      "beat": 21.06,
+      "end_beat": 23.9,
+      "pitch": 53,
+      "velocity": 39,
+      "gain": 0.23,
+      "delay": 0.021,
+      "start": 17.06911657226942,
+      "hold": 2.212987012987014
+    },
+    {
+      "track": "piano_support",
+      "beat": 21.06,
+      "end_beat": 23.9,
+      "pitch": 57,
+      "velocity": 40,
+      "gain": 0.23,
+      "delay": 0.042,
+      "start": 17.09011657226942,
+      "hold": 2.212987012987014
+    },
+    {
+      "track": "piano_support",
+      "beat": 23.05,
+      "end_beat": 23.9,
+      "pitch": 53,
+      "velocity": 36,
+      "gain": 0.19,
+      "delay": 0.0,
+      "start": 18.598765922918773,
+      "hold": 0.6623376623376593
+    },
+    {
+      "track": "piano_lead",
+      "beat": 24.0,
+      "end_beat": 25.395,
+      "pitch": 67,
+      "velocity": 71,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 19.35102566317851,
+      "hold": 1.1159999999999997
+    },
+    {
+      "track": "piano_lead",
+      "beat": 25.5,
+      "end_beat": 25.965,
+      "pitch": 64,
+      "velocity": 62,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 20.54302566317851,
+      "hold": 0.3719999999999999
+    },
+    {
+      "track": "piano_lead",
+      "beat": 26.0,
+      "end_beat": 26.93,
+      "pitch": 65,
+      "velocity": 67,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 20.951025663178513,
+      "hold": 0.7439999999999998
+    },
+    {
+      "track": "piano_lead",
+      "beat": 27.0,
+      "end_beat": 27.93,
+      "pitch": 69,
+      "velocity": 67,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 21.75102566317851,
+      "hold": 0.7439999999999998
+    },
+    {
+      "track": "piano_support",
+      "beat": 24,
+      "end_beat": 27.9,
+      "pitch": 43,
+      "velocity": 47,
+      "gain": 0.38,
+      "delay": 0.0,
+      "start": 19.33902566317851,
+      "hold": 3.1199999999999974
+    },
+    {
+      "track": "piano_support",
+      "beat": 25.06,
+      "end_beat": 27.9,
+      "pitch": 50,
+      "velocity": 38,
+      "gain": 0.23,
+      "delay": 0.0,
+      "start": 20.18702566317851,
+      "hold": 2.2719999999999985
+    },
+    {
+      "track": "piano_support",
+      "beat": 25.06,
+      "end_beat": 27.9,
+      "pitch": 55,
+      "velocity": 39,
+      "gain": 0.23,
+      "delay": 0.021,
+      "start": 20.20802566317851,
+      "hold": 2.2719999999999985
+    },
+    {
+      "track": "piano_support",
+      "beat": 25.06,
+      "end_beat": 27.9,
+      "pitch": 58,
+      "velocity": 40,
+      "gain": 0.23,
+      "delay": 0.042,
+      "start": 20.22902566317851,
+      "hold": 2.2719999999999985
+    },
+    {
+      "track": "piano_support",
+      "beat": 27.05,
+      "end_beat": 27.9,
+      "pitch": 55,
+      "velocity": 36,
+      "gain": 0.19,
+      "delay": 0.0,
+      "start": 21.779025663178512,
+      "hold": 0.6799999999999962
+    },
+    {
+      "track": "piano_lead",
+      "beat": 28.0,
+      "end_beat": 28.93,
+      "pitch": 64,
+      "velocity": 64,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 22.55102566317851,
+      "hold": 0.7643835616438359
+    },
+    {
+      "track": "piano_lead",
+      "beat": 29.0,
+      "end_beat": 29.465,
+      "pitch": 65,
+      "velocity": 59,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 23.36494347139769,
+      "hold": 0.3821917808219162
+    },
+    {
+      "track": "piano_lead",
+      "beat": 29.5,
+      "end_beat": 29.965,
+      "pitch": 64,
+      "velocity": 59,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 23.77590237550728,
+      "hold": 0.3821917808219162
+    },
+    {
+      "track": "piano_lead",
+      "beat": 30.0,
+      "end_beat": 30.93,
+      "pitch": 61,
+      "velocity": 64,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 24.194861279616866,
+      "hold": 0.7643835616438359
+    },
+    {
+      "track": "piano_lead",
+      "beat": 31.0,
+      "end_beat": 31.93,
+      "pitch": 64,
+      "velocity": 64,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 25.016779087836046,
+      "hold": 0.7643835616438359
+    },
+    {
+      "track": "piano_support",
+      "beat": 28,
+      "end_beat": 31.9,
+      "pitch": 33,
+      "velocity": 44,
+      "gain": 0.38,
+      "delay": 0.0,
+      "start": 22.53902566317851,
+      "hold": 3.2054794520547922
+    },
+    {
+      "track": "piano_support",
+      "beat": 29.06,
+      "end_beat": 31.9,
+      "pitch": 49,
+      "velocity": 38,
+      "gain": 0.23,
+      "delay": 0.0,
+      "start": 23.410258539890837,
+      "hold": 2.3342465753424655
+    },
+    {
+      "track": "piano_support",
+      "beat": 29.06,
+      "end_beat": 31.9,
+      "pitch": 55,
+      "velocity": 39,
+      "gain": 0.23,
+      "delay": 0.021,
+      "start": 23.431258539890838,
+      "hold": 2.3342465753424655
+    },
+    {
+      "track": "piano_support",
+      "beat": 29.06,
+      "end_beat": 31.9,
+      "pitch": 57,
+      "velocity": 40,
+      "gain": 0.23,
+      "delay": 0.042,
+      "start": 23.45225853989084,
+      "hold": 2.3342465753424655
+    },
+    {
+      "track": "piano_lead",
+      "beat": 32.0,
+      "end_beat": 34.79,
+      "pitch": 62,
+      "velocity": 63,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 25.83869689605522,
+      "hold": 2.42608695652174
+    },
+    {
+      "track": "piano_support",
+      "beat": 32,
+      "end_beat": 35.9,
+      "pitch": 38,
+      "velocity": 39,
+      "gain": 0.38,
+      "delay": 0.0,
+      "start": 25.82669689605522,
+      "hold": 3.391304347826086
+    },
+    {
+      "track": "piano_support",
+      "beat": 33.06,
+      "end_beat": 35.9,
+      "pitch": 50,
+      "velocity": 38,
+      "gain": 0.23,
+      "delay": 0.0,
+      "start": 26.748436026490005,
+      "hold": 2.4695652173913025
+    },
+    {
+      "track": "piano_support",
+      "beat": 33.06,
+      "end_beat": 35.9,
+      "pitch": 57,
+      "velocity": 39,
+      "gain": 0.23,
+      "delay": 0.021,
+      "start": 26.769436026490006,
+      "hold": 2.4695652173913025
+    },
+    {
+      "track": "piano_support",
+      "beat": 33.06,
+      "end_beat": 35.9,
+      "pitch": 62,
+      "velocity": 40,
+      "gain": 0.23,
+      "delay": 0.042,
+      "start": 26.790436026490006,
+      "hold": 2.4695652173913025
+    },
+    {
+      "track": "piano_lead",
+      "beat": 36.5,
+      "end_beat": 36.965,
+      "pitch": 74,
+      "velocity": 63,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 29.703694607725705,
+      "hold": 0.36710526315789593
+    },
+    {
+      "track": "piano_lead",
+      "beat": 37.0,
+      "end_beat": 37.93,
+      "pitch": 77,
+      "velocity": 68,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 30.106431449830968,
+      "hold": 0.7342105263157883
+    },
+    {
+      "track": "piano_lead",
+      "beat": 38.0,
+      "end_beat": 39.395,
+      "pitch": 81,
+      "velocity": 72,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 30.89590513404149,
+      "hold": 1.1013157894736878
+    },
+    {
+      "track": "piano_lead",
+      "beat": 39.5,
+      "end_beat": 39.965,
+      "pitch": 79,
+      "velocity": 63,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 32.07211566035728,
+      "hold": 0.36710526315790304
+    },
+    {
+      "track": "piano_support",
+      "beat": 36,
+      "end_beat": 39.9,
+      "pitch": 38,
+      "velocity": 48,
+      "gain": 0.38,
+      "delay": 0.0,
+      "start": 29.30495776562044,
+      "hold": 3.0789473684210513
+    },
+    {
+      "track": "guitar",
+      "beat": 36,
+      "end_beat": 38.0,
+      "pitch": 50,
+      "velocity": 56,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 29.30495776562044,
+      "hold": 1.5789473684210513
+    },
+    {
+      "track": "guitar",
+      "beat": 36.76,
+      "end_beat": 38.76,
+      "pitch": 57,
+      "velocity": 59,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 29.915957765620437,
+      "hold": 1.5789473684210549
+    },
+    {
+      "track": "guitar",
+      "beat": 37.48,
+      "end_beat": 39.48,
+      "pitch": 64,
+      "velocity": 62,
+      "gain": 0.31,
+      "delay": -0.007,
+      "start": 30.466378818252014,
+      "hold": 1.5789473684210549
+    },
+    {
+      "track": "guitar",
+      "beat": 38.05,
+      "end_beat": 40.0,
+      "pitch": 65,
+      "velocity": 56,
+      "gain": 0.31,
+      "delay": 0.008,
+      "start": 30.931378818252014,
+      "hold": 1.539473684210531
+    },
+    {
+      "track": "guitar",
+      "beat": 38.77,
+      "end_beat": 40.0,
+      "pitch": 57,
+      "velocity": 59,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 31.4917998708836,
+      "hold": 0.9710526315789458
+    },
+    {
+      "track": "guitar",
+      "beat": 39.48,
+      "end_beat": 40.0,
+      "pitch": 64,
+      "velocity": 62,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 32.06332618667307,
+      "hold": 0.4105263157894754
+    },
+    {
+      "track": "piano_support",
+      "beat": 38.1,
+      "end_beat": 39.9,
+      "pitch": 57,
+      "velocity": 36,
+      "gain": 0.19,
+      "delay": 0.0,
+      "start": 30.962852502462546,
+      "hold": 1.4210526315789451
+    },
+    {
+      "track": "piano_support",
+      "beat": 38.1,
+      "end_beat": 39.9,
+      "pitch": 64,
+      "velocity": 36,
+      "gain": 0.19,
+      "delay": 0.026,
+      "start": 30.988852502462546,
+      "hold": 1.4210526315789451
+    },
+    {
+      "track": "piano_lead",
+      "beat": 40.0,
+      "end_beat": 40.93,
+      "pitch": 76,
+      "velocity": 65,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 32.47485250246255,
+      "hold": 0.7439999999999998
+    },
+    {
+      "track": "piano_lead",
+      "beat": 41.0,
+      "end_beat": 41.465,
+      "pitch": 77,
+      "velocity": 60,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 33.26685250246254,
+      "hold": 0.372000000000007
+    },
+    {
+      "track": "piano_lead",
+      "beat": 41.5,
+      "end_beat": 41.965,
+      "pitch": 76,
+      "velocity": 60,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 33.66685250246255,
+      "hold": 0.3719999999999999
+    },
+    {
+      "track": "piano_lead",
+      "beat": 42.0,
+      "end_beat": 43.395,
+      "pitch": 74,
+      "velocity": 69,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 34.07485250246255,
+      "hold": 1.1159999999999997
+    },
+    {
+      "track": "piano_support",
+      "beat": 40,
+      "end_beat": 43.9,
+      "pitch": 34,
+      "velocity": 45,
+      "gain": 0.38,
+      "delay": 0.0,
+      "start": 32.462852502462546,
+      "hold": 3.1199999999999974
+    },
+    {
+      "track": "guitar",
+      "beat": 40,
+      "end_beat": 42.0,
+      "pitch": 50,
+      "velocity": 53,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 32.462852502462546,
+      "hold": 1.6000000000000014
+    },
+    {
+      "track": "guitar",
+      "beat": 40.76,
+      "end_beat": 42.76,
+      "pitch": 53,
+      "velocity": 56,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 33.081852502462546,
+      "hold": 1.6000000000000014
+    },
+    {
+      "track": "guitar",
+      "beat": 41.48,
+      "end_beat": 43.48,
+      "pitch": 57,
+      "velocity": 59,
+      "gain": 0.31,
+      "delay": -0.007,
+      "start": 33.639852502462546,
+      "hold": 1.6000000000000014
+    },
+    {
+      "track": "guitar",
+      "beat": 42.05,
+      "end_beat": 44.0,
+      "pitch": 62,
+      "velocity": 53,
+      "gain": 0.31,
+      "delay": 0.008,
+      "start": 34.11085250246255,
+      "hold": 1.5600000000000023
+    },
+    {
+      "track": "guitar",
+      "beat": 42.77,
+      "end_beat": 44.0,
+      "pitch": 53,
+      "velocity": 56,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 34.67885250246255,
+      "hold": 0.9840000000000018
+    },
+    {
+      "track": "guitar",
+      "beat": 43.48,
+      "end_beat": 44.0,
+      "pitch": 57,
+      "velocity": 59,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 35.25785250246255,
+      "hold": 0.4160000000000039
+    },
+    {
+      "track": "piano_lead",
+      "beat": 44.5,
+      "end_beat": 44.965,
+      "pitch": 74,
+      "velocity": 64,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 36.056462892072936,
+      "hold": 0.36233766233766573
+    },
+    {
+      "track": "piano_lead",
+      "beat": 45.0,
+      "end_beat": 45.93,
+      "pitch": 77,
+      "velocity": 69,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 36.45407328168333,
+      "hold": 0.7246753246753244
+    },
+    {
+      "track": "piano_lead",
+      "beat": 46.0,
+      "end_beat": 47.395,
+      "pitch": 84,
+      "velocity": 73,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 37.23329406090411,
+      "hold": 1.08701298701299
+    },
+    {
+      "track": "piano_lead",
+      "beat": 47.5,
+      "end_beat": 47.965,
+      "pitch": 81,
+      "velocity": 64,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 38.39412522973527,
+      "hold": 0.36233766233766573
+    },
+    {
+      "track": "piano_support",
+      "beat": 44,
+      "end_beat": 47.9,
+      "pitch": 33,
+      "velocity": 48,
+      "gain": 0.38,
+      "delay": 0.0,
+      "start": 35.66285250246255,
+      "hold": 3.038961038961041
+    },
+    {
+      "track": "guitar",
+      "beat": 44,
+      "end_beat": 46.0,
+      "pitch": 48,
+      "velocity": 57,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 35.66285250246255,
+      "hold": 1.558441558441558
+    },
+    {
+      "track": "guitar",
+      "beat": 44.76,
+      "end_beat": 46.76,
+      "pitch": 53,
+      "velocity": 60,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 36.26606029467034,
+      "hold": 1.5584415584415652
+    },
+    {
+      "track": "guitar",
+      "beat": 45.48,
+      "end_beat": 47.48,
+      "pitch": 57,
+      "velocity": 63,
+      "gain": 0.31,
+      "delay": -0.007,
+      "start": 36.8090992557093,
+      "hold": 1.558441558441558
+    },
+    {
+      "track": "guitar",
+      "beat": 46.05,
+      "end_beat": 48.0,
+      "pitch": 64,
+      "velocity": 57,
+      "gain": 0.31,
+      "delay": 0.008,
+      "start": 37.268255099865144,
+      "hold": 1.519480519480524
+    },
+    {
+      "track": "guitar",
+      "beat": 46.77,
+      "end_beat": 48.0,
+      "pitch": 53,
+      "velocity": 60,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 37.82129406090411,
+      "hold": 0.9584415584415567
+    },
+    {
+      "track": "guitar",
+      "beat": 47.48,
+      "end_beat": 48.0,
+      "pitch": 57,
+      "velocity": 63,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 38.38554081415086,
+      "hold": 0.4051948051948102
+    },
+    {
+      "track": "piano_support",
+      "beat": 46.1,
+      "end_beat": 47.9,
+      "pitch": 53,
+      "velocity": 36,
+      "gain": 0.19,
+      "delay": 0.0,
+      "start": 37.29921613882619,
+      "hold": 1.4025974025974008
+    },
+    {
+      "track": "piano_support",
+      "beat": 46.1,
+      "end_beat": 47.9,
+      "pitch": 57,
+      "velocity": 36,
+      "gain": 0.19,
+      "delay": 0.026,
+      "start": 37.32521613882619,
+      "hold": 1.4025974025974008
+    },
+    {
+      "track": "piano_lead",
+      "beat": 48.0,
+      "end_beat": 48.93,
+      "pitch": 79,
+      "velocity": 66,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 38.791735619345665,
+      "hold": 0.7540540540540519
+    },
+    {
+      "track": "piano_lead",
+      "beat": 49.0,
+      "end_beat": 49.465,
+      "pitch": 76,
+      "velocity": 61,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 39.59454643015648,
+      "hold": 0.37702702702702595
+    },
+    {
+      "track": "piano_lead",
+      "beat": 49.5,
+      "end_beat": 49.965,
+      "pitch": 79,
+      "velocity": 61,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 39.99995183556188,
+      "hold": 0.37702702702702595
+    },
+    {
+      "track": "piano_lead",
+      "beat": 50.0,
+      "end_beat": 51.395,
+      "pitch": 81,
+      "velocity": 70,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 40.41335724096729,
+      "hold": 1.131081081081085
+    },
+    {
+      "track": "piano_support",
+      "beat": 48,
+      "end_beat": 51.9,
+      "pitch": 31,
+      "velocity": 46,
+      "gain": 0.38,
+      "delay": 0.0,
+      "start": 38.779735619345665,
+      "hold": 3.1621621621621614
+    },
+    {
+      "track": "guitar",
+      "beat": 48,
+      "end_beat": 50.0,
+      "pitch": 48,
+      "velocity": 54,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 38.779735619345665,
+      "hold": 1.621621621621621
+    },
+    {
+      "track": "guitar",
+      "beat": 48.76,
+      "end_beat": 50.76,
+      "pitch": 52,
+      "velocity": 57,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 39.406951835561884,
+      "hold": 1.621621621621621
+    },
+    {
+      "track": "guitar",
+      "beat": 49.48,
+      "end_beat": 51.48,
+      "pitch": 57,
+      "velocity": 60,
+      "gain": 0.31,
+      "delay": -0.007,
+      "start": 39.97273561934566,
+      "hold": 1.621621621621621
+    },
+    {
+      "track": "guitar",
+      "beat": 50.05,
+      "end_beat": 52.0,
+      "pitch": 60,
+      "velocity": 54,
+      "gain": 0.31,
+      "delay": 0.008,
+      "start": 40.44989778150783,
+      "hold": 1.5810810810810807
+    },
+    {
+      "track": "guitar",
+      "beat": 50.77,
+      "end_beat": 52.0,
+      "pitch": 52,
+      "velocity": 57,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 41.02568156529161,
+      "hold": 0.997297297297294
+    },
+    {
+      "track": "guitar",
+      "beat": 51.48,
+      "end_beat": 52.0,
+      "pitch": 57,
+      "velocity": 60,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 41.612357240967285,
+      "hold": 0.4216216216216253
+    },
+    {
+      "track": "piano_lead",
+      "beat": 52.0,
+      "end_beat": 52.465,
+      "pitch": 81,
+      "velocity": 69,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 42.026978862588905,
+      "hold": 0.35769230769231086
+    },
+    {
+      "track": "piano_lead",
+      "beat": 52.5,
+      "end_beat": 52.965,
+      "pitch": 84,
+      "velocity": 69,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 42.41159424720429,
+      "hold": 0.35769230769231086
+    },
+    {
+      "track": "piano_lead",
+      "beat": 53.0,
+      "end_beat": 54.395,
+      "pitch": 86,
+      "velocity": 78,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 42.804209631819674,
+      "hold": 1.0730769230769255
+    },
+    {
+      "track": "piano_lead",
+      "beat": 54.5,
+      "end_beat": 54.965,
+      "pitch": 84,
+      "velocity": 69,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 43.950055785665825,
+      "hold": 0.35769230769231086
+    },
+    {
+      "track": "piano_lead",
+      "beat": 55.0,
+      "end_beat": 55.93,
+      "pitch": 81,
+      "velocity": 74,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 44.342671170281214,
+      "hold": 0.7153846153846146
+    },
+    {
+      "track": "piano_support",
+      "beat": 52,
+      "end_beat": 55.9,
+      "pitch": 34,
+      "velocity": 48,
+      "gain": 0.38,
+      "delay": 0.0,
+      "start": 42.02297886258891,
+      "hold": 3.0
+    },
+    {
+      "track": "guitar",
+      "beat": 52,
+      "end_beat": 54.0,
+      "pitch": 50,
+      "velocity": 57,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 42.02297886258891,
+      "hold": 1.53846153846154
+    },
+    {
+      "track": "guitar",
+      "beat": 52.76,
+      "end_beat": 54.76,
+      "pitch": 53,
+      "velocity": 60,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 42.61859424720429,
+      "hold": 1.53846153846154
+    },
+    {
+      "track": "guitar",
+      "beat": 53.48,
+      "end_beat": 55.48,
+      "pitch": 57,
+      "velocity": 63,
+      "gain": 0.31,
+      "delay": -0.007,
+      "start": 43.154440401050444,
+      "hold": 1.53846153846154
+    },
+    {
+      "track": "guitar",
+      "beat": 54.05,
+      "end_beat": 56.0,
+      "pitch": 62,
+      "velocity": 57,
+      "gain": 0.31,
+      "delay": 0.008,
+      "start": 43.60790193951198,
+      "hold": 1.500000000000007
+    },
+    {
+      "track": "guitar",
+      "beat": 54.77,
+      "end_beat": 56.0,
+      "pitch": 53,
+      "velocity": 60,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 44.15374809335814,
+      "hold": 0.9461538461538481
+    },
+    {
+      "track": "guitar",
+      "beat": 55.48,
+      "end_beat": 56.0,
+      "pitch": 57,
+      "velocity": 63,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 44.710901939511984,
+      "hold": 0.4000000000000057
+    },
+    {
+      "track": "piano_support",
+      "beat": 54.1,
+      "end_beat": 55.9,
+      "pitch": 53,
+      "velocity": 36,
+      "gain": 0.19,
+      "delay": 0.0,
+      "start": 43.63836347797352,
+      "hold": 1.3846153846153868
+    },
+    {
+      "track": "piano_support",
+      "beat": 54.1,
+      "end_beat": 55.9,
+      "pitch": 57,
+      "velocity": 36,
+      "gain": 0.19,
+      "delay": 0.026,
+      "start": 43.664363477973524,
+      "hold": 1.3846153846153868
+    },
+    {
+      "track": "piano_lead",
+      "beat": 56.0,
+      "end_beat": 57.395,
+      "pitch": 79,
+      "velocity": 74,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 45.11190193951199,
+      "hold": 1.1013157894736878
+    },
+    {
+      "track": "piano_lead",
+      "beat": 57.5,
+      "end_beat": 57.965,
+      "pitch": 76,
+      "velocity": 65,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 46.28811246582777,
+      "hold": 0.36710526315789593
+    },
+    {
+      "track": "piano_lead",
+      "beat": 58.0,
+      "end_beat": 58.93,
+      "pitch": 77,
+      "velocity": 70,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 46.69084930793304,
+      "hold": 0.7342105263157848
+    },
+    {
+      "track": "piano_lead",
+      "beat": 59.0,
+      "end_beat": 59.93,
+      "pitch": 81,
+      "velocity": 70,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 47.48032299214357,
+      "hold": 0.7342105263157848
+    },
+    {
+      "track": "piano_support",
+      "beat": 56,
+      "end_beat": 59.9,
+      "pitch": 43,
+      "velocity": 48,
+      "gain": 0.38,
+      "delay": 0.0,
+      "start": 45.09990193951199,
+      "hold": 3.0789473684210478
+    },
+    {
+      "track": "guitar",
+      "beat": 56,
+      "end_beat": 58.0,
+      "pitch": 50,
+      "velocity": 57,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 45.09990193951199,
+      "hold": 1.5789473684210549
+    },
+    {
+      "track": "guitar",
+      "beat": 56.76,
+      "end_beat": 58.76,
+      "pitch": 55,
+      "velocity": 60,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 45.71090193951199,
+      "hold": 1.5789473684210478
+    },
+    {
+      "track": "guitar",
+      "beat": 57.48,
+      "end_beat": 59.48,
+      "pitch": 58,
+      "velocity": 63,
+      "gain": 0.31,
+      "delay": -0.007,
+      "start": 46.26132299214357,
+      "hold": 1.5789473684210478
+    },
+    {
+      "track": "guitar",
+      "beat": 58.05,
+      "end_beat": 60.0,
+      "pitch": 64,
+      "velocity": 57,
+      "gain": 0.31,
+      "delay": 0.008,
+      "start": 46.726322992143565,
+      "hold": 1.5394736842105274
+    },
+    {
+      "track": "guitar",
+      "beat": 58.77,
+      "end_beat": 60.0,
+      "pitch": 55,
+      "velocity": 60,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 47.28674404477515,
+      "hold": 0.9710526315789423
+    },
+    {
+      "track": "guitar",
+      "beat": 59.48,
+      "end_beat": 60.0,
+      "pitch": 58,
+      "velocity": 63,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 47.85827036056462,
+      "hold": 0.4105263157894754
+    },
+    {
+      "track": "piano_lead",
+      "beat": 60.0,
+      "end_beat": 60.93,
+      "pitch": 76,
+      "velocity": 67,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 48.26979667635409,
+      "hold": 0.7643835616438324
+    },
+    {
+      "track": "piano_lead",
+      "beat": 61.0,
+      "end_beat": 61.465,
+      "pitch": 77,
+      "velocity": 62,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 49.083714484573264,
+      "hold": 0.38219178082191974
+    },
+    {
+      "track": "piano_lead",
+      "beat": 61.5,
+      "end_beat": 61.965,
+      "pitch": 76,
+      "velocity": 62,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 49.494673388682855,
+      "hold": 0.38219178082191974
+    },
+    {
+      "track": "piano_lead",
+      "beat": 62.0,
+      "end_beat": 62.93,
+      "pitch": 73,
+      "velocity": 67,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 49.91363229279245,
+      "hold": 0.7643835616438324
+    },
+    {
+      "track": "piano_lead",
+      "beat": 63.0,
+      "end_beat": 63.93,
+      "pitch": 76,
+      "velocity": 67,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 50.735550101011626,
+      "hold": 0.7643835616438324
+    },
+    {
+      "track": "piano_support",
+      "beat": 60,
+      "end_beat": 63.9,
+      "pitch": 33,
+      "velocity": 47,
+      "gain": 0.38,
+      "delay": 0.0,
+      "start": 48.25779667635409,
+      "hold": 3.205479452054796
+    },
+    {
+      "track": "guitar",
+      "beat": 60,
+      "end_beat": 62.0,
+      "pitch": 49,
+      "velocity": 55,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 48.25779667635409,
+      "hold": 1.6438356164383592
+    },
+    {
+      "track": "guitar",
+      "beat": 60.76,
+      "end_beat": 62.76,
+      "pitch": 55,
+      "velocity": 58,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 48.893454210600666,
+      "hold": 1.6438356164383592
+    },
+    {
+      "track": "guitar",
+      "beat": 61.48,
+      "end_beat": 63.48,
+      "pitch": 57,
+      "velocity": 61,
+      "gain": 0.31,
+      "delay": -0.007,
+      "start": 49.467235032518474,
+      "hold": 1.6438356164383592
+    },
+    {
+      "track": "guitar",
+      "beat": 62.05,
+      "end_beat": 64.0,
+      "pitch": 65,
+      "velocity": 55,
+      "gain": 0.31,
+      "delay": 0.008,
+      "start": 49.9507281832034,
+      "hold": 1.6027397260274014
+    },
+    {
+      "track": "guitar",
+      "beat": 62.77,
+      "end_beat": 64.0,
+      "pitch": 55,
+      "velocity": 58,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 50.534509005121215,
+      "hold": 1.0109589041095859
+    },
+    {
+      "track": "guitar",
+      "beat": 63.48,
+      "end_beat": 64.0,
+      "pitch": 57,
+      "velocity": 61,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 51.129070648956834,
+      "hold": 0.4273972602739704
+    },
+    {
+      "track": "piano_lead",
+      "beat": 64.0,
+      "end_beat": 66.79,
+      "pitch": 74,
+      "velocity": 66,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 51.5574679092308,
+      "hold": 2.391428571428577
+    },
+    {
+      "track": "piano_support",
+      "beat": 64,
+      "end_beat": 67.9,
+      "pitch": 38,
+      "velocity": 42,
+      "gain": 0.38,
+      "delay": 0.0,
+      "start": 51.5454679092308,
+      "hold": 3.3428571428571487
+    },
+    {
+      "track": "guitar",
+      "beat": 64,
+      "end_beat": 66.0,
+      "pitch": 50,
+      "velocity": 50,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 51.5454679092308,
+      "hold": 1.7142857142857153
+    },
+    {
+      "track": "guitar",
+      "beat": 64.76,
+      "end_beat": 66.76,
+      "pitch": 57,
+      "velocity": 53,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 52.20789648065938,
+      "hold": 1.7142857142857153
+    },
+    {
+      "track": "guitar",
+      "beat": 65.48,
+      "end_beat": 67.48,
+      "pitch": 62,
+      "velocity": 56,
+      "gain": 0.31,
+      "delay": -0.007,
+      "start": 52.80703933780224,
+      "hold": 1.7142857142857153
+    },
+    {
+      "track": "guitar",
+      "beat": 66.05,
+      "end_beat": 68.0,
+      "pitch": 64,
+      "velocity": 50,
+      "gain": 0.31,
+      "delay": 0.008,
+      "start": 53.31061076637366,
+      "hold": 1.671428571428578
+    },
+    {
+      "track": "guitar",
+      "beat": 66.77,
+      "end_beat": 68.0,
+      "pitch": 57,
+      "velocity": 53,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 53.91975362351651,
+      "hold": 1.0542857142857187
+    },
+    {
+      "track": "guitar",
+      "beat": 67.48,
+      "end_beat": 68.0,
+      "pitch": 62,
+      "velocity": 56,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 54.53932505208795,
+      "hold": 0.4457142857142813
+    },
+    {
+      "track": "piano_support",
+      "beat": 66.1,
+      "end_beat": 67.9,
+      "pitch": 57,
+      "velocity": 36,
+      "gain": 0.19,
+      "delay": 0.0,
+      "start": 53.3454679092308,
+      "hold": 1.5428571428571516
+    },
+    {
+      "track": "piano_support",
+      "beat": 66.1,
+      "end_beat": 67.9,
+      "pitch": 62,
+      "velocity": 36,
+      "gain": 0.19,
+      "delay": 0.026,
+      "start": 53.3714679092308,
+      "hold": 1.5428571428571516
+    },
+    {
+      "track": "piano_lead",
+      "beat": 68.5,
+      "end_beat": 68.965,
+      "pitch": 62,
+      "velocity": 59,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 55.38344474320763,
+      "hold": 0.37702702702703306
+    },
+    {
+      "track": "piano_lead",
+      "beat": 69.0,
+      "end_beat": 69.93,
+      "pitch": 65,
+      "velocity": 64,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 55.796850148613046,
+      "hold": 0.754054054054059
+    },
+    {
+      "track": "piano_lead",
+      "beat": 70.0,
+      "end_beat": 71.395,
+      "pitch": 69,
+      "velocity": 68,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 56.60766095942385,
+      "hold": 1.1310810810810779
+    },
+    {
+      "track": "piano_lead",
+      "beat": 71.5,
+      "end_beat": 71.965,
+      "pitch": 67,
+      "velocity": 59,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 57.81587717564007,
+      "hold": 0.37702702702702595
+    },
+    {
+      "track": "piano_support",
+      "beat": 68,
+      "end_beat": 71.9,
+      "pitch": 38,
+      "velocity": 44,
+      "gain": 0.38,
+      "delay": 0.0,
+      "start": 54.97403933780223,
+      "hold": 3.1621621621621685
+    },
+    {
+      "track": "guitar",
+      "beat": 68,
+      "end_beat": 70.0,
+      "pitch": 50,
+      "velocity": 52,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 54.97403933780223,
+      "hold": 1.621621621621621
+    },
+    {
+      "track": "guitar",
+      "beat": 68.76,
+      "end_beat": 70.76,
+      "pitch": 57,
+      "velocity": 55,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 55.60125555401846,
+      "hold": 1.621621621621621
+    },
+    {
+      "track": "guitar",
+      "beat": 69.48,
+      "end_beat": 71.48,
+      "pitch": 64,
+      "velocity": 58,
+      "gain": 0.31,
+      "delay": -0.007,
+      "start": 56.16703933780224,
+      "hold": 1.621621621621621
+    },
+    {
+      "track": "guitar",
+      "beat": 70.05,
+      "end_beat": 72.0,
+      "pitch": 65,
+      "velocity": 52,
+      "gain": 0.31,
+      "delay": 0.008,
+      "start": 56.644201499964396,
+      "hold": 1.5810810810810807
+    },
+    {
+      "track": "guitar",
+      "beat": 70.77,
+      "end_beat": 72.0,
+      "pitch": 57,
+      "velocity": 55,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 57.21998528374817,
+      "hold": 0.9972972972973011
+    },
+    {
+      "track": "guitar",
+      "beat": 71.48,
+      "end_beat": 72.0,
+      "pitch": 64,
+      "velocity": 58,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 57.80666095942386,
+      "hold": 0.4216216216216182
+    },
+    {
+      "track": "piano_support",
+      "beat": 70.1,
+      "end_beat": 71.9,
+      "pitch": 57,
+      "velocity": 36,
+      "gain": 0.19,
+      "delay": 0.0,
+      "start": 56.676742040504934,
+      "hold": 1.4594594594594668
+    },
+    {
+      "track": "piano_support",
+      "beat": 70.1,
+      "end_beat": 71.9,
+      "pitch": 64,
+      "velocity": 36,
+      "gain": 0.19,
+      "delay": 0.026,
+      "start": 56.70274204050494,
+      "hold": 1.4594594594594668
+    },
+    {
+      "track": "piano_lead",
+      "beat": 72.0,
+      "end_beat": 72.93,
+      "pitch": 64,
+      "velocity": 61,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 58.229282581045474,
+      "hold": 0.7643835616438395
+    },
+    {
+      "track": "piano_lead",
+      "beat": 73.0,
+      "end_beat": 73.465,
+      "pitch": 65,
+      "velocity": 56,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 59.04320038926465,
+      "hold": 0.38219178082191974
+    },
+    {
+      "track": "piano_lead",
+      "beat": 73.5,
+      "end_beat": 73.965,
+      "pitch": 64,
+      "velocity": 56,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 59.45415929337424,
+      "hold": 0.38219178082191974
+    },
+    {
+      "track": "piano_lead",
+      "beat": 74.0,
+      "end_beat": 75.395,
+      "pitch": 62,
+      "velocity": 65,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 59.873118197483834,
+      "hold": 1.146575342465745
+    },
+    {
+      "track": "piano_support",
+      "beat": 72,
+      "end_beat": 75.9,
+      "pitch": 34,
+      "velocity": 41,
+      "gain": 0.38,
+      "delay": 0.0,
+      "start": 58.217282581045474,
+      "hold": 3.205479452054796
+    },
+    {
+      "track": "guitar",
+      "beat": 72,
+      "end_beat": 74.0,
+      "pitch": 50,
+      "velocity": 49,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 58.217282581045474,
+      "hold": 1.6438356164383592
+    },
+    {
+      "track": "guitar",
+      "beat": 72.76,
+      "end_beat": 74.76,
+      "pitch": 53,
+      "velocity": 52,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 58.85294011529206,
+      "hold": 1.643835616438352
+    },
+    {
+      "track": "guitar",
+      "beat": 73.48,
+      "end_beat": 75.48,
+      "pitch": 57,
+      "velocity": 55,
+      "gain": 0.31,
+      "delay": -0.007,
+      "start": 59.426720937209865,
+      "hold": 1.643835616438352
+    },
+    {
+      "track": "guitar",
+      "beat": 74.05,
+      "end_beat": 76.0,
+      "pitch": 62,
+      "velocity": 49,
+      "gain": 0.31,
+      "delay": 0.008,
+      "start": 59.910214087894786,
+      "hold": 1.6027397260274014
+    },
+    {
+      "track": "guitar",
+      "beat": 74.77,
+      "end_beat": 76.0,
+      "pitch": 53,
+      "velocity": 52,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 60.49399490981259,
+      "hold": 1.010958904109593
+    },
+    {
+      "track": "guitar",
+      "beat": 75.48,
+      "end_beat": 76.0,
+      "pitch": 57,
+      "velocity": 55,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 61.08855655364822,
+      "hold": 0.4273972602739704
+    },
+    {
+      "track": "piano_lead",
+      "beat": 76.5,
+      "end_beat": 76.965,
+      "pitch": 62,
+      "velocity": 60,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 61.90895381392218,
+      "hold": 0.372000000000007
+    },
+    {
+      "track": "piano_lead",
+      "beat": 77.0,
+      "end_beat": 77.93,
+      "pitch": 65,
+      "velocity": 65,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 62.31695381392218,
+      "hold": 0.7440000000000069
+    },
+    {
+      "track": "piano_lead",
+      "beat": 78.0,
+      "end_beat": 79.395,
+      "pitch": 72,
+      "velocity": 69,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 63.11695381392219,
+      "hold": 1.1159999999999926
+    },
+    {
+      "track": "piano_lead",
+      "beat": 79.5,
+      "end_beat": 79.965,
+      "pitch": 69,
+      "velocity": 60,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 64.30895381392219,
+      "hold": 0.3719999999999999
+    },
+    {
+      "track": "piano_support",
+      "beat": 76,
+      "end_beat": 79.9,
+      "pitch": 33,
+      "velocity": 45,
+      "gain": 0.38,
+      "delay": 0.0,
+      "start": 61.504953813922185,
+      "hold": 3.1200000000000045
+    },
+    {
+      "track": "guitar",
+      "beat": 76,
+      "end_beat": 78.0,
+      "pitch": 48,
+      "velocity": 53,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 61.504953813922185,
+      "hold": 1.6000000000000014
+    },
+    {
+      "track": "guitar",
+      "beat": 76.76,
+      "end_beat": 78.76,
+      "pitch": 53,
+      "velocity": 56,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 62.12395381392219,
+      "hold": 1.6000000000000014
+    },
+    {
+      "track": "guitar",
+      "beat": 77.48,
+      "end_beat": 79.48,
+      "pitch": 57,
+      "velocity": 59,
+      "gain": 0.31,
+      "delay": -0.007,
+      "start": 62.68195381392219,
+      "hold": 1.6000000000000014
+    },
+    {
+      "track": "guitar",
+      "beat": 78.05,
+      "end_beat": 80.0,
+      "pitch": 64,
+      "velocity": 53,
+      "gain": 0.31,
+      "delay": 0.008,
+      "start": 63.15295381392219,
+      "hold": 1.5600000000000023
+    },
+    {
+      "track": "guitar",
+      "beat": 78.77,
+      "end_beat": 80.0,
+      "pitch": 53,
+      "velocity": 56,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 63.72095381392218,
+      "hold": 0.9840000000000089
+    },
+    {
+      "track": "guitar",
+      "beat": 79.48,
+      "end_beat": 80.0,
+      "pitch": 57,
+      "velocity": 59,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 64.29995381392219,
+      "hold": 0.4159999999999968
+    },
+    {
+      "track": "piano_support",
+      "beat": 78.1,
+      "end_beat": 79.9,
+      "pitch": 53,
+      "velocity": 36,
+      "gain": 0.19,
+      "delay": 0.0,
+      "start": 63.18495381392218,
+      "hold": 1.440000000000012
+    },
+    {
+      "track": "piano_support",
+      "beat": 78.1,
+      "end_beat": 79.9,
+      "pitch": 57,
+      "velocity": 36,
+      "gain": 0.19,
+      "delay": 0.026,
+      "start": 63.21095381392218,
+      "hold": 1.440000000000012
+    },
+    {
+      "track": "piano_lead",
+      "beat": 80.0,
+      "end_beat": 80.93,
+      "pitch": 67,
+      "velocity": 62,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 64.71695381392219,
+      "hold": 0.7750000000000057
+    },
+    {
+      "track": "piano_lead",
+      "beat": 81.0,
+      "end_beat": 81.465,
+      "pitch": 64,
+      "velocity": 57,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 65.54228714725552,
+      "hold": 0.38750000000000284
+    },
+    {
+      "track": "piano_lead",
+      "beat": 81.5,
+      "end_beat": 81.965,
+      "pitch": 67,
+      "velocity": 57,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 65.9589538139222,
+      "hold": 0.38750000000000284
+    },
+    {
+      "track": "piano_lead",
+      "beat": 82.0,
+      "end_beat": 83.395,
+      "pitch": 69,
+      "velocity": 66,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 66.38362048058886,
+      "hold": 1.1624999999999943
+    },
+    {
+      "track": "piano_support",
+      "beat": 80,
+      "end_beat": 83.9,
+      "pitch": 31,
+      "velocity": 42,
+      "gain": 0.38,
+      "delay": 0.0,
+      "start": 64.70495381392219,
+      "hold": 3.25
+    },
+    {
+      "track": "guitar",
+      "beat": 80,
+      "end_beat": 82.0,
+      "pitch": 48,
+      "velocity": 50,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 64.70495381392219,
+      "hold": 1.6666666666666714
+    },
+    {
+      "track": "guitar",
+      "beat": 80.76,
+      "end_beat": 82.76,
+      "pitch": 52,
+      "velocity": 53,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 65.34928714725552,
+      "hold": 1.6666666666666572
+    },
+    {
+      "track": "guitar",
+      "beat": 81.48,
+      "end_beat": 83.48,
+      "pitch": 57,
+      "velocity": 56,
+      "gain": 0.31,
+      "delay": -0.007,
+      "start": 65.93128714725552,
+      "hold": 1.6666666666666714
+    },
+    {
+      "track": "guitar",
+      "beat": 82.05,
+      "end_beat": 84.0,
+      "pitch": 60,
+      "velocity": 50,
+      "gain": 0.31,
+      "delay": 0.008,
+      "start": 66.42128714725551,
+      "hold": 1.625
+    },
+    {
+      "track": "guitar",
+      "beat": 82.77,
+      "end_beat": 84.0,
+      "pitch": 52,
+      "velocity": 53,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 67.01328714725551,
+      "hold": 1.0250000000000057
+    },
+    {
+      "track": "guitar",
+      "beat": 83.48,
+      "end_beat": 84.0,
+      "pitch": 57,
+      "velocity": 56,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 67.61595381392219,
+      "hold": 0.4333333333333229
+    },
+    {
+      "track": "piano_lead",
+      "beat": 84.0,
+      "end_beat": 84.465,
+      "pitch": 69,
+      "velocity": 65,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 68.04228714725552,
+      "hold": 0.36710526315789593
+    },
+    {
+      "track": "piano_lead",
+      "beat": 84.5,
+      "end_beat": 84.965,
+      "pitch": 72,
+      "velocity": 65,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 68.43702398936078,
+      "hold": 0.36710526315789593
+    },
+    {
+      "track": "piano_lead",
+      "beat": 85.0,
+      "end_beat": 86.395,
+      "pitch": 74,
+      "velocity": 74,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 68.83976083146604,
+      "hold": 1.1013157894736878
+    },
+    {
+      "track": "piano_support",
+      "beat": 85.0,
+      "end_beat": 87.9,
+      "pitch": 62,
+      "velocity": 49,
+      "gain": 0.24,
+      "delay": 0.018,
+      "start": 68.84576083146604,
+      "hold": 2.2894736842105345
+    },
+    {
+      "track": "piano_lead",
+      "beat": 86.5,
+      "end_beat": 86.965,
+      "pitch": 72,
+      "velocity": 65,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 70.01597135778184,
+      "hold": 0.36710526315789593
+    },
+    {
+      "track": "piano_lead",
+      "beat": 87.0,
+      "end_beat": 87.93,
+      "pitch": 69,
+      "velocity": 70,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 70.41870819988709,
+      "hold": 0.7342105263157919
+    },
+    {
+      "track": "piano_support",
+      "beat": 87.0,
+      "end_beat": 88.0,
+      "pitch": 57,
+      "velocity": 49,
+      "gain": 0.24,
+      "delay": 0.018,
+      "start": 70.42470819988709,
+      "hold": 0.7894736842105345
+    },
+    {
+      "track": "piano_support",
+      "beat": 84,
+      "end_beat": 87.9,
+      "pitch": 34,
+      "velocity": 48,
+      "gain": 0.38,
+      "delay": 0.0,
+      "start": 68.03828714725552,
+      "hold": 3.078947368421055
+    },
+    {
+      "track": "guitar",
+      "beat": 84,
+      "end_beat": 86.0,
+      "pitch": 50,
+      "velocity": 57,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 68.03828714725552,
+      "hold": 1.5789473684210549
+    },
+    {
+      "track": "guitar",
+      "beat": 84.76,
+      "end_beat": 86.76,
+      "pitch": 53,
+      "velocity": 60,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 68.64928714725552,
+      "hold": 1.5789473684210549
+    },
+    {
+      "track": "guitar",
+      "beat": 85.48,
+      "end_beat": 87.48,
+      "pitch": 57,
+      "velocity": 63,
+      "gain": 0.31,
+      "delay": -0.007,
+      "start": 69.1997081998871,
+      "hold": 1.5789473684210549
+    },
+    {
+      "track": "guitar",
+      "beat": 86.05,
+      "end_beat": 88.0,
+      "pitch": 62,
+      "velocity": 57,
+      "gain": 0.31,
+      "delay": 0.008,
+      "start": 69.66470819988709,
+      "hold": 1.5394736842105345
+    },
+    {
+      "track": "guitar",
+      "beat": 86.77,
+      "end_beat": 88.0,
+      "pitch": 53,
+      "velocity": 60,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 70.22512925251867,
+      "hold": 0.9710526315789565
+    },
+    {
+      "track": "guitar",
+      "beat": 87.48,
+      "end_beat": 88.0,
+      "pitch": 57,
+      "velocity": 63,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 70.79665556830815,
+      "hold": 0.4105263157894683
+    },
+    {
+      "track": "piano_support",
+      "beat": 86.1,
+      "end_beat": 87.9,
+      "pitch": 53,
+      "velocity": 36,
+      "gain": 0.19,
+      "delay": 0.0,
+      "start": 69.69618188409761,
+      "hold": 1.4210526315789593
+    },
+    {
+      "track": "piano_support",
+      "beat": 86.1,
+      "end_beat": 87.9,
+      "pitch": 57,
+      "velocity": 36,
+      "gain": 0.19,
+      "delay": 0.026,
+      "start": 69.72218188409761,
+      "hold": 1.4210526315789593
+    },
+    {
+      "track": "piano_lead",
+      "beat": 88.0,
+      "end_beat": 89.395,
+      "pitch": 67,
+      "velocity": 70,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 71.20818188409763,
+      "hold": 1.1624999999999943
+    },
+    {
+      "track": "piano_lead",
+      "beat": 89.5,
+      "end_beat": 89.965,
+      "pitch": 64,
+      "velocity": 61,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 72.45018188409763,
+      "hold": 0.38750000000000284
+    },
+    {
+      "track": "piano_lead",
+      "beat": 90.0,
+      "end_beat": 90.93,
+      "pitch": 65,
+      "velocity": 66,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 72.8748485507643,
+      "hold": 0.7750000000000057
+    },
+    {
+      "track": "piano_lead",
+      "beat": 91.0,
+      "end_beat": 91.93,
+      "pitch": 69,
+      "velocity": 66,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 73.70818188409763,
+      "hold": 0.7750000000000057
+    },
+    {
+      "track": "piano_support",
+      "beat": 88,
+      "end_beat": 91.9,
+      "pitch": 43,
+      "velocity": 46,
+      "gain": 0.38,
+      "delay": 0.0,
+      "start": 71.19618188409763,
+      "hold": 3.25
+    },
+    {
+      "track": "guitar",
+      "beat": 88,
+      "end_beat": 90.0,
+      "pitch": 50,
+      "velocity": 54,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 71.19618188409763,
+      "hold": 1.6666666666666714
+    },
+    {
+      "track": "guitar",
+      "beat": 88.76,
+      "end_beat": 90.76,
+      "pitch": 55,
+      "velocity": 57,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 71.84051521743096,
+      "hold": 1.6666666666666714
+    },
+    {
+      "track": "guitar",
+      "beat": 89.48,
+      "end_beat": 91.48,
+      "pitch": 58,
+      "velocity": 60,
+      "gain": 0.31,
+      "delay": -0.007,
+      "start": 72.42251521743096,
+      "hold": 1.6666666666666714
+    },
+    {
+      "track": "guitar",
+      "beat": 90.05,
+      "end_beat": 92.0,
+      "pitch": 64,
+      "velocity": 54,
+      "gain": 0.31,
+      "delay": 0.008,
+      "start": 72.91251521743095,
+      "hold": 1.625
+    },
+    {
+      "track": "guitar",
+      "beat": 90.77,
+      "end_beat": 92.0,
+      "pitch": 55,
+      "velocity": 57,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 73.50451521743096,
+      "hold": 1.0249999999999915
+    },
+    {
+      "track": "guitar",
+      "beat": 91.48,
+      "end_beat": 92.0,
+      "pitch": 58,
+      "velocity": 60,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 74.10718188409763,
+      "hold": 0.4333333333333229
+    },
+    {
+      "track": "piano_lead",
+      "beat": 92.0,
+      "end_beat": 92.93,
+      "pitch": 64,
+      "velocity": 63,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 74.54151521743096,
+      "hold": 0.8205882352941245
+    },
+    {
+      "track": "piano_lead",
+      "beat": 93.0,
+      "end_beat": 93.465,
+      "pitch": 65,
+      "velocity": 58,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 75.41586815860742,
+      "hold": 0.41029411764706936
+    },
+    {
+      "track": "piano_lead",
+      "beat": 93.5,
+      "end_beat": 93.965,
+      "pitch": 64,
+      "velocity": 58,
+      "gain": 0.69,
+      "delay": 0.004,
+      "start": 75.85704462919567,
+      "hold": 0.41029411764705515
+    },
+    {
+      "track": "piano_lead",
+      "beat": 94.0,
+      "end_beat": 94.93,
+      "pitch": 61,
+      "velocity": 63,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 76.3062210997839,
+      "hold": 0.8205882352941245
+    },
+    {
+      "track": "piano_lead",
+      "beat": 95.0,
+      "end_beat": 95.93,
+      "pitch": 64,
+      "velocity": 63,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 77.18857404096036,
+      "hold": 0.8205882352941245
+    },
+    {
+      "track": "piano_support",
+      "beat": 92,
+      "end_beat": 95.9,
+      "pitch": 33,
+      "velocity": 43,
+      "gain": 0.38,
+      "delay": 0.0,
+      "start": 74.52951521743095,
+      "hold": 3.441176470588246
+    },
+    {
+      "track": "guitar",
+      "beat": 92,
+      "end_beat": 94.0,
+      "pitch": 49,
+      "velocity": 51,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 74.52951521743095,
+      "hold": 1.764705882352942
+    },
+    {
+      "track": "guitar",
+      "beat": 92.76,
+      "end_beat": 94.76,
+      "pitch": 55,
+      "velocity": 54,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 75.21110345272507,
+      "hold": 1.764705882352942
+    },
+    {
+      "track": "guitar",
+      "beat": 93.48,
+      "end_beat": 95.48,
+      "pitch": 57,
+      "velocity": 57,
+      "gain": 0.31,
+      "delay": -0.007,
+      "start": 75.82839757037213,
+      "hold": 1.764705882352942
+    },
+    {
+      "track": "piano_lead",
+      "beat": 96.0,
+      "end_beat": 98.79,
+      "pitch": 62,
+      "velocity": 62,
+      "gain": 0.69,
+      "delay": 0.012,
+      "start": 78.07092698213684,
+      "hold": 2.6571428571428584
+    },
+    {
+      "track": "piano_support",
+      "beat": 96,
+      "end_beat": 99.9,
+      "pitch": 38,
+      "velocity": 38,
+      "gain": 0.38,
+      "delay": 0.0,
+      "start": 78.05892698213684,
+      "hold": 3.7142857142857224
+    },
+    {
+      "track": "guitar",
+      "beat": 96,
+      "end_beat": 98.0,
+      "pitch": 50,
+      "velocity": 46,
+      "gain": 0.31,
+      "delay": 0.0,
+      "start": 78.05892698213684,
+      "hold": 1.904761904761898
+    },
+    {
+      "track": "guitar",
+      "beat": 96.76,
+      "end_beat": 98.76,
+      "pitch": 57,
+      "velocity": 49,
+      "gain": 0.31,
+      "delay": 0.011,
+      "start": 78.79373650594637,
+      "hold": 1.904761904761898
+    },
+    {
+      "track": "guitar",
+      "beat": 97.48,
+      "end_beat": 99.48,
+      "pitch": 62,
+      "velocity": 52,
+      "gain": 0.31,
+      "delay": -0.007,
+      "start": 79.46145079166065,
+      "hold": 1.904761904761898
+    },
+    {
+      "track": "piano_support",
+      "beat": 98.1,
+      "end_beat": 99.9,
+      "pitch": 57,
+      "velocity": 36,
+      "gain": 0.19,
+      "delay": 0.0,
+      "start": 80.05892698213684,
+      "hold": 1.7142857142857224
+    },
+    {
+      "track": "piano_support",
+      "beat": 98.1,
+      "end_beat": 99.9,
+      "pitch": 62,
+      "velocity": 36,
+      "gain": 0.19,
+      "delay": 0.026,
+      "start": 80.08492698213684,
+      "hold": 1.7142857142857224
+    },
+    {
+      "track": "piano_support",
+      "beat": 100.0,
+      "end_beat": 103.9,
+      "pitch": 38,
+      "velocity": 34,
+      "gain": 0.25,
+      "delay": 0.0,
+      "start": 81.86845079166065,
+      "hold": 3.9000000000000057
+    },
+    {
+      "track": "piano_support",
+      "beat": 100.08,
+      "end_beat": 103.9,
+      "pitch": 50,
+      "velocity": 35,
+      "gain": 0.25,
+      "delay": 0.0,
+      "start": 81.94845079166065,
+      "hold": 3.8200000000000074
+    },
+    {
+      "track": "piano_support",
+      "beat": 100.16,
+      "end_beat": 103.9,
+      "pitch": 57,
+      "velocity": 36,
+      "gain": 0.25,
+      "delay": 0.0,
+      "start": 82.02845079166065,
+      "hold": 3.740000000000009
+    },
+    {
+      "track": "piano_support",
+      "beat": 100.24,
+      "end_beat": 103.9,
+      "pitch": 64,
+      "velocity": 37,
+      "gain": 0.25,
+      "delay": 0.0,
+      "start": 82.10845079166064,
+      "hold": 3.660000000000011
+    },
+    {
+      "track": "piano_lead",
+      "beat": 100.7,
+      "end_beat": 103.7,
+      "pitch": 62,
+      "velocity": 43,
+      "gain": 0.46,
+      "delay": 0.0,
+      "start": 82.56845079166065,
+      "hold": 3.0
+    }
+  ],
+  "sources": [
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 1 A#2.wav",
+      "sha256": "d49840b1daa6d95f79dd8683770bc3246ee9c9c5463eb3c6550dce137f82e629"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 1 C2.wav",
+      "sha256": "d00d21e80386bfcef7b3d2e260cb487d66dc879810523f7b214fa1c386183892"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 1 C3.wav",
+      "sha256": "3057ee1fcc384db66e53073e2c84aa4d8aa269bf29db6d278c473e8dee2e3359"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 1 D2.wav",
+      "sha256": "0d4103bc68cccf5d64470d9cbdd9639c2caf3cc87a0b8c4aa15352606224f1bb"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 1 D3.wav",
+      "sha256": "89595fb82d2c962476ad1358af14bd2a7fab9b0e66a39c7d0ee7282e75c76e64"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 1 E2.wav",
+      "sha256": "dc3cd3598c4c49becf671eddc0c95ce2268315bb724dfd43c0dfb66d26f7bd19"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 1 E3.wav",
+      "sha256": "04f05b8f46ff3d8c05bad8d90a8123536872c78f178835e9e21bb4ad34d7c4a6"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 1 F#2.wav",
+      "sha256": "56f34e62e9b683e83cc36d70c819302617bcc18196f65a6f880d1dad4fadef87"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 2 A#2.wav",
+      "sha256": "0cff913701adb0f67b48fa8ac40b679ac8c1aaa35d1078e6d3fa350d0bc453f3"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 2 C2.wav",
+      "sha256": "1b64345ea43fe0e9f757121f2c6af0cd2bfb93be8d8ddd28a80d497d7fef34fd"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 2 C3.wav",
+      "sha256": "6afe54ae98361a4556ca5a2320ea4493236f569a16703b77649283bda8634e70"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 2 D2.wav",
+      "sha256": "e0858fa8ae1d421e012cbaa75259f4a07c0e14701aa41ccd60f806c5b2aa3756"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 2 D3.wav",
+      "sha256": "3701c06511849517a9cf97e4376ec83d3aa5eaec9ec6b9465403aed6bc205bad"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 2 E2.wav",
+      "sha256": "4e534c21eb5db89adb0ed8792bdf5efc80537ef2bb76f8ae84b5768d6c746cea"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 2 E3.wav",
+      "sha256": "a6afec697b7c430a473f69b5b0f2a38d629ded8ed35dd179ca3801ea3e59f04f"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 2 F#2.wav",
+      "sha256": "106ace350825a7406a2c6052bce7b9a3c9e84ecf2f50bf0b8b9c93f204cf37de"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 3 A#2.wav",
+      "sha256": "cc86c77b95d3ccd1bc57baa41cc4199db548e5217692faa2257872c22b2a9d91"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 3 C2.wav",
+      "sha256": "c36e5598eaed2259c74f1ab6743f72b6fe6304bf12ae902a77cf1f7a5986e9db"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 3 D2.wav",
+      "sha256": "707cb07ffd3703c94d41e90d8ca1dd734f7510bacd7a3574750bf962f86a8227"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 3 D3.wav",
+      "sha256": "c9456c2b5a40974fe6bf01497a8be3fc1a30f0c84862f72884252983455c9d7e"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 3 E2.wav",
+      "sha256": "69e371afb689c4b6f3c1078e7b426b6dae0e9c6ea3759d9580a0463d927d6158"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 3 E3.wav",
+      "sha256": "a6e7ade0cfe6b7341c4dcc1a0757b5245281348bb481f464158a5d11b63b094a"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 3 F#2.wav",
+      "sha256": "02bc1d66fe6261748aa5736c469c7fcc27fe157443638ef4e9e617868c9758cc"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 4 A#2.wav",
+      "sha256": "d1787a6b14353aec63ea4898bfc4f16be96b72023bbf370b0d71f4c789fdf703"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 4 C2.wav",
+      "sha256": "af58c1f6cbdf63af3729608ee9577e47f3de6bffe752a52a0333c4f89260c7ba"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 4 D2.wav",
+      "sha256": "01535311d610bdd2e600d6c88a668d69e0b0928079b0a9688810955ed7c01838"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 4 D3.wav",
+      "sha256": "3cefb67c444eddab23acffe49e88caad0060146ad2f33bef5019772befd42c6d"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 4 E2.wav",
+      "sha256": "a7a610c11c0587cacbc6d519741b3322e06844b6c5711fdc5b6861ea7abd0f7d"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 4 E3.wav",
+      "sha256": "7136ff09010a6182e2782f9ef720339a67344d6a2062f353b13dbf3f8f8949f9"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 4 F#2.wav",
+      "sha256": "691e46996fa3c32354de080b40ceee1d5c09147b3f834a18328e0f34ed963c05"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/030_F#0KM56_S.wav",
+      "sha256": "19f2903bd7c081d0af7fede1bb4d4ff06360e6bfca604f58987e4534768e861c"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/033_A0KM56_S.wav",
+      "sha256": "44ea0ba66d011152467a9786cd0f26ccb7e3c683d05fc68761707c90bab6f3f8"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/034_A#0KM56_S.wav",
+      "sha256": "d724c53dbee70dcc9d779a67495f25e3fc23110e7c44964e9bf559151fb52682"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/037_C#1KM56_S.wav",
+      "sha256": "7b5cc3e13ac926063d25bb15fdb32366e5086c075b6a94bd769dbd409d5c39bf"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/043_G1KM56_S.wav",
+      "sha256": "2e51937e8ab7c4cfb3641b50fb5cd7c886d0d3c875ef8a3123c890f37524acc0"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/048_C2KM56_S.wav",
+      "sha256": "c45742366a3c766c8e81ba399694212da5ac5c596ab2640d46deeb4ca4a520e2"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/049_C#2KM56_S.wav",
+      "sha256": "6f2ac1cd501bb339a72cf64ebf64a9dbe3a141a227034b12022d84a7a3786c2e"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/052_E2KM56_S.wav",
+      "sha256": "318b30e0b16a4fb3def4f8f2cddbce66ce05a2a7c6218d90a9efb945242e4cd2"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/053_F2KM56_S.wav",
+      "sha256": "cb7f7cda9f886dd854d3c0f70cb6c1c65d2b27e752f92401b40b112c00043f87"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/056_G#2KM56_S.wav",
+      "sha256": "9138612488113cf8f3271cbd1ec071b2bc9d659c2886eef287343d3079e35b91"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/057_A2KM56_S.wav",
+      "sha256": "0168be1dd9f0726d91336e5857096ed9dc6f72404171cf901e653dbffdf67197"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/062_D3KM56_S.wav",
+      "sha256": "aef88cdae4bc9be95cb8a08a4cefdc97c590e2984330639448402d4d51a64994"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/066_F#3KM56_S.wav",
+      "sha256": "0cf569d44c2f77e0593ea9f6827ac213b50e9067aae5e8f93cd382f6cc71e8f8"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/067_G3KM56_S.wav",
+      "sha256": "a0c738a8db0b6b392c1890f48c8b8cf168bb93a2c579da2086dbdc3c5cb25b50"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/069_A3KM56_S.wav",
+      "sha256": "189f9e3c868e6fab329247b7ada3a90e0bcaa16d6f8cecc3db84b456795e7f8b"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/071_B3KM56_S.wav",
+      "sha256": "41f0f93175d12130c4770af1a0cecc5677c151897daf908c563c1f8676b0d3cc"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/073_C#4KM56_S.wav",
+      "sha256": "3e43ce8a62609b5374a363326392445f74a176518179cf740e90a349b6ca42e9"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/074_D4KM56_M.wav",
+      "sha256": "5a3aeac03b46a36dc9d53a90fbfaf377ca274ca1d9d259a8f55d788b97479568"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/074_D4KM56_S.wav",
+      "sha256": "a3ab8f52d6954b16e1f35ac70d218ea58475673fa60cd2f64d3888e1be6c23f2"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/076_E4KM56_S.wav",
+      "sha256": "adfb853274b2d05abcd97ac75a23f39217d3b208f249d67750d4640c41a4a64c"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/079_G4KM56_M.wav",
+      "sha256": "24f51cacf468ee346d8c19306a9a9a9796b173ecc5a6d2d6d3817d05e5c8010d"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/079_G4KM56_S.wav",
+      "sha256": "de392a29355681cf9fc27f4f98073a1b8d69866980066dd83a2edab50be91b56"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/080_G#4KM56_M.wav",
+      "sha256": "4ca3fd7a760f61ad0195a05b9a6fb1698f773e25c00a04517d29776d6ec22b30"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/080_G#4KM56_S.wav",
+      "sha256": "b8aea00e54b14c421814967b289386f1811e0dd08cab6963181040ee68c890c9"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/084_C5KM56_S.wav",
+      "sha256": "99779a70393163b7371dd2befe88a5f071cb62076b5b434b0b726a6154649973"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/085_C#5KM56_M.wav",
+      "sha256": "bd4a038b38c24eea5711952d8bbf1a6438b4bf8b7064346ba2e1b3dea95ece5b"
+    },
+    {
+      "path": "/Library/Audio/Impulse Responses/Apple/02 Medium Spaces/02 Halls/1.6s_Small Hall.SDIR",
+      "sha256": "e5a30953cc74e52e48b4c0cf9418cf9afdcb6fabddd6b46bbb0e237e221334eb"
+    }
+  ]
+}

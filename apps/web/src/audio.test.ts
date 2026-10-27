@@ -28,21 +28,24 @@ beforeEach(() => { vi.stubGlobal('AudioContext', Context); vi.stubGlobal('fetch'
 afterEach(() => vi.unstubAllGlobals());
 
 describe('ordinary scene audio', () => {
-  it('loads compressed revised cues, with WAV fallback when a codec is unavailable', async () => {
-    const player = createAudioPlayer(vi.fn(), { edition: 'revised' }); await player.start();
+  it('loads the committed recording and captions unavailable codecs without substituting an old score', async () => {
+    const fallback = vi.fn();
+    const player = createAudioPlayer(fallback, { edition: 'revised' }); await player.start();
     Context.latest.decodeAudioData.mockRejectedValueOnce(new Error('codec unavailable'));
     player.cue('v2-boathouse'); await flush();
-    expect(fetch).toHaveBeenNthCalledWith(1, '/auditions/v2-boathouse.m4a');
-    expect(fetch).toHaveBeenNthCalledWith(2, '/auditions/v2-boathouse.wav');
-    expect(Context.latest.sources).toHaveLength(1);
+    expect(fetch).toHaveBeenCalledExactlyOnceWith('/music/a-place-kept-v1/v2-boathouse.m4a');
+    expect(fallback).toHaveBeenCalledWith('v2-boathouse');
+    expect(Context.latest.sources).toHaveLength(0);
   });
   it('uses acoustic lossless stems for revised confessions and ordinary missed motifs', async () => {
     const player = createAudioPlayer(vi.fn(), { edition: 'revised' }); await player.start();
     player.fragments(['priya']); await flush();
-    expect(fetch).toHaveBeenCalledWith('/auditions/v2-ensemble-priya.wav');
+    expect(fetch).toHaveBeenCalledWith('/music/a-place-kept-v1/v2-ensemble-priya.wav');
     expect(player.snapshot().mix.sam).toBe(0);
+    expect(player.snapshot().mix.priya).toBe(1);
+    expect(player.snapshot().mix.sea).toBe(1);
     player.cue('v2-boathouse'); await flush(); player.detune('priya', -50); await flush();
-    expect(fetch).toHaveBeenCalledWith('/auditions/v2-ensemble-priya-lowered.wav');
+    expect(fetch).toHaveBeenCalledWith('/music/a-place-kept-v1/v2-ensemble-priya-lowered.wav');
     expect(fetch).not.toHaveBeenCalledWith('/auditions/v2-ensemble-priya.m4a');
   });
   it('evicts decoded cues after a long session without interrupting the current source', async () => {
@@ -115,5 +118,64 @@ describe('ordinary scene audio', () => {
     player.fingerprint({ 'n1:goodbye': 'door' }); await flush();
     expect(fetch).toHaveBeenCalledWith('/auditions/v2-fingerprint-door.wav');
     player.fingerprint({ 'n1:goodbye': 'door' }); await flush(); expect(fetch).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('title intro audio clock', () => {
+  it('schedules the reveal from the decoded title start and does not stop its music', async () => {
+    const player = createAudioPlayer(vi.fn(), { edition: 'revised' }); await player.start();
+    const reveal = vi.fn(); player.titleIntro(reveal); await flush();
+    const [music, marker] = Context.latest.sources;
+    expect(fetch).toHaveBeenCalledWith('/music/a-place-kept-v1/v2-title.m4a');
+    expect(music!.start).toHaveBeenCalledWith(1);
+    expect(marker!.start).toHaveBeenCalledWith(5.945333);
+    expect(reveal).not.toHaveBeenCalled();
+    marker!.onended!();
+    expect(reveal).toHaveBeenCalledOnce();
+    expect(music!.stop).not.toHaveBeenCalled();
+  });
+
+  it('cancels callbacks on skip and on navigation to another cue', async () => {
+    const player = createAudioPlayer(vi.fn(), { edition: 'revised' }); await player.start();
+    const reveal = vi.fn(); const cancel = player.titleIntro(reveal); await flush();
+    const marker = Context.latest.sources[1]!; const staleEnded = marker.onended!;
+    cancel(); staleEnded(); expect(reveal).not.toHaveBeenCalled();
+    expect(Context.latest.sources[0]!.stop).not.toHaveBeenCalled();
+    player.titleIntro(reveal); await flush();
+    const nextMarker = Context.latest.sources.at(-1)!; const nextEnded = nextMarker.onended!;
+    player.cue('v2-shore'); nextEnded(); await flush();
+    expect(reveal).not.toHaveBeenCalled();
+  });
+
+  it('reveals the menu if the recording is missing', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: false, status: 404 })));
+    const player = createAudioPlayer(vi.fn(), { edition: 'revised' }); await player.start();
+    const reveal = vi.fn(); player.titleIntro(reveal); await flush();
+    expect(reveal).toHaveBeenCalledOnce();
+  });
+
+  it('does not reveal from a stale download after stop', async () => {
+    let resolve!: (value: ReturnType<typeof response>) => void;
+    vi.stubGlobal('fetch', vi.fn(() => new Promise(done => { resolve = done; })));
+    const player = createAudioPlayer(vi.fn(), { edition: 'revised' }); await player.start();
+    const reveal = vi.fn(); player.titleIntro(reveal); player.stop(); resolve(response()); await flush();
+    expect(reveal).not.toHaveBeenCalled();
+    expect(Context.latest.sources).toHaveLength(0);
+  });
+
+  it('releases a stalled download without allowing a second reveal later', async () => {
+    vi.useFakeTimers();
+    try {
+      let resolve!: (value: ReturnType<typeof response>) => void;
+      vi.stubGlobal('fetch', vi.fn(() => new Promise(done => { resolve = done; })));
+      const player = createAudioPlayer(vi.fn(), { edition: 'revised' }); await player.start();
+      const reveal = vi.fn(); player.titleIntro(reveal);
+      await vi.advanceTimersByTimeAsync(15000);
+      expect(reveal).toHaveBeenCalledOnce();
+      resolve(response()); await flush();
+      expect(Context.latest.sources).toHaveLength(1);
+      expect(reveal).toHaveBeenCalledOnce();
+      player.stop();
+    } finally { vi.useRealTimers(); }
   });
 });

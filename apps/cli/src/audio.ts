@@ -1,6 +1,6 @@
 /**
  * Event handler for EngineEvent[] on the terminal. music.cue plays the
- * matching audition WAV via afplay when present (killing the previous
+ * matching recorded asset via afplay when present (killing the previous
  * player first) and ALWAYS returns the dim '♪ <caption>' line — the caption
  * channel is accessibility, not a fallback, so deaf players get it whether
  * or not audio is sounding. Captions are diegetic (see @not-here/music
@@ -12,7 +12,8 @@
  * ship as per-layer loops (`act3-ensemble-<layer>.wav`). afplay plays a
  * file once, so each active layer respawns on exit to loop; `-v` applies
  * the authored per-layer gain (ACT3_ENSEMBLE_LAYER_GAINS) since the layer
- * WAVs are individually normalized at render time. music.chord reconciles
+ * original WAVs are individually normalized at render time; revised stems
+ * already carry their balance and play at unity. music.chord reconciles
  * the active set to the first n fragments of the cascade; the sea bed
  * sounds whenever any fragment is up. Layer events print nothing — the
  * scenes carry their own prose twins. Unknown patterns (e.g. the day-15
@@ -27,6 +28,9 @@ import {
   ACT3_ENSEMBLE_LAYER_GAINS,
   ACT3_FRAGMENT_ORDER,
   cueCaption,
+  cueLoops,
+  sampledAudioFile,
+  SAMPLED_ENSEMBLE_GAINS,
   type Act3LayerId,
 } from '@not-here/music';
 import { dim, italic } from './render.ts';
@@ -52,22 +56,34 @@ const ENSEMBLE_LAYER_IDS: readonly string[] = [
 const isEnsembleLayer = (pattern: string): pattern is Act3LayerId =>
   (ENSEMBLE_LAYER_IDS as readonly string[]).includes(pattern);
 
+export const audioAssetPath = (auditionsDir: string, cue: string, edition?: 'original' | 'revised'): string => {
+  const sampledFile = edition === 'revised' ? sampledAudioFile(cue) : undefined;
+  return sampledFile
+    ? join(auditionsDir, '..', 'apps', 'web', 'public', sampledFile)
+    : join(auditionsDir, `${cue}.wav`);
+};
+
 export const createAudioSink = (
   auditionsDir: string,
   options: AudioSinkOptions = {},
 ): AudioSink => {
   // Process-handle tracking is inherently stateful; confined to this closure.
   let current: ChildProcess | undefined;
+  let playingCue: string | null = null;
+  let deferredCue: string | null = null;
   const layers = new Map<Act3LayerId, ChildProcess>();
 
   const stop = (): void => {
+    playingCue = null;
+    deferredCue = null;
     if (current !== undefined) {
+      const child = current;
+      current = undefined;
       try {
-        current.kill();
+        child.kill();
       } catch {
         // Already exited; nothing to reap.
       }
-      current = undefined;
     }
   };
 
@@ -91,17 +107,27 @@ export const createAudioSink = (
 
   /** Best-effort playback; the caption line prints regardless. */
   const playCue = (cue: string): void => {
-    const file = join(auditionsDir, `${cue}.wav`);
-    if (options.silent === true || !existsSync(file)) return;
+    if (options.edition === 'revised' && current && playingCue === cue) { deferredCue = null; return; }
+    if (options.edition === 'revised' && current && playingCue && !cueLoops(playingCue)) { deferredCue = cue; return; }
+    const file = audioAssetPath(auditionsDir, cue, options.edition);
     stop();
+    if (options.silent === true || !existsSync(file)) return;
     try {
       const child = spawn('afplay', [file], { detached: true, stdio: 'ignore' });
       child.on('error', () => {
         // afplay missing or unspawnable — the caption already printed.
-        current = undefined;
+        if (current === child) { current = undefined; playingCue = null; }
+      });
+      child.on('exit', code => {
+        if (current !== child) return;
+        current = undefined; playingCue = null;
+        const next = deferredCue; deferredCue = null;
+        if (next) playCue(next);
+        else if (options.edition === 'revised' && code === 0 && cueLoops(cue)) playCue(cue);
       });
       child.unref();
       current = child;
+      playingCue = cue;
     } catch {
       // Spawn refused synchronously — degrade to caption-only.
     }
@@ -111,9 +137,9 @@ export const createAudioSink = (
   const startLayer = (id: Act3LayerId): void => {
     if (layers.has(id)) return;
     if (options.silent === true) return;
-    const file = join(auditionsDir, `${options.edition === 'revised' ? 'v2-ensemble' : 'act3-ensemble'}-${id}.wav`);
+    const file = audioAssetPath(auditionsDir, `${options.edition === 'revised' ? 'v2-ensemble' : 'act3-ensemble'}-${id}`, options.edition);
     if (!existsSync(file)) return;
-    const gain = ACT3_ENSEMBLE_LAYER_GAINS[id];
+    const gain = (options.edition === 'revised' ? SAMPLED_ENSEMBLE_GAINS : ACT3_ENSEMBLE_LAYER_GAINS)[id];
     try {
       const child = spawn('afplay', ['-v', String(gain), file], {
         detached: true,
@@ -124,12 +150,12 @@ export const createAudioSink = (
         // afplay missing or unspawnable — drop the layer silently.
         if (layers.get(id) === child) layers.delete(id);
       });
-      child.on('exit', () => {
+      child.on('exit', code => {
         // afplay plays once; respawn to loop, unless the layer was killed
         // on purpose (map entry removed or replaced).
         if (layers.get(id) !== child) return;
         layers.delete(id);
-        startLayer(id);
+        if (code === 0) startLayer(id);
       });
       child.unref();
     } catch {

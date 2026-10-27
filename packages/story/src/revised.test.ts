@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { advance, initialState, resumeScene, type StepResult } from '@not-here/engine';
 import { buildRevisedContent, REVISED_OPENING_SCENE } from './revised.ts';
-import { acquiredFragments } from './presentation.ts';
+import { acquiredFragments, revisedCue } from './presentation.ts';
 
 const content = buildRevisedContent();
 const start = () => advance(content, initialState(42, REVISED_OPENING_SCENE), { kind: 'enter' });
@@ -20,6 +20,12 @@ const walk = (picks: Record<string, string> = {}, inspect = false, stopAt?: stri
 };
 
 describe('story edition 2: meaningful outcomes through play', () => {
+  it('maps the title and both horn calls to the new recordings without inventing music for silent scenes', () => {
+    for (const [old, sampled] of [['title', 'v2-title'], ['foghorn-312', 'v2-foghorn-312'], ['horn-close', 'v2-horn-close']] as const) {
+      expect(revisedCue({ id: 'test', prose: { kind: 'inline', paragraphs: [] }, choices: [], cue: old })).toBe(sampled);
+    }
+    expect(revisedCue({ id: 'test', prose: { kind: 'inline', paragraphs: [] }, choices: [] })).toBeUndefined();
+  });
   it.each([
     ['r18-gate', 18, 'November 23.'],
     ['r20-gate', 20, 'November 25.'],

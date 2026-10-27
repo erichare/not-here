@@ -32,6 +32,8 @@ Generate a new matching illustration, not an edit of the diner: NOT HERE game lo
 
 ## Audio provenance
 
+**October 27 update:** the creator approved *A Place Kept* and its sampled piano/guitar direction, then requested the full revised soundtrack and a musical intro. The current 26 cues and 13 stems, installed sample sources, hashes, reproduction instructions, and observed verification are documented in [soundtrack and intro](soundtrack-a-place-kept.md). The earlier synthesized arrangements described below are retained as production history; they no longer supply revised-edition playback. No raw instrument-library samples are distributed.
+
 The sample is synthesized from authored score data in packages/music/scores/immersion.ts, derived from the game’s existing five-bar melody. Guitar and piano use damped modal synthesis; the reed uses FM. These are acoustic direction auditions, not recorded human performances. Ambient beds are deterministic noise/hum sketches, not claimed field recordings. No voice performance has been produced. No external music was copied. The reference to Kentucky Route Zero is a creative direction supplied by the creator, not source audio.
 
 ## Controlled revision

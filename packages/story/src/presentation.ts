@@ -70,6 +70,8 @@ export const revisedCue = (scene: Scene): string | undefined => {
     'ending-wren-again': 'v2-wren-again', 'act2-ash': 'v2-ash',
   };
   const aliases: Record<string, string> = {
+    title: 'v2-title', 'foghorn-song-title': 'v2-title',
+    'foghorn-312': 'v2-foghorn-312', 'horn-close': 'v2-horn-close',
     'pub-warm': 'v2-kettle', 'kettle-warm': 'v2-kettle', shingle: 'v2-shore',
     'wrens-room': 'v2-room', 'dianne-theme': 'v2-room', 'wade-theme': 'v2-wharf',
     'priya-theme': 'v2-clinic', 'sam-theme': 'v2-boathouse', 'tam-theme': 'v2-shelter',

@@ -1,0 +1,132 @@
+[
+  {
+    "id": "v2-title",
+    "decodedFrames": 4361686,
+    "peakDbfs": -1.822
+  },
+  {
+    "id": "v2-kettle",
+    "decodedFrames": 3686400,
+    "peakDbfs": -5.943
+  },
+  {
+    "id": "v2-room",
+    "decodedFrames": 2457600,
+    "peakDbfs": -2.188
+  },
+  {
+    "id": "v2-room-hollow",
+    "decodedFrames": 2457600,
+    "peakDbfs": -10.994
+  },
+  {
+    "id": "v2-shore",
+    "decodedFrames": 3686400,
+    "peakDbfs": -5.678
+  },
+  {
+    "id": "v2-motel",
+    "decodedFrames": 2457600,
+    "peakDbfs": -3.859
+  },
+  {
+    "id": "v2-wharf",
+    "decodedFrames": 3686400,
+    "peakDbfs": -3.765
+  },
+  {
+    "id": "v2-clinic",
+    "decodedFrames": 2457600,
+    "peakDbfs": -2.202
+  },
+  {
+    "id": "v2-boathouse",
+    "decodedFrames": 2457600,
+    "peakDbfs": -2.157
+  },
+  {
+    "id": "v2-hall",
+    "decodedFrames": 3686400,
+    "peakDbfs": -4.756
+  },
+  {
+    "id": "v2-shelter",
+    "decodedFrames": 2457600,
+    "peakDbfs": -7.533
+  },
+  {
+    "id": "v2-potluck",
+    "decodedFrames": 3686400,
+    "peakDbfs": -5.202
+  },
+  {
+    "id": "v2-letter",
+    "decodedFrames": 1987200,
+    "peakDbfs": -3.174
+  },
+  {
+    "id": "v2-arrival",
+    "decodedFrames": 1987200,
+    "peakDbfs": -2.894
+  },
+  {
+    "id": "v2-two-wrens",
+    "decodedFrames": 2601600,
+    "peakDbfs": -3.673
+  },
+  {
+    "id": "v2-long-winter",
+    "decodedFrames": 2936727,
+    "peakDbfs": -5.468
+  },
+  {
+    "id": "v2-stranger",
+    "decodedFrames": 2601600,
+    "peakDbfs": -5.193
+  },
+  {
+    "id": "v2-wren-again",
+    "decodedFrames": 2601600,
+    "peakDbfs": -2.187
+  },
+  {
+    "id": "v2-ash",
+    "decodedFrames": 1372800,
+    "peakDbfs": -6.784
+  },
+  {
+    "id": "v2-sixth-open",
+    "decodedFrames": 1065600,
+    "peakDbfs": -6.671
+  },
+  {
+    "id": "v2-sixth-rest",
+    "decodedFrames": 1065600,
+    "peakDbfs": -6.671
+  },
+  {
+    "id": "v2-fingerprint-never",
+    "decodedFrames": 432000,
+    "peakDbfs": -3.909
+  },
+  {
+    "id": "v2-fingerprint-forgot",
+    "decodedFrames": 432000,
+    "peakDbfs": -7.532
+  },
+  {
+    "id": "v2-fingerprint-door",
+    "decodedFrames": 432000,
+    "peakDbfs": -7.483
+  },
+  {
+    "id": "v2-foghorn-312",
+    "decodedFrames": 921600,
+    "peakDbfs": -9.322
+  },
+  {
+    "id": "v2-horn-close",
+    "decodedFrames": 921600,
+    "peakDbfs": -9.322
+  }
+]

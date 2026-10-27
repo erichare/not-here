@@ -6,6 +6,7 @@ import { createExperience } from './experience.ts';
 import { classifyLaunch, clearSave, isWorldState, loadSave, persistSave, resumeStep, saveMargin } from './save.ts';
 import './styles/index.css';
 import { EMPTY_PLAYBACK, playbackEvents, readPlayback, rememberPlayback } from './playback-state.ts';
+import { startTitleIntro } from './title-intro.ts';
 
 const root = document.querySelector<HTMLElement>('#app');
 if (!root) throw new Error('Missing game root');
@@ -60,6 +61,7 @@ const fresh = (): void => {
 };
 const titleSave = loadSave(storage);
 const ui = createExperience(root, {
+  onTitleIntro: revealMenu => startTitleIntro(audio, revealMenu, () => ui.addCaption('Audio is unavailable. Every clue is still on the page.')),
   ...(typeof titleSave?.flags['n1:goodbye'] === 'string' ? { onTitleSound: () => { void audio.start().then(() => { audio.fingerprint({}); audio.fingerprint(titleSave.flags); ui.addCaption(cueCaptionLine(`v2-fingerprint-${titleSave.flags['n1:goodbye']}`)); }).catch(() => ui.addCaption('Your remembered phrase is two plucked notes with a space between them.')); } } : {}),
   onChoose: choiceId => render(advance(content, state, { kind: 'choose', choiceId })),
   onInspect: observationId => render(advance(content, state, { kind: 'inspect', observationId })),

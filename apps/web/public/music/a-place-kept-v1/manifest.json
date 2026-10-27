@@ -1,0 +1,843 @@
+{
+  "version": "a-place-kept-v1",
+  "approvedThemeSha256": "86f19a265ab83dd2b719d75a01f51d91750e5d8af5e53b1827907bd164eee501",
+  "menuRevealSeconds": 4.945333333333333,
+  "ensembleSeconds": 19.2,
+  "ensembleGain": 1,
+  "ensembleFrames": 921600,
+  "sampleRate": 48000,
+  "cues": [
+    {
+      "id": "v2-title",
+      "title": "A Place Kept",
+      "description": "The approved main theme: intimate piano, guitar on its return, and a quiet closing phrase.",
+      "loop": true,
+      "file": "v2-title.m4a",
+      "sampleRate": 48000,
+      "frames": 4361686,
+      "seconds": 90.86845833333334,
+      "channels": 2,
+      "peakDbfs": -1.8,
+      "sha256": "86f19a265ab83dd2b719d75a01f51d91750e5d8af5e53b1827907bd164eee501",
+      "bytes": 2766645
+    },
+    {
+      "id": "v2-kettle",
+      "title": "The Warm Side of the Glass",
+      "description": "Barb’s piano makes room for a brief guitar memory, then returns to ordinary work.",
+      "loop": true,
+      "file": "v2-kettle.m4a",
+      "sampleRate": 48000,
+      "frames": 3686400,
+      "seconds": 76.8,
+      "channels": 2,
+      "peakDbfs": -5.9104,
+      "sha256": "64e4e5b6332f2dc80a04079b323118999e3e034ea0cb0cb4dc3606272b817d29",
+      "bytes": 2465881
+    },
+    {
+      "id": "v2-room",
+      "title": "A Room Kept for Someone",
+      "description": "Dianne’s opening phrase, close and unhurried on guitar.",
+      "loop": true,
+      "file": "v2-room.m4a",
+      "sampleRate": 48000,
+      "frames": 2457600,
+      "seconds": 51.2,
+      "channels": 2,
+      "peakDbfs": -2.1581,
+      "sha256": "548b2033b88bcf845b6e3a5257b5827299c4e1cf92359b54bd7cf7dc9e9605be",
+      "bytes": 1125614
+    },
+    {
+      "id": "v2-room-hollow",
+      "title": "The Room Without the Song",
+      "description": "The identical piano accompaniment and timing, with Dianne’s guitar removed.",
+      "loop": true,
+      "file": "v2-room-hollow.m4a",
+      "sampleRate": 48000,
+      "frames": 2457600,
+      "seconds": 51.2,
+      "channels": 2,
+      "peakDbfs": -10.984,
+      "sha256": "d7acc8a6f0e275d7c00b26fce2689313c86f3f7f01949a500471a8a43d3615c8",
+      "bytes": 971027
+    },
+    {
+      "id": "v2-shore",
+      "title": "November Water",
+      "description": "Low piano across open water; distant fragments on guitar.",
+      "loop": true,
+      "file": "v2-shore.m4a",
+      "sampleRate": 48000,
+      "frames": 3686400,
+      "seconds": 76.8,
+      "channels": 2,
+      "peakDbfs": -5.6625,
+      "sha256": "1e2647b4148360bf6542ee45e33ccaa69bb21244afac3715891252f4df9dd307",
+      "bytes": 942458
+    },
+    {
+      "id": "v2-motel",
+      "title": "Unit One",
+      "description": "The opening pickup repeatedly stops before its expected arrival.",
+      "loop": true,
+      "file": "v2-motel.m4a",
+      "sampleRate": 48000,
+      "frames": 2457600,
+      "seconds": 51.2,
+      "channels": 2,
+      "peakDbfs": -3.8564,
+      "sha256": "bdeaae115d8c0e377e8b156a2fb67ba94f19aa4be9ceff90e04f0f1e95b786cc",
+      "bytes": 1093844
+    },
+    {
+      "id": "v2-wharf",
+      "title": "Pressure in the Boards",
+      "description": "Wade’s falling third in low piano, with a quiet wooden pulse.",
+      "loop": true,
+      "file": "v2-wharf.m4a",
+      "sampleRate": 48000,
+      "frames": 3686400,
+      "seconds": 76.8,
+      "channels": 2,
+      "peakDbfs": -3.7553,
+      "sha256": "c473065431842c777fb9b686907ac67befd478bcf30b9533929b663b57c9ab34",
+      "bytes": 1795286
+    },
+    {
+      "id": "v2-clinic",
+      "title": "The Unsent Reply",
+      "description": "Priya’s piano phrase faces the wrong way; the rests remain exposed.",
+      "loop": true,
+      "file": "v2-clinic.m4a",
+      "sampleRate": 48000,
+      "frames": 2457600,
+      "seconds": 51.2,
+      "channels": 2,
+      "peakDbfs": -2.1999,
+      "sha256": "b2800669b213e9145a8bac12144ec1688f42362dc5dff772a1732dcc2e90b9f0",
+      "bytes": 1126434
+    },
+    {
+      "id": "v2-boathouse",
+      "title": "Sanding the Canoe",
+      "description": "Sam’s quick rising fragment moves above a buoyant fingerpicked accompaniment.",
+      "loop": true,
+      "file": "v2-boathouse.m4a",
+      "sampleRate": 48000,
+      "frames": 2457600,
+      "seconds": 51.2,
+      "channels": 2,
+      "peakDbfs": -2.1581,
+      "sha256": "0c0a8dd1ff9359895a7e28c1b41a9ac803fa9fac2841cb1e39662cb51b160723",
+      "bytes": 1618700
+    },
+    {
+      "id": "v2-hall",
+      "title": "Chairs After Closing",
+      "description": "Exposed piano chords and brief answering fragments in an empty hall.",
+      "loop": true,
+      "file": "v2-hall.m4a",
+      "sampleRate": 48000,
+      "frames": 3686400,
+      "seconds": 76.8,
+      "channels": 2,
+      "peakDbfs": -4.7507,
+      "sha256": "1610b8a8e930389fcee2669e7fe359d33226f9d1414e42d4eae12fb1a1d9345a",
+      "bytes": 1634786
+    },
+    {
+      "id": "v2-shelter",
+      "title": "The Road Still Goes",
+      "description": "Tam’s steady wooden pulse under passing guitar phrases.",
+      "loop": true,
+      "file": "v2-shelter.m4a",
+      "sampleRate": 48000,
+      "frames": 2457600,
+      "seconds": 51.2,
+      "channels": 2,
+      "peakDbfs": -7.5347,
+      "sha256": "7ca55250d61e5ce539367d975d48fd87ec6f85847f580c727c1fb9a48ea4e635",
+      "bytes": 1607417
+    },
+    {
+      "id": "v2-potluck",
+      "title": "Places at the Table",
+      "description": "Dianne and Sam answer across Barb’s harmony, then the room thins.",
+      "loop": true,
+      "file": "v2-potluck.m4a",
+      "sampleRate": 48000,
+      "frames": 3686400,
+      "seconds": 76.8,
+      "channels": 2,
+      "peakDbfs": -5.1989,
+      "sha256": "64e736c610d31b533c1c7f0a22ba721155248698b1c029de3614ff42bbc9c1fa",
+      "bytes": 2457186
+    },
+    {
+      "id": "v2-letter",
+      "title": "Two Different Letters",
+      "description": "The inverted turn becomes legible after a pause; the last E remains unsettled.",
+      "loop": false,
+      "file": "v2-letter.m4a",
+      "sampleRate": 48000,
+      "frames": 1987200,
+      "seconds": 41.4,
+      "channels": 2,
+      "peakDbfs": -3.1707,
+      "sha256": "bc91e4a3836b16b68c3da967c5caf0e8a06a57177408858b84af790fbf5d297b",
+      "bytes": 1058347
+    },
+    {
+      "id": "v2-arrival",
+      "title": "A Person at the Bus Door",
+      "description": "Sam’s phrase slows down. Piano answers without claiming the whole room.",
+      "loop": false,
+      "file": "v2-arrival.m4a",
+      "sampleRate": 48000,
+      "frames": 1987200,
+      "seconds": 41.4,
+      "channels": 2,
+      "peakDbfs": -2.8938,
+      "sha256": "89df616a6340a50ddc73e43cc01e9370e7a63d86d1d2b47dbc4e2eb070f919a0",
+      "bytes": 894615
+    },
+    {
+      "id": "v2-two-wrens",
+      "title": "Room for Both",
+      "description": "The two instruments exchange the theme; neither has to disappear.",
+      "loop": false,
+      "file": "v2-two-wrens.m4a",
+      "sampleRate": 48000,
+      "frames": 2601600,
+      "seconds": 54.2,
+      "channels": 2,
+      "peakDbfs": -3.671,
+      "sha256": "aa9f95acb7aeba77c5cdab35fccca2911ff46844c747a692d57dcb87b7674dc4",
+      "bytes": 1653591
+    },
+    {
+      "id": "v2-long-winter",
+      "title": "A Winter of Your Own",
+      "description": "Barb’s warm piano harmony and an unhurried opening phrase.",
+      "loop": false,
+      "file": "v2-long-winter.m4a",
+      "sampleRate": 48000,
+      "frames": 2936727,
+      "seconds": 61.1818125,
+      "channels": 2,
+      "peakDbfs": -5.4626,
+      "sha256": "5eec0e15bf530d3fbaafb7e24ad9f28fcbcc1f8040250f546ce5c8d2cd5c9713",
+      "bytes": 1885245
+    },
+    {
+      "id": "v2-stranger",
+      "title": "A Name on the Ticket",
+      "description": "The guitar carries its own melody out along the road as the accompaniment falls away.",
+      "loop": false,
+      "file": "v2-stranger.m4a",
+      "sampleRate": 48000,
+      "frames": 2601600,
+      "seconds": 54.2,
+      "channels": 2,
+      "peakDbfs": -5.0121,
+      "sha256": "22280478ae2cbf619a393d292d34c021344e29a5abf434a588e7ef134e2e55ef",
+      "bytes": 1245350
+    },
+    {
+      "id": "v2-wren-again",
+      "title": "The Place You Borrowed",
+      "description": "The familiar lullaby rests over piano a quarter-tone away from belonging.",
+      "loop": false,
+      "file": "v2-wren-again.m4a",
+      "sampleRate": 48000,
+      "frames": 2601600,
+      "seconds": 54.2,
+      "channels": 2,
+      "peakDbfs": -2.1581,
+      "sha256": "87142b84294126d951fa169a6b36f39519383572abd30067168c84360b52c67d",
+      "bytes": 1140397
+    },
+    {
+      "id": "v2-ash",
+      "title": "What the Book Cannot Keep",
+      "description": "Piano, then guitar, then the recognizable voices are gone. The ending is silence.",
+      "loop": false,
+      "file": "v2-ash.m4a",
+      "sampleRate": 48000,
+      "frames": 1372800,
+      "seconds": 28.6,
+      "channels": 2,
+      "peakDbfs": -6.7994,
+      "sha256": "939bedb8754d2deb94f708c9da7b0cbc595694ad11ef4976238fef70ff0489e4",
+      "bytes": 510956
+    },
+    {
+      "id": "v2-sixth-open",
+      "title": "Your Rising Answer",
+      "description": "Five shared bars followed by the player’s distinct, deliberate sixth-bar answer.",
+      "loop": false,
+      "file": "v2-sixth-open.m4a",
+      "sampleRate": 48000,
+      "frames": 1065600,
+      "seconds": 22.2,
+      "channels": 2,
+      "peakDbfs": -6.6354,
+      "sha256": "d51b4ad709e2d20c590034b43abd9e358b7d5e3b219926d7caeba6b75f97bd5f",
+      "bytes": 619553
+    },
+    {
+      "id": "v2-sixth-rest",
+      "title": "Your Quiet Return",
+      "description": "Five shared bars followed by the player’s distinct, deliberate sixth-bar answer.",
+      "loop": false,
+      "file": "v2-sixth-rest.m4a",
+      "sampleRate": 48000,
+      "frames": 1065600,
+      "seconds": 22.2,
+      "channels": 2,
+      "peakDbfs": -6.6354,
+      "sha256": "c03dd9b7b7e0d8dd4ab4c0a59002c3332c1ba5471be80d16ce8178dd7289abda",
+      "bytes": 620873
+    },
+    {
+      "id": "v2-fingerprint-never",
+      "title": "Remembered Phrase: never",
+      "description": "The original interview’s two-note pitch and rhythm identity, on the sampled guitar.",
+      "loop": false,
+      "file": "v2-fingerprint-never.m4a",
+      "sampleRate": 48000,
+      "frames": 432000,
+      "seconds": 9.0,
+      "channels": 2,
+      "peakDbfs": -3.8767,
+      "sha256": "d1b5068333d402eae60b9a4d58da9794e99a63d168d167d1762d01dd502c62b8",
+      "bytes": 110427
+    },
+    {
+      "id": "v2-fingerprint-forgot",
+      "title": "Remembered Phrase: forgot",
+      "description": "The original interview’s two-note pitch and rhythm identity, on the sampled guitar.",
+      "loop": false,
+      "file": "v2-fingerprint-forgot.m4a",
+      "sampleRate": 48000,
+      "frames": 432000,
+      "seconds": 9.0,
+      "channels": 2,
+      "peakDbfs": -7.4807,
+      "sha256": "91dfd03603aa6f57c4381980765488e879ec985dd22d1e66ec1d5650dbe2629b",
+      "bytes": 86382
+    },
+    {
+      "id": "v2-fingerprint-door",
+      "title": "Remembered Phrase: door",
+      "description": "The original interview’s two-note pitch and rhythm identity, on the sampled guitar.",
+      "loop": false,
+      "file": "v2-fingerprint-door.m4a",
+      "sampleRate": 48000,
+      "frames": 432000,
+      "seconds": 9.0,
+      "channels": 2,
+      "peakDbfs": -7.4516,
+      "sha256": "3395327c3b20f66e32279a461e3df0dc61510366e2d2fea75fe521e14b0695af",
+      "bytes": 130135
+    },
+    {
+      "id": "v2-foghorn-312",
+      "title": "The Five-Bar Call",
+      "description": "The theme’s five-bar call in low, resonant piano; the sixth measure stays empty.",
+      "loop": false,
+      "file": "v2-foghorn-312.m4a",
+      "sampleRate": 48000,
+      "frames": 921600,
+      "seconds": 19.2,
+      "channels": 2,
+      "peakDbfs": -9.3196,
+      "sha256": "62b535ebd083575389ece9f5908b0e37fe230b72bf1f7b55c363b371675c38d9",
+      "bytes": 507449
+    },
+    {
+      "id": "v2-horn-close",
+      "title": "At the Valve",
+      "description": "The theme’s five-bar call in low, resonant piano; the sixth measure stays empty.",
+      "loop": true,
+      "file": "v2-horn-close.m4a",
+      "sampleRate": 48000,
+      "frames": 921600,
+      "seconds": 19.2,
+      "channels": 2,
+      "peakDbfs": -9.3196,
+      "sha256": "ed4a33510693df24de57145dff1c7c5ad1dc26cbbb2f4901151be9ac5acce9be",
+      "bytes": 507444
+    },
+    {
+      "id": "v2-ensemble-dianne",
+      "title": "The Returned Fragments: dianne",
+      "description": "One aligned character stem; the sixth bar is silent. Playback gain is unity.",
+      "loop": true,
+      "file": "v2-ensemble-dianne.wav",
+      "sampleRate": 48000,
+      "frames": 921600,
+      "seconds": 19.2,
+      "channels": 1,
+      "peakDbfs": -6.9701,
+      "sha256": "080eeee345a4772466e2404e884bb67eba73f42a5cdfe9f84c5f2a72e9d5c0ad",
+      "bytes": 1843244
+    },
+    {
+      "id": "v2-ensemble-dianne-lowered",
+      "title": "The Returned Fragments: dianne-lowered",
+      "description": "One aligned character stem; the sixth bar is silent. Playback gain is unity.",
+      "loop": true,
+      "file": "v2-ensemble-dianne-lowered.wav",
+      "sampleRate": 48000,
+      "frames": 921600,
+      "seconds": 19.2,
+      "channels": 1,
+      "peakDbfs": -9.6568,
+      "sha256": "20826d3e4a82d5ebac02fa8eb977b42052badab601e4c53c0b45add17405902c",
+      "bytes": 1843244
+    },
+    {
+      "id": "v2-ensemble-wade",
+      "title": "The Returned Fragments: wade",
+      "description": "One aligned character stem; the sixth bar is silent. Playback gain is unity.",
+      "loop": true,
+      "file": "v2-ensemble-wade.wav",
+      "sampleRate": 48000,
+      "frames": 921600,
+      "seconds": 19.2,
+      "channels": 1,
+      "peakDbfs": -5.2465,
+      "sha256": "fef0967097cb4281fa6878512c1b54dea087e4365c22b90fed428ed795cfb280",
+      "bytes": 1843244
+    },
+    {
+      "id": "v2-ensemble-wade-lowered",
+      "title": "The Returned Fragments: wade-lowered",
+      "description": "One aligned character stem; the sixth bar is silent. Playback gain is unity.",
+      "loop": true,
+      "file": "v2-ensemble-wade-lowered.wav",
+      "sampleRate": 48000,
+      "frames": 921600,
+      "seconds": 19.2,
+      "channels": 1,
+      "peakDbfs": -5.0426,
+      "sha256": "acab74d49a3b5ff6db601846bd2aa19396fad9f8c121f8c2f5f6934fdb0fd06d",
+      "bytes": 1843244
+    },
+    {
+      "id": "v2-ensemble-priya",
+      "title": "The Returned Fragments: priya",
+      "description": "One aligned character stem; the sixth bar is silent. Playback gain is unity.",
+      "loop": true,
+      "file": "v2-ensemble-priya.wav",
+      "sampleRate": 48000,
+      "frames": 921600,
+      "seconds": 19.2,
+      "channels": 1,
+      "peakDbfs": -4.7966,
+      "sha256": "6f886a4125974c8cd8b58c816b9fca1d7b3250bc75dc3e95551715bd18f27de7",
+      "bytes": 1843244
+    },
+    {
+      "id": "v2-ensemble-priya-lowered",
+      "title": "The Returned Fragments: priya-lowered",
+      "description": "One aligned character stem; the sixth bar is silent. Playback gain is unity.",
+      "loop": true,
+      "file": "v2-ensemble-priya-lowered.wav",
+      "sampleRate": 48000,
+      "frames": 921600,
+      "seconds": 19.2,
+      "channels": 1,
+      "peakDbfs": -5.4604,
+      "sha256": "d14fc6476a7cb49da9c2cd332422c024330b732c75f8251ae310518cdbd32e92",
+      "bytes": 1843244
+    },
+    {
+      "id": "v2-ensemble-sam",
+      "title": "The Returned Fragments: sam",
+      "description": "One aligned character stem; the sixth bar is silent. Playback gain is unity.",
+      "loop": true,
+      "file": "v2-ensemble-sam.wav",
+      "sampleRate": 48000,
+      "frames": 921600,
+      "seconds": 19.2,
+      "channels": 1,
+      "peakDbfs": -4.8235,
+      "sha256": "1dbceeea1271651262eca7e476e009455e923fcb87576bdf33f925cebef4e5c8",
+      "bytes": 1843244
+    },
+    {
+      "id": "v2-ensemble-sam-lowered",
+      "title": "The Returned Fragments: sam-lowered",
+      "description": "One aligned character stem; the sixth bar is silent. Playback gain is unity.",
+      "loop": true,
+      "file": "v2-ensemble-sam-lowered.wav",
+      "sampleRate": 48000,
+      "frames": 921600,
+      "seconds": 19.2,
+      "channels": 1,
+      "peakDbfs": -4.5942,
+      "sha256": "e91cb1ea31a9a00265eb652a4fe827a88c21241331ca0ec4b69b340b367e0397",
+      "bytes": 1843244
+    },
+    {
+      "id": "v2-ensemble-barb",
+      "title": "The Returned Fragments: barb",
+      "description": "One aligned character stem; the sixth bar is silent. Playback gain is unity.",
+      "loop": true,
+      "file": "v2-ensemble-barb.wav",
+      "sampleRate": 48000,
+      "frames": 921600,
+      "seconds": 19.2,
+      "channels": 1,
+      "peakDbfs": -13.5163,
+      "sha256": "7402c6013fd7154ecdb0b4c65dfdf56a90aaa4106bb8e83ac965b1b1c0147bf4",
+      "bytes": 1843244
+    },
+    {
+      "id": "v2-ensemble-barb-lowered",
+      "title": "The Returned Fragments: barb-lowered",
+      "description": "One aligned character stem; the sixth bar is silent. Playback gain is unity.",
+      "loop": true,
+      "file": "v2-ensemble-barb-lowered.wav",
+      "sampleRate": 48000,
+      "frames": 921600,
+      "seconds": 19.2,
+      "channels": 1,
+      "peakDbfs": -13.6187,
+      "sha256": "37f9f3d91024164a4959f13d5b19617e5988476f40d39c5162e71c1f43d70032",
+      "bytes": 1843244
+    },
+    {
+      "id": "v2-ensemble-tam",
+      "title": "The Returned Fragments: tam",
+      "description": "One aligned character stem; the sixth bar is silent. Playback gain is unity.",
+      "loop": true,
+      "file": "v2-ensemble-tam.wav",
+      "sampleRate": 48000,
+      "frames": 921600,
+      "seconds": 19.2,
+      "channels": 1,
+      "peakDbfs": -20.7981,
+      "sha256": "23d9bfab2f3340ad60c6429c6475b7f1d84d2fcdd3d6941bbaf0c5d921ca674c",
+      "bytes": 1843244
+    },
+    {
+      "id": "v2-ensemble-tam-lowered",
+      "title": "The Returned Fragments: tam-lowered",
+      "description": "One aligned character stem; the sixth bar is silent. Playback gain is unity.",
+      "loop": true,
+      "file": "v2-ensemble-tam-lowered.wav",
+      "sampleRate": 48000,
+      "frames": 921600,
+      "seconds": 19.2,
+      "channels": 1,
+      "peakDbfs": -20.7981,
+      "sha256": "23d9bfab2f3340ad60c6429c6475b7f1d84d2fcdd3d6941bbaf0c5d921ca674c",
+      "bytes": 1843244
+    },
+    {
+      "id": "v2-ensemble-sea",
+      "title": "The Returned Fragments: sea",
+      "description": "One aligned character stem; the sixth bar is silent. Playback gain is unity.",
+      "loop": true,
+      "file": "v2-ensemble-sea.wav",
+      "sampleRate": 48000,
+      "frames": 921600,
+      "seconds": 19.2,
+      "channels": 1,
+      "peakDbfs": -33.282,
+      "sha256": "8df04c560ac334772f205f31c8e9c84eb752dc886efd37a422933bbe4f2bc72f",
+      "bytes": 1843244
+    }
+  ],
+  "sourceSamples": [
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Drums/Single Samples/Mid Knock.aif",
+      "sha256": "03a30f14c22f9a17151b0255f26f6883067c11d3673fb57626092e8be4ad0e2e"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 1 A#2.wav",
+      "sha256": "d49840b1daa6d95f79dd8683770bc3246ee9c9c5463eb3c6550dce137f82e629"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 1 A#3.wav",
+      "sha256": "77419c999070eece7aef0727b77d82748de911447a284ed7facc94b2a4987d94"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 1 C2.wav",
+      "sha256": "d00d21e80386bfcef7b3d2e260cb487d66dc879810523f7b214fa1c386183892"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 1 C3.wav",
+      "sha256": "3057ee1fcc384db66e53073e2c84aa4d8aa269bf29db6d278c473e8dee2e3359"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 1 C4.wav",
+      "sha256": "27adfb7705e2c5db5a48e72fa86654208d78b16e8a70849f7d0eadd93046cdec"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 1 D2.wav",
+      "sha256": "0d4103bc68cccf5d64470d9cbdd9639c2caf3cc87a0b8c4aa15352606224f1bb"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 1 D3.wav",
+      "sha256": "89595fb82d2c962476ad1358af14bd2a7fab9b0e66a39c7d0ee7282e75c76e64"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 1 D4.wav",
+      "sha256": "5fe794e47f7cef52cc7e3a88f451b76c5028d7f78fc79ba3bfaaffdbf978fde2"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 1 E2.wav",
+      "sha256": "dc3cd3598c4c49becf671eddc0c95ce2268315bb724dfd43c0dfb66d26f7bd19"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 1 E3.wav",
+      "sha256": "04f05b8f46ff3d8c05bad8d90a8123536872c78f178835e9e21bb4ad34d7c4a6"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 1 F#2.wav",
+      "sha256": "56f34e62e9b683e83cc36d70c819302617bcc18196f65a6f880d1dad4fadef87"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 1 F#3.wav",
+      "sha256": "27eaf3f35607e6a1d07ecc03060742c23ced308e970f9b84d2fcb204323d4e5d"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 1 G#3.wav",
+      "sha256": "a60686f4f1243b871b8f543df6578b053a01c260e0547961dfce1cff39d71185"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 2 A#2.wav",
+      "sha256": "0cff913701adb0f67b48fa8ac40b679ac8c1aaa35d1078e6d3fa350d0bc453f3"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 2 A#3.wav",
+      "sha256": "8131a4c7e19cbe1f24027aef85a6dc9ae7af485db6fe9c7b3c6fa7d3705dfaf5"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 2 C2.wav",
+      "sha256": "1b64345ea43fe0e9f757121f2c6af0cd2bfb93be8d8ddd28a80d497d7fef34fd"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 2 C3.wav",
+      "sha256": "6afe54ae98361a4556ca5a2320ea4493236f569a16703b77649283bda8634e70"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 2 C4.wav",
+      "sha256": "2f205081612010d6f95494a1e1d00b7842c2cca98002f835ae9b00576bc48be3"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 2 D2.wav",
+      "sha256": "e0858fa8ae1d421e012cbaa75259f4a07c0e14701aa41ccd60f806c5b2aa3756"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 2 D3.wav",
+      "sha256": "3701c06511849517a9cf97e4376ec83d3aa5eaec9ec6b9465403aed6bc205bad"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 2 D4.wav",
+      "sha256": "30afbdc10a1fef2ebfee582b80b9965825b182c01098655155e969b17ae558fa"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 2 E2.wav",
+      "sha256": "4e534c21eb5db89adb0ed8792bdf5efc80537ef2bb76f8ae84b5768d6c746cea"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 2 E3.wav",
+      "sha256": "a6afec697b7c430a473f69b5b0f2a38d629ded8ed35dd179ca3801ea3e59f04f"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 2 F#2.wav",
+      "sha256": "106ace350825a7406a2c6052bce7b9a3c9e84ecf2f50bf0b8b9c93f204cf37de"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 2 F#3.wav",
+      "sha256": "b0b4346267e4c44d9d860c709b8395ebb4ed5674ec4a1542e79640d7ef2c5e03"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 2 G#3.wav",
+      "sha256": "a5ff8165be4876c7a4c2c6f77ee47ec5a327caec06baa9139e25194b72828cb4"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 3 A#2.wav",
+      "sha256": "cc86c77b95d3ccd1bc57baa41cc4199db548e5217692faa2257872c22b2a9d91"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 3 A#3.wav",
+      "sha256": "35dcaf0e303d541db5e017bd9cb1937ff30ce4a93a82fa18a83c5088e119932c"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 3 C2.wav",
+      "sha256": "c36e5598eaed2259c74f1ab6743f72b6fe6304bf12ae902a77cf1f7a5986e9db"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 3 C3.wav",
+      "sha256": "62b0ee34a127b39167a87e675f869a01fbf6435dfb4cc65800d7921f4027b28a"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 3 C4.wav",
+      "sha256": "48fed2e0d779643c3bcbde69695988ca1754a61c945ef1c702b341ba7a473f0b"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 3 D2.wav",
+      "sha256": "707cb07ffd3703c94d41e90d8ca1dd734f7510bacd7a3574750bf962f86a8227"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 3 D3.wav",
+      "sha256": "c9456c2b5a40974fe6bf01497a8be3fc1a30f0c84862f72884252983455c9d7e"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 3 E2.wav",
+      "sha256": "69e371afb689c4b6f3c1078e7b426b6dae0e9c6ea3759d9580a0463d927d6158"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 3 E3.wav",
+      "sha256": "a6e7ade0cfe6b7341c4dcc1a0757b5245281348bb481f464158a5d11b63b094a"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 3 F#2.wav",
+      "sha256": "02bc1d66fe6261748aa5736c469c7fcc27fe157443638ef4e9e617868c9758cc"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 3 F#3.wav",
+      "sha256": "7dcafa21d2441226eda4594638d5b52a2d65d220f0b51b3ca033979e13f91fcc"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 4 A#2.wav",
+      "sha256": "d1787a6b14353aec63ea4898bfc4f16be96b72023bbf370b0d71f4c789fdf703"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 4 A#3.wav",
+      "sha256": "663c4e582b4648d956f84bd39a11e47454f139424f332d44a262c8befaca33e9"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 4 C2.wav",
+      "sha256": "af58c1f6cbdf63af3729608ee9577e47f3de6bffe752a52a0333c4f89260c7ba"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 4 C4.wav",
+      "sha256": "e519402ad8c13b86636956d61244949c4bbbb1ce4f3415ebdfa27078de3c18bf"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 4 D2.wav",
+      "sha256": "01535311d610bdd2e600d6c88a668d69e0b0928079b0a9688810955ed7c01838"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 4 D3.wav",
+      "sha256": "3cefb67c444eddab23acffe49e88caad0060146ad2f33bef5019772befd42c6d"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 4 E2.wav",
+      "sha256": "a7a610c11c0587cacbc6d519741b3322e06844b6c5711fdc5b6861ea7abd0f7d"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 4 E3.wav",
+      "sha256": "7136ff09010a6182e2782f9ef720339a67344d6a2062f353b13dbf3f8f8949f9"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 4 F#2.wav",
+      "sha256": "691e46996fa3c32354de080b40ceee1d5c09147b3f834a18328e0f34ed963c05"
+    },
+    {
+      "path": "/Library/Application Support/Logic/Alchemy Samples/Guitars/Acoustic Guitars/Acoustic Guitar 2 Finger RR/Acoustic Guitar 2 Finger 4 F#3.wav",
+      "sha256": "b2403f78e0f034be14a4a82d4b834f70cdefbfa6d17ad783a6a29cdec62d6bf3"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/030_F#0KM56_S.wav",
+      "sha256": "19f2903bd7c081d0af7fede1bb4d4ff06360e6bfca604f58987e4534768e861c"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/032_G#0KM56_S.wav",
+      "sha256": "8a19a58aab158059e0e39f62b70e989776af5ba83de613aae8c317c59a21d49c"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/033_A0KM56_S.wav",
+      "sha256": "44ea0ba66d011152467a9786cd0f26ccb7e3c683d05fc68761707c90bab6f3f8"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/034_A#0KM56_S.wav",
+      "sha256": "d724c53dbee70dcc9d779a67495f25e3fc23110e7c44964e9bf559151fb52682"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/037_C#1KM56_S.wav",
+      "sha256": "7b5cc3e13ac926063d25bb15fdb32366e5086c075b6a94bd769dbd409d5c39bf"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/041_F1KM56_S.wav",
+      "sha256": "428ad96bd25f72bd16b17865aeca96c74275329ffba2976f59036319673f666f"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/043_G1KM56_S.wav",
+      "sha256": "2e51937e8ab7c4cfb3641b50fb5cd7c886d0d3c875ef8a3123c890f37524acc0"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/044_G#1KM56_S.wav",
+      "sha256": "6b201b0f3ff6e2fe51165dfb4367dcb5ff93d8ec80027cb44cbd618be775c866"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/047_B1KM56_S.wav",
+      "sha256": "0546276786c92e23c430d252ec16740663fcc1a9a1f4b4cbce600e82f1b16d14"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/048_C2KM56_S.wav",
+      "sha256": "c45742366a3c766c8e81ba399694212da5ac5c596ab2640d46deeb4ca4a520e2"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/049_C#2KM56_S.wav",
+      "sha256": "6f2ac1cd501bb339a72cf64ebf64a9dbe3a141a227034b12022d84a7a3786c2e"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/052_E2KM56_S.wav",
+      "sha256": "318b30e0b16a4fb3def4f8f2cddbce66ce05a2a7c6218d90a9efb945242e4cd2"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/053_F2KM56_S.wav",
+      "sha256": "cb7f7cda9f886dd854d3c0f70cb6c1c65d2b27e752f92401b40b112c00043f87"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/056_G#2KM56_S.wav",
+      "sha256": "9138612488113cf8f3271cbd1ec071b2bc9d659c2886eef287343d3079e35b91"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/057_A2KM56_S.wav",
+      "sha256": "0168be1dd9f0726d91336e5857096ed9dc6f72404171cf901e653dbffdf67197"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/059_B2KM56_S.wav",
+      "sha256": "ba49c0b70fc02df1af843f2a4c57375d789e09dcd4b1a00ddcf621bb21a67699"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/062_D3KM56_S.wav",
+      "sha256": "aef88cdae4bc9be95cb8a08a4cefdc97c590e2984330639448402d4d51a64994"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/066_F#3KM56_S.wav",
+      "sha256": "0cf569d44c2f77e0593ea9f6827ac213b50e9067aae5e8f93cd382f6cc71e8f8"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/067_G3KM56_S.wav",
+      "sha256": "a0c738a8db0b6b392c1890f48c8b8cf168bb93a2c579da2086dbdc3c5cb25b50"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/069_A3KM56_S.wav",
+      "sha256": "189f9e3c868e6fab329247b7ada3a90e0bcaa16d6f8cecc3db84b456795e7f8b"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/071_B3KM56_S.wav",
+      "sha256": "41f0f93175d12130c4770af1a0cecc5677c151897daf908c563c1f8676b0d3cc"
+    },
+    {
+      "path": "/Library/Application Support/Logic/EXS Factory Samples/01 Acoustic Pianos/Yamaha Grand Piano/074_D4KM56_S.wav",
+      "sha256": "a3ab8f52d6954b16e1f35ac70d218ea58475673fa60cd2f64d3888e1be6c23f2"
+    },
+    {
+      "path": "/Library/Audio/Impulse Responses/Apple/02 Medium Spaces/02 Halls/1.6s_Small Hall.SDIR",
+      "sha256": "e5a30953cc74e52e48b4c0cf9418cf9afdcb6fabddd6b46bbb0e237e221334eb"
+    }
+  ]
+}

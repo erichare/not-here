@@ -60,6 +60,7 @@ describe('the 3:12 line', () => {
 
   it('is the horn when the step carries its cue', () => {
     expect(threeTwelveKind('n1-312', 'night', {}, [horn])).toBe('horn');
+    expect(threeTwelveKind('n1-312', 'night', {}, [{ kind: 'music.cue', cue: 'v2-foghorn-312' }])).toBe('horn');
   });
 
   it('is the silence on a night under the stop, and nothing otherwise', () => {

@@ -5,7 +5,7 @@ import type { EngineEvent } from '@not-here/engine';
 import { cueCaption, UNKNOWN_CUE_CAPTION } from '@not-here/music';
 import { buildContent } from '@not-here/story';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { createAudioSink } from './audio.ts';
+import { audioAssetPath, createAudioSink } from './audio.ts';
 import { stripAnsi } from './render.ts';
 
 let dir: string;
@@ -21,6 +21,11 @@ afterEach(() => {
 const sink = () => createAudioSink(dir);
 
 describe('createAudioSink', () => {
+  it('resolves revised recordings from the committed public directory and preserves originals', () => {
+    expect(audioAssetPath('/game/auditions', 'v2-kettle', 'revised')).toBe('/game/apps/web/public/music/a-place-kept-v1/v2-kettle.m4a');
+    expect(audioAssetPath('/game/auditions', 'v2-ensemble-sam', 'revised')).toBe('/game/apps/web/public/music/a-place-kept-v1/v2-ensemble-sam.wav');
+    expect(audioAssetPath('/game/auditions', 'title', 'original')).toBe('/game/auditions/title.wav');
+  });
   it('prints a diegetic caption line, never the raw cue id', () => {
     const lines = sink().handle([{ kind: 'music.cue', cue: 'wrens-room' }]);
     expect(lines.map(stripAnsi)).toEqual(['♪ a tune the kept room knows']);

@@ -1,6 +1,7 @@
 node_modules/
 dist/
 *.tsbuildinfo
+__pycache__/
 .DS_Store
 # rendered audition audio (regenerated from score data)
 auditions/*.wav

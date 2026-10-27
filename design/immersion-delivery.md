@@ -1,6 +1,6 @@
 # NOT HERE — implementation and sample review
 
-Status: revised story implemented; the creator approved the sample on September 7 and its art and music have now been expanded. This is not a claim that every human acceptance criterion has passed.
+Status: revised story implemented. On October 27 the creator approved *A Place Kept* as the main theme; the revised soundtrack now contains 26 sampled-instrument cues and 13 aligned stems, with a menu entrance timed to the melody. See [current soundtrack and intro](soundtrack-a-place-kept.md) for files and verification. The earlier music counts and synthesis descriptions below are the previous delivery snapshot. This is not a claim that every human acceptance criterion has passed.
 
 ## Delivered
 

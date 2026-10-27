@@ -1,0 +1,43 @@
+/* The menu's entrance is cued by the playing score, not a CSS delay. */
+.experience-root[data-intro] .experience-title { justify-content: flex-start; }
+.experience-root[data-intro] .title-invitation { animation: none; }
+.experience-root[data-intro] .experience-header { transition: opacity .9s ease; }
+.experience-root[data-intro="ready"] .experience-header,
+.experience-root[data-intro="playing"] .experience-header { opacity: 0; pointer-events: none; }
+.experience-root[data-intro="ready"] .title-invitation { opacity: 0; }
+.experience-root[data-intro="playing"] .title-invitation,
+.experience-root[data-intro="menu"] .title-invitation { opacity: 1; transition: opacity 2.4s ease; }
+.experience-root[data-intro] .title-painting {
+  animation: none; transition: filter 4s ease, transform 12s cubic-bezier(.2,.6,.3,1);
+}
+.experience-root[data-intro="ready"] .title-painting { filter: brightness(.58) saturate(.72); transform: scale(1.045); }
+.experience-root[data-intro="playing"] .title-painting,
+.experience-root[data-intro="menu"] .title-painting { filter: brightness(.95) saturate(.9); transform: scale(1); }
+.experience-root[data-intro="menu"] .title-menu { animation: menu-on-the-note .8s ease-out both; }
+.experience-root[data-intro="menu"] .title-footer { animation: menu-on-the-note 1.4s ease-out both; }
+.title-prelude {
+  position: absolute; z-index: 2; top: 45%; left: 50%; transform: translate(-50%, -50%);
+  width: min(510px, calc(100% - 48px)); text-align: center;
+}
+.title-prelude > .eyebrow { color: #b9c7c4; font-size: 10px; letter-spacing: .32em; }
+.intro-invitation { color: #eee7d6; font-size: clamp(30px, 4vw, 44px); line-height: 1.35; margin: 25px 0 34px; }
+.experience-root .intro-begin { gap: 18px; padding: 14px 27px; }
+.intro-sound-note { font-size: 12px; font-style: italic; color: #b5c3c1; margin: 23px auto 8px; line-height: 1.7; }
+.title-prelude > .quiet-button { font-size: 10px; color: #a4b5b6; }
+.experience-root .intro-skip {
+  position: fixed; z-index: 10; right: max(28px, 3.6vw); bottom: max(22px, env(safe-area-inset-bottom));
+  color: #c9d1cb; font-size: 11px; letter-spacing: .04em; padding: 12px 4px;
+}
+.intro-skip::after { content: '→'; margin-left: 10px; }
+@keyframes menu-on-the-note {
+  from { opacity: 0; transform: translateY(7px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .experience-root[data-intro] :is(.title-painting, .title-invitation, .title-menu, .title-footer, .experience-header) {
+    transition: none; animation: none; transform: none;
+  }
+}
+.reduce-motion .experience-root[data-intro] :is(.title-painting, .title-invitation, .title-menu, .title-footer, .experience-header) {
+  transition: none; animation: none; transform: none;
+}

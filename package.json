@@ -13,6 +13,8 @@
     "test": "pnpm -r test",
     "typecheck": "pnpm -r typecheck",
     "render:audio": "node packages/music/scripts/render-all.ts",
+    "render:sampled": "python3 packages/music/scripts/render-sampled.py",
+    "verify:soundtrack": "node packages/music/scripts/verify-sampled.ts",
     "story:metrics": "node scripts/story-metrics.ts"
   },
   "devDependencies": {

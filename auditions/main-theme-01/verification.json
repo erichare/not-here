@@ -1,0 +1,27 @@
+{
+  "checks": {
+    "wav_stereo_48khz_24bit": true,
+    "wav_and_aac_finite": true,
+    "wav_no_clipped_samples": true,
+    "aac_no_clipped_samples": true,
+    "aac_duration_within_one_frame": true,
+    "quiet_ending": true,
+    "midi_all_261_notes_balanced": true,
+    "midi_three_instrument_tracks": true,
+    "source_shifts_at_most_two_semitones": true,
+    "lead_written_durations_preserved": true
+  },
+  "passed": 10,
+  "total": 10,
+  "wav_duration_seconds": 90.86845833333334,
+  "wav_peak_dbfs": -1.7999994529225174,
+  "aac_peak_dbfs": -1.8218207359313965,
+  "integrated_loudness_lufs": -19.7,
+  "true_peak_dbtp": -1.79,
+  "loudness_range_lu": 8.4,
+  "midi_note_on": 261,
+  "midi_note_off": 261,
+  "aac_bytes": 2766645,
+  "wav_bytes": 26170160,
+  "human_listening_approval": "pending"
+}

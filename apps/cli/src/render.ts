@@ -87,7 +87,7 @@ export const renderHeader = (
 
 export type ThreeTwelveKind = 'horn' | 'silence';
 
-const HORN_CUE = 'foghorn-312';
+const HORN_CUES = new Set(['foghorn-312', 'v2-foghorn-312']);
 const NIGHT_ID = /-night(-\d+)?$/;
 
 /** Which 3:12 a step is, if any: the horn's cue, or a night under the stop. */
@@ -97,7 +97,7 @@ export const threeTwelveKind = (
   flags: Readonly<Record<string, unknown>>,
   events: readonly EngineEvent[],
 ): ThreeTwelveKind | undefined => {
-  if (events.some((event) => event.kind === 'music.cue' && event.cue === HORN_CUE)) {
+  if (events.some((event) => event.kind === 'music.cue' && HORN_CUES.has(event.cue))) {
     return 'horn';
   }
   if (slot === 'night' && NIGHT_ID.test(sceneId) && flags['horn-stopped'] === true) {

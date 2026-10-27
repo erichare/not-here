@@ -14,8 +14,8 @@ import { defineConfig, type Plugin } from 'vite';
 const APP_DIR = dirname(fileURLToPath(import.meta.url));
 const AUDITIONS_DIR = resolve(APP_DIR, '../../auditions');
 
-/** Only plain kebab-case wav names — no traversal, no dotfiles. */
-const AUDIO_NAME = /^[a-z0-9][a-z0-9-]*\.(wav|m4a)$/;
+/** Original edition only. Revised recordings are served from public/music. */
+const AUDIO_NAME = /^(?!v2-)[a-z0-9][a-z0-9-]*\.(wav|m4a)$/;
 
 const auditionsPlugin = (): Plugin => ({
   name: 'not-here:auditions',

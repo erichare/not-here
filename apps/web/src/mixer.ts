@@ -37,7 +37,9 @@ export interface EnsembleMixer {
 
 const clamp01 = (x: number): number => Math.max(0, Math.min(1, x));
 
-export const createEnsembleMixer = (): EnsembleMixer => {
+export const createEnsembleMixer = (
+  authoredGains: Readonly<Record<Act3LayerId, number>> = ACT3_ENSEMBLE_LAYER_GAINS,
+): EnsembleMixer => {
   let targets: Record<string, number> = {};
 
   const isEnsemblePattern = (pattern: string): boolean =>
@@ -45,11 +47,11 @@ export const createEnsembleMixer = (): EnsembleMixer => {
 
   const snapshot = (): EnsembleSnapshot => {
     const active = Object.values(targets).some((gain) => gain > 0);
-    const mix = { ...ACT3_ENSEMBLE_LAYER_GAINS };
+    const mix = { ...authoredGains };
     for (const id of ACT3_FRAGMENT_ORDER) {
-      mix[id] = ACT3_ENSEMBLE_LAYER_GAINS[id] * (targets[id] ?? 0);
+      mix[id] = authoredGains[id] * (targets[id] ?? 0);
     }
-    mix.sea = active ? ACT3_ENSEMBLE_LAYER_GAINS.sea : 0;
+    mix.sea = active ? authoredGains.sea : 0;
     return { active, fragments: { ...targets }, mix };
   };
 

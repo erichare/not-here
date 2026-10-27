@@ -2,7 +2,8 @@
  * Cue playback for `music.cue` / `music.stop` engine events, plus the Act 3
  * ensemble mixer for `music.layer` / `music.chord` / `music.detune`.
  *
- * Cues: fetches /auditions/<cue>.wav, decodes once (cached), and plays it
+ * Cues: fetches committed revised recordings or original /auditions WAVs,
+ * decodes once (cached), and plays each
  * through a per-cue GainNode with a 1s crossfade between cues. Loop policy
  * comes from the shared cue map: ambient cues and the Night-7 close call
  * loop; one-shot beats play once and leave silence. stop() fades the current
@@ -11,7 +12,7 @@
  * onFallback caption (tier-3: the '♪ <caption>' ledger note).
  *
  * Ensemble: the chord.add mixer. Each layer is its own loop-synced WAV
- * (act3-ensemble-<layer>.wav — sample-exact 15s loops) through its own
+ * (15s original loops; 19.2s revised loops) through its own
  * GainNode; all sources start together so the stack stays in sync.
  * music.layer raises one fragment, music.chord {fragments: n} raises the
  * first n of the cascade (sam → dianne → barb → priya → tam → wade) and
@@ -26,7 +27,7 @@
  * title-screen click before any cue will sound.
  */
 
-import { ACT3_FRAGMENT_ORDER } from '@not-here/music';
+import { ACT3_FRAGMENT_ORDER, sampledAudioFile, SAMPLED_ENSEMBLE_GAINS, TITLE_REVEAL_SECONDS } from '@not-here/music';
 import { cueLoops } from './cues.ts';
 import { createEnsembleMixer, type EnsembleSnapshot } from './mixer.ts';
 import { DEFAULT_PREFERENCES, type Preferences } from './preferences.ts';
@@ -51,6 +52,8 @@ interface EnsembleNode {
 }
 
 export interface AudioPlayer {
+  /** Start the title anew; reveal on its held note. Canceling leaves the music playing. */
+  readonly titleIntro: (onReveal: () => void) => () => void;
   readonly fragments: (characters: readonly string[]) => void;
   readonly preferences: (preferences: Preferences) => void;
   readonly ambience: (location: string | null) => void;
@@ -100,6 +103,31 @@ export const createAudioPlayer = (
   let musicFilter: BiquadFilterNode | null = null;
   let staticAmount = 0;
   let current: PlayingCue | null = null;
+  let introGeneration = 0;
+  let introReveal: (() => void) | null = null;
+  let introMarker: AudioBufferSourceNode | null = null;
+  let introLoadTimeout: ReturnType<typeof setTimeout> | null = null;
+
+  const cancelTitleIntro = (): void => {
+    introGeneration++;
+    introReveal = null;
+    if (introLoadTimeout !== null) clearTimeout(introLoadTimeout);
+    introLoadTimeout = null;
+    if (introMarker) {
+      introMarker.onended = null;
+      try { introMarker.stop(); } catch { /* The marker may already have ended. */ }
+      introMarker.disconnect();
+      introMarker = null;
+    }
+  };
+
+  const revealTitle = (): void => {
+    const reveal = introReveal;
+    introReveal = null;
+    if (introLoadTimeout !== null) clearTimeout(introLoadTimeout);
+    introLoadTimeout = null;
+    reveal?.();
+  };
   /** Latest requested cue — stale fetches resolve and bow out. */
   let wanted: string | null = null;
   /** Decoded buffers; null marks a cue known to be missing/broken. */
@@ -110,7 +138,7 @@ export const createAudioPlayer = (
     while (buffers.size > 12 || bytes() > 48 * 1024 * 1024) buffers.delete(buffers.keys().next().value!);
   };
 
-  const mixer = createEnsembleMixer();
+  const mixer = createEnsembleMixer(options.edition === 'revised' ? SAMPLED_ENSEMBLE_GAINS : undefined);
   let ensemble: { readonly nodes: Map<string, EnsembleNode> } | null = null;
   /** Supersession counter for async ensemble starts. */
   let ensembleGeneration = 0;
@@ -149,16 +177,17 @@ export const createAudioPlayer = (
   const load = async (context: AudioContext, name: string): Promise<AudioBuffer | null> => {
     const cached = buffers.get(name);
     if (cached !== undefined) return cached;
-    const formats = options.edition === 'revised' && name.startsWith('v2-') && !name.startsWith('v2-ensemble-') ? ['m4a', 'wav'] : ['wav'];
-    for (const format of formats) {
+    const sampledFile = options.edition === 'revised' ? sampledAudioFile(name) : undefined;
+    const paths = sampledFile ? [`/${sampledFile}`] : [`/auditions/${encodeURIComponent(name)}.wav`];
+    for (const path of paths) {
       try {
-        const response = await fetch(`/auditions/${encodeURIComponent(name)}.${format}`);
+        const response = await fetch(path);
         if (!response.ok) continue;
         const buffer = await context.decodeAudioData(await response.arrayBuffer());
         // Bound decoded memory; playing sources retain their own buffer references.
         rememberBuffer(name, buffer);
         return buffer;
-      } catch { /* Try the WAV master when encoding or codec support is absent. */ }
+      } catch { /* Missing audio leaves the accessible caption available. */ }
     }
     rememberBuffer(name, null);
     return null;
@@ -203,6 +232,23 @@ export const createAudioPlayer = (
     }
     source.start(now);
     current = started;
+    if (name === 'v2-title' && introReveal) {
+      if (introLoadTimeout !== null) clearTimeout(introLoadTimeout);
+      introLoadTimeout = null;
+      // A silent one-frame source follows the audio clock, including suspension.
+      // Its ended event cannot run early because decoding or loading was slow.
+      const generation = introGeneration;
+      const marker = context.createBufferSource();
+      marker.buffer = context.createBuffer(1, 1, context.sampleRate);
+      marker.connect(context.destination);
+      introMarker = marker;
+      marker.onended = () => {
+        marker.disconnect();
+        if (introMarker === marker) introMarker = null;
+        if (generation === introGeneration) revealTitle();
+      };
+      marker.start(now + TITLE_REVEAL_SECONDS);
+    }
   };
 
   const transition = async (name: string): Promise<void> => {
@@ -213,6 +259,7 @@ export const createAudioPlayer = (
     fadeOutCurrent(ctx, CROSSFADE_SECONDS);
     if (buffer === null) {
       onFallback(name);
+      if (name === 'v2-title') revealTitle();
       return;
     }
     fadeIn(ctx, name, buffer);
@@ -263,7 +310,7 @@ export const createAudioPlayer = (
     for (const [id, buffer] of entries) {
       const source = context.createBufferSource();
       source.buffer = buffer;
-      source.loop = true; // layer WAVs are sample-exact 15s loops
+      source.loop = true; // Every stem in this edition has the same exact frame count.
       const gain = context.createGain();
       gain.gain.setValueAtTime(0, now);
       source.connect(gain);
@@ -277,6 +324,7 @@ export const createAudioPlayer = (
 
   const syncEnsemble = (): void => {
     if (!ctx) return;
+    cancelTitleIntro();
     const snap = mixer.snapshot();
     if (!snap.active) {
       teardownEnsemble(ctx, LAYER_FADE_SECONDS);
@@ -308,6 +356,22 @@ export const createAudioPlayer = (
   };
 
   return {
+    titleIntro: onReveal => {
+      cancelTitleIntro();
+      const generation = introGeneration;
+      if (!ctx) { onReveal(); return () => {}; }
+      introReveal = onReveal;
+      deferredCue = null;
+      wanted = 'v2-title';
+      mixer.reset();
+      teardownEnsemble(ctx, CROSSFADE_SECONDS);
+      // A stalled download must not trap the reader outside the menu.
+      introLoadTimeout = setTimeout(() => {
+        if (generation === introGeneration) revealTitle();
+      }, 15000);
+      void transition('v2-title');
+      return () => { if (generation === introGeneration) cancelTitleIntro(); };
+    },
     preferences: next => {
       preferences = next;
       if (ctx) for (const name of ['music', 'ambience', 'effects', 'voice'] as const) bus(ctx, name).gain.setTargetAtTime(next[name], ctx.currentTime, .05);
@@ -342,6 +406,7 @@ export const createAudioPlayer = (
       if (mixer.snapshot().active) syncEnsemble();
     },
     cue: (name) => {
+      cancelTitleIntro();
       // Re-requests of the playing cue are no-ops, but the same cue after a
       // one-shot ended (or a failed load) must sound again next scene.
       if (wanted === name && current !== null) { deferredCue = null; return; }
@@ -357,6 +422,7 @@ export const createAudioPlayer = (
       void transition(name);
     },
     stop: () => {
+      cancelTitleIntro();
       accentGeneration++;
       cueGeneration++; deferredCue = null;
       for (const source of accents) { try { source.stop(); } catch { /* ended */ } }
@@ -397,7 +463,7 @@ export const createAudioPlayer = (
       }
       const node = ensemble.nodes.get(pattern);
       if (!node) return;
-      // Authored quarter-tone variants keep the same 15-second loop duration.
+      // Authored quarter-tone variants keep the edition's exact loop duration.
       // Source.detune would change playback speed and drift away from the other parts.
       const context = ctx; const playing = ensemble;
       const request = (detuneRequests.get(pattern) ?? 0) + 1; detuneRequests.set(pattern, request);
